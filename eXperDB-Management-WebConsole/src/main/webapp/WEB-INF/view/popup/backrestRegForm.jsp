@@ -15,6 +15,8 @@
 
 <script type="text/javascript">
 	var svrBckCheck = 'local';
+	var selectedAgentServer = null;
+	var backrestServerTable = null;
 	
 	$(window.document).ready(function() {
 		
@@ -79,6 +81,23 @@
 
 		$(window).trigger('resize'); 
 	}
+
+	$(function() {
+		$("#backrest_svr_info").on('click', 'tbody tr', function(){
+			$(this).toggleClass('selected');
+
+			selectedAgentServer = backrestServerTable.rows(this).data()[0];
+			var words = this.className.split(' ');
+
+			if(words.length == 2){
+				$("#ins_bckr_pth", "#workRegFormBckr").val(selectedAgentServer.pghome_pth + "/etc/pgbackrest/backup");
+				$("#ins_bckr_log_pth", "#workRegFormBckr").val(selectedAgentServer.pghome_pth + "/etc/pgbackrest/logs");
+			}else{
+				$("#ins_bckr_pth", "#workRegFormBckr").val("");
+				$("#ins_bckr_log_pth", "#workRegFormBckr").val("");
+			}
+		});
+	})
 
 	function fn_bck_srv_check(svrBckRadioCheck) {
 		var bckSrvLocal = document.getElementById("bck_srv_local_check"); 
@@ -322,13 +341,6 @@
 			
 			iChkCnt = iChkCnt + 1;
 		}
-
-		if(nvlPrmSet($("#ins_bckr_pth", "#workRegFormBckr").val(), "") == "") {
-			$("#ins_bckr_pth_alert", "#workRegFormBckr").html('백업경로를 입력해주세요.');
-			$("#ins_bckr_pth_alert", "#workRegFormBckr").show();
-			
-			iChkCnt = iChkCnt + 1;
-		}
 		
 		if(nvlPrmSet($("#ins_bckr_cnt", "#workRegFormBckr").val(), "") == "") {
 			$("#ins_bckr_cnt_alert", "#workRegFormBckr").html('풀 백업 보관일을 입력해주세요.');
@@ -508,7 +520,7 @@
 				bck_bsn_dscd : "TC000205",
 				bck_pth : $("#ins_bckr_pth", "#workRegFormBckr").val(),
 				log_file_pth : $("#ins_bckr_log_pth", "#workRegFormBckr").val(),
-				bck_filenm : ($('#ins_wrk_nm_bckr', '#workRegFormBckr').val()) + "_pgbackrest.conf",
+				bck_filenm : ($('#ins_wrk_nm_bckr', '#workRegFormBckr').val()) + ".conf",
 				prcs_cnt: $("#ins_cps_opt_prcs", "#workRegFormBckr").val(),
 				cps_type: $("#ins_cps_opt_type", "#workRegFormBckr").val(),
 				ipadr: selectedAgent.ipadr,
@@ -895,8 +907,8 @@
 												백업 경로
 											</label>
 
-											<div class="col-sm-4">
-												<input type="text" class="form-control form-control-xsm" maxlength="100" id="ins_bckr_pth" name="ins_bckr_pth" style="width: 280px;" onchange="fn_backrest_chg_alert(this)" onclick="fn_backrest_ip_select_check()"/>
+											<div class="col-sm-5">
+												<input type="text" class="form-control form-control-xsm" maxlength="100" id="ins_bckr_pth" name="ins_bckr_pth" style="width: 400px;" readonly/>
 											</div>
 
 											<!-- <div class="col-sm-2" style="margin-top: -2px;">

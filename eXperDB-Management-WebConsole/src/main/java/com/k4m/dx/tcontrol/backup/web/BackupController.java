@@ -7,6 +7,7 @@ import java.io.FileInputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.StringReader;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -64,90 +65,93 @@ import com.k4m.dx.tcontrol.login.service.LoginVO;
 public class BackupController {
 	@Autowired
 	private BackupService backupService;
-	
+
 	@Autowired
 	private CmmnCodeDtlService cmmnCodeDtlService;
-	
+
 	@Autowired
 	private AccessHistoryService accessHistoryService;
-	
+
 	@Autowired
 	private DbAuthorityService dbAuthorityService;
-	
+
 	@Autowired
 	private CmmnServerInfoService cmmnServerInfoService;
-	
+
 	@Autowired
-	private ScheduleService scheduleService ;
-	
+	private ScheduleService scheduleService;
+
 	private List<Map<String, Object>> dbSvrAut;
-	
+
 	/**
-	 * Mybatis Transaction 
+	 * Mybatis Transaction
 	 */
 	@Autowired
 	private PlatformTransactionManager txManager;
 
 	/**
 	 * Work List View page
+	 * 
 	 * @param WorkVO, historyVO, request
 	 * @return ModelAndView
 	 * @throws Exception
 	 */
 	@RequestMapping(value = "/backup/workList.do")
-	public ModelAndView workList(@ModelAttribute("historyVO") HistoryVO historyVO,@ModelAttribute("workVo") WorkVO workVO, HttpServletRequest request) {
-		int db_svr_id=workVO.getDb_svr_id();
+	public ModelAndView workList(@ModelAttribute("historyVO") HistoryVO historyVO,
+			@ModelAttribute("workVo") WorkVO workVO, HttpServletRequest request) {
+		int db_svr_id = workVO.getDb_svr_id();
 		String pgbackrest_useyn = "";
-		
+
 		Properties props = new Properties();
-        try {
-           props.load(new FileInputStream(ResourceUtils.getFile("classpath:egovframework/tcontrolProps/globals.properties")));
-           pgbackrest_useyn = props.getProperty("pgbackrest.useyn").toString().toUpperCase();
-        } catch (IOException e) {
-           // TODO Auto-generated catch block
-           e.printStackTrace();
-        }   
-		
-		//유저 디비서버 권한 조회 (공통메소드호출),
+		try {
+			props.load(new FileInputStream(
+					ResourceUtils.getFile("classpath:egovframework/tcontrolProps/globals.properties")));
+			pgbackrest_useyn = props.getProperty("pgbackrest.useyn").toString().toUpperCase();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		// 유저 디비서버 권한 조회 (공통메소드호출),
 		CmmnUtils cu = new CmmnUtils();
-		dbSvrAut = cu.selectUserDBSvrAutList(dbAuthorityService,db_svr_id);
+		dbSvrAut = cu.selectUserDBSvrAutList(dbAuthorityService, db_svr_id);
 		ModelAndView mv = new ModelAndView();
 
-		//읽기 권한이 없는경우 error페이지 호출 , [추후 Exception 처리예정]
-		if(dbSvrAut.get(0).get("bck_cng_aut_yn").equals("N")){
-			mv.setViewName("error/autError");				
-		}else{			
+		// 읽기 권한이 없는경우 error페이지 호출 , [추후 Exception 처리예정]
+		if (dbSvrAut.get(0).get("bck_cng_aut_yn").equals("N")) {
+			mv.setViewName("error/autError");
+		} else {
 			try {
 				// 화면접근이력 이력 남기기
 				CmmnUtils.saveHistory(request, historyVO);
 				historyVO.setExe_dtl_cd("DX-T0021");
 				accessHistoryService.insertHistory(historyVO);
-				
+
 				HttpSession session = request.getSession();
 				LoginVO loginVo = (LoginVO) session.getAttribute("session");
 				String usr_id = loginVo.getUsr_id();
 				workVO.setUsr_id(usr_id);
-				
+
 				mv.addObject("usr_id", usr_id);
 				mv.addObject("pgbackrest_useyn", pgbackrest_useyn);
-				mv.addObject("dbList",backupService.selectDbList(workVO));
-				
+				mv.addObject("dbList", backupService.selectDbList(workVO));
+
 			} catch (Exception e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
-			
+
 			// Get Incoding Code List
 			try {
 				PageVO pageVO = new PageVO();
 				pageVO.setGrp_cd("TC0005");
 				pageVO.setSearchCondition("0");
 				List<CmmnCodeVO> cmmnCodeVO = cmmnCodeDtlService.cmmnDtlCodeSearch(pageVO);
-				mv.addObject("incodeList",cmmnCodeVO);
+				mv.addObject("incodeList", cmmnCodeVO);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-	
+
 			try {
 				mv.addObject("db_svr_nm", backupService.selectDbSvrNm(workVO).getDb_svr_nm());
 			} catch (Exception e) {
@@ -155,12 +159,12 @@ public class BackupController {
 				e.printStackTrace();
 			}
 
-			if(request.getParameter("tabGbn") != null){
-				mv.addObject("tabGbn",request.getParameter("tabGbn"));
+			if (request.getParameter("tabGbn") != null) {
+				mv.addObject("tabGbn", request.getParameter("tabGbn"));
 			}
 
-			mv.addObject("db_svr_id",workVO.getDb_svr_id());
-	
+			mv.addObject("db_svr_id", workVO.getDb_svr_id());
+
 			mv.setViewName("backup/workList");
 		}
 		return mv;
@@ -168,21 +172,22 @@ public class BackupController {
 
 	/**
 	 * Work List
+	 * 
 	 * @param WorkVO, request, historyVO
 	 * @return List<WorkVO>
 	 */
-	@RequestMapping(value="/backup/getWorkList.do")
+	@RequestMapping(value = "/backup/getWorkList.do")
 	@ResponseBody
-	public List<WorkVO> rmanDataList(@ModelAttribute("workVo") WorkVO workVO, HttpServletRequest request, @ModelAttribute("historyVO") HistoryVO historyVO){
+	public List<WorkVO> rmanDataList(@ModelAttribute("workVo") WorkVO workVO, HttpServletRequest request,
+			@ModelAttribute("historyVO") HistoryVO historyVO) {
 		List<WorkVO> resultSet = null;
 
-		
 		// 화면접근이력 이력 남기기
 		try {
 			CmmnUtils.saveHistory(request, historyVO);
-			if(workVO.getBck_bsn_dscd().equals("TC000201")){
-				historyVO.setExe_dtl_cd("DX-T0021_01");		
-			}else{
+			if (workVO.getBck_bsn_dscd().equals("TC000201")) {
+				historyVO.setExe_dtl_cd("DX-T0021_01");
+			} else {
 				historyVO.setExe_dtl_cd("DX-T0021_03");
 			}
 			accessHistoryService.insertHistory(historyVO);
@@ -190,52 +195,54 @@ public class BackupController {
 			// TODO Auto-generated catch block
 			e2.printStackTrace();
 		}
-		
+
 		try {
 			resultSet = backupService.selectWorkList(workVO);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+
 		return resultSet;
 	}
-	
+
 	/**
 	 * Backup Log View page
+	 * 
 	 * @param WorkVO, historyVO, request
 	 * @return ModelAndView
 	 */
 	@RequestMapping(value = "/backup/workLogList.do")
-	public ModelAndView rmanLogList(@ModelAttribute("historyVO") HistoryVO historyVO,@ModelAttribute("workVo") WorkVO workVO, HttpServletRequest request) {
-		int db_svr_id=workVO.getDb_svr_id();
-		//유저 디비서버 권한 조회 (공통메소드호출),
+	public ModelAndView rmanLogList(@ModelAttribute("historyVO") HistoryVO historyVO,
+			@ModelAttribute("workVo") WorkVO workVO, HttpServletRequest request) {
+		int db_svr_id = workVO.getDb_svr_id();
+		// 유저 디비서버 권한 조회 (공통메소드호출),
 		CmmnUtils cu = new CmmnUtils();
-		dbSvrAut = cu.selectUserDBSvrAutList(dbAuthorityService,db_svr_id);
-				
+		dbSvrAut = cu.selectUserDBSvrAutList(dbAuthorityService, db_svr_id);
+
 		ModelAndView mv = new ModelAndView();
 
-		//읽기 권한이 없는경우 error페이지 호출 , [추후 Exception 처리예정]
-		if(dbSvrAut.get(0).get("bck_hist_aut_yn").equals("N")){
-			mv.setViewName("error/autError");				
-		}else{	
+		// 읽기 권한이 없는경우 error페이지 호출 , [추후 Exception 처리예정]
+		if (dbSvrAut.get(0).get("bck_hist_aut_yn").equals("N")) {
+			mv.setViewName("error/autError");
+		} else {
 			try {
 				// 화면접근이력 이력 남기기
 				CmmnUtils.saveHistory(request, historyVO);
 				historyVO.setExe_dtl_cd("DX-T0026");
 				accessHistoryService.insertHistory(historyVO);
-				
+
 				HttpSession session = request.getSession();
 				LoginVO loginVo = (LoginVO) session.getAttribute("session");
 				String usr_id = loginVo.getUsr_id();
 				workVO.setUsr_id(usr_id);
 
-				mv.addObject("dbList",backupService.selectDbList(workVO));
+				mv.addObject("dbList", backupService.selectDbList(workVO));
 			} catch (Exception e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
-			
+
 			// Get DBServer Name
 			try {
 				mv.addObject("db_svr_nm", backupService.selectDbSvrNm(workVO).getDb_svr_nm());
@@ -244,42 +251,45 @@ public class BackupController {
 				e.printStackTrace();
 			}
 
-			if(request.getParameter("tabGbn") != null){
-				mv.addObject("tabGbn",request.getParameter("tabGbn"));
+			if (request.getParameter("tabGbn") != null) {
+				mv.addObject("tabGbn", request.getParameter("tabGbn"));
 			}
-			
-			//pgbackrest 권한에 따른 object 추가
+
+			// pgbackrest 권한에 따른 object 추가
 			Properties props = new Properties();
 			try {
-				props.load(new FileInputStream(ResourceUtils.getFile("classpath:egovframework/tcontrolProps/globals.properties")));
-				mv.addObject("pgbackrest",props.getProperty("pgbackrest.useyn"));
+				props.load(new FileInputStream(
+						ResourceUtils.getFile("classpath:egovframework/tcontrolProps/globals.properties")));
+				mv.addObject("pgbackrest", props.getProperty("pgbackrest.useyn"));
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
-			}	
-			
-			mv.addObject("db_svr_id",workVO.getDb_svr_id());
+			}
+
+			mv.addObject("db_svr_id", workVO.getDb_svr_id());
 			mv.setViewName("backup/workLogList");
 		}
-		return mv;	
+		return mv;
 	}
-	
+
 	/**
 	 * Backup Log List
+	 * 
 	 * @param WorkLogVO, request, historyVO
 	 * @return List<WorkLogVO>
 	 * @throws Exception
 	 */
-	@RequestMapping(value="/backup/selectWorkLogList.do")
+	@RequestMapping(value = "/backup/selectWorkLogList.do")
 	@ResponseBody
-	public List<WorkLogVO> selectWorkLogList(@ModelAttribute("workLogVo") WorkLogVO workLogVO, HttpServletRequest request, @ModelAttribute("historyVO") HistoryVO historyVO) throws Exception{
-		
+	public List<WorkLogVO> selectWorkLogList(@ModelAttribute("workLogVo") WorkLogVO workLogVO,
+			HttpServletRequest request, @ModelAttribute("historyVO") HistoryVO historyVO) throws Exception {
+
 		// 화면접근이력 이력 남기기
 		try {
 			CmmnUtils.saveHistory(request, historyVO);
-			if(workLogVO.getBck_bsn_dscd().equals("TC000201")){
+			if (workLogVO.getBck_bsn_dscd().equals("TC000201")) {
 				historyVO.setExe_dtl_cd("DX-T0026_01");
-			}else{
+			} else {
 				historyVO.setExe_dtl_cd("DX-T0026_02");
 			}
 			accessHistoryService.insertHistory(historyVO);
@@ -287,7 +297,7 @@ public class BackupController {
 			// TODO Auto-generated catch block
 			e2.printStackTrace();
 		}
-				
+
 		List<WorkLogVO> resultSet = null;
 		resultSet = backupService.selectWorkLogList(workLogVO);
 
@@ -296,12 +306,14 @@ public class BackupController {
 
 	/**
 	 * Rman Backup Registration View page
+	 * 
 	 * @param WorkVO, request, historyVO
 	 * @return ModelAndView
 	 */
 	@SuppressWarnings("null")
 	@RequestMapping(value = "/popup/rmanRegForm.do")
-	public ModelAndView rmanRegForm(@ModelAttribute("workVo") WorkVO workVO, HttpServletRequest request, @ModelAttribute("historyVO") HistoryVO historyVO) {
+	public ModelAndView rmanRegForm(@ModelAttribute("workVo") WorkVO workVO, HttpServletRequest request,
+			@ModelAttribute("historyVO") HistoryVO historyVO) {
 		ModelAndView mv = new ModelAndView("jsonView");
 
 		// 화면접근이력 이력 남기기
@@ -313,22 +325,24 @@ public class BackupController {
 			// TODO Auto-generated catch block
 			e2.printStackTrace();
 		}
-				
-		mv.addObject("db_svr_id",workVO.getDb_svr_id());
+
+		mv.addObject("db_svr_id", workVO.getDb_svr_id());
 
 		return mv;
 	}
-	
+
 	/**
 	 * Backrest Backup Registration View page
+	 * 
 	 * @param WorkVO, request, historyVO
 	 * @return ModelAndView
 	 */
 	@SuppressWarnings("null")
 	@RequestMapping(value = "/popup/backrestRegForm.do")
-	public ModelAndView backrestRegForm(@ModelAttribute("workVo") WorkVO workVO, HttpServletRequest request, @ModelAttribute("historyVO") HistoryVO historyVO) {
+	public ModelAndView backrestRegForm(@ModelAttribute("workVo") WorkVO workVO, HttpServletRequest request,
+			@ModelAttribute("historyVO") HistoryVO historyVO) {
 		ModelAndView mv = new ModelAndView("jsonView");
-		
+
 		// 화면접근이력 이력 남기기
 		try {
 			CmmnUtils.saveHistory(request, historyVO);
@@ -338,21 +352,23 @@ public class BackupController {
 			e2.printStackTrace();
 		}
 		
-		mv.addObject("db_svr_id",workVO.getDb_svr_id());
+		mv.addObject("db_svr_id", workVO.getDb_svr_id());
 
 		return mv;
 	}
-	
+
 	/**
 	 * Backrest Backup Agent Info Select
+	 * 
 	 * @param WorkVO, request, dbServerVO, historyVO
 	 * @return ModelAndView
 	 */
 	@SuppressWarnings("null")
 	@RequestMapping(value = "/backup/backrestAgentList.do")
-	public ModelAndView backrestAgentList(@ModelAttribute("workVo") WorkVO workVO, HttpServletRequest request, @ModelAttribute("dbServerVO") DbServerVO dbServerVO, @ModelAttribute("historyVO") HistoryVO historyVO) {
+	public ModelAndView backrestAgentList(@ModelAttribute("workVo") WorkVO workVO, HttpServletRequest request,
+			@ModelAttribute("dbServerVO") DbServerVO dbServerVO, @ModelAttribute("historyVO") HistoryVO historyVO) {
 		ModelAndView mv = new ModelAndView("jsonView");
-		
+
 		// 화면접근이력 이력 남기기
 		try {
 			CmmnUtils.saveHistory(request, historyVO);
@@ -361,7 +377,7 @@ public class BackupController {
 			// TODO Auto-generated catch block
 			e2.printStackTrace();
 		}
-		
+
 		try {
 			mv.addObject("agent_list", backupService.selectAgentInfo(dbServerVO));
 		} catch (Exception e) {
@@ -369,19 +385,22 @@ public class BackupController {
 			e.printStackTrace();
 		}
 
-		mv.addObject("db_svr_id",workVO.getDb_svr_id());
+		mv.addObject("db_svr_id", workVO.getDb_svr_id());
 
 		return mv;
 	}
-	
+
 	/**
 	 * Backrest Backup Registration Custom View page
+	 * 
 	 * @param WorkVO, request, historyVO
 	 * @return ModelAndView
 	 */
 	@SuppressWarnings("null")
 	@RequestMapping(value = "/popup/backrestRegCustomForm.do")
-	public ModelAndView backrestRegCustomForm(@ModelAttribute("workVo") WorkVO workVO, @ModelAttribute("dbServerVO") DbServerVO dbServerVO, HttpServletRequest request, @ModelAttribute("historyVO") HistoryVO historyVO) {
+	public ModelAndView backrestRegCustomForm(@ModelAttribute("workVo") WorkVO workVO,
+			@ModelAttribute("dbServerVO") DbServerVO dbServerVO, HttpServletRequest request,
+			@ModelAttribute("historyVO") HistoryVO historyVO) {
 		ModelAndView mv = new ModelAndView("jsonView");
 
 		// 화면접근이력 이력 남기기
@@ -393,29 +412,31 @@ public class BackupController {
 			// TODO Auto-generated catch block
 			e2.printStackTrace();
 		}
-		
+
 		try {
 			mv.addObject("backrest_cus_opt", backupService.selectBackrestCstOpt(dbServerVO));
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-				
-		mv.addObject("db_svr_id",workVO.getDb_svr_id());
+
+		mv.addObject("db_svr_id", workVO.getDb_svr_id());
 
 		return mv;
 	}
-	
+
 	/**
 	 * Dump Backup Registration View page
+	 * 
 	 * @param WorkVO, request, historyVO
 	 * @return ModelAndView
 	 */
 	@SuppressWarnings("unchecked")
 	@RequestMapping(value = "/popup/dumpRegForm.do")
-	public ModelAndView dumpRegForm(@ModelAttribute("workVo") WorkVO workVO, HttpServletRequest request, @ModelAttribute("historyVO") HistoryVO historyVO) {
+	public ModelAndView dumpRegForm(@ModelAttribute("workVo") WorkVO workVO, HttpServletRequest request,
+			@ModelAttribute("historyVO") HistoryVO historyVO) {
 		ModelAndView mv = new ModelAndView("jsonView");
-		
+
 		// 화면접근이력 이력 남기기
 		try {
 			CmmnUtils.saveHistory(request, historyVO);
@@ -429,7 +450,7 @@ public class BackupController {
 		// Get DB ROLE List
 		try {
 			AES256 aes = new AES256(AES256_KEY.ENC_KEY);
-			
+
 			int db_svr_id = workVO.getDb_svr_id();
 			DbServerVO schDbServerVO = new DbServerVO();
 			schDbServerVO.setDb_svr_id(db_svr_id);
@@ -438,98 +459,101 @@ public class BackupController {
 			AgentInfoVO vo = new AgentInfoVO();
 			vo.setIPADR(strIpAdr);
 			AgentInfoVO agentInfo = (AgentInfoVO) cmmnServerInfoService.selectAgentInfo(vo);
-			
+
 			String IP = DbServerVO.getIpadr();
 			int PORT = agentInfo.getSOCKET_PORT();
-			
+
 			DbServerVO dbServerVO = backupService.selectDbSvrNm(workVO);
 			JSONObject serverObj = new JSONObject();
-			
+
 			serverObj.put(ClientProtocolID.SERVER_NAME, dbServerVO.getDb_svr_nm());
 			serverObj.put(ClientProtocolID.SERVER_IP, dbServerVO.getIpadr());
 			serverObj.put(ClientProtocolID.SERVER_PORT, dbServerVO.getPortno());
 			serverObj.put(ClientProtocolID.DATABASE_NAME, dbServerVO.getDft_db_nm());
 			serverObj.put(ClientProtocolID.USER_ID, dbServerVO.getSvr_spr_usr_id());
-			//serverObj.put(ClientProtocolID.USER_PWD, dbServerVO.getSvr_spr_scm_pwd());
+			// serverObj.put(ClientProtocolID.USER_PWD, dbServerVO.getSvr_spr_scm_pwd());
 			serverObj.put(ClientProtocolID.USER_PWD, aes.aesDecode(dbServerVO.getSvr_spr_scm_pwd()));
 			ClientInfoCmmn cic = new ClientInfoCmmn();
 
-			mv.addObject("roleList",cic.role_List(serverObj,IP,PORT));
+			mv.addObject("roleList", cic.role_List(serverObj, IP, PORT));
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
-		mv.addObject("db_svr_id",workVO.getDb_svr_id());
 
-		return mv;	
+		mv.addObject("db_svr_id", workVO.getDb_svr_id());
+
+		return mv;
 	}
-	
+
 	/**
 	 * Rman Backup Work Insert
+	 * 
 	 * @param historyVO, dbServerVO, workVO, response, request
 	 * @return String
-	 * @throws IOException 
+	 * @throws IOException
 	 */
 	@SuppressWarnings("unchecked")
 	@RequestMapping(value = "/popup/workRmanWrite.do")
 	@ResponseBody
-	public String workRmanWrite(@ModelAttribute("historyVO") HistoryVO historyVO, @ModelAttribute("dbServerVO") DbServerVO dbServerVO, @ModelAttribute("workVO") WorkVO workVO, HttpServletResponse response, HttpServletRequest request) throws IOException {
+	public String workRmanWrite(@ModelAttribute("historyVO") HistoryVO historyVO,
+			@ModelAttribute("dbServerVO") DbServerVO dbServerVO, @ModelAttribute("workVO") WorkVO workVO,
+			HttpServletResponse response, HttpServletRequest request) throws IOException {
 		String result = "S";
 		WorkVO resultSet = null;
-		
-		try{
-			Map<String, Object> initResult =new HashMap<String, Object>();
+
+		try {
+			Map<String, Object> initResult = new HashMap<String, Object>();
 			AgentInfoVO vo = new AgentInfoVO();
-			List<DbServerVO> ipResult = null;		
-			
+			List<DbServerVO> ipResult = null;
+
 			String bck_pth = request.getParameter("bck_pth");
 			int db_svr_id = Integer.parseInt(request.getParameter("db_svr_id"));
 
 			// 백업 WORK등록시 백업 경로 INIT
 			ipResult = (List<DbServerVO>) cmmnServerInfoService.selectAllIpadrList(db_svr_id);
-			
-			for(int i=0; i<ipResult.size(); i++){
-				vo.setIPADR(ipResult.get(i).getIpadr());		
-				AgentInfoVO agentInfo =  (AgentInfoVO) cmmnServerInfoService.selectAgentInfo(vo);
+
+			for (int i = 0; i < ipResult.size(); i++) {
+				vo.setIPADR(ipResult.get(i).getIpadr());
+				AgentInfoVO agentInfo = (AgentInfoVO) cmmnServerInfoService.selectAgentInfo(vo);
 				String IP = ipResult.get(i).getIpadr();
 				int PORT = agentInfo.getSOCKET_PORT();
 
 				ClientInfoCmmn cic = new ClientInfoCmmn();
 				initResult = cic.setInit(IP, PORT, bck_pth);
-			}			
-		}catch (Exception e) {
+			}
+		} catch (Exception e) {
 			result = "I";
 			e.printStackTrace();
 		}
-		
-		//WORK 명 중복체크
-		try{
+
+		// WORK 명 중복체크
+		try {
 			String wrk_nm = request.getParameter("wrk_nm");
 			int wrkNmCheck = backupService.wrk_nmCheck(wrk_nm);
-			
+
 			if (wrkNmCheck > 0) {
 				result = "F";
 			}
-			
-		}catch(Exception e){
+
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
-		//중복체크 - 사용가능 wrk_nm
-		if("S".equals(result)){
-			try {					
+
+		// 중복체크 - 사용가능 wrk_nm
+		if ("S".equals(result)) {
+			try {
 				// 화면접근이력 이력 남기기
 				CmmnUtils.saveHistory(request, historyVO);
 				historyVO.setExe_dtl_cd("DX-T0022_01");
 				accessHistoryService.insertHistory(historyVO);
-			
+
 				HttpSession session = request.getSession();
 				LoginVO loginVo = (LoginVO) session.getAttribute("session");
 				String usr_id = loginVo.getUsr_id();
 				workVO.setFrst_regr_id(usr_id);
-				
-				//작업 정보등록
+
+				// 작업 정보등록
 				backupService.insertWork(workVO);
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -537,7 +561,7 @@ public class BackupController {
 			}
 
 			// Get Last wrk_id
-			if(result.equals("S")){
+			if (result.equals("S")) {
 				try {
 					resultSet = backupService.lastWorkId();
 					workVO.setWrk_id(resultSet.getWrk_id());
@@ -546,65 +570,68 @@ public class BackupController {
 					result = "D";
 				}
 			}
-			
-			if(result.equals("S")){
+
+			if (result.equals("S")) {
 				if (resultSet != null) {
-					try {	
+					try {
 						backupService.insertRmanWork(workVO);
 					} catch (Exception e) {
 						e.printStackTrace();
 						result = "D";
-					} 
+					}
 				}
 			}
-		}else{
+		} else {
 			return result;
 		}
 
 		return result;
 	}
-	
-	
+
 	/**
 	 * Backrest Backup Work Insert
+	 * 
 	 * @param historyVO, dbServerVO, workVO, response, request, paramMap
 	 * @return String
-	 * @throws IOException 
+	 * @throws IOException
 	 */
 	@SuppressWarnings("unchecked")
 	@RequestMapping(value = "/popup/workBackrestWrite.do")
 	@ResponseBody
-	public String workBackrestWrite(@ModelAttribute("historyVO") HistoryVO historyVO, @ModelAttribute("dbServerVO") DbServerVO dbServerVO, @ModelAttribute("workVO") WorkVO workVO, HttpServletResponse response, HttpServletRequest request, @RequestParam Map<String, Object> paramMap) throws IOException {
+	public String workBackrestWrite(@ModelAttribute("historyVO") HistoryVO historyVO,
+			@ModelAttribute("dbServerVO") DbServerVO dbServerVO, @ModelAttribute("workVO") WorkVO workVO,
+			HttpServletResponse response, HttpServletRequest request, @RequestParam Map<String, Object> paramMap)
+			throws IOException {
 		String result = "S";
 		WorkVO resultSet = null;
-		
-		//WORK 명 중복체크
-		try{
+
+		// WORK 명 중복체크
+		try {
 			String wrk_nm = request.getParameter("wrk_nm");
 			int wrkNmCheck = backupService.wrk_nmCheck(wrk_nm);
-			
+
 			if (wrkNmCheck > 0) {
 				result = "F";
 			}
-			
-		}catch(Exception e){
+
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
-		//중복체크 - 사용가능 wrk_nm
-		if("S".equals(result)){
-			try {					
+
+		// 중복체크 - 사용가능 wrk_nm
+		if ("S".equals(result)) {
+			try {
 				// 화면접근이력 이력 남기기
 				CmmnUtils.saveHistory(request, historyVO);
 //				historyVO.setExe_dtl_cd("DX-T0022_01");
 				accessHistoryService.insertHistory(historyVO);
-			
+
 				HttpSession session = request.getSession();
 				LoginVO loginVo = (LoginVO) session.getAttribute("session");
 				String usr_id = loginVo.getUsr_id();
 				workVO.setFrst_regr_id(usr_id);
-				
-				//작업 정보등록
+
+				// 작업 정보등록
 				backupService.insertWork(workVO);
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -612,7 +639,7 @@ public class BackupController {
 			}
 
 			// Get Last wrk_id
-			if(result.equals("S")){
+			if (result.equals("S")) {
 				try {
 					resultSet = backupService.lastWorkId();
 					workVO.setWrk_id(resultSet.getWrk_id());
@@ -621,63 +648,66 @@ public class BackupController {
 					result = "D";
 				}
 			}
-			
-			if(result.equals("S")){
+
+			if (result.equals("S")) {
+				try {
+					createBackrestConfig(workVO, dbServerVO, request, paramMap);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+
+			if (result.equals("S")) {
 				if (resultSet != null) {
-					try {	
+					try {
 						backupService.insertBackrestWork(workVO);
 					} catch (Exception e) {
 						e.printStackTrace();
 						result = "D";
-					} 
+					}
 				}
 			}
-			
-			if(result.equals("S")){
-				try {
-					createBackrestConfig(workVO, dbServerVO, request, paramMap);
-				}catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		}else{
+
+		} else {
 			return result;
 		}
-		
+
 		return result;
 	}
 
-
 	/**
 	 * Dump Backup Work Insert
+	 * 
 	 * @param WorkVO, historyVO, response, request
 	 * @return String
-	 * @throws IOException 
+	 * @throws IOException
 	 */
 	@RequestMapping(value = "/popup/workDumpWrite.do")
 	@ResponseBody
-	public String workDumpWrite(@ModelAttribute("historyVO") HistoryVO historyVO,@ModelAttribute("workVO") WorkVO workVO, HttpServletResponse response, HttpServletRequest request) throws IOException{
+	public String workDumpWrite(@ModelAttribute("historyVO") HistoryVO historyVO,
+			@ModelAttribute("workVO") WorkVO workVO, HttpServletResponse response, HttpServletRequest request)
+			throws IOException {
 		String result = "S";
 		WorkVO resultSet = null;
 
-		//work 명 중복체크
-		try{
+		// work 명 중복체크
+		try {
 			String wrk_nm = request.getParameter("wrk_nm");
 			int wrkNmCheck = backupService.wrk_nmCheck(wrk_nm);
-			
+
 			if (wrkNmCheck > 0) {
 				result = "F";
 			}
-			
-		}catch(Exception e){
+
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
+
 		if ("F".equals(result)) {
 			return result;
 		}
-		
-		//중복체크 - 사용가능 wrk_nm
+
+		// 중복체크 - 사용가능 wrk_nm
 		if ("S".equals(result)) {
 			// Data Insert
 			try {
@@ -685,44 +715,44 @@ public class BackupController {
 				CmmnUtils.saveHistory(request, historyVO);
 				historyVO.setExe_dtl_cd("DX-T0024_01");
 				accessHistoryService.insertHistory(historyVO);
-				
+
 				HttpSession session = request.getSession();
 				LoginVO loginVo = (LoginVO) session.getAttribute("session");
 				String usr_id = loginVo.getUsr_id();
 				workVO.setFrst_regr_id(usr_id);
 
-				//작업 정보등록
-				backupService.insertWork(workVO);			
+				// 작업 정보등록
+				backupService.insertWork(workVO);
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 				result = "D";
 			}
-		
+
 			// Get Last wrk_id
-			if(result.equals("S")){
+			if (result.equals("S")) {
 				try {
 					resultSet = backupService.lastWorkId();
 					workVO.setWrk_id(resultSet.getWrk_id());
-				
+
 				} catch (Exception e) {
 					result = "D";
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 			}
-			
-			if(result.equals("S")){
-				try {	
+
+			if (result.equals("S")) {
+				try {
 					backupService.insertDumpWork(workVO);
 				} catch (Exception e) {
 					result = "F";
 					e.printStackTrace();
 				}
 			}
-			
+
 			// Get Last bck_wrk_id
-			if(result.equals("S")){
+			if (result.equals("S")) {
 				try {
 					resultSet = backupService.lastBckWorkId();
 				} catch (Exception e) {
@@ -733,22 +763,23 @@ public class BackupController {
 		}
 
 		return Integer.toString(resultSet.getBck_wrk_id());
-				
+
 	}
-	
+
 	/**
 	 * Backup Work Option insert
+	 * 
 	 * @param WorkOptVO, request
 	 * @return
 	 */
 	@RequestMapping(value = "/popup/workOptWrite.do")
 	@ResponseBody
-	public void workOptWrite(@ModelAttribute("WorkOptVO") WorkOptVO workOptVO, HttpServletRequest request){
+	public void workOptWrite(@ModelAttribute("WorkOptVO") WorkOptVO workOptVO, HttpServletRequest request) {
 		HttpSession session = request.getSession();
 		LoginVO loginVo = (LoginVO) session.getAttribute("session");
 		String usr_id = loginVo.getUsr_id();
-		workOptVO.setFrst_regr_id(usr_id);		
-		try{
+		workOptVO.setFrst_regr_id(usr_id);
+		try {
 			backupService.insertWorkOpt(workOptVO);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -757,12 +788,14 @@ public class BackupController {
 
 	/**
 	 * Rman Backup Reregistration View page
+	 * 
 	 * @param WorkVO, request, historyVO
 	 * @return ModelAndView
 	 */
 	@SuppressWarnings("null")
 	@RequestMapping(value = "/popup/rmanRegReForm.do")
-	public ModelAndView rmanRegReForm(@ModelAttribute("workVo") WorkVO workVO, HttpServletRequest request, @ModelAttribute("historyVO") HistoryVO historyVO)  {
+	public ModelAndView rmanRegReForm(@ModelAttribute("workVo") WorkVO workVO, HttpServletRequest request,
+			@ModelAttribute("historyVO") HistoryVO historyVO) {
 		ModelAndView mv = new ModelAndView("jsonView");
 
 		// 화면접근이력 이력 남기기
@@ -774,7 +807,7 @@ public class BackupController {
 			// TODO Auto-generated catch block
 			e2.printStackTrace();
 		}
-		
+
 		// Get Rman Backup Information
 		try {
 			workVO.setBck_bsn_dscd("TC000201");
@@ -790,28 +823,30 @@ public class BackupController {
 			pageVO.setGrp_cd("TC0005");
 			pageVO.setSearchCondition("0");
 			List<CmmnCodeVO> cmmnCodeVO = cmmnCodeDtlService.cmmnDtlCodeSearch(pageVO);
-			mv.addObject("incodeList",cmmnCodeVO);
+			mv.addObject("incodeList", cmmnCodeVO);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
-		mv.addObject("db_svr_id",workVO.getDb_svr_id());
-		mv.addObject("wrk_id",workVO.getWrk_id());
-		mv.addObject("bck_wrk_id",workVO.getBck_wrk_id());
 
-		return mv;	
+		mv.addObject("db_svr_id", workVO.getDb_svr_id());
+		mv.addObject("wrk_id", workVO.getWrk_id());
+		mv.addObject("bck_wrk_id", workVO.getBck_wrk_id());
+
+		return mv;
 	}
-	
-	
+
 	/**
 	 * Backrest Backup Reregistration View page
+	 * 
 	 * @param WorkVO, request, historyVO
 	 * @return ModelAndView
 	 */
-	@SuppressWarnings("null")
+	@SuppressWarnings("unchecked")
 	@RequestMapping(value = "/popup/backrestRegReForm.do")
-	public ModelAndView backrestRegReForm(@ModelAttribute("workVo") WorkVO workVO, HttpServletRequest request, @ModelAttribute("historyVO") HistoryVO historyVO)  {
+	public ModelAndView backrestRegReForm(@ModelAttribute("workVo") WorkVO workVO, HttpServletRequest request,
+			@ModelAttribute("historyVO") HistoryVO historyVO) {
 		ModelAndView mv = new ModelAndView("jsonView");
+		String result = null;
 
 		// 화면접근이력 이력 남기기
 		try {
@@ -822,82 +857,106 @@ public class BackupController {
 			// TODO Auto-generated catch block
 			e2.printStackTrace();
 		}
-		
+
 		// Get Backrest Backup Information
 		try {
 			workVO.setBck_bsn_dscd("TC000205");
-			
+
 			List<WorkVO> selectedWork = backupService.selectWorkList(workVO);
+			List<DbServerVO> dbServerVO = backupService.selectBckServer(selectedWork.get(0));
 			mv.addObject("workInfo", selectedWork);
-			mv.addObject("bckSvrInfo", backupService.selectBckServer(selectedWork.get(0)));
-			
-			String configPath = "C:\\backrest\\" + selectedWork.get(0).getBck_filenm();
-			BufferedReader br = new BufferedReader(new FileReader(new File(configPath)));
-			
+			mv.addObject("bckSvrInfo", dbServerVO);
+
+			ClientInfoCmmn cic = new ClientInfoCmmn();
+			JSONObject resultObj = new JSONObject();
+
+			try {
+				AgentInfoVO vo = new AgentInfoVO();
+				vo.setIPADR(dbServerVO.get(0).getIpadr());
+				AgentInfoVO agentInfo = (AgentInfoVO) cmmnServerInfoService.selectAgentInfo(vo);
+
+				String ip = dbServerVO.get(0).getIpadr();
+				int port = agentInfo.getSOCKET_PORT();
+
+				JSONObject jObj = new JSONObject();
+				jObj.put(ClientProtocolID.WRK_NM, selectedWork.get(0).getWrk_nm());
+
+				resultObj = cic.selectBackrestConf(ip, port, jObj);
+
+				result = (String) resultObj.get(ClientProtocolID.RESULT_DATA);
+
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+
+			BufferedReader br = new BufferedReader(new StringReader(result));
+
 			boolean readFromCustomLine = false;
 			Map<String, Object> customMap = new HashMap<String, Object>();
 			
 			String fileContent;
-				while((fileContent = br.readLine()) != null) {
-					if(fileContent.contains("process-max")) {
-						String processMaxLine = fileContent;
-						String processMaxValue = processMaxLine.replaceAll("process-max=", "");
-						
-						mv.addObject("prcs_max_mod", processMaxValue);
-					}
-					
-					if(fileContent.contains("compress-type")) {
-						String compressTypeLine = fileContent;
-						String compressTypeValue = compressTypeLine.replaceAll("compress-type=", ""); 
-						
-						mv.addObject("cps_type_mod", compressTypeValue);
-					}
-					
-					if(readFromCustomLine) {
-						String customLine = fileContent;
-						String customSplit[] = customLine.split("=");
-						
-						customMap.put(customSplit[0], customSplit[1]);
-					}
-					
-					if(fileContent.startsWith("#[custom]")) {
-						readFromCustomLine = true;
-					}
+			while ((fileContent = br.readLine()) != null) {
+				if (fileContent.contains("process-max")) {
+					String processMaxLine = fileContent;
+					String processMaxValue = processMaxLine.replaceAll("process-max=", "");
+
+					mv.addObject("prcs_max_mod", processMaxValue);
 				}
-				
-				mv.addObject("custom_map", customMap);
-			
+
+				if (fileContent.contains("compress-type")) {
+					String compressTypeLine = fileContent;
+					String compressTypeValue = compressTypeLine.replaceAll("compress-type=", "");
+
+					mv.addObject("cps_type_mod", compressTypeValue);
+				}
+
+				if (readFromCustomLine) {
+					String customLine = fileContent;
+					String customSplit[] = customLine.split("=");
+
+					customMap.put(customSplit[0], customSplit[1]);
+				}
+
+				if (fileContent.startsWith("#[custom]")) {
+					readFromCustomLine = true;
+				}
+			}
+
+			mv.addObject("custom_map", customMap);
+
 		} catch (Exception e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
-		
+
 		// Get Incoding Code List
 		try {
 			PageVO pageVO = new PageVO();
 			pageVO.setGrp_cd("TC0005");
 			pageVO.setSearchCondition("0");
 			List<CmmnCodeVO> cmmnCodeVO = cmmnCodeDtlService.cmmnDtlCodeSearch(pageVO);
-			mv.addObject("incodeList",cmmnCodeVO);
+			mv.addObject("incodeList", cmmnCodeVO);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
-		mv.addObject("db_svr_id",workVO.getDb_svr_id());
-		mv.addObject("wrk_id",workVO.getWrk_id());
-		mv.addObject("bck_wrk_id",workVO.getBck_wrk_id());
 
-		return mv;	
+		mv.addObject("db_svr_id", workVO.getDb_svr_id());
+		mv.addObject("wrk_id", workVO.getWrk_id());
+		mv.addObject("bck_wrk_id", workVO.getBck_wrk_id());
+
+		return mv;
 	}
 
 	/**
 	 * Dump백업 수정팝업 페이지를 반환한다.
+	 * 
 	 * @param WorkVO, request, historyVO
 	 * @return ModelAndView
 	 */
 	@SuppressWarnings({ "null", "unchecked" })
 	@RequestMapping(value = "/popup/dumpRegReForm.do")
-	public ModelAndView dumpRegReForm(@ModelAttribute("workVo") WorkVO workVO, HttpServletRequest request, @ModelAttribute("historyVO") HistoryVO historyVO) {
+	public ModelAndView dumpRegReForm(@ModelAttribute("workVo") WorkVO workVO, HttpServletRequest request,
+			@ModelAttribute("historyVO") HistoryVO historyVO) {
 		ModelAndView mv = new ModelAndView("jsonView");
 
 		// 화면접근이력 이력 남기기
@@ -918,7 +977,7 @@ public class BackupController {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+
 		// Work Option List
 		try {
 			mv.addObject("workOptInfo", backupService.selectWorkOptList(workVO));
@@ -926,7 +985,7 @@ public class BackupController {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+
 		// Work Object List
 		try {
 			mv.addObject("workObjList", backupService.selectWorkObj(workVO));
@@ -938,7 +997,7 @@ public class BackupController {
 		// Server Role List
 		try {
 			AES256 aes = new AES256(AES256_KEY.ENC_KEY);
-			
+
 			int db_svr_id = workVO.getDb_svr_id();
 			DbServerVO schDbServerVO = new DbServerVO();
 			schDbServerVO.setDb_svr_id(db_svr_id);
@@ -947,44 +1006,47 @@ public class BackupController {
 			AgentInfoVO vo = new AgentInfoVO();
 			vo.setIPADR(strIpAdr);
 			AgentInfoVO agentInfo = (AgentInfoVO) cmmnServerInfoService.selectAgentInfo(vo);
-			
+
 			String IP = DbServerVO.getIpadr();
 			int PORT = agentInfo.getSOCKET_PORT();
-			
+
 			DbServerVO dbServerVO = backupService.selectDbSvrNm(workVO);
 			JSONObject serverObj = new JSONObject();
-			
+
 			serverObj.put(ClientProtocolID.SERVER_NAME, dbServerVO.getDb_svr_nm());
 			serverObj.put(ClientProtocolID.SERVER_IP, dbServerVO.getIpadr());
 			serverObj.put(ClientProtocolID.SERVER_PORT, dbServerVO.getPortno());
 			serverObj.put(ClientProtocolID.DATABASE_NAME, dbServerVO.getDft_db_nm());
 			serverObj.put(ClientProtocolID.USER_ID, dbServerVO.getSvr_spr_usr_id());
 			serverObj.put(ClientProtocolID.USER_PWD, aes.aesDecode(dbServerVO.getSvr_spr_scm_pwd()));
-			
+
 			ClientInfoCmmn cic = new ClientInfoCmmn();
-			mv.addObject("roleList",cic.role_List(serverObj,IP,PORT));
+			mv.addObject("roleList", cic.role_List(serverObj, IP, PORT));
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
-		mv.addObject("db_svr_id",workVO.getDb_svr_id());
-		mv.addObject("bck_wrk_id",workVO.getBck_wrk_id());
-		mv.addObject("wrk_id",workVO.getWrk_id());
+		mv.addObject("db_svr_id", workVO.getDb_svr_id());
+		mv.addObject("bck_wrk_id", workVO.getBck_wrk_id());
+		mv.addObject("wrk_id", workVO.getWrk_id());
 
 //		mv.setViewName("popup/dumpRegReForm");
-		return mv;	
+		return mv;
 	}
-	
+
 	/**
 	 * Rman Backup Work Update
+	 * 
 	 * @param historyVO, workVO, response, request
 	 * @return String
-	 * @throws IOException 
+	 * @throws IOException
 	 */
 	@RequestMapping(value = "/popup/workRmanReWrite.do")
 	@ResponseBody
-	public String workRmanReWrite(@ModelAttribute("historyVO") HistoryVO historyVO,@ModelAttribute("workVO") WorkVO workVO, HttpServletResponse response, HttpServletRequest request ) throws IOException{
+	public String workRmanReWrite(@ModelAttribute("historyVO") HistoryVO historyVO,
+			@ModelAttribute("workVO") WorkVO workVO, HttpServletResponse response, HttpServletRequest request)
+			throws IOException {
 		String result = "S";
 
 		try {
@@ -995,35 +1057,35 @@ public class BackupController {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
+
 		// 백업 WORK 수정 시 백업 경로 INIT
-		try{
-			Map<String, Object> initResult =new HashMap<String, Object>();
+		try {
+			Map<String, Object> initResult = new HashMap<String, Object>();
 			AgentInfoVO vo = new AgentInfoVO();
 			List<DbServerVO> ipResult = null;
-			
+
 			String bck_pth = workVO.getBck_pth();
 			int db_svr_id = workVO.getDb_svr_id();
-			
+
 			ipResult = (List<DbServerVO>) cmmnServerInfoService.selectAllIpadrList(db_svr_id);
 
-			for(int i=0; i<ipResult.size(); i++){
-				vo.setIPADR(ipResult.get(i).getIpadr());		
-				AgentInfoVO agentInfo =  (AgentInfoVO) cmmnServerInfoService.selectAgentInfo(vo);
+			for (int i = 0; i < ipResult.size(); i++) {
+				vo.setIPADR(ipResult.get(i).getIpadr());
+				AgentInfoVO agentInfo = (AgentInfoVO) cmmnServerInfoService.selectAgentInfo(vo);
 				String IP = ipResult.get(i).getIpadr();
 				int PORT = agentInfo.getSOCKET_PORT();
 
 				ClientInfoCmmn cic = new ClientInfoCmmn();
 				initResult = cic.setInit(IP, PORT, bck_pth);
 			}
-		}catch(Exception e){
+		} catch (Exception e) {
 			result = "I";
 			e.printStackTrace();
 		}
-		
-		//Rman 업데이트
-		if(result.equals("S")){
-			try{
+
+		// Rman 업데이트
+		if (result.equals("S")) {
+			try {
 				HttpSession session = request.getSession();
 				LoginVO loginVo = (LoginVO) session.getAttribute("session");
 				String usr_id = loginVo.getUsr_id();
@@ -1031,7 +1093,7 @@ public class BackupController {
 				workVO.setLst_mdfr_id(usr_id);
 				backupService.updateRmanWork(workVO);
 
-			}catch(Exception e){
+			} catch (Exception e) {
 				e.printStackTrace();
 				result = "D";
 			}
@@ -1039,17 +1101,21 @@ public class BackupController {
 
 		return result;
 	}
-	
+
 	/**
 	 * Backrest Backup Work Update
+	 * 
 	 * @param historyVO, workVO, dbServerVO, response, request, paramMap
 	 * @return String
-	 * @throws IOException 
+	 * @throws IOException
 	 */
 	@SuppressWarnings("unchecked")
 	@RequestMapping(value = "/popup/workBackrestReWrite.do")
 	@ResponseBody
-	public String workBackrestReWrite(@ModelAttribute("historyVO") HistoryVO historyVO, @ModelAttribute("workVO") WorkVO workVO, @ModelAttribute("dbServerVO") DbServerVO dbServerVO, HttpServletResponse response, HttpServletRequest request, @RequestParam Map<String, Object> paramMap) throws IOException{
+	public String workBackrestReWrite(@ModelAttribute("historyVO") HistoryVO historyVO,
+			@ModelAttribute("workVO") WorkVO workVO, @ModelAttribute("dbServerVO") DbServerVO dbServerVO,
+			HttpServletResponse response, HttpServletRequest request, @RequestParam Map<String, Object> paramMap)
+			throws IOException {
 		String result = "S";
 
 		try {
@@ -1060,10 +1126,10 @@ public class BackupController {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
-		//Backrest 업데이트
-		if(result.equals("S")){
-			try{
+
+		// Backrest 업데이트
+		if (result.equals("S")) {
+			try {
 				HttpSession session = request.getSession();
 				LoginVO loginVo = (LoginVO) session.getAttribute("session");
 				String usr_id = loginVo.getUsr_id();
@@ -1071,40 +1137,42 @@ public class BackupController {
 				workVO.setLst_mdfr_id(usr_id);
 				backupService.updateBackrestWork(workVO);
 
-			}catch(Exception e){
+			} catch (Exception e) {
 				e.printStackTrace();
 				result = "D";
 				return result;
 			}
 		}
-		
-		if(result.equals("S")){
-			deleteBackrestConfig(workVO);
+
+		if (result.equals("S")) {
+			deleteBackrestConfig(workVO, dbServerVO);
 			createBackrestConfig(workVO, dbServerVO, request, paramMap);
 		}
-		
+
 		return result;
 	}
-	
-	
+
 	/**
 	 * Dump Backup Work Update
+	 * 
 	 * @param historyVO, workVO, response, request
 	 * @return String
-	 * @throws IOException 
+	 * @throws IOException
 	 */
 	@RequestMapping(value = "/popup/workDumpReWrite.do")
 	@ResponseBody
-	public String workDumpReWrite(@ModelAttribute("historyVO") HistoryVO historyVO,@ModelAttribute("workVO") WorkVO workVO, HttpServletResponse response, HttpServletRequest request) throws IOException{
+	public String workDumpReWrite(@ModelAttribute("historyVO") HistoryVO historyVO,
+			@ModelAttribute("workVO") WorkVO workVO, HttpServletResponse response, HttpServletRequest request)
+			throws IOException {
 		String result = "F";
 		int bck_wrk_id = workVO.getBck_wrk_id();
-		
+
 		try {
 			// 화면접근이력 이력 남기기
 			CmmnUtils.saveHistory(request, historyVO);
 			historyVO.setExe_dtl_cd("DX-T0025_01");
 			accessHistoryService.insertHistory(historyVO);
-			
+
 			HttpSession session = request.getSession();
 			LoginVO loginVo = (LoginVO) session.getAttribute("session");
 			String usr_id = loginVo.getUsr_id();
@@ -1118,22 +1186,22 @@ public class BackupController {
 			e.printStackTrace();
 			result = "F";
 		}
-		
+
 		// work option delete
 		try {
 			backupService.deleteWorkOpt(bck_wrk_id);
-			
+
 			result = "S";
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			result = "F";
 		}
-		
-		// work object delete 
+
+		// work object delete
 		try {
 			backupService.deleteWorkObj(bck_wrk_id);
-			
+
 			result = "S";
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
@@ -1143,23 +1211,25 @@ public class BackupController {
 
 		return result;
 	}
-	
-	
+
 	/**
 	 * Work scheduleCheck
+	 * 
 	 * @param wrk_id
 	 * @return String
-	 * @throws IOException 
-	 * @throws ParseException 
+	 * @throws IOException
+	 * @throws ParseException
 	 */
 	@RequestMapping(value = "/popup/scheduleCheck.do")
 	@ResponseBody
-	public int scheduleCheck(@ModelAttribute("workVO") WorkVO workVO, HttpServletResponse response, HttpServletRequest request, @ModelAttribute("historyVO") HistoryVO historyVO) throws IOException, ParseException{
-		// Transaction 
-		DefaultTransactionDefinition def  = new DefaultTransactionDefinition();
+	public int scheduleCheck(@ModelAttribute("workVO") WorkVO workVO, HttpServletResponse response,
+			HttpServletRequest request, @ModelAttribute("historyVO") HistoryVO historyVO)
+			throws IOException, ParseException {
+		// Transaction
+		DefaultTransactionDefinition def = new DefaultTransactionDefinition();
 		def.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRED);
 		TransactionStatus status = txManager.getTransaction(def);
-		
+
 		int totCnt = 0;
 		// 화면접근이력 이력 남기기
 		try {
@@ -1170,49 +1240,51 @@ public class BackupController {
 			e2.printStackTrace();
 		}
 
-
 		String wrk_id_Rows = request.getParameter("wrk_id_List").toString().replaceAll("&quot;", "\"");
-		JSONArray wrk_ids = (JSONArray) new JSONParser().parse(wrk_id_Rows);	
-		List<String> ids = new ArrayList<String>(); 
-		HashMap<String , Object> paramvalue = new HashMap<String, Object>();
-		
+		JSONArray wrk_ids = (JSONArray) new JSONParser().parse(wrk_id_Rows);
+		List<String> ids = new ArrayList<String>();
+		HashMap<String, Object> paramvalue = new HashMap<String, Object>();
+
 		try {
-			for(int i=0; i<wrk_ids.size(); i++){
-				ids.add(wrk_ids.get(i).toString()); 
+			for (int i = 0; i < wrk_ids.size(); i++) {
+				ids.add(wrk_ids.get(i).toString());
 			}
 			paramvalue.put("work_id", ids);
-			
+
 			totCnt = backupService.selectScheduleCheckCnt(paramvalue);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return totCnt;
-	
+
 	}
 
 	/**
 	 * Work Delete
+	 * 
 	 * @param WorkVO, response, request, historyVO
 	 * @return boolean
-	 * @throws IOException 
-	 * @throws ParseException 
+	 * @throws IOException
+	 * @throws ParseException
 	 */
 	@RequestMapping(value = "/popup/workDelete.do")
 	@ResponseBody
-	public boolean workDelete(@ModelAttribute("workVO") WorkVO workVO, HttpServletResponse response, HttpServletRequest request, @ModelAttribute("historyVO") HistoryVO historyVO) throws IOException, ParseException{
+	public boolean workDelete(@ModelAttribute("workVO") WorkVO workVO, HttpServletResponse response,
+			HttpServletRequest request, @ModelAttribute("historyVO") HistoryVO historyVO)
+			throws IOException, ParseException {
 		boolean result = false;
 
-		// Transaction 
-		DefaultTransactionDefinition def  = new DefaultTransactionDefinition();
+		// Transaction
+		DefaultTransactionDefinition def = new DefaultTransactionDefinition();
 		def.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRED);
 		TransactionStatus status = txManager.getTransaction(def);
-		
+
 		String bck_wrk_id_Rows = request.getParameter("bck_wrk_id_List").toString().replaceAll("&quot;", "\"");
-		JSONArray bck_wrk_ids = (JSONArray) new JSONParser().parse(bck_wrk_id_Rows);		
-		
+		JSONArray bck_wrk_ids = (JSONArray) new JSONParser().parse(bck_wrk_id_Rows);
+
 		String wrk_id_Rows = request.getParameter("wrk_id_List").toString().replaceAll("&quot;", "\"");
-		JSONArray wrk_ids = (JSONArray) new JSONParser().parse(wrk_id_Rows);	
-		
+		JSONArray wrk_ids = (JSONArray) new JSONParser().parse(wrk_id_Rows);
+
 		// 화면접근이력 이력 남기기
 		try {
 			CmmnUtils.saveHistory(request, historyVO);
@@ -1222,61 +1294,63 @@ public class BackupController {
 			e2.printStackTrace();
 		}
 
-		try{
-			for(int i=0; i<bck_wrk_ids.size(); i++){
+		try {
+			for (int i = 0; i < bck_wrk_ids.size(); i++) {
 				int bck_wrk_id = Integer.parseInt(bck_wrk_ids.get(i).toString());
 				int wrk_id = Integer.parseInt(wrk_ids.get(i).toString());
 
-				//WORK 옵션 삭제
-				backupService.deleteWorkOpt(bck_wrk_id);			
-				//WORK 오브젝트 삭제
+				// WORK 옵션 삭제
+				backupService.deleteWorkOpt(bck_wrk_id);
+				// WORK 오브젝트 삭제
 				backupService.deleteWorkObj(bck_wrk_id);
-				//백업작업 삭제
+				// 백업작업 삭제
 				backupService.deleteBckWork(bck_wrk_id);
-				//전체 작업 삭제
+				// 전체 작업 삭제
 				backupService.deleteWork(wrk_id);
 			}
 
 			result = true;
-		}catch(Exception e){
+		} catch (Exception e) {
 			e.printStackTrace();
 			txManager.rollback(status);
-		}finally{
+		} finally {
 			txManager.commit(status);
 		}
 		return result;
 	}
-	
+
 	/**
 	 * Object insert
+	 * 
 	 * @param WorkObjVO
-	 * @return 
+	 * @return
 	 */
 	@RequestMapping(value = "/popup/workObjWrite.do")
 	@ResponseBody
-	public void workObjWrite(@ModelAttribute("WorkObjVO") WorkObjVO workObjVO, HttpServletRequest request){
+	public void workObjWrite(@ModelAttribute("WorkObjVO") WorkObjVO workObjVO, HttpServletRequest request) {
 		HttpSession session = request.getSession();
 		LoginVO loginVo = (LoginVO) session.getAttribute("session");
 		String usr_id = loginVo.getUsr_id();
 
-		try{
+		try {
 			workObjVO.setFrst_regr_id(usr_id);
 			backupService.insertWorkObj(workObjVO);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
-	
+
 	/**
 	 * Object delete
+	 * 
 	 * @param WorkVO
-	 * @return 
+	 * @return
 	 */
 	@RequestMapping(value = "/popup/workObjDelete.do")
 	@ResponseBody
-	public void workObjDelete(@ModelAttribute("WorkVO") WorkVO workVO, HttpServletResponse response){
+	public void workObjDelete(@ModelAttribute("WorkVO") WorkVO workVO, HttpServletResponse response) {
 		try {
-			//backupService.deleteWorkObj(workVO);
+			// backupService.deleteWorkObj(workVO);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -1285,6 +1359,7 @@ public class BackupController {
 
 	/**
 	 * work명을 중복 체크한다.
+	 * 
 	 * @param wrk_nm
 	 * @return String
 	 * @throws
@@ -1302,7 +1377,7 @@ public class BackupController {
 		}
 		return "true";
 	}
-		
+
 	/**
 	 * 스케줄러 화면을 보여준다.
 	 * 
@@ -1311,44 +1386,45 @@ public class BackupController {
 	 * @throws Exception
 	 */
 	@RequestMapping(value = "/schedulerView.do")
-	public ModelAndView schedulerView(@ModelAttribute("workVO") WorkVO workVO, @ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request) {
+	public ModelAndView schedulerView(@ModelAttribute("workVO") WorkVO workVO,
+			@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request) {
 		int db_svr_id = Integer.parseInt(request.getParameter("db_svr_id"));
 		String db_svr_nm = request.getParameter("db_svr_nm");
 
-		//해당메뉴 권한 조회 (공통메소드호출)
+		// 해당메뉴 권한 조회 (공통메소드호출)
 		CmmnUtils cu = new CmmnUtils();
-		dbSvrAut = cu.selectUserDBSvrAutList(dbAuthorityService,db_svr_id);
+		dbSvrAut = cu.selectUserDBSvrAutList(dbAuthorityService, db_svr_id);
 		ModelAndView mv = new ModelAndView();
 		List<DbVO> resultSet = null;
-		
-		try {			
-			 if(dbSvrAut.get(0).get("policy_change_his_aut_yn").equals("N")){
-				 mv.setViewName("error/autError");
-			 }else{
-				//화면접근이력 남기기
+
+		try {
+			if (dbSvrAut.get(0).get("policy_change_his_aut_yn").equals("N")) {
+				mv.setViewName("error/autError");
+			} else {
+				// 화면접근이력 남기기
 				CmmnUtils.saveHistory(request, historyVO);
 				historyVO.setExe_dtl_cd("DX-T0051");
 				accessHistoryService.insertHistory(historyVO);
-				
+
 				HttpSession session = request.getSession();
 				LoginVO loginVo = (LoginVO) session.getAttribute("session");
 				String usr_id = loginVo.getUsr_id();
 				workVO.setDb_svr_id(db_svr_id);
 				workVO.setUsr_id(usr_id);
-				
-				resultSet=backupService.selectDbList(workVO);
-				
-				SimpleDateFormat frm= new SimpleDateFormat ("yyyyMMdd");
+
+				resultSet = backupService.selectDbList(workVO);
+
+				SimpleDateFormat frm = new SimpleDateFormat("yyyyMMdd");
 				Calendar cal = Calendar.getInstance();
 				String end_date = frm.format(cal.getTime());
-	
-				mv.addObject("month",end_date);
-				
-				mv.addObject("dbList",resultSet);		
-				mv.addObject("db_svr_id",db_svr_id);
-				mv.addObject("db_svr_nm",db_svr_nm);
+
+				mv.addObject("month", end_date);
+
+				mv.addObject("dbList", resultSet);
+				mv.addObject("db_svr_id", db_svr_id);
+				mv.addObject("db_svr_nm", db_svr_nm);
 				mv.setViewName("functions/scheduler/schedulerView");
-			 }
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -1356,68 +1432,68 @@ public class BackupController {
 	}
 
 	/**
-	 *   백업스케줄 리스트(주별)
+	 * 백업스케줄 리스트(주별)
 	 * 
 	 * @param
-	 * @return 
+	 * @return
 	 * @throws Exception
 	 */
 	@RequestMapping(value = "/selectBckSchedule.do")
 	@ResponseBody
-	public List<Map<String, Object>> selectBckSchedule(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request, HttpServletResponse response) {
-		
+	public List<Map<String, Object>> selectBckSchedule(@ModelAttribute("historyVO") HistoryVO historyVO,
+			HttpServletRequest request, HttpServletResponse response) {
+
 		List<Map<String, Object>> result = null;
-		try {		
-				int db_svr_id = Integer.parseInt(request.getParameter("db_svr_id"));
-				result = backupService.selectBckSchedule(db_svr_id);
+		try {
+			int db_svr_id = Integer.parseInt(request.getParameter("db_svr_id"));
+			result = backupService.selectBckSchedule(db_svr_id);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return result;		
-	}	
-	
+		return result;
+	}
 
 	/**
-	 *   백업스케줄 리스트(월별)
+	 * 백업스케줄 리스트(월별)
 	 * 
 	 * @param
-	 * @return 
+	 * @return
 	 * @throws Exception
 	 */
 	@RequestMapping(value = "/selectMonthBckSchedule.do")
 	@ResponseBody
-	public List<Map<String, Object>> selectMonthBckSchedule(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request, HttpServletResponse response) {
-		
+	public List<Map<String, Object>> selectMonthBckSchedule(@ModelAttribute("historyVO") HistoryVO historyVO,
+			HttpServletRequest request, HttpServletResponse response) {
+
 		List<Map<String, Object>> result = null;
-		try {		
-				int db_svr_id = Integer.parseInt(request.getParameter("db_svr_id"));
-				result = backupService.selectMonthBckSchedule(db_svr_id);
+		try {
+			int db_svr_id = Integer.parseInt(request.getParameter("db_svr_id"));
+			result = backupService.selectMonthBckSchedule(db_svr_id);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return result;		
-	}	
-	
-	
+		return result;
+	}
+
 	@RequestMapping(value = "/selectMonthBckScheduleSearch.do")
 	@ResponseBody
-	public List<Map<String, Object>> selectMonthBckScheduleSearch(HttpServletRequest request, HttpServletResponse response) {
-		
+	public List<Map<String, Object>> selectMonthBckScheduleSearch(HttpServletRequest request,
+			HttpServletResponse response) {
+
 		List<Map<String, Object>> result = null;
-		try {		
-			HashMap<String,Object> paramvalue = new HashMap<String, Object>();
-			paramvalue.put("datest",(String)request.getParameter("stdate"));
-			paramvalue.put("dateed", (String)request.getParameter("eddate"));
-			paramvalue.put("db_svr_id", (String)request.getParameter("db_svr_id"));
-			
-				result = backupService.selectMonthBckScheduleSearch(paramvalue);
+		try {
+			HashMap<String, Object> paramvalue = new HashMap<String, Object>();
+			paramvalue.put("datest", (String) request.getParameter("stdate"));
+			paramvalue.put("dateed", (String) request.getParameter("eddate"));
+			paramvalue.put("db_svr_id", (String) request.getParameter("db_svr_id"));
+
+			result = backupService.selectMonthBckScheduleSearch(paramvalue);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return result;		
-	}	
-	
-	
+		return result;
+	}
+
 	/**
 	 * 백업스케줄 등록 뷰
 	 * 
@@ -1426,37 +1502,38 @@ public class BackupController {
 	 * @throws Exception
 	 */
 	@RequestMapping(value = "/bckScheduleInsertVeiw.do")
-	public ModelAndView bckScheduleInsertVeiw(@ModelAttribute("workVO") WorkVO workVO, @ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request, HttpServletResponse response) {
+	public ModelAndView bckScheduleInsertVeiw(@ModelAttribute("workVO") WorkVO workVO,
+			@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request,
+			HttpServletResponse response) {
 		ModelAndView mv = new ModelAndView("jsonView");
 		List<DbVO> resultSet = null;
 
 		try {
-			//화면접근이력 남기기
+			// 화면접근이력 남기기
 			CmmnUtils.saveHistory(request, historyVO);
 			historyVO.setExe_dtl_cd("DX-T0052");
 			accessHistoryService.insertHistory(historyVO);
-			
+
 			int db_svr_id = Integer.parseInt(request.getParameter("db_svr_id"));
-			
+
 			HttpSession session = request.getSession();
 			LoginVO loginVo = (LoginVO) session.getAttribute("session");
 			String usr_id = loginVo.getUsr_id();
 			workVO.setDb_svr_id(db_svr_id);
 			workVO.setUsr_id(usr_id);
-			
-			resultSet=backupService.selectDbList(workVO);
-			
-			mv.addObject("view_dbList",resultSet);		
-			mv.addObject("db_svr_id",db_svr_id);
-	/*		mv.setViewName("popup/bckScheduleInsertVeiw");*/	
-			
+
+			resultSet = backupService.selectDbList(workVO);
+
+			mv.addObject("view_dbList", resultSet);
+			mv.addObject("db_svr_id", db_svr_id);
+			/* mv.setViewName("popup/bckScheduleInsertVeiw"); */
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return mv;
 	}
-	
-	
+
 	/**
 	 * 백업스케줄 상세정보
 	 * 
@@ -1465,32 +1542,34 @@ public class BackupController {
 	 * @throws Exception
 	 */
 	@RequestMapping(value = "/bckScheduleDtlVeiw.do")
-	public ModelAndView bckScheduleDtlVeiw(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request, HttpServletResponse response) {
+	public ModelAndView bckScheduleDtlVeiw(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request,
+			HttpServletResponse response) {
 		ModelAndView mv = new ModelAndView("jsonView");
-		
+
 		try {
-				String scd_id = request.getParameter("scd_id");
-				//mv.setViewName("popup/bakupScheduleDtl");
-				mv.addObject("scd_id", scd_id);				
+			String scd_id = request.getParameter("scd_id");
+			// mv.setViewName("popup/bakupScheduleDtl");
+			mv.addObject("scd_id", scd_id);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
 		return mv;
 	}
-	
-	
-	
+
 	/**
 	 * 백업 간편등록
+	 * 
 	 * @param WorkVO
 	 * @return String
-	 * @throws IOException 
+	 * @throws IOException
 	 */
 	@RequestMapping(value = "/popup/insertBckJob.do")
-	public String insertBckJob(@ModelAttribute("historyVO") HistoryVO historyVO,@ModelAttribute("workVO") WorkVO workVO, HttpServletResponse response, HttpServletRequest request) throws IOException {
+	public String insertBckJob(@ModelAttribute("historyVO") HistoryVO historyVO,
+			@ModelAttribute("workVO") WorkVO workVO, HttpServletResponse response, HttpServletRequest request)
+			throws IOException {
 		String result = "S";
-		
+
 		String wrkid_result = "S";
 		WorkVO resultSet = null;
 
@@ -1500,34 +1579,34 @@ public class BackupController {
 			// historyVO.setExe_dtl_cd("DX-T0022_01");
 			// historyVO.setMnu_id(25);
 			// accessHistoryService.insertHistory(historyVO);
-			
+
 			HttpSession session = request.getSession();
 			LoginVO loginVo = (LoginVO) session.getAttribute("session");
 			String usr_id = loginVo.getUsr_id();
 			workVO.setFrst_regr_id(usr_id);
-			
-			//작업 정보등록
+
+			// 작업 정보등록
 			backupService.insertWork(workVO);
-			//backupService.insertRmanWork(workVO);
+			// backupService.insertRmanWork(workVO);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			result = "F";
 		}
-	
+
 		// Get Last wrk_id
-		if(result.equals("S")){
+		if (result.equals("S")) {
 			try {
 				resultSet = backupService.lastWorkId();
-				workVO.setWrk_id(resultSet.getWrk_id());		
+				workVO.setWrk_id(resultSet.getWrk_id());
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
-		
-		if(wrkid_result.equals("S")){
-			try {	
+
+		if (wrkid_result.equals("S")) {
+			try {
 				backupService.insertRmanWork(workVO);
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
@@ -1535,26 +1614,27 @@ public class BackupController {
 			}
 		}
 		return result;
-	}	
-	
+	}
+
 	/**
-	 * PATH  정보 호출
+	 * PATH 정보 호출
+	 * 
 	 * @param request
 	 * @return List<Map<String, Object>>
 	 * @throws
 	 */
 	@RequestMapping(value = "/selectPathInfo.do")
 	@ResponseBody
-	public List<Map<String, Object>> selectPathInfo (HttpServletRequest request) {
+	public List<Map<String, Object>> selectPathInfo(HttpServletRequest request) {
 		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
-		
-		Map<String, Object> pgdataResult =new HashMap<String, Object>();
-		Map<String, Object> bckpathResult =new HashMap<String, Object>();
-		JSONObject serverObj = new JSONObject();		
-	
+
+		Map<String, Object> pgdataResult = new HashMap<String, Object>();
+		Map<String, Object> bckpathResult = new HashMap<String, Object>();
+		JSONObject serverObj = new JSONObject();
+
 		try {
 			AES256 dec = new AES256(AES256_KEY.ENC_KEY);
-			
+
 			int db_svr_id = Integer.parseInt(request.getParameter("db_svr_id"));
 			DbServerVO schDbServerVO = new DbServerVO();
 			schDbServerVO.setDb_svr_id(db_svr_id);
@@ -1577,34 +1657,35 @@ public class BackupController {
 			ClientInfoCmmn cic = new ClientInfoCmmn();
 			pgdataResult = cic.dbms_inforamtion(IP, PORT, serverObj);
 			bckpathResult = cic.back_path_call(IP, PORT);
-	
+
 			list.add(pgdataResult);
 			list.add(bckpathResult);
-			
-			//System.out.println(result);
+
+			// System.out.println(result);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return list;
-	}	
-	
+	}
+
 	/**
 	 * RMAN 정보 호출(pg_rman show)
+	 * 
 	 * @param request
 	 * @return JSONObject
 	 * @throws
 	 */
 	@RequestMapping(value = "/rmanShow.do")
 	@ResponseBody
-	public JSONObject rmanShow (HttpServletRequest request) {
-		
+	public JSONObject rmanShow(HttpServletRequest request) {
+
 		List<HashMap<String, String>> pgRmanInfo = null;
 		JSONObject result = new JSONObject();
 
 		try {
 			int db_svr_id = Integer.parseInt(request.getParameter("db_svr_id"));
 			String cmd = request.getParameter("cmd");
-			
+
 			DbServerVO schDbServerVO = new DbServerVO();
 			schDbServerVO.setDb_svr_id(db_svr_id);
 			DbServerVO dbServerVO = (DbServerVO) cmmnServerInfoService.selectServerInfo(schDbServerVO);
@@ -1615,10 +1696,10 @@ public class BackupController {
 
 			String IP = dbServerVO.getIpadr();
 			int PORT = agentInfo.getSOCKET_PORT();
-			
+
 			ClientInfoCmmn cic = new ClientInfoCmmn();
 			pgRmanInfo = cic.rmanShow(IP, PORT, cmd);
-			
+
 			if (pgRmanInfo != null) {
 				result.put("data", pgRmanInfo);
 			} else {
@@ -1632,6 +1713,7 @@ public class BackupController {
 
 	/**
 	 * rmanShowView page
+	 * 
 	 * @param historyVO, request
 	 * @return ModelAndView
 	 * @throws Exception
@@ -1648,9 +1730,9 @@ public class BackupController {
 
 			int db_svr_id = Integer.parseInt(request.getParameter("db_svr_id"));
 			String bck = request.getParameter("bck");
-			 			
-			mv.addObject("db_svr_id",db_svr_id);
-			mv.addObject("bck",bck);
+
+			mv.addObject("db_svr_id", db_svr_id);
+			mv.addObject("bck", bck);
 
 		} catch (Exception e1) {
 			// TODO Auto-generated catch block
@@ -1661,6 +1743,7 @@ public class BackupController {
 
 	/**
 	 * dumpShowView page
+	 * 
 	 * @param historyVO, request
 	 * @return ModelAndView
 	 * @throws Exception
@@ -1678,8 +1761,8 @@ public class BackupController {
 			int db_svr_id = Integer.parseInt(request.getParameter("db_svr_id"));
 			String bck = request.getParameter("bck");
 
-			mv.addObject("db_svr_id",db_svr_id);
-			mv.addObject("bck",bck);
+			mv.addObject("db_svr_id", db_svr_id);
+			mv.addObject("bck", bck);
 
 		} catch (Exception e1) {
 			// TODO Auto-generated catch block
@@ -1691,17 +1774,18 @@ public class BackupController {
 
 	/**
 	 * DUMP 정보 호출(pg_dump show)
+	 * 
 	 * @param request
 	 * @return JSONObject
 	 * @throws
 	 */
 	@RequestMapping(value = "/dumpShow.do")
 	@ResponseBody
-	public JSONObject dumpShow (HttpServletRequest request) {
-			
+	public JSONObject dumpShow(HttpServletRequest request) {
+
 		List<HashMap<String, String>> pgDumpInfo = null;
 		JSONObject result = new JSONObject();
-			
+
 		try {
 			int db_svr_id = Integer.parseInt(request.getParameter("db_svr_id"));
 			String cmd = request.getParameter("cmd");
@@ -1716,16 +1800,16 @@ public class BackupController {
 
 			String IP = dbServerVO.getIpadr();
 			int PORT = agentInfo.getSOCKET_PORT();
-				
+
 			ClientInfoCmmn cic = new ClientInfoCmmn();
-			
+
 			pgDumpInfo = cic.dumpShow(IP, PORT, cmd);
 
 			if (pgDumpInfo != null) {
 				result.put("data", pgDumpInfo);
 			} else {
 				result.put("data", null);
-			}	
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -1734,29 +1818,30 @@ public class BackupController {
 
 	/**
 	 * 백업 즉시 실행
+	 * 
 	 * @param request
 	 * @return resultSet
 	 * @throws Exception
 	 */
 	@RequestMapping(value = "/backupImmediateExe.do")
 	@ResponseBody
-	public void backupImmediateExe (HttpServletRequest request) {
+	public void backupImmediateExe(HttpServletRequest request) {
 		Map<String, Object> result = null;
-			
-		String cmd =null;
-		String bck_fileNm ="";
-			
-		List<Map<String, Object>> resultWork = null;		
-			
-		try{
+
+		String cmd = null;
+		String bck_fileNm = "";
+
+		List<Map<String, Object>> resultWork = null;
+
+		try {
 			int db_svr_id = Integer.parseInt(request.getParameter("db_svr_id"));
 			int wrk_id = Integer.parseInt(request.getParameter("wrk_id"));
 			String bck_bsn_dscd = request.getParameter("bck_bsn_dscd");
-			
+
 			DbServerVO schDbServerVO = new DbServerVO();
 			schDbServerVO.setDb_svr_id(db_svr_id);
 			DbServerVO dbServerVO = (DbServerVO) cmmnServerInfoService.selectServerInfo(schDbServerVO);
-				
+
 			String strIpAdr = dbServerVO.getIpadr();
 			AgentInfoVO vo = new AgentInfoVO();
 			vo.setIPADR(strIpAdr);
@@ -1764,46 +1849,46 @@ public class BackupController {
 
 			String IP = dbServerVO.getIpadr();
 			int PORT = agentInfo.getSOCKET_PORT();
-			
-			BackupImmediate bckImd= new  BackupImmediate();
+
+			BackupImmediate bckImd = new BackupImmediate();
 			resultWork = backupService.selectBckInfo(wrk_id);
-				
-			if(bck_bsn_dscd.equals("TC000201")){
-				 cmd = bckImd.rmanBackupMakeCmd(resultWork, dbServerVO);
-					 
-				 System.out.println("RMAN 명령어@@@@@@@@@@@@@@@@@@@@");
-				 System.out.println(cmd);
-			}else{
+
+			if (bck_bsn_dscd.equals("TC000201")) {
+				cmd = bckImd.rmanBackupMakeCmd(resultWork, dbServerVO);
+
+				System.out.println("RMAN 명령어@@@@@@@@@@@@@@@@@@@@");
+				System.out.println(cmd);
+			} else {
 				List<Map<String, Object>> addOption = null;
 				List<Map<String, Object>> addObject = null;
-					
-				Calendar calendar = Calendar.getInstance();				
-		        java.util.Date date = calendar.getTime();
-		        String today = (new SimpleDateFormat("yyyyMMddHHmmss").format(date));
 
-		    	if(resultWork.get(0).get("file_fmt_cd_nm") != null && resultWork.get(0).get("file_fmt_cd_nm") != ""){							
-					if(resultWork.get(0).get("file_fmt_cd_nm").equals("tar")){
-						bck_fileNm = "eXperDB_"+resultWork.get(0).get("wrk_id")+"_"+today+".tar";	
-					}else if(resultWork.get(0).get("file_fmt_cd_nm").equals("diretocry")){
-						bck_fileNm = "eXperDB_"+resultWork.get(0).get("wrk_id")+"_"+today;
-					}else if(resultWork.get(0).get("file_fmt_cd_nm").equals("plain")){
-						bck_fileNm = "eXperDB_"+resultWork.get(0).get("wrk_id")+"_"+today+".sql";
-					}else{						
-						bck_fileNm = "eXperDB_"+resultWork.get(0).get("wrk_id")+"_"+today+".dump";									
+				Calendar calendar = Calendar.getInstance();
+				java.util.Date date = calendar.getTime();
+				String today = (new SimpleDateFormat("yyyyMMddHHmmss").format(date));
+
+				if (resultWork.get(0).get("file_fmt_cd_nm") != null && resultWork.get(0).get("file_fmt_cd_nm") != "") {
+					if (resultWork.get(0).get("file_fmt_cd_nm").equals("tar")) {
+						bck_fileNm = "eXperDB_" + resultWork.get(0).get("wrk_id") + "_" + today + ".tar";
+					} else if (resultWork.get(0).get("file_fmt_cd_nm").equals("diretocry")) {
+						bck_fileNm = "eXperDB_" + resultWork.get(0).get("wrk_id") + "_" + today;
+					} else if (resultWork.get(0).get("file_fmt_cd_nm").equals("plain")) {
+						bck_fileNm = "eXperDB_" + resultWork.get(0).get("wrk_id") + "_" + today + ".sql";
+					} else {
+						bck_fileNm = "eXperDB_" + resultWork.get(0).get("wrk_id") + "_" + today + ".dump";
 					}
 				}
-			        
-		        //부가옵션 조회
-				addOption= scheduleService.selectAddOption(wrk_id);			
-				//오브젝트옵션 조회
-				addObject= scheduleService.selectAddObject(wrk_id);
-					
-				cmd = bckImd.dumpBackupMakeCmd( dbServerVO,resultWork,addOption,addObject,bck_fileNm);
-					
+
+				// 부가옵션 조회
+				addOption = scheduleService.selectAddOption(wrk_id);
+				// 오브젝트옵션 조회
+				addObject = scheduleService.selectAddObject(wrk_id);
+
+				cmd = bckImd.dumpBackupMakeCmd(dbServerVO, resultWork, addOption, addObject, bck_fileNm);
+
 				System.out.println("DUMP 명령어@@@@@@@@@@@@@@@@@@@@");
 				System.out.println(cmd);
 			}
-				
+
 			ClientInfoCmmn cic = new ClientInfoCmmn();
 			result = cic.immediate(IP, PORT, cmd, resultWork, bck_fileNm);
 
@@ -1811,39 +1896,39 @@ public class BackupController {
 			System.out.println(result.get("RESULT_CODE"));
 			System.out.println(result.get("ERR_CODE"));
 			System.out.println(result.get("ERR_MSG"));
-			
-		}catch(Exception e){
+
+		} catch (Exception e) {
 			e.printStackTrace();
-		}		
+		}
 	}
-	
+
 	/**
 	 * pgbackrest info history
-	 * @param 
-	 * @return 
+	 * 
+	 * @param
+	 * @return
 	 * @throws Exception
 	 */
 	@RequestMapping(value = "/backrestHistory.do")
 	@ResponseBody
-	public JSONObject pgbackrestShow(HttpServletRequest request) throws Exception{
-		
+	public JSONObject pgbackrestShow(HttpServletRequest request) throws Exception {
+
 		ClientInfoCmmn cic = new ClientInfoCmmn();
-		
-		
-		String Ip = "192.168.10.151";
+
+		String Ip = "192.168.10.121";
 		int port = 9001;
 		String backrest_opt = request.getParameter("backrest_opt");
-		
+
 		String wrk_nm = request.getParameter("wrk_nm");
-		
+
 		JSONObject jObj = new JSONObject();
-		
+
 		jObj.put(ClientProtocolID.STORAGE_OPT, backrest_opt);
-		
+
 		JSONObject result = new JSONObject();
 
 		result = cic.backrestinfo(Ip, port, jObj);
-		
+
 //		System.out.println(result.get("RESULT_CODE"));
 //		System.out.println(result.get("ERR_CODE"));
 //		System.out.println(result.get("ERR_MSG"));
@@ -1851,199 +1936,164 @@ public class BackupController {
 
 		return result;
 	}
-	
+
 	/**
 	 * pgbackrest info history
-	 * @param 
-	 * @return 
+	 * 
+	 * @param
+	 * @return
 	 * @throws Exception
 	 */
 	@RequestMapping(value = "/backrestLog.do")
 	@ResponseBody
-	public JSONObject pgbackrestLog(HttpServletRequest request) throws Exception{
-			
-		String Ip = "192.168.10.151";
+	public JSONObject pgbackrestLog(HttpServletRequest request) throws Exception {
+
+		String Ip = "192.168.10.121";
 		int port = 9001;
-		//String backrest_opt = request.getParameter("backrest_opt");
-		
-		//String wrk_nm = request.getParameter("wrk_nm");
-		
+		// String backrest_opt = request.getParameter("backrest_opt");
+
+		// String wrk_nm = request.getParameter("wrk_nm");
+
 		JSONObject jObj = new JSONObject();
-		
+
 		jObj.put(ClientProtocolID.STORAGE_OPT, "local");
-		
+
 		JSONObject result = new JSONObject();
 		ClientInfoCmmn cic = new ClientInfoCmmn();
-		
+
 		result = cic.pgbackrestLog(Ip, port, jObj);
-		
+
 		return result;
 	}
-	
+
 	@RequestMapping(value = "/selectBackrestLog.do")
 	@ResponseBody
 	public JSONObject selectPgbackrestLog(HttpServletRequest request) {
-		
+
 		String Ip = "192.168.10.151";
 		int port = 9001;
-		
+
 //		String logPath = request.getParameter("log_path");
 		String logPath = "/experdb/app/postgres/etc/local/log";
 		String logDate = request.getParameter("start_date");
 		logDate.replaceAll("", "-");
-		
+
 //		backuplog 파일 명 정하기
-		
+
 		String pullPath = logPath + "/experdb-" + logDate;
-		
-		
+
 		JSONObject jObj = new JSONObject();
-		
+
 		jObj.put(ClientProtocolID.CMD_BACKUP_PATH, pullPath);
 		return null;
 	}
-	
+
 	/**
 	 * Backrest config 정보
-	 * @param 
+	 * 
+	 * @param
 	 * @return resultSet
 	 * @throws Exception
 	 */
 	@SuppressWarnings("unchecked")
 	@RequestMapping(value = "/selectBackrestConfigInfo.do")
 	public @ResponseBody String selectBackrestConfigInfo(HttpServletRequest request) {
+		ClientInfoCmmn cic = new ClientInfoCmmn();
+		JSONObject resultObj = new JSONObject();
 		String result = null;
 		List<Map<String, Object>> resultWork = null;
-		
+
 		try {
 			int wrk_id = Integer.parseInt(request.getParameter("wrk_id"));
-			
 			resultWork = backupService.selectBckInfo(wrk_id);
-				
-			String backrest_path = "C:\\backrest\\";	
-			String filePath = backrest_path + resultWork.get(0).get("wrk_nm") + "_pgbackrest.conf";
-		    FileInputStream fileStream = null;
-		    try{
-		    	fileStream = new FileInputStream( filePath );// 파일 스트림 생성
-		    }catch (Exception e){
-				System.out.println("파일 입출력 에러 : " + e);
-				return result;
-			}
-		    //버퍼 선언
-		    byte[ ] readBuffer = new byte[fileStream.available()];
-		    while (fileStream.read( readBuffer ) != -1){}
-		    fileStream.close(); //스트림 닫기	
-		    result=new String(readBuffer);
+
+			AgentInfoVO vo = new AgentInfoVO();
+			vo.setIPADR((resultWork.get(0).get("db_svr_ipadr")).toString());
+			AgentInfoVO agentInfo = (AgentInfoVO) cmmnServerInfoService.selectAgentInfo(vo);
+
+			String ip = (resultWork.get(0).get("db_svr_ipadr")).toString();
+			int port = agentInfo.getSOCKET_PORT();
+
+			JSONObject jObj = new JSONObject();
+			jObj.put(ClientProtocolID.WRK_NM, resultWork.get(0).get("wrk_nm"));
+
+			resultObj = cic.selectBackrestConf(ip, port, jObj);
+
+			result = (String) resultObj.get(ClientProtocolID.RESULT_DATA);
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return result;
 	}
-	
+
 	/**
 	 * Backrest config 생성
+	 * 
 	 * @param workVO, dbServerVO, request, paramMap
-	 * @return 
+	 * @return
 	 * @throws Exception
 	 */
 	@SuppressWarnings("unchecked")
-	public void createBackrestConfig(@ModelAttribute("workVO") WorkVO workVO, @ModelAttribute("dbServerVO") DbServerVO dbServerVO, HttpServletRequest request, @RequestParam Map<String, Object> paramMap) {
+	public void createBackrestConfig(WorkVO workVO, DbServerVO dbServerVO, HttpServletRequest request, Map<String, Object> paramMap) {
+		ClientInfoCmmn cic = new ClientInfoCmmn();
+		JSONObject result = new JSONObject();
+
 		try {
-			String filePath = "C:\\backrest\\" + workVO.getBck_filenm();
-			String configPath = "C:\\backrest\\pgbackrest.conf";
-			BufferedReader br = new BufferedReader(new FileReader(new File(configPath)));
-			BufferedWriter bw = new BufferedWriter(new FileWriter(new File(filePath)));
-			
-			int prcs_cnt = Integer.parseInt(request.getParameter("prcs_cnt"));	//병렬도
-			String cps_type = request.getParameter("cps_type");	//압축타입
-			
-			ArrayList<String> customKeyList = new ArrayList<String>();
-			ArrayList<String> customValueList = new ArrayList<String>();
-			
-			if(!(paramMap.get("custom_map")).equals("") || (paramMap.get("custom_map")) != null ) {
-				try {
-					JSONParser parser = new JSONParser();
-					JSONObject jsonObject = (JSONObject) parser.parse((paramMap.get("custom_map")).toString());
-					Iterator<String> customKeys = jsonObject.keySet().iterator();
-					
-					while(customKeys.hasNext()){
-		                String key = customKeys.next().toString();
-		                customKeyList.add(key);
-		                customValueList.add((jsonObject.get(key)).toString());
-		            }
-					
-				} catch (ParseException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
-			}
-			
-			try{
-		        String fileContent;
-				while((fileContent = br.readLine()) != null) {
-					fileContent = fileContent.replaceAll("#repo1-path=", "repo1-path=" + workVO.getBck_pth());
-					fileContent = fileContent.replaceAll("#repo1-retention-full=", "repo1-retention-full=" + workVO.getBck_mtn_ecnt());
-					fileContent = fileContent.replaceAll("#log-path=", "log-path=" + workVO.getLog_file_pth());
-					fileContent = fileContent.replaceAll("#log-level-console=detail", "log-level-console=detail");
-					fileContent = fileContent.replaceAll("#log-level-file=detail", "log-level-file=detail");
-					
-					fileContent = fileContent.replaceAll("#pg1-path=", "pg1-path=" + dbServerVO.getPgdata_pth());
-					fileContent = fileContent.replaceAll("#pg1-port=", "pg1-port=" + dbServerVO.getPortno());
-					fileContent = fileContent.replaceAll("#pg1-user=", "pg1-user=" + dbServerVO.getSvr_spr_usr_id());
-					fileContent = fileContent.replaceAll("#repo1-gbn=", "#repo1-gbn=" + workVO.getBackrest_gbn());
-					fileContent = fileContent.replaceAll("#process-max=", "process-max=" + prcs_cnt);
-					
-					if(workVO.getCps_yn().toString().equals("Y")) {
-						if(cps_type.toString().equals("gzip")) {
-							fileContent = fileContent.replaceAll("#compress-type=", "compress-type=gz");
-						}else {
-							fileContent = fileContent.replaceAll("#compress-type=", "compress-type=" + cps_type);
-						}
-					}else {
-						fileContent = fileContent.replaceAll("#compress=", "compress=" + workVO.getCps_yn().toString().toLowerCase());
-					}
-					
-					bw.write(fileContent + "\r\n");
-					bw.flush();
-				}
-				
-				if(customKeyList.size() != 0) {
-					for(int i=0; i < customKeyList.size(); i++) {
-						fileContent = customKeyList.get(i) + "=" + customValueList.get(i);
-						
-						bw.write(fileContent + "\r\n");
-						bw.flush();
-					}
-					
-				}
-				
-				bw.close();
-				br.close();
-				
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		}catch (Exception e) {
-			e.printStackTrace();
+			AgentInfoVO vo = new AgentInfoVO();
+			vo.setIPADR(dbServerVO.getIpadr());
+			AgentInfoVO agentInfo = (AgentInfoVO) cmmnServerInfoService.selectAgentInfo(vo);
+
+			String ip = dbServerVO.getIpadr();
+			int port = agentInfo.getSOCKET_PORT();
+			JSONObject jObj = new JSONObject();
+
+			jObj.put(ClientProtocolID.PGDATA, dbServerVO.getPgdata_pth());
+			jObj.put(ClientProtocolID.DBMS_PORT, dbServerVO.getPortno());
+			jObj.put(ClientProtocolID.SPR_USR_ID, dbServerVO.getSvr_spr_usr_id());
+			jObj.put(ClientProtocolID.BCK_FILENM, workVO.getBck_filenm());
+			jObj.put(ClientProtocolID.BCK_MTN_ECNT, workVO.getBck_mtn_ecnt());
+			jObj.put(ClientProtocolID.LOG_PATH, workVO.getLog_file_pth());
+			jObj.put(ClientProtocolID.STORAGE_OPT, workVO.getBackrest_gbn());
+			jObj.put(ClientProtocolID.CPS_YN, workVO.getCps_yn());
+			jObj.put(ClientProtocolID.PRCS_CNT, request.getParameter("prcs_cnt"));
+			jObj.put(ClientProtocolID.CPS_TYPE, request.getParameter("cps_type"));
+			jObj.put(ClientProtocolID.CUSTOM_MAP, paramMap.get("custom_map"));
+
+			result = cic.createBackrestConf(ip, port, jObj);
+
+		} catch (Exception e2) {
+			// TODO Auto-generated catch block
+			e2.printStackTrace();
 		}
 	}
-	
+
 	/**
 	 * Backrest config 삭제
+	 * 
 	 * @param workVO
-	 * @return 
+	 * @return
 	 * @throws Exception
 	 */
 	@SuppressWarnings("unchecked")
-	public void deleteBackrestConfig(@ModelAttribute("workVO") WorkVO workVO) {
-		String filePath = "C:\\backrest\\" + workVO.getBck_filenm();
-		
-		try{
-			File file = new File(filePath);
-			if(file.exists()){
-				file.delete();
-	    	}
-		}catch (Exception e) {
+	public void deleteBackrestConfig(WorkVO workVO, DbServerVO dbServerVO) {
+		ClientInfoCmmn cic = new ClientInfoCmmn();
+		JSONObject result = new JSONObject();
+
+		try {
+			AgentInfoVO vo = new AgentInfoVO();
+			vo.setIPADR(dbServerVO.getIpadr());
+			AgentInfoVO agentInfo = (AgentInfoVO) cmmnServerInfoService.selectAgentInfo(vo);
+
+			String ip = dbServerVO.getIpadr();
+			int port = agentInfo.getSOCKET_PORT();
+			JSONObject jObj = new JSONObject();
+			
+			jObj.put(ClientProtocolID.BCK_FILENM, workVO.getBck_filenm());
+			
+			result = cic.deleteBackrestConf(ip, port, jObj);
+
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 

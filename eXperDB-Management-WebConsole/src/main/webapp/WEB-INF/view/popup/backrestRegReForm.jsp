@@ -313,7 +313,7 @@
 				bck_bsn_dscd : "TC000205",
 				bck_pth : $("#mod_bckr_pth", "#workRegReFormBckr").val(),
 				log_file_pth : $("#mod_bckr_log_pth", "#workRegReFormBckr").val(),
-				bck_filenm : ($('#mod_wrk_nm_bckr', '#workRegReFormBckr').val()) + "_pgbackrest.conf",
+				bck_filenm : ($('#mod_wrk_nm_bckr', '#workRegReFormBckr').val()) + ".conf",
 				prcs_cnt: $("#mod_cps_opt_prcs", "#workRegReFormBckr").val(),
 				cps_type: $("#mod_cps_opt_type", "#workRegReFormBckr").val(),
 				ipadr: selectedAgent.ipadr,

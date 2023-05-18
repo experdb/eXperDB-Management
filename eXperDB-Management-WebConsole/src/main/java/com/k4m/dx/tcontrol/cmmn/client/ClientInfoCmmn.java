@@ -13,12 +13,15 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -26,6 +29,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.k4m.dx.tcontrol.admin.dbserverManager.service.DbServerVO;
+import com.k4m.dx.tcontrol.backup.service.WorkVO;
 import com.k4m.dx.tcontrol.cmmn.AES256;
 import com.k4m.dx.tcontrol.cmmn.AES256_KEY;
 import com.k4m.dx.tcontrol.db2pg.cmmn.DB2PG_START;
@@ -2687,5 +2691,59 @@ System.out.println("=====cmd9999999999999999999999999999" + properties_nm);
 		}
 		
 		return null;
+	}
+	
+	public JSONObject createBackrestConf(String ip, int port, JSONObject jObj) {
+		JSONObject objList;
+		
+		ClientAdapter CA = new ClientAdapter(ip, port);
+		
+		jObj.put(ClientProtocolID.DX_EX_CODE, ClientTranCodeType.DxT049);
+
+		try {
+			CA.open();
+			objList = CA.dxT049(jObj);
+			CA.close();
+		} catch (Exception e) {			
+			e.printStackTrace();
+		}
+		
+		return null;
+	}
+	
+	public JSONObject selectBackrestConf(String ip, int port, JSONObject jObj) {
+		JSONObject objList = null;
+		
+		ClientAdapter CA = new ClientAdapter(ip, port);
+		
+		jObj.put(ClientProtocolID.DX_EX_CODE, ClientTranCodeType.DxT050);
+
+		try {
+			CA.open();
+			objList = CA.dxT050(jObj);
+			CA.close();
+		} catch (Exception e) {			
+			e.printStackTrace();
+		}
+		
+		return objList;
+	}
+	
+	public JSONObject deleteBackrestConf(String ip, int port, JSONObject jObj) {
+		JSONObject objList = null;
+		
+		ClientAdapter CA = new ClientAdapter(ip, port);
+		
+		jObj.put(ClientProtocolID.DX_EX_CODE, ClientTranCodeType.DxT051);
+
+		try {
+			CA.open();
+			objList = CA.dxT051(jObj);
+			CA.close();
+		} catch (Exception e) {			
+			e.printStackTrace();
+		}
+		
+		return objList;
 	}
 }
