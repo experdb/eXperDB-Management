@@ -5,14 +5,16 @@ INSERT INTO T_SYSDTL_C(GRP_CD, SYS_CD, SYS_CD_NM, USE_YN, FRST_REGR_ID, FRST_REG
 
 
 CREATE TABLE t_BACKREST_OPT_i (
-		opt_id NUMERIC PRIMARY key
-		,opt_nm varchar(50)
-		,opt_exp varchar(100)
-		);
+      opt_id NUMERIC PRIMARY key
+      ,opt_gbn  numeric(5)
+      ,opt_nm varchar(50)
+      ,opt_exp varchar(100)
+      );
 		
 COMMENT ON COLUMN t_BACKREST_OPT_i.opt_id IS 'Backrest 옵션ID';
+COMMENT ON COLUMN t_BACKREST_OPT_i.opt_gbn IS 'Backrest 구분';   
 COMMENT ON COLUMN t_BACKREST_OPT_i.opt_nm IS 'Backrest 옵션';
-COMMENT ON COLUMN t_BACKREST_OPT_i.opt_exp IS 'Backrest 옵션설명';	
+COMMENT ON COLUMN t_BACKREST_OPT_i.opt_exp IS 'Backrest 옵션설명';   
 		
 		
 CREATE SEQUENCE Q_BACKREST_OPT_I_01 ;
