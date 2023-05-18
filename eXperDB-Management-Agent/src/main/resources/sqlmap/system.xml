@@ -940,4 +940,23 @@
 	 	)	 	
     </insert>
     
+    <update id="updateBackrestWrk"  parameterType="WrkExeVO">
+   		/**
+	 	* Query ID : updateBackrestWrk
+	 	* Description : backrest 작업실행로그 update
+	 	* Author : 이지석
+	 	**/
+		UPDATE T_WRKEXE_G
+		SET
+			WRK_END_DTM = TO_TIMESTAMP(#{WRK_END_DTM}, 'YYYY-MM-DD HH24:MI:SS')
+			, WRK_STRT_DTM = TO_TIMESTAMP(#{WRK_STRT_DTM}, 'YYYY-MM-DD HH24:MI:SS')
+			, EXE_RSLT_CD = #{EXE_RSLT_CD}
+			, FILE_SZ = #{FILE_SZ}
+			, BCK_FILENM = #{BCK_FILENM}
+			, RSLT_MSG = #{RSLT_MSG}
+		WHERE
+			EXE_SN = #{EXE_SN}
+				
+    </update>
+    
 </mapper>

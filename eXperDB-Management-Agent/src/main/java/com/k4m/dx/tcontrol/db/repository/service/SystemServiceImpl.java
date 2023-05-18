@@ -344,4 +344,11 @@ public class SystemServiceImpl implements SystemService{
 		systemDAO.insertPgbackrestBackup(vo);
 	}
 
+	@Override
+	public void updateBackrestWrk(WrkExeVO vo) throws Exception {
+		systemDAO.updateBackrestWrk(vo);
+	}
+	
+	
+
 }
