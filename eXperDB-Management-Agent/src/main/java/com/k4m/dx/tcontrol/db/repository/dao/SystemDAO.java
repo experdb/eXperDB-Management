@@ -246,6 +246,10 @@ public class SystemDAO {
 	public void insertPgbackrestBackup(WrkExeVO vo) {
 		session.insert("system.insertPgbackrestBackup", vo);
 	}
+
+	public void updateBackrestWrk(WrkExeVO vo) {
+		session.update("system.updateBackrestWrk", vo);
+	}
 }
 
 

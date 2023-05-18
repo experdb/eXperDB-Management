@@ -194,4 +194,11 @@ public interface SystemService {
 	 * @throws Exception
 	 */
 	public void insertPgbackrestBackup(WrkExeVO vo) throws Exception;
+	
+	/**
+	 * pgbackrest 백업 완료시 업데이트
+	 * @param WrkExeVO 
+	 * @throws Exception
+	 */
+	public void updateBackrestWrk(WrkExeVO vo) throws Exception;
 }

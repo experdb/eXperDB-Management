@@ -66,8 +66,8 @@ public class DxT046 extends SocketCtl{
 			JSONObject infoObj = new JSONObject();
 				
 			for (int i = 0; i < confName.size(); i++) {
-				String configPath = "/experdb/app/postgres/etc/pgbackrest/config/" + confName.get(i);
-				String strCmd = "pgbackrest --stanza=experdb " + "--config=" + configPath + " info --output=json";
+				String configPath = "$PGHOME/etc/pgbackrest/config/" + confName.get(i);
+				String strCmd = "pgbackrest --stanza=experdb --config=" + configPath + " info --output=json";
 				
 				String backupInfo =  util.getPidExec(strCmd);
 				infoObj.put("backrestinfo", backupInfo);				

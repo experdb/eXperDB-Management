@@ -11,12 +11,16 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 
+import org.codehaus.jackson.JsonNode;
+import org.codehaus.jackson.map.ObjectMapper;
 import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
+import com.google.gson.JsonArray;
 import com.k4m.dx.tcontrol.db.repository.service.SystemServiceImpl;
 import com.k4m.dx.tcontrol.db.repository.vo.WrkExeVO;
 import com.k4m.dx.tcontrol.socket.ProtocolID;
@@ -76,7 +80,7 @@ public class DxT047 extends SocketCtl{
 			
 			int ipadrId = service.selectDbSvrIpAdrId(ipadr);
 			
-			String configPath = "/experdb/app/postgres/etc/pgbackrest/config/";
+			String configPath = "$PGHOME/etc/pgbackrest/config/";
 			String fullPath = configPath + jObj.get(ProtocolID.BCK_FILENM);
 		
 			String backupType = (String) jObj.get(ProtocolID.BCK_TYPE);
@@ -133,19 +137,36 @@ public class DxT047 extends SocketCtl{
 			String retVal = r.call();
 			String strResultMessage = r.getMessage();
 			if(retVal.equals("success")) {
-				CommonUtil util = new CommonUtil();
-				String bckSizeCmd = "du -s --apparent-size " + bck_file_pth + "/backup/experdb/latest/ | awk '{print $1}'";
-				String fileSizeStr = util.getPidExec(bckSizeCmd);
-				long fileSize = Long.parseLong(fileSizeStr);
 				
+				String succesCmd = "pgbackrest --stanza=experdb --config=" + fullPath + " info --output=json";
+				
+				CommonUtil util = new CommonUtil();
+				
+				// 작업 완료 시 info 값으로 DB 값 업데이트
+				String successObj = util.getPidExec(succesCmd);
+
+				ObjectMapper mapper = new ObjectMapper();
+				JsonNode jsonNode = mapper.readTree(successObj);
+				
+				int jsonSize = jsonNode.findValue("backup").size();
+			
+				int repoSizeInt = jsonNode.findValue("backup").path(jsonSize-1).path("info").path("repository").path("size").asInt();
+				int startTimeInt = jsonNode.findValue("backup").path(jsonSize-1).path("timestamp").path("start").asInt();
+				int stopTimeInt = jsonNode.findValue("backup").path(jsonSize-1).path("timestamp").path("stop").asInt(); 
+				
+				String startDateStr = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date(startTimeInt * 1000L));
+				String stopDateStr = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date(stopTimeInt * 1000L));
+			
 				WrkExeVO endVO = new WrkExeVO();
 				endVO.setEXE_SN(exe_sn);
+				endVO.setWRK_STRT_DTM(startDateStr);
+				endVO.setWRK_END_DTM(stopDateStr);
 				endVO.setEXE_RSLT_CD(strResultCode);
-				endVO.setFILE_SZ(fileSize);
+				endVO.setFILE_SZ(repoSizeInt);
 				endVO.setBCK_FILENM(logFullPath);
 				endVO.setRSLT_MSG(retVal + " " + strResultMessage);
 				
-				service.updateT_WRKEXE_G(endVO);
+				service.updateBackrestWrk(endVO);
 			}else {
 				
 				errLogger.error("[ERROR] DxT047 {} ", retVal + " " + strResultMessage);
@@ -154,13 +175,14 @@ public class DxT047 extends SocketCtl{
 
 				WrkExeVO endVO = new WrkExeVO();
 				endVO.setEXE_RSLT_CD(strResultCode);
+				endVO.setWRK_END_DTM(wrk_nm);
 				endVO.setEXE_SN(exe_sn);
 				endVO.setFILE_SZ(0);
 				endVO.setBCK_FILENM(logFullPath);
 				endVO.setRSLT_MSG(retVal + " " + strResultMessage);
 
 				// 백업 이력 update
-				service.updateT_WRKEXE_G(endVO);
+				service.updateBackrestWrk(endVO);
 			}
 			outputObj.put(ProtocolID.DX_EX_CODE, strDxExCode);
 			outputObj.put(ProtocolID.RESULT_CODE, strSuccessCode);
