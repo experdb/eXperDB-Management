@@ -909,7 +909,7 @@
 								<button type="button" class="btn btn-outline-primary btn-icon-text float-right" id="btnInsert" data-toggle="modal">
 									<i class="ti-pencil btn-icon-prepend "></i><spring:message code="common.registory" />
 								</button>								
-								<button type="button" class="btn btn-outline-primary btn-icon-text float-right" id="btnImmediately">
+								<button type="button" class="btn btn-outline-primary btn-icon-text float-left" id="btnImmediately">
 									<i class="ti-control-forward btn-icon-prepend "></i><spring:message code="migration.run_immediately" />
 								</button>
 							</div>

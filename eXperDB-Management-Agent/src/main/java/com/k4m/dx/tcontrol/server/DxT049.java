@@ -50,9 +50,12 @@ public class DxT049 extends SocketCtl{
 		try {
 			String backrestPathCmd = "echo $PGBBAK";
 			String backrestPath =  util.getPidExec(backrestPathCmd);
+			
+			String pghomePathCmd = "echo $PGHOME";
+			String pghomePath =  util.getPidExec(pghomePathCmd);
 
-			String configPath = "/sw/app/postgres/etc/pgbackrest/default.conf";
-			filePath = "/sw/app/postgres/etc/pgbackrest/config/" + String.valueOf(jObj.get(ProtocolID.BCK_FILENM));
+			String configPath = pghomePath + "/etc/pgbackrest/default.conf";
+			filePath = pghomePath + "/etc/pgbackrest/config/" + String.valueOf(jObj.get(ProtocolID.BCK_FILENM));
 			
 			BufferedReader br = new BufferedReader(new FileReader(new File(configPath)));
 			BufferedWriter bw = new BufferedWriter(new FileWriter(new File(filePath)));
@@ -92,9 +95,18 @@ public class DxT049 extends SocketCtl{
 				fileContent = fileContent.replaceAll("#log-level-console=detail", "log-level-console=detail");
 				fileContent = fileContent.replaceAll("#log-level-file=detail", "log-level-file=detail");
 				
-				fileContent = fileContent.replaceAll("#pg1-path=", "pg1-path=" + String.valueOf(jObj.get(ClientProtocolID.PGDATA)));
-				fileContent = fileContent.replaceAll("#pg1-port=", "pg1-port=" + String.valueOf(jObj.get(ClientProtocolID.DBMS_PORT)));
-				fileContent = fileContent.replaceAll("#pg1-user=", "pg1-user=" + String.valueOf(jObj.get(ClientProtocolID.SPR_USR_ID)));
+				if(String.valueOf(jObj.get(ClientProtocolID.MASTER_GBN)).equals("S")) {
+					fileContent = fileContent.replaceAll("#pg1-path=", "pg1-path=" + String.valueOf(jObj.get(ClientProtocolID.MASTER_PGDATA)));
+					fileContent = fileContent.replaceAll("#pg1-host-user=experdb", "pg1-host-user=experdb");
+					fileContent = fileContent.replaceAll("#pg1-host=", "pg1-host=" + String.valueOf(jObj.get(ClientProtocolID.MASTER_IP)));
+					fileContent = fileContent.replaceAll("#pg1-port=", "pg1-port=" + String.valueOf(jObj.get(ClientProtocolID.MASTER_DBMS_PORT)));
+					fileContent = fileContent.replaceAll("#pg1-user=", "pg1-user=" + String.valueOf(jObj.get(ClientProtocolID.MASTER_DBMS_USER)));
+				}else {
+					fileContent = fileContent.replaceAll("#pg1-path=", "pg1-path=" + String.valueOf(jObj.get(ClientProtocolID.PGDATA)));
+					fileContent = fileContent.replaceAll("#pg1-port=", "pg1-port=" + String.valueOf(jObj.get(ClientProtocolID.DBMS_PORT)));
+					fileContent = fileContent.replaceAll("#pg1-user=", "pg1-user=" + String.valueOf(jObj.get(ClientProtocolID.SPR_USR_ID)));
+				}
+				
 				fileContent = fileContent.replaceAll("#repo1-gbn=", "#repo1-gbn=" + String.valueOf(jObj.get(ClientProtocolID.STORAGE_OPT)));
 				fileContent = fileContent.replaceAll("#process-max=", "process-max=" + prcs_cnt);
 				

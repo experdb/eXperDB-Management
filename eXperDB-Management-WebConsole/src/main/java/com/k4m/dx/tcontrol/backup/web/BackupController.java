@@ -651,7 +651,20 @@ public class BackupController {
 
 			if (result.equals("S")) {
 				try {
-					createBackrestConfig(workVO, dbServerVO, request, paramMap);
+					if(request.getParameter("master_gbn").toString().equals("M")) {
+						createBackrestConfig(workVO, dbServerVO, request, paramMap, null);
+					}else {
+						List<DbServerVO> masterServer = backupService.selectMasterServer(dbServerVO);
+						
+						DbServerVO masterDbServerVO = new DbServerVO();
+						masterDbServerVO.setPgdata_pth(masterServer.get(0).getPgdata_pth());
+						masterDbServerVO.setPortno(masterServer.get(0).getPortno());
+						masterDbServerVO.setIpadr(masterServer.get(0).getIpadr());
+						masterDbServerVO.setSvr_spr_usr_id(masterServer.get(0).getSvr_spr_usr_id());
+						
+						createBackrestConfig(workVO, dbServerVO, request, paramMap, masterDbServerVO);
+					}
+					
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -1146,7 +1159,24 @@ public class BackupController {
 
 		if (result.equals("S")) {
 			deleteBackrestConfig(workVO, dbServerVO);
-			createBackrestConfig(workVO, dbServerVO, request, paramMap);
+			
+			try {
+				if(request.getParameter("master_gbn").toString().equals("M")) {
+					createBackrestConfig(workVO, dbServerVO, request, paramMap, null);
+				}else {
+					List<DbServerVO> masterServer = backupService.selectMasterServer(dbServerVO);
+					DbServerVO masterDbServerVO = new DbServerVO();
+					masterDbServerVO.setPgdata_pth(masterServer.get(0).getPgdata_pth());
+					masterDbServerVO.setPortno(masterServer.get(0).getPortno());
+					masterDbServerVO.setIpadr(masterServer.get(0).getIpadr());
+					masterDbServerVO.setSvr_spr_usr_id(masterServer.get(0).getSvr_spr_usr_id());
+					
+					createBackrestConfig(workVO, dbServerVO, request, paramMap, masterDbServerVO);
+				}
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}		
 		}
 
 		return result;
@@ -2018,7 +2048,7 @@ public class BackupController {
 	 * @throws Exception
 	 */
 	@SuppressWarnings("unchecked")
-	public void createBackrestConfig(WorkVO workVO, DbServerVO dbServerVO, HttpServletRequest request, Map<String, Object> paramMap) {
+	public void createBackrestConfig(WorkVO workVO, DbServerVO dbServerVO, HttpServletRequest request, Map<String, Object> paramMap, DbServerVO masterServer) {
 		ClientInfoCmmn cic = new ClientInfoCmmn();
 		JSONObject result = new JSONObject();
 
@@ -2039,9 +2069,17 @@ public class BackupController {
 			jObj.put(ClientProtocolID.LOG_PATH, workVO.getLog_file_pth());
 			jObj.put(ClientProtocolID.STORAGE_OPT, workVO.getBackrest_gbn());
 			jObj.put(ClientProtocolID.CPS_YN, workVO.getCps_yn());
+			jObj.put(ClientProtocolID.MASTER_GBN, dbServerVO.getMaster_gbn());
 			jObj.put(ClientProtocolID.PRCS_CNT, request.getParameter("prcs_cnt"));
 			jObj.put(ClientProtocolID.CPS_TYPE, request.getParameter("cps_type"));
 			jObj.put(ClientProtocolID.CUSTOM_MAP, paramMap.get("custom_map"));
+			
+			if(masterServer != null) {
+				jObj.put(ClientProtocolID.MASTER_PGDATA, masterServer.getPgdata_pth());
+				jObj.put(ClientProtocolID.MASTER_IP, masterServer.getIpadr());
+				jObj.put(ClientProtocolID.MASTER_DBMS_PORT, masterServer.getPortno());
+				jObj.put(ClientProtocolID.MASTER_DBMS_USER, masterServer.getSvr_spr_usr_id());
+			}
 
 			result = cic.createBackrestConf(ip, port, jObj);
 

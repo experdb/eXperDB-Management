@@ -186,4 +186,10 @@ public class BackupDAO extends EgovAbstractMapper{
 		return sl;
 	}
 	
+	public List<DbServerVO> selectMasterServer(DbServerVO dbServerVO) {
+		List<DbServerVO> sl = null;
+		sl = (List<DbServerVO>) list("backupSQL.selectMasterServer", dbServerVO);
+		return sl;
+	}
+	
 }

@@ -210,4 +210,6 @@ public interface BackupService {
 	
 	public List<DbServerVO> selectBckServer(WorkVO workVO) throws Exception;
 	
+	public List<DbServerVO> selectMasterServer(DbServerVO dbServerVO) throws Exception;
+	
 }

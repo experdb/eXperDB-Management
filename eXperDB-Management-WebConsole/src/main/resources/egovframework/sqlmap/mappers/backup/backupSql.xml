@@ -993,4 +993,19 @@
            A.DB_SVR_ID = B.DB_SVR_ID
            AND B.IPADR = #{db_svr_ipadr}	
     </select>
+    
+    <select id="selectMasterServer" parameterType="dbServerVO" resultType="dbServerVO">
+          SELECT
+          	   (ROW_NUMBER() OVER()) AS ROWNUM,
+               A.pgdata_pth ,
+               B.ipadr,
+               B.portno,
+               B.master_gbn,
+               A.svr_spr_usr_id,
+               B.db_svr_ipadr_id
+          FROM T_DBSVR_I A, T_DBSVRIPADR_I B
+         WHERE
+           A.DB_SVR_ID = B.DB_SVR_ID
+           AND B.MASTER_GBN = 'M'
+    </select>
 </mapper>

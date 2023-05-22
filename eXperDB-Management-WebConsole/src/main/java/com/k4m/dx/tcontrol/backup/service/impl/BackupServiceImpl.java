@@ -172,4 +172,9 @@ public class BackupServiceImpl extends EgovAbstractServiceImpl implements Backup
 	public List<DbServerVO> selectBckServer(WorkVO workVO) throws Exception {
 		return backupDAO.selectBckServer(workVO);
 	}
+	
+	@Override
+	public List<DbServerVO> selectMasterServer(DbServerVO dbServerVO) throws Exception {
+		return backupDAO.selectMasterServer(dbServerVO);
+	}
 }

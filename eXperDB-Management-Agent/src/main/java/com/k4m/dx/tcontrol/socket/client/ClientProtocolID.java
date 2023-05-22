@@ -270,4 +270,8 @@ public class ClientProtocolID {
 	public static final String CPS_TYPE = "CPS_TYPE";
 	public static final String CUSTOM_MAP = "CUSTOM_MAP";
 	public static final String SPR_USR_ID = "SPR_USR_ID";
+	public static final String MASTER_PGDATA = "MASTER_PGDATA";
+	public static final String MASTER_IP = "MASTER_IP";
+	public static final String MASTER_DBMS_PORT = "MASTER_DBMS_PORT";
+	public static final String MASTER_DBMS_USER = "MASTER_DBMS_USER";
 }
