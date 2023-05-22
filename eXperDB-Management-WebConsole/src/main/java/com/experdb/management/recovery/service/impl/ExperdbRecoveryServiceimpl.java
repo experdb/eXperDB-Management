@@ -95,7 +95,7 @@ public class ExperdbRecoveryServiceimpl extends EgovAbstractServiceImpl implemen
 		List<BackupLocationInfoVO> storageList = null;
 		List<Map<String, Object>> resultList = new ArrayList<Map<String, Object>>();
 		
-		storageList = experdbRecoveryDAO.getStorageList(request.getParameter("ipadr"));
+		//storageList = experdbRecoveryDAO.getStorageList(request.getParameter("ipadr"));
 		
 		if(storageList.size() > 0){
 			for(BackupLocationInfoVO s : storageList){
@@ -285,7 +285,7 @@ public class ExperdbRecoveryServiceimpl extends EgovAbstractServiceImpl implemen
 		
 		List<Map<String, Object>> resultList = new ArrayList<Map<String, Object>>();
 		
-		resultList = experdbRecoveryDAO.getRecoveryTimeList(request.getParameter("ipadr"));
+		//resultList = experdbRecoveryDAO.getRecoveryTimeList(request.getParameter("ipadr"));
 	
 		for(int i=0; i<resultList.size(); i++){
 			JSONObject jsonObj = new JSONObject();
@@ -314,9 +314,9 @@ public class ExperdbRecoveryServiceimpl extends EgovAbstractServiceImpl implemen
 		List<Map<String, Object>> resultRpoint = new ArrayList<Map<String, Object>>();
 		List<BackupLocationInfoVO> list = null;
 		
-		list = experdbBackupStorageDAO.backupStorageList();
-		resultList = experdbRecoveryDAO.getRecoveryTimeOption(request.getParameter("jobid"));
-		resultRpoint = experdbRecoveryDAO.getRecoveryPoinList(request.getParameter("jobid"));
+		//list = experdbBackupStorageDAO.backupStorageList();
+		//resultList = experdbRecoveryDAO.getRecoveryTimeOption(request.getParameter("jobid"));
+		//resultRpoint = experdbRecoveryDAO.getRecoveryPoinList(request.getParameter("jobid"));
 		
 		
 			JSONObject jsonObj = new JSONObject();

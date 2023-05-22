@@ -22,29 +22,32 @@ public class ExperdbRecoveryDAO extends EgovAbstractMapper{
 	@Resource(name="sqlSessionTemplate") 
 	private SqlSession sql; 
 	
-	@Autowired 
-	@Resource(name="backupDB") 
-	private SqlSession sql2;
-	
-	@Autowired 
-	@Resource(name="activitylogDB") 
-	private SqlSession sql3;
-	
-	@Autowired 
-	@Resource(name="jobhistoryDB") 
-	private SqlSession jobhistoryDBsql;
+	/*
+	 * @Autowired
+	 * 
+	 * @Resource(name="backupDB") private SqlSession sql2;
+	 * 
+	 * @Autowired
+	 * 
+	 * @Resource(name="activitylogDB") private SqlSession sql3;
+	 * 
+	 * @Autowired
+	 * 
+	 * @Resource(name="jobhistoryDB") private SqlSession jobhistoryDBsql;
+	 */
 
-	public List<BackupLocationInfoVO> getStorageList(String ipadr) {
-		return jobhistoryDBsql.selectList("experdbRecoverySql.getStorageList", ipadr);
-	}
+	/*
+	 * public List<BackupLocationInfoVO> getStorageList(String ipadr) { return
+	 * jobhistoryDBsql.selectList("experdbRecoverySql.getStorageList", ipadr); }
+	 */
 
 	public int getStorageType(String backupDestLocation) {
 		int result = -1;
-		BackupLocationInfoVO resultInfo = sql2.selectOne("experdbRecoverySql.getStorageType", backupDestLocation);
+		//BackupLocationInfoVO resultInfo = sql2.selectOne("experdbRecoverySql.getStorageType", backupDestLocation);
 		
-		if(resultInfo != null){
-			result = resultInfo.getType();
-		}
+		/*
+		 * if(resultInfo != null){ result = resultInfo.getType(); }
+		 */
 		return result;
 	}
 
@@ -67,17 +70,18 @@ public class ExperdbRecoveryDAO extends EgovAbstractMapper{
 		return user_password;
 	}
 
-	public List<Map<String, Object>> getRecoveryTimeList(String target) {
-		return jobhistoryDBsql.selectList("experdbRecoverySql.getRecoveryTimeList", target);
-	}
-
-	public List<Map<String, Object>> getRecoveryPoinList(String jobid) {
-		return sql3.selectList("experdbRecoverySql.getRecoveryPoinList", jobid);
-	}
-
-	public List<Map<String, Object>> getRecoveryTimeOption(String jobid) {
-		return jobhistoryDBsql.selectList("experdbRecoverySql.getRecoveryTimeOption", jobid);
-	}
+	/*
+	 * public List<Map<String, Object>> getRecoveryTimeList(String target) { return
+	 * jobhistoryDBsql.selectList("experdbRecoverySql.getRecoveryTimeList", target);
+	 * }
+	 * 
+	 * public List<Map<String, Object>> getRecoveryPoinList(String jobid) { return
+	 * sql3.selectList("experdbRecoverySql.getRecoveryPoinList", jobid); }
+	 * 
+	 * public List<Map<String, Object>> getRecoveryTimeOption(String jobid) { return
+	 * jobhistoryDBsql.selectList("experdbRecoverySql.getRecoveryTimeOption",
+	 * jobid); }
+	 */
 	
 	
 	

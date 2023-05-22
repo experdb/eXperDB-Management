@@ -8,33 +8,7 @@
 		<!-- <jdbc:script location= "classpath:/db/sampledb.sql"/> -->
 	</jdbc:embedded-database>
 	
-    
-    <!-- hsql
-    <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
-        <property name="driverClassName" value="net.sf.log4jdbc.DriverSpy"/>
-        <property name="url" value="jdbc:log4jdbc:hsqldb:hsql://localhost/sampledb"/>
-        <property name="username" value="sa"/>
-    </bean>
-    -->  
-    
-    <!-- Mysql  
-    <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
-        <property name="driverClassName" value="com.mysql.jdbc.Driver"/>
-        <property name="url" value="jdbc:mysql://127.0.0.1:3306/example" />
-        <property name="username" value="user"/>
-        <property name="password" value="password"/>
-    </bean>
-    -->
-    
-    <!-- oracle
-    <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
-        <property name="driverClassName" value="oracle.jdbc.driver.OracleDriver"/>
-        <property name="url" value="jdbc:oracle:thin:@127.0.0.1:1521:example" />
-        <property name="username" value="user"/>
-        <property name="password" value="password"/>
-    </bean>
-    
-    -->
+   
     
     <bean id="environmentVariablesConfiguration" class="org.jasypt.encryption.pbe.config.EnvironmentStringPBEConfig">  
 	        <property name="algorithm" value="PBEWithMD5AndDES" />  
@@ -75,51 +49,4 @@
         <property name="defaultAutoCommit" value="true" />
     </bean>
     
-    
-    <!-- ARCserveLinuxD2D  -->
-      <bean id="dataSourceBackup" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
-        <property name="driverClassName" value="org.postgresql.Driver" />
-        <property name="url" value="${backupdb.url}" />
-        <property name="username" value="${database.username}" />
-        <property name="password" value="${database.password}" />
-        <property name="maxActive" value="100" />
-        <property name="maxIdle" value="10" />
-        <property name="minIdle" value="10" />
-        <property name="maxWait" value="1000" />
-        <property name="validationQuery" value="select 1" />      
-        <property name="defaultAutoCommit" value="true" />
-    </bean> 
-    
-    
-    <!-- ActivityLog  -->
-       <bean id="dataSourceActivitylog" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
-        <property name="driverClassName" value="org.postgresql.Driver" />
-        <property name="url" value="${activitylog.url}" />
-        <property name="username" value="${database.username}" />
-        <property name="password" value="${database.password}" />
-        <property name="maxActive" value="100" />
-        <property name="maxIdle" value="10" />
-        <property name="minIdle" value="10" />
-        <property name="maxWait" value="1000" />
-        <property name="validationQuery" value="select 1" />      
-        <property name="defaultAutoCommit" value="true" />
-    </bean> 
-    
-    <!-- JobHistory  -->
-       <bean id="dataSourceJobhistory" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
-        <property name="driverClassName" value="org.postgresql.Driver" />
-        <property name="url" value="${jobhistory.url}" />
-        <property name="username" value="${database.username}" />
-        <property name="password" value="${database.password}" />
-        <property name="maxActive" value="100" />
-        <property name="maxIdle" value="10" />
-        <property name="minIdle" value="10" />
-        <property name="maxWait" value="1000" />
-        <property name="validationQuery" value="select 1" />      
-        <property name="defaultAutoCommit" value="true" />
-    </bean>
-    
-
-
-
 </beans>

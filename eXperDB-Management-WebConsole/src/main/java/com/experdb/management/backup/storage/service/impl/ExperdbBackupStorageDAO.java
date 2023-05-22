@@ -17,28 +17,33 @@ public class ExperdbBackupStorageDAO {
 	@Resource(name="sqlSessionTemplate") 
 	private SqlSession sql; 
 	
-	@Autowired 
-	@Resource(name="backupDB") 
-	private SqlSession sql2;
+	/*
+	 * @Autowired
+	 * 
+	 * @Resource(name="backupDB") private SqlSession sql2;
+	 */
 
 	public void backupStorageInsert(BackupLocationInfoVO locationVO) {
-		sql2.insert("backupStorageSql.backupStorageInsert", locationVO);
+		//sql2.insert("backupStorageSql.backupStorageInsert", locationVO);
 	}
 
-	public List<BackupLocationInfoVO> backupStorageList() {
-		return sql2.selectList("backupStorageSql.backupStorageList");
-	}
+	/*
+	 * public List<BackupLocationInfoVO> backupStorageList() { return
+	 * sql2.selectList("backupStorageSql.backupStorageList"); }
+	 */
 
-	public BackupLocationInfoVO backupStorageInfo(BackupLocationInfoVO locationVO) {
-		return sql2.selectOne("backupStorageSql.backupStorageInfo", locationVO);
-	}
+	/*
+	 * public BackupLocationInfoVO backupStorageInfo(BackupLocationInfoVO
+	 * locationVO) { return sql2.selectOne("backupStorageSql.backupStorageInfo",
+	 * locationVO); }
+	 */
 
 	public void backupStorageUpdate(BackupLocationInfoVO locationVO) {
-		sql2.update("backupStorageSql.backupStorageUpdate", locationVO);
+		//sql2.update("backupStorageSql.backupStorageUpdate", locationVO);
 	}
 
 	public void backupStorageDelete(BackupLocationInfoVO locationVO) {
-		sql2.delete("backupStorageSql.backupStorageDelete", locationVO);
+		//sql2.delete("backupStorageSql.backupStorageDelete", locationVO);
 	}
 	
 }

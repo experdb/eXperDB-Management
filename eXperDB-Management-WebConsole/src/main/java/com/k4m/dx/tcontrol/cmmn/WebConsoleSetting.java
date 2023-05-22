@@ -39,8 +39,9 @@ public class WebConsoleSetting {
 		
 		// 2021-04-13 백업사용 유무 추가 변승우
 		String strBackupYN = "";
-		String strRootPw = "";
-		String strSshPort = "";
+		/*
+		 * String strRootPw = ""; String strSshPort = "";
+		 */
 
 		String strScaleYN="";
 		String strScalePath="";
@@ -128,14 +129,14 @@ public class WebConsoleSetting {
 		}
 
 		/* 백업 사용여부  추가  2021-04-13  변승우 */
-		System.out.println("Whether to enable eXperDB-Backup settings? (y, n)");
+		System.out.println("Whether to enable eXperDB-Backrest settings? (y, n)");
 		strBackupYN = scan.nextLine();
 		strBackupYN = strBackupYN.toUpperCase();
 
 		while (true) {
 			if(strBackupYN.equals("")) {
-				System.out.println("Please enter your eXperDB-Backup setting yn. ");
-				System.out.println("Whether to enable eXperDB-Backup settings? (y, n) :");
+				System.out.println("Please enter your eXperDB-Backrest setting yn. ");
+				System.out.println("Whether to enable eXperDB-Backrest settings? (y, n) :");
 				strBackupYN = scan.nextLine();
 				strBackupYN = strBackupYN.toUpperCase();
 			} else {
@@ -143,45 +144,26 @@ public class WebConsoleSetting {
 			}
 		}
 
-		if(strBackupYN.equals("Y")){
-			System.out.println("Server root password :");
-			strRootPw = scan.nextLine();
-			while (true) {
-				if(strRootPw.equals("")) {
-					System.out.println("Please enter your Server root password. ");
-					System.out.println("Server root password :");
-					strRootPw = scan.nextLine();
-					strRootPw = strRootPw.toUpperCase();
-				} else {
-					break;
-				}
-			}
-
-			System.out.println("Server SSH Port : ");
-			strSshPort = scan.nextLine();
-			while (true) {
-				if(strSshPort.equals("")) {
-					System.out.println("Please enter your Server SSH Port. ");
-					System.out.println("Server SSH Port :");
-					strSshPort = scan.nextLine();
-					strSshPort = strSshPort.toUpperCase();
-				} else {
-					break;
-				}
-			}
-
-			System.out.println("BnR License cnt : ");
-			strBnrLicense = scan.nextLine(); 
-			while (true) {
-				if(strSshPort.equals("")) {
-					System.out.println("Please enter your BnR License cnt. ");
-					System.out.println("BnR License cnt :");
-					strBnrLicense = scan.nextLine();
-				} else {
-					break;
-				}
-			}
-		}
+		/*
+		 * BNR 제거
+		 * if(strBackupYN.equals("Y")){ System.out.println("Server root password :");
+		 * strRootPw = scan.nextLine(); while (true) { if(strRootPw.equals("")) {
+		 * System.out.println("Please enter your Server root password. ");
+		 * System.out.println("Server root password :"); strRootPw = scan.nextLine();
+		 * strRootPw = strRootPw.toUpperCase(); } else { break; } }
+		 * 
+		 * System.out.println("Server SSH Port : "); strSshPort = scan.nextLine(); while
+		 * (true) { if(strSshPort.equals("")) {
+		 * System.out.println("Please enter your Server SSH Port. ");
+		 * System.out.println("Server SSH Port :"); strSshPort = scan.nextLine();
+		 * strSshPort = strSshPort.toUpperCase(); } else { break; } }
+		 * 
+		 * System.out.println("BnR License cnt : "); strBnrLicense = scan.nextLine();
+		 * while (true) { if(strSshPort.equals("")) {
+		 * System.out.println("Please enter your BnR License cnt. ");
+		 * System.out.println("BnR License cnt :"); strBnrLicense = scan.nextLine(); }
+		 * else { break; } } }
+		 */
 
 		/* 감사설정 사용여부 */
 		System.out.println("Whether to enable auditing settings? (y, n)");
@@ -379,9 +361,15 @@ public class WebConsoleSetting {
 		strDatabaseUrl = "jdbc:postgresql://" + strDatabaseIp + ":" + strDatabasePort + "/" + strDatabaseUsername;
 
 		//아크서버, 백업을위한 DBURL 추가 (2021-04-13 변승우)
-		strBackupDatabaseUrl = "jdbc:postgresql://" + strDatabaseIp + ":" + strDatabasePort + "/ARCserveLinuxD2D";
-		strActivitylogDatabaseUrl = "jdbc:postgresql://" + strDatabaseIp + ":" + strDatabasePort + "/ActivityLog";
-		strJobhistoryDatabaseUrl = "jdbc:postgresql://" + strDatabaseIp + ":" + strDatabasePort + "/JobHistory";
+
+		/*
+		 * BnR 제거
+		 * strBackupDatabaseUrl = "jdbc:postgresql://" + strDatabaseIp + ":" +
+		 * strDatabasePort + "/ARCserveLinuxD2D"; strActivitylogDatabaseUrl =
+		 * "jdbc:postgresql://" + strDatabaseIp + ":" + strDatabasePort +
+		 * "/ActivityLog"; strJobhistoryDatabaseUrl = "jdbc:postgresql://" +
+		 * strDatabaseIp + ":" + strDatabasePort + "/JobHistory";
+		 */
 
 		System.out.println("################globals.properties##################");
 		System.out.println("Repository database IP address :" + strDatabaseIp);
@@ -390,7 +378,7 @@ public class WebConsoleSetting {
 		System.out.println("Repository database password :" + strDatabasePassword);
 		System.out.println("Repository database Access information :" + strDatabaseUrl);
 		System.out.println("Whether to enable auditing settings : " + strAuditYN);
-		System.out.println("Whether to enable Backup settings : " + strBackupYN);
+		System.out.println("Whether to enable Backrest settings : " + strBackupYN);
 		System.out.println("Whether data transfer is enabled : " + strTransferYN);
 		if(strTransferYN.equals("Y")){
 			System.out.println("Whether data consumer transfer is enabled : " + strTransferOraYN);
@@ -415,6 +403,7 @@ public class WebConsoleSetting {
 		System.out.println("###################eXperDB-Proxy##################");
 		System.out.println("Whether proxy menu is enabled : " + strProxyMenuYN);
 		System.out.println("Whether proxy-service is enabled : " + strProxyYN);
+		
 		System.out.println("###################eXperDB-Encrypt##################");
 		System.out.println("Whether eXperDB-Encrypt is enabled : " + strEnctyptYn);
 		if(strEnctyptYn.equals("Y")){
@@ -435,10 +424,13 @@ public class WebConsoleSetting {
 			String password = pbeEnc.encrypt(strDatabasePassword);
 
 			//아크서버, 백업을위한 DBURL 추가 (2021-04-13 변승우)
-			String backupUrl = pbeEnc.encrypt(strBackupDatabaseUrl);
-			String activitylUrl = pbeEnc.encrypt(strActivitylogDatabaseUrl);
-			String jobhistoryUrl = pbeEnc.encrypt(strJobhistoryDatabaseUrl);		    
-			String backupPw = pbeEnc.encrypt(strRootPw);
+			/*
+			 * BnR 제거
+			 * String backupUrl = pbeEnc.encrypt(strBackupDatabaseUrl); String activitylUrl
+			 * = pbeEnc.encrypt(strActivitylogDatabaseUrl); String jobhistoryUrl =
+			 * pbeEnc.encrypt(strJobhistoryDatabaseUrl); String backupPw =
+			 * pbeEnc.encrypt(strRootPw);
+			 */
 
 			Properties prop = new Properties();
 
@@ -483,20 +475,24 @@ public class WebConsoleSetting {
 			prop.setProperty("database.password", "ENC(" + password + ")");
 
 			//아크서버, 백업을위한 DBURL 추가 (2021-04-13 변승우)
-			prop.setProperty("backupdb.url", "ENC(" + backupUrl + ")");
-			prop.setProperty("activitylog.url", "ENC(" + activitylUrl + ")");
-			prop.setProperty("jobhistory.url", "ENC(" + jobhistoryUrl + ")");
+			/*
+			 * BnR제거
+			 * prop.setProperty("backupdb.url", "ENC(" + backupUrl + ")");
+			 * prop.setProperty("activitylog.url", "ENC(" + activitylUrl + ")");
+			 * prop.setProperty("jobhistory.url", "ENC(" + jobhistoryUrl + ")");
+			 */
 
-			if(strBackupYN.equals("Y")){
-				prop.setProperty("backup.url", strDatabaseIp);
-				prop.setProperty("backup.username", "root");
-				prop.setProperty("backup.password", backupPw);
-				prop.setProperty("backup.port", strSshPort);
-				prop.setProperty("bnr.license", strBnrLicense);
-			}
+			/*
+			 * BnR제거
+			 * if(strBackupYN.equals("Y")){ prop.setProperty("backup.url", strDatabaseIp);
+			 * prop.setProperty("backup.username", "root");
+			 * prop.setProperty("backup.password", backupPw);
+			 * prop.setProperty("backup.port", strSshPort); prop.setProperty("bnr.license",
+			 * strBnrLicense); }
+			 */
 
 			prop.setProperty("pg_audit", strAuditYN);
-			prop.setProperty("bnr.useyn", strBackupYN);
+			prop.setProperty("pgbackrest.useyn", strBackupYN);
 			prop.setProperty("transfer", strTransferYN);	
 			prop.setProperty("transfer_ora", strTransferOraYN);
 			prop.setProperty("transfer_mon_menu", strTransferMonMenuYN);

@@ -2,7 +2,7 @@
 
 declare PASSWD_AUTO="N"
 
-if [ $1 == "A" ]; then
+if [ ${1:-} == "A" ]; then
     PASSWD_AUTO="Y"
 fi
 
@@ -102,7 +102,3 @@ echo "**14.0.3**"
 psql -U experdb -d experdb -f eXperDB-Management_14.0.3.sql
 echo "**14.0.3 END**"
 
-#항상 마지막에 backup sql 수행 (등록 DB가 다름)
-echo "**bnr backup**"
-psql -U experdb -d experdb -f create_new_backup.sql
-echo "**bnr backup END**"

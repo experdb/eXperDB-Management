@@ -660,6 +660,8 @@ public class CmmnUtil {
 			
 			
 			public static void main(String[] args) {
+				
+				
 				TargetMachineVO targetMachine = new TargetMachineVO();
 				targetMachine.setName("192.168.20.127");
 				JobScriptApply("/opt/Arcserve/d2dserver/bin/jobs/",targetMachine);
