@@ -112,9 +112,8 @@
 						}
 					},
 					success : function(data) {
-						console.log(data);
-						// $("#ins_bckr_pth", "#workRegFormBckr").val(selectedAgentServer.pghome_pth + "/etc/pgbackrest/backup");
-						// $("#ins_bckr_log_pth", "#workRegFormBckr").val(selectedAgentServer.pghome_pth + "/etc/pgbackrest/logs");
+						$("#ins_bckr_pth", "#workRegFormBckr").val(data.RESULT_DATA.PGBBAK);
+						$("#ins_bckr_log_pth", "#workRegFormBckr").val(data.RESULT_DATA.PGBLOG);
 					}
 				});
 			}else{

@@ -2121,7 +2121,9 @@ public class BackupController {
 	
 	@SuppressWarnings("unchecked")
 	@RequestMapping(value = "/backup/backrestPath.do")
-	public void selectBackrestPath(HttpServletRequest request) {
+	@ResponseBody
+	public JSONObject selectBackrestPath(@ModelAttribute("workVo") WorkVO workVO, HttpServletRequest request,
+			@ModelAttribute("historyVO") HistoryVO historyVO) {
 		ClientInfoCmmn cic = new ClientInfoCmmn();
 		JSONObject result = new JSONObject();
 
@@ -2134,16 +2136,13 @@ public class BackupController {
 			int port = agentInfo.getSOCKET_PORT();
 			JSONObject jObj = new JSONObject();
 			
-			System.out.println(ip);
-			System.out.println(port);
-			
-//			result = cic.selectBackrestPath(ip, port, jObj);
+			result = cic.selectBackrestPath(ip, port, jObj);
 
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		
-//		return result;
+		return result;
 	}
 	
 }

@@ -2,7 +2,6 @@ package com.k4m.dx.tcontrol.server;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
-import java.io.File;
 import java.net.Socket;
 import java.util.HashMap;
 
@@ -15,11 +14,11 @@ import com.k4m.dx.tcontrol.socket.SocketCtl;
 import com.k4m.dx.tcontrol.socket.TranCodeType;
 import com.k4m.dx.tcontrol.util.CommonUtil;
 
-public class DxT051 extends SocketCtl{
+public class DxT052 extends SocketCtl{
 	private Logger errLogger = LoggerFactory.getLogger("errorToFile");
 	private Logger socketLogger = LoggerFactory.getLogger("socketLogger");
 	
-	public DxT051(Socket socket, BufferedInputStream is, BufferedOutputStream os) {
+	public DxT052(Socket socket, BufferedInputStream is, BufferedOutputStream os) {
 		this.client = socket;
 		this.is = is;
 		this.os = os;
@@ -27,7 +26,7 @@ public class DxT051 extends SocketCtl{
 	
 	@SuppressWarnings("unchecked")
 	public void execute(String strDxExCode, JSONObject jObj) throws Exception {
-		socketLogger.info("DxT051.execute : " + strDxExCode);
+		socketLogger.info("DxT052.execute : " + strDxExCode);
 		byte[] sendBuff = null;
 		String strErrCode = "";
 		String strErrMsg = "";
@@ -36,31 +35,32 @@ public class DxT051 extends SocketCtl{
 		CommonUtil util = new CommonUtil();
 		JSONObject outputObj = new JSONObject();
 		
-		String pgHomePathCmd = "echo $PGHOME";
-		String pgHomePath =  util.getPidExec(pgHomePathCmd);
-		
 		try {
-			String confPath = pgHomePath + "/etc/pgbackrest/config/";
-			String confFile = confPath + String.valueOf(jObj.get(ProtocolID.BCK_FILENM)) + ".conf";
+			JSONObject infoObj = new JSONObject();
 			
-			File file = new File(confFile);
-			if (file.exists()) {
-				file.delete();
-			}
+			String pgBbakPathCmd = "echo $PGBBAK";
+			String pgBbakPath =  util.getPidExec(pgBbakPathCmd);
+			
+			String pgBblogPathCmd = "echo $PGBLOG";
+			String pgBlogPath =  util.getPidExec(pgBblogPathCmd);
+			
+			infoObj.put("PGBBAK", pgBbakPath);
+			infoObj.put("PGBLOG", pgBlogPath);	
 			
 			outputObj.put(ProtocolID.DX_EX_CODE, strDxExCode);
 			outputObj.put(ProtocolID.RESULT_CODE, strSuccessCode);
 			outputObj.put(ProtocolID.ERR_CODE, strErrCode);
 			outputObj.put(ProtocolID.ERR_MSG, strErrMsg);
+			outputObj.put(ProtocolID.RESULT_DATA, infoObj);
 			
 			sendBuff = outputObj.toString().getBytes();
 			send(4, sendBuff);
 		}catch (Exception e) {
-			errLogger.error("DxT051 {} ", e.toString());
-			outputObj.put(ProtocolID.DX_EX_CODE, TranCodeType.DxT051);
+			errLogger.error("DxT052 {} ", e.toString());
+			outputObj.put(ProtocolID.DX_EX_CODE, TranCodeType.DxT052);
 			outputObj.put(ProtocolID.RESULT_CODE, "1");
-			outputObj.put(ProtocolID.ERR_CODE, TranCodeType.DxT051);
-			outputObj.put(ProtocolID.ERR_MSG, "DxT051 Error [" + e.toString() + "]");
+			outputObj.put(ProtocolID.ERR_CODE, TranCodeType.DxT052);
+			outputObj.put(ProtocolID.ERR_MSG, "DxT052 Error [" + e.toString() + "]");
 			HashMap hp = new HashMap();
 			outputObj.put(ProtocolID.RESULT_DATA, hp);
 			

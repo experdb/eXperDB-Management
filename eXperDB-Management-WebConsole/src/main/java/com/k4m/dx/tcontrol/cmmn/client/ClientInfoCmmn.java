@@ -2677,4 +2677,23 @@ public JSONObject pgbackrestImmediateStart(String ip, int port, JSONObject jObj)
 		
 		return objList;
 	}
+	
+	public JSONObject selectBackrestPath(String ip, int port, JSONObject jObj) {
+		JSONObject objList = null;
+		
+		ClientAdapter CA = new ClientAdapter(ip, port);
+		
+		jObj.put(ClientProtocolID.DX_EX_CODE, ClientTranCodeType.DxT052);
+
+		try {
+			CA.open();
+			objList = CA.dxT052(jObj);
+			CA.close();
+		} catch (Exception e) {			
+			e.printStackTrace();
+		}
+		
+		return objList;
+	}
+	
 }
