@@ -102,7 +102,6 @@
 						xhr.setRequestHeader("AJAX", true);
 					},
 					error : function(xhr, status, error) {
-						alert(xhr.status);
 						if(xhr.status == 401) {
 							showSwalIconRst(message_msg02, closeBtn, '', 'error', 'top');
 						} else if(xhr.status == 403) {
