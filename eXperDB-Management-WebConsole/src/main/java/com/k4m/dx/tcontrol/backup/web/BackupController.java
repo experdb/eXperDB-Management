@@ -2117,6 +2117,33 @@ public class BackupController {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-
 	}
+	
+	@SuppressWarnings("unchecked")
+	@RequestMapping(value = "/backup/backrestPath.do")
+	public void selectBackrestPath(HttpServletRequest request) {
+		ClientInfoCmmn cic = new ClientInfoCmmn();
+		JSONObject result = new JSONObject();
+
+		try {
+			AgentInfoVO vo = new AgentInfoVO();
+			vo.setIPADR(request.getParameter("ipadr"));
+			AgentInfoVO agentInfo = (AgentInfoVO) cmmnServerInfoService.selectAgentInfo(vo);
+
+			String ip = request.getParameter("ipadr");
+			int port = agentInfo.getSOCKET_PORT();
+			JSONObject jObj = new JSONObject();
+			
+			System.out.println(ip);
+			System.out.println(port);
+			
+//			result = cic.selectBackrestPath(ip, port, jObj);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+//		return result;
+	}
+	
 }

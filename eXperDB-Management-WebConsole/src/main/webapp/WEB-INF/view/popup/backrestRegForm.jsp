@@ -90,8 +90,33 @@
 			var words = this.className.split(' ');
 
 			if(words.length == 2){
-				$("#ins_bckr_pth", "#workRegFormBckr").val(selectedAgentServer.pghome_pth + "/etc/pgbackrest/backup");
-				$("#ins_bckr_log_pth", "#workRegFormBckr").val(selectedAgentServer.pghome_pth + "/etc/pgbackrest/logs");
+				$.ajax({
+					url : "/backup/backrestPath.do",
+					data : {
+						db_svr_id : $("#db_svr_id", "#findList").val(),
+						ipadr : selectedAgentServer.ipadr
+					},
+					dataType : "json",
+					type : "post",
+					beforeSend: function(xhr) {
+						xhr.setRequestHeader("AJAX", true);
+					},
+					error : function(xhr, status, error) {
+						alert(xhr.status);
+						if(xhr.status == 401) {
+							showSwalIconRst(message_msg02, closeBtn, '', 'error', 'top');
+						} else if(xhr.status == 403) {
+							showSwalIconRst(message_msg03, closeBtn, '', 'error', 'top');
+						} else {
+							showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), closeBtn, '', 'error');
+						}
+					},
+					success : function(data) {
+						console.log(data);
+						// $("#ins_bckr_pth", "#workRegFormBckr").val(selectedAgentServer.pghome_pth + "/etc/pgbackrest/backup");
+						// $("#ins_bckr_log_pth", "#workRegFormBckr").val(selectedAgentServer.pghome_pth + "/etc/pgbackrest/logs");
+					}
+				});
 			}else{
 				$("#ins_bckr_pth", "#workRegFormBckr").val("");
 				$("#ins_bckr_log_pth", "#workRegFormBckr").val("");
