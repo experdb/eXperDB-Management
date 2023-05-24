@@ -55,19 +55,12 @@ public class DxT048 extends SocketCtl{
 		try {
 			File inFile = new File(logFileNm);
 			String strFileView = FileUtil.getFileView(inFile);
-			String[] lines = strFileView.split("\n");
-			String strFileResult = "";
-			
-			for (int i = lines.length -1; i >= 0; i--) {
-				String line = lines[i];
-				strFileResult += line+"\n";
-			}
-			
+		
 			outputObj.put(ProtocolID.DX_EX_CODE, strDxExCode);
 			outputObj.put(ProtocolID.RESULT_CODE, strSuccessCode);
 			outputObj.put(ProtocolID.ERR_CODE, strErrCode);
 			outputObj.put(ProtocolID.ERR_MSG, strErrMsg);
-			outputObj.put(ProtocolID.RESULT_DATA, strFileResult);
+			outputObj.put(ProtocolID.RESULT_DATA, strFileView);
 			
 			inFile = null;
 			send(TotalLengthBit, outputObj.toString().getBytes());

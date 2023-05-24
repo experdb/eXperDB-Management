@@ -549,6 +549,7 @@
 			async: true,
 			beforeSend: function(xhr) {
 				xhr.setRequestHeader("AJAX", true);
+				showSwalIconRst('<spring:message code="backup_management.msg02" />' + '\n' + '<spring:message code="backup_management.msg03" />', '<spring:message code="common.close" />', '', 'success', 'backup');
 			},
 			error : function(xhr, status, error) {
 				if(xhr.status == 401) {
@@ -564,7 +565,7 @@
 				}
 			},
 			success : function(result) {
-				showSwalIconRst('<spring:message code="backup_management.msg02" />' + '\n' + '<spring:message code="backup_management.msg03" />', '<spring:message code="common.close" />', '', 'success', 'backup');
+				
 			}
 		});
 	}

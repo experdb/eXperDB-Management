@@ -289,7 +289,9 @@ public class BackupController {
 			CmmnUtils.saveHistory(request, historyVO);
 			if (workLogVO.getBck_bsn_dscd().equals("TC000201")) {
 				historyVO.setExe_dtl_cd("DX-T0026_01");
-			} else {
+			}else if(workLogVO.getBck_bsn_dscd().equals("TC000205")) {
+				historyVO.setExe_dtl_cd("DX-T0021_05");
+			}else {
 				historyVO.setExe_dtl_cd("DX-T0026_02");
 			}
 			accessHistoryService.insertHistory(historyVO);

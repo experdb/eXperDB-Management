@@ -597,12 +597,14 @@
 	 		AA.FRST_REG_DTM,
 	 		AA.LST_MDFR_ID,
 	 		AA.LST_MDF_DTM,
-	 		AA.BACKREST_GBN
+	 		AA.BACKREST_GBN,
+	 		AA.DB_SZ
         FROM
         (SELECT
         	B.DB_SVR_ID,
 	 		B.IPADR,
 	 		TWI.BACKREST_GBN,
+	 		TWG.DB_SZ,
 	 		TWG.EXE_SN AS EXE_SN,
 	 		TWG.SCD_ID AS SCD_ID,
 	 		(SELECT SCD_NM FROM T_SCD_M WHERE TWG.SCD_ID = SCD_ID ) AS SCD_NM,
@@ -711,7 +713,7 @@
 			obj_sn,
 			bck_wrk_id,
 			db_id,
-			scm_nm,
+			scm_nm,selectWorkLogList
 			obj_nm,
 			frst_regr_id,
 			frst_reg_dtm,

@@ -28,6 +28,7 @@
 	var tableBackrest = null;
 	var tabGbn = "${tabGbn}";
 	var pgbackrest = "${pgbackrest}"
+	var interval = null;
 
 	$(window.document).ready(function() {
 		//검색조건 초기화
@@ -549,12 +550,34 @@
 							var html = '';
 							if(full.backrest_gbn != null && full.backrest_gbn != ''){
 								html += full.backrest_gbn.toUpperCase();	
-								return html;
+								return html; 
 							}
 						},
 						className: "dt-center", defaultContent: ""},
-					{data: "bck_opt_cd_nm",	className: "dt-center", defaultContent: ""},
+					{data: "bck_opt_cd_nm",
+							render : function(data, type, full, meta){
+								var html = '';
+								html += full.bck_opt_cd_nm.toUpperCase();
+								return html;
+							},
+							className: "dt-center", defaultContent: ""},
 					{data: "bck_file_pth", className: "dt-center", defaultContent: ""},
+					{data: "db_sz", 
+						render : function(data, type, full, meta){ 
+							var html = '';
+							
+							if(full.db_sz !=0){
+								var s = ['bytes', 'kB', 'MB', 'GB', 'TB', 'PB'];
+								var e = Math.floor(Math.log(full.db_sz) / Math.log(1024));
+
+								html += "<div class='badge badge-light' style='background-color: transparent !important;font-size: 0.875rem;'>";
+								html += "	<i class='ti-files text-primary' >";
+								html += '&nbsp;' + (full.db_sz / Math.pow(1024, e)).toFixed(2) + " " + s[e] + '</i>';
+								html += "</div>";
+							}
+							return html;
+						},
+						className: "dt-center", defaultContent: ""},
 					{data: "file_sz",
 						render : function(data, type, full, meta){
 							var html = ''; 
@@ -571,12 +594,23 @@
 							return html;							
 						},
 						className: "dt-center", defaultContent: ""},
+					{data: "compress", 
+							render : function(data, type, full, meta){
+								var html = '';
+								
+								if(full.exe_rslt_cd == 'TC001701'){
+									var compress = full.db_sz / full.file_sz;
+									html += compress.toFixed(1) + "%";
+								}
+								return html;
+							},
+							className: "dt-center", defaultContent: ""},
 					{data: "wrk_strt_dtm", className: "dt-center", defaultContent: ""},
 					{data: "wrk_end_dtm",
 						render : function(data, type, full, meta){
 							var html = '';
 							
-							if(full.wrk_strt_dtm != full.wrk_end_dtm){
+							if(full.exe_rslt_cd == 'TC001701'){
 								html += full.wrk_end_dtm;
 							}
 							return html;
@@ -585,7 +619,7 @@
 					{data: "wrk_dtm",
 							render : function(data, type, full, meta){
 								html = '';
-								if(full.wrk_strt_dtm != full.wrk_end_dtm){
+								if(full.exe_rslt_cd == 'TC001701'){
 									var html = "<div class='badge badge-pill badge-primary'>";
 									html += "	<i class='mdi mdi-timer mr-2'></i>";
 									html += full.wrk_dtm;
@@ -843,12 +877,13 @@
 					},
 					success : function(result) {
 						$('#backRestAcitveLog').text(result.RESULT_DATA);
+						$('#backRestAcitveLog').scrollTop($('#backRestAcitveLog')[0].scrollHeight);
 					}
 				})
 			} else if(state == 'TC001802'){
 				var resultCode = -1;
 	
-				var interval = setInterval(function() {
+				interval = setInterval(function() {
 					if(resultCode == -1){
 						$.ajax({
 							url : "/selectBackrestLog.do",
@@ -874,7 +909,9 @@
 							},
 							success : function(result) {
 								resultCode = result.RESULT_DATA.indexOf('successfully');
+								 
 								$('#backRestAcitveLog').text(result.RESULT_DATA);
+								$('#backRestAcitveLog').scrollTop($('#backRestAcitveLog')[0].scrollHeight);
 							}
 						});
 						$('#loading').hide();
@@ -886,6 +923,16 @@
 			}
 		})
 	});
+	
+	function stopInterval(){
+		var selectedRow = tableBackrest.row('.selected').data();
+		if(selectedRow != undefined || selectedRow != null){
+			if(selectedRow.exe_rslt_cd != 'TC001701'){
+				showSwalIcon('실시간 로그 중지', '<spring:message code="common.close" />', '', 'success');
+				clearInterval(interval);
+			}
+		} 
+	}
 	
 	
 </script>
@@ -1148,7 +1195,9 @@
 												<th width="40">스토리지</th>
 												<th width="40">백업 구분</th>
 												<th width="100"><spring:message code="properties.backup_path" /></th>
+												<th width="50">DB SIZE</th>
 												<th width="50">백업 SIZE</th>
+												<th width="50">압축률</th>
 												<th width="50">백업 시작 시간</th>
 												<th width="50">백업 종료 시간</th>
 												<th width="50">백업 수행 시간</th>
@@ -1169,6 +1218,7 @@
 										<table id="backresLog" class="table table-hover table-striped system-tlb-scroll" style="width:100%;">
 											<tr class="bg-info text-white">
 												<th>Log Message</th> 
+												<th class="float-right"><button type="button" class="btn btn-danger" onclick="stopInterval()">Log Stop</button></th>
 											</tr>
 										</table>
 										<textarea id="backRestAcitveLog" rows=10 style="width:100%" disabled onfocus="this.value = this.value;"></textarea>

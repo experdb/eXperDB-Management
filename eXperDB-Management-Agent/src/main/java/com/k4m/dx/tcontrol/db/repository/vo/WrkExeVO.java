@@ -36,7 +36,7 @@ public class WrkExeVO {
 	private String SCD_NM;
 	private String WRK_NM;
 	private int DB_SVR_IPADR_ID;
-	
+	private int DB_SZ;
 	
 	public int getDB_SVR_IPADR_ID() {
 		return DB_SVR_IPADR_ID;
@@ -170,6 +170,12 @@ public class WrkExeVO {
 	}
 	public void setLST_MDF_DTM(String lST_MDF_DTM) {
 		LST_MDF_DTM = lST_MDF_DTM;
+	}
+	public int getDB_SZ() {
+		return DB_SZ;
+	}
+	public void setDB_SZ(int dB_SZ) {
+		DB_SZ = dB_SZ;
 	}
 	
 	

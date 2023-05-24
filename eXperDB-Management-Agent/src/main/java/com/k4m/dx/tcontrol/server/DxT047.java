@@ -120,7 +120,7 @@ public class DxT047 extends SocketCtl{
 			service.insertPgbackrestBackup(vo);
 
 			if(bck_opt_cd.equals("TC000302")) {
-				bck_opt_cd = "incr";
+				backupType = "incr";
 			}
 			String lowerBckType = backupType.toLowerCase();
 			
@@ -151,12 +151,13 @@ public class DxT047 extends SocketCtl{
 				int jsonSize = jsonNode.findValue("backup").size();
 			
 				int repoSizeInt = jsonNode.findValue("backup").path(jsonSize-1).path("info").path("repository").path("size").asInt();
+				int dbSizeInt = jsonNode.findValue("backup").path(jsonSize-1).path("info").path("size").asInt();
 				int startTimeInt = jsonNode.findValue("backup").path(jsonSize-1).path("timestamp").path("start").asInt();
 				int stopTimeInt = jsonNode.findValue("backup").path(jsonSize-1).path("timestamp").path("stop").asInt(); 
 				
 				String startDateStr = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date(startTimeInt * 1000L));
 				String stopDateStr = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date(stopTimeInt * 1000L));
-			
+							
 				WrkExeVO endVO = new WrkExeVO();
 				endVO.setEXE_SN(exe_sn);
 				endVO.setWRK_STRT_DTM(startDateStr);
@@ -164,6 +165,7 @@ public class DxT047 extends SocketCtl{
 				endVO.setEXE_RSLT_CD(strResultCode);
 				endVO.setFILE_SZ(repoSizeInt);
 				endVO.setBCK_FILENM(logFullPath);
+				endVO.setDB_SZ(dbSizeInt);
 				endVO.setRSLT_MSG(retVal + " " + strResultMessage);
 				
 				service.updateBackrestWrk(endVO);
@@ -172,7 +174,8 @@ public class DxT047 extends SocketCtl{
 				errLogger.error("[ERROR] DxT047 {} ", retVal + " " + strResultMessage);
 
 				strResultCode = TC001702;
-
+				strSuccessCode = "2";
+				
 				WrkExeVO endVO = new WrkExeVO();
 				endVO.setEXE_RSLT_CD(strResultCode);
 				endVO.setWRK_END_DTM(wrk_nm);

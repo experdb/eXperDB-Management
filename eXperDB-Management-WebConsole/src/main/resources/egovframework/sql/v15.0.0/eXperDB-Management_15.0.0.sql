@@ -1,5 +1,7 @@
 ALTER TABLE t_bck_wrkcng_i ADD COLUMN db_svr_ipadr_id numeric(18);
 ALTER TABLE t_bck_wrkcng_i ADD COLUMN backrest_gbn varchar(20) ;
+ALTER TABLE t_wrkexe_g add column db_sz numeric(18);
+
 
 INSERT INTO T_SYSDTL_C(GRP_CD, SYS_CD, SYS_CD_NM, USE_YN, FRST_REGR_ID, FRST_REG_DTM, LST_MDFR_ID, LST_MDF_DTM ) VALUES('TC0003', 'TC000304', 'diff', 'Y', 'ADMIN', clock_timestamp(), 'ADMIN', clock_timestamp());
 
@@ -15,7 +17,7 @@ COMMENT ON COLUMN t_BACKREST_OPT_i.opt_id IS 'Backrest 옵션ID';
 COMMENT ON COLUMN t_BACKREST_OPT_i.opt_gbn IS 'Backrest 구분';   
 COMMENT ON COLUMN t_BACKREST_OPT_i.opt_nm IS 'Backrest 옵션';
 COMMENT ON COLUMN t_BACKREST_OPT_i.opt_exp IS 'Backrest 옵션설명';   
-		
+COMMENT ON COLUMN t_wrkexe_g.db_sz IS 'db 백업 사이즈';		
 		
 CREATE SEQUENCE Q_BACKREST_OPT_I_01 ;
 

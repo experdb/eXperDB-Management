@@ -908,6 +908,7 @@
 			, BCK_OPT_CD
 			, TLI
 			, FILE_SZ
+			, DB_SZ
 			, DB_ID
 			, BCK_FILE_PTH
 			, BCK_FILENM
@@ -926,6 +927,7 @@
 			, now()
 			, now()
 			, #{BCK_OPT_CD}
+			, 0
 			, 0
 			, 0
 			, #{DB_ID}
@@ -952,6 +954,7 @@
 			, WRK_STRT_DTM = TO_TIMESTAMP(#{WRK_STRT_DTM}, 'YYYY-MM-DD HH24:MI:SS')
 			, EXE_RSLT_CD = #{EXE_RSLT_CD}
 			, FILE_SZ = #{FILE_SZ}
+			, DB_SZ = #{DB_SZ}
 			, BCK_FILENM = #{BCK_FILENM}
 			, RSLT_MSG = #{RSLT_MSG}
 		WHERE

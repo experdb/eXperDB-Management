@@ -37,6 +37,7 @@ public class WorkLogVO {
 	private String bck_wrk_id;
 	private String log_filenm;
 	private String backrest_gbn;
+	private int db_sz;
 
 	public String getBck_wrk_id() {
 		return bck_wrk_id;
@@ -324,6 +325,14 @@ public class WorkLogVO {
 
 	public void setBackrest_gbn(String backrest_gbn) {
 		this.backrest_gbn = backrest_gbn;
+	}
+
+	public int getDb_sz() {
+		return db_sz;
+	}
+
+	public void setDb_sz(int db_sz) {
+		this.db_sz = db_sz;
 	}
 
 }
