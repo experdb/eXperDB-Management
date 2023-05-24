@@ -90,6 +90,14 @@
 			var words = this.className.split(' ');
 
 			if(words.length == 2){
+				if(selectedAgentServer.master_gbn == "S"){
+					$("#bckr_standby_alert", "#workRegFormBckr").html("Primary DB를 Stnadby서버에 백업합니다.");
+					$("#bckr_standby_alert", "#workRegFormBckr").show();
+				}else{
+					$("#bckr_standby_alert", "#workRegFormBckr").html("");
+					$("#bckr_standby_alert", "#workRegFormBckr").hide();
+				}
+
 				$.ajax({
 					url : "/backup/backrestPath.do",
 					data : {
@@ -118,6 +126,8 @@
 			}else{
 				$("#ins_bckr_pth", "#workRegFormBckr").val("");
 				$("#ins_bckr_log_pth", "#workRegFormBckr").val("");
+				$("#bckr_standby_alert", "#workRegFormBckr").html("");
+				$("#bckr_standby_alert", "#workRegFormBckr").hide();
 			}
 		});
 	})
@@ -219,9 +229,9 @@
 	function fn_bckr_opt_reset(){
 		//백업옵션 초기화
 		$("#ins_bckr_opt_cd", "#workRegFormBckr").val('').prop("selected", true);	//백업유형
-		$("#ins_bckr_pth", "#workRegFormBckr").val("");	//백업경로
+		// $("#ins_bckr_pth", "#workRegFormBckr").val("");	//백업경로
 		$("#ins_bckr_cnt", "#workRegFormBckr").val(2); //풀백업보관일
-		$("#ins_bckr_log_pth", "#workRegFormBckr").val("");	//로그경로
+		// $("#ins_bckr_log_pth", "#workRegFormBckr").val("");	//로그경로
 
 		//압축옵션 초기화
 		$("input:checkbox[id='ins_bckr_cps_yn_chk']").prop("checked", true); //압축여부
@@ -254,7 +264,7 @@
 		$("#ins_bckr_log_pth_alert", "#workRegFormBckr").html("");
 		$("#ins_bckr_log_pth_alert", "#workRegFormBckr").hide();			
 		$("#ins_cps_opt_prcs_alert", "#workRegFormBckr").html("");
-		$("#ins_cps_opt_prcs_alert", "#workRegFormBckr").hide();			
+		$("#ins_cps_opt_prcs_alert", "#workRegFormBckr").hide();		
 
 		//Remote 옵션 초기화
 		$("#ins_remt_str_ip_alert", "#workRegFormBckr").html("");
@@ -669,6 +679,10 @@
 									<button type="button" class="btn btn-inverse-primary btn-icon-text mb-2 btn-search-disable" onclick="fn_select_agent_info()">
 										<i class="ti-search btn-icon-prepend "></i><spring:message code="common.search" />
 									</button>
+
+									<div class="col-sm-4">
+										<div class="alert alert-info " style="display:none; width: 300px; margin-bottom: 0px;" id="bckr_standby_alert" ></div>
+									</div>
 									
 									<div class="col-12" id="backrest_svr_info_div" style="diplay:none;">
 										<div class="table-responsive">

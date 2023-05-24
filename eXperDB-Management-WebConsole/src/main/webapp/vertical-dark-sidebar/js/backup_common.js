@@ -396,6 +396,9 @@ function fn_insert_chogihwa(gbn, result) {
 		$("#remote_opt").hide();
 		$("#cloud_opt").hide();
 
+		$("#bckr_standby_alert", "#workRegFormBckr").html("");
+		$("#bckr_standby_alert", "#workRegFormBckr").hide();
+
 		fn_deleteCustom();
 		custom_map.clear();
         custom_map_before.clear();
