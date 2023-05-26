@@ -150,8 +150,8 @@ public class DxT047 extends SocketCtl{
 				
 				int jsonSize = jsonNode.findValue("backup").size();
 			
-				int repoSizeInt = jsonNode.findValue("backup").path(jsonSize-1).path("info").path("repository").path("size").asInt();
-				int dbSizeInt = jsonNode.findValue("backup").path(jsonSize-1).path("info").path("size").asInt();
+				long repoSizeInt = jsonNode.findValue("backup").path(jsonSize-1).path("info").path("repository").path("size").asLong();
+				long dbSizeInt = jsonNode.findValue("backup").path(jsonSize-1).path("info").path("size").asLong();
 				int startTimeInt = jsonNode.findValue("backup").path(jsonSize-1).path("timestamp").path("start").asInt();
 				int stopTimeInt = jsonNode.findValue("backup").path(jsonSize-1).path("timestamp").path("stop").asInt(); 
 				
