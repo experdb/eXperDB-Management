@@ -84,6 +84,15 @@
 				fn_get_dump_list();
 			}
 		});
+		
+		
+		/* ********************************************************
+		 * Click Latest Log
+		 ******************************************************** */
+		 if(tableBackrest != null){
+			 console.log(tableBackrest.rows(0).select())
+			 tableBackrest.row(0).click;
+		 }
 	});
 	
 	/* ********************************************************
@@ -845,91 +854,125 @@
 	$(function() {
 		$('#logBackrestList tbody').on('click', 'tr', function() {
 			if($(this).hasClass('selected')){
-				
+				realTimeLog();
 			}else {
 				tableBackrest.$('tr.selected').removeClass('selected');
 				$(this).addClass('selected');
-			}
-			var state = tableBackrest.row('.selected').data().exe_rslt_cd
-//			상태가 실행 중이면 ajax 여러번 실행 / 상태가 성공이면 한번만 실행
-			if(state == 'TC001701'){
-				$.ajax({
-					url : "/selectBackrestLog.do",
-					data : {
-						log_path : tableBackrest.row('.selected').data().bck_filenm,
-						ipadr : tableBackrest.row('.selected').data().ipadr
-					},
-					dataType : "json",
-					type : "post",
-					beforeSend: function(xhr) {
-						xhr.setRequestHeader("AJAX", true);
-					},
-					error : function(xhr, status, error) {
-						if(xhr.status == 401) {
-							showSwalIcon('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error');
-							top.location.href = "/";
-						} else if(xhr.status == 403) {
-							showSwalIcon('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error');
-							top.location.href = "/";
-						} else {
-							showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
-						}
-					},
-					success : function(result) {
-						$('#backRestAcitveLog').text(result.RESULT_DATA);
-						$('#backRestAcitveLog').scrollTop($('#backRestAcitveLog')[0].scrollHeight);
-					}
-				})
-			} else if(state == 'TC001802'){
-				var resultCode = -1;
-	
-				interval = setInterval(function() {
-					if(resultCode == -1){
-						$.ajax({
-							url : "/selectBackrestLog.do",
-							data : {
-								log_path : tableBackrest.row('.selected').data().bck_filenm,
-								ipadr : tableBackrest.row('.selected').data().ipadr
-							},
-							dataType : "json",
-							type : "post",
-							beforeSend: function(xhr) {
-								xhr.setRequestHeader("AJAX", true);
-							},
-							error : function(xhr, status, error) {
-								if(xhr.status == 401) {
-									showSwalIcon('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error');
-									top.location.href = "/";
-								} else if(xhr.status == 403) {
-									showSwalIcon('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error');
-									top.location.href = "/";
-								} else {
-									showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
-								}
-							},
-							success : function(result) {
-								resultCode = result.RESULT_DATA.indexOf('successfully');
-								 
-								$('#backRestAcitveLog').text(result.RESULT_DATA);
-								$('#backRestAcitveLog').scrollTop($('#backRestAcitveLog')[0].scrollHeight);
-							}
-						});
-						$('#loading').hide();
-					}else {
-						clearInterval(interval);
-						fn_get_backrest_list()
-					}
-				}, 5000);
+				realTimeLog();
 			}
 		})
 	});
+
+	function realTimeLog(){
+		$(function() {
+			var state
+			if(tableBackrest.row('.selected').data() != null || tableBackrest.row('.selected').data() != undefined){
+				state = tableBackrest.row('.selected').data().exe_rslt_cd
+			}
+//				상태가 실행 중이면 ajax 여러번 실행 / 상태가 성공이면 한번만 실행
+				if(state == 'TC001701'){
+					$.ajax({
+						url : "/selectBackrestLog.do",
+						data : {
+							log_path : tableBackrest.row('.selected').data().bck_filenm,
+							ipadr : tableBackrest.row('.selected').data().ipadr
+						},
+						dataType : "json",
+						type : "post",
+						beforeSend: function(xhr) {
+							xhr.setRequestHeader("AJAX", true);
+						},
+						error : function(xhr, status, error) {
+							if(xhr.status == 401) {
+								showSwalIcon('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error');
+								top.location.href = "/";
+							} else if(xhr.status == 403) {
+								showSwalIcon('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error');
+								top.location.href = "/";
+							} else {
+								showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
+							}
+						},
+						success : function(result) {
+							$('#backRestAcitveLog').text(result.RESULT_DATA);
+							$('#backRestAcitveLog').scrollTop($('#backRestAcitveLog')[0].scrollHeight);
+						}
+					})
+				} else if(state == 'TC001802'){
+					var resultCode = -1;
+		
+					interval = setInterval(function() {
+						if(resultCode == -1){
+							$.ajax({
+								url : "/selectBackrestLog.do",
+								data : {
+									log_path : tableBackrest.row('.selected').data().bck_filenm,
+									ipadr : tableBackrest.row('.selected').data().ipadr
+								},
+								dataType : "json",
+								type : "post",
+								beforeSend: function(xhr) {
+									xhr.setRequestHeader("AJAX", true);
+								},
+								error : function(xhr, status, error) {
+									if(xhr.status == 401) {
+										showSwalIcon('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error');
+										top.location.href = "/";
+									} else if(xhr.status == 403) {
+										showSwalIcon('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error');
+										top.location.href = "/";
+									} else {
+										showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
+									}
+								},
+								success : function(result) {
+									if($('#log_starter').text() == 'Log Stop'){
+										resultCode = result.RESULT_DATA.indexOf('successfully');
+										 
+										$('#backRestAcitveLog').text(result.RESULT_DATA);
+										$('#backRestAcitveLog').scrollTop($('#backRestAcitveLog')[0].scrollHeight);	
+									}else {
+										fn_get_backrest_list()
+
+									}
+									
+								}
+							});
+							$('#loading').hide();
+						}else {
+							clearInterval(interval);
+							fn_get_backrest_list()
+							$('#loading').hide();
+						}
+					}, 5000);
+				}
+		});
+	} 
 	
+	  
 	function stopInterval(){
+
 		var selectedRow = tableBackrest.row('.selected').data();
+		var logText = $('#log_starter').text();
+		
 		if(selectedRow != undefined || selectedRow != null){
-			if(selectedRow.exe_rslt_cd != 'TC001701'){
+			var logText = $('#log_starter').text();
+			
+			if(selectedRow.exe_rslt_cd != 'TC001701' && logText == 'Log Stop'){
 				showSwalIcon('실시간 로그 중지', '<spring:message code="common.close" />', '', 'success');
-				clearInterval(interval);
+				//clearInterval(interval);
+				
+				$('#log_starter').text('Log Restart');
+				$('#log_starter').removeClass('btn-danger');
+				$('#log_starter').addClass('btn-success');
+			}else if (selectedRow.exe_rslt_cd == 'TC001701'){
+				
+			}else {
+				showSwalIcon('실시간 로그 재시작', '<spring:message code="common.close" />', '', 'success');
+				$('#log_starter').text('Log Stop');
+				$('#log_starter').removeClass('btn-success');
+				$('#log_starter').addClass('btn-danger');
+				interval = setInterval(realTimeLog, 5000);
 			}
 		} 
 	}
@@ -1218,7 +1261,7 @@
 										<table id="backresLog" class="table table-hover table-striped system-tlb-scroll" style="width:100%;">
 											<tr class="bg-info text-white">
 												<th>Log Message</th> 
-												<th class="float-right"><button type="button" class="btn btn-danger" onclick="stopInterval()">Log Stop</button></th>
+												<th class="float-right"><button id="log_starter" type="button" class="btn btn-danger" onclick="stopInterval()">Log Stop</button></th>
 											</tr>
 										</table>
 										<textarea id="backRestAcitveLog" rows=10 style="width:100%" disabled onfocus="this.value = this.value;"></textarea>
