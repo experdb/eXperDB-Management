@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="restoreBackrestSql">
+
+	<select id="backrestRestoreHistory" parameterType="restoreBackrestVO" resultType="restoreBackrestVO">
+		/**
+		* Query ID : backrestRestoreHistory
+		* Description : BACKREST Restore 이력 조회
+		* Author : 변승우
+		**/
+		SELECT
+		        (ROW_NUMBER() OVER()) AS ROWNUM,
+				(ROW_NUMBER() OVER()) AS IDX,
+				AA.RESTORE_SN,
+	      		AA.DB_SVR_NM,
+				AA.RESTORE_NM,
+				AA.RESTORE_EXP,
+				AA.TIMELINE_DT,
+				AA.TIMELINE_H,
+				AA.TIMELINE_M,
+				AA.TIMELINE_S,
+				AA.DTB_PTH,
+				AA.PGALOG_PTH,
+				AA.SVRLOG_PTH,
+				AA.BCK_PTH,
+				AA.RESTORE_STRTDTM,
+				AA.RESTORE_ENDDTM,
+				AA.RESTORE_CNDT,
+				AA.RESTORE_FLAG,
+				AA.ASIS_FLAG,
+				AA.RESTORE_DIR,
+				AA.EXELOG,
+				AA.REGR_ID,
+				AA.REG_DTM
+		  FROM(	
+	      SELECT 
+	      		RESTORE_SN,
+	      		(SELECT IPADR FROM t_dbsvripadr_i WHERE A.DB_SVR_ID = DB_SVR_ID and master_gbn = 'M' ) AS DB_SVR_NM,
+				RESTORE_NM,
+				RESTORE_EXP,
+				TIMELINE_DT,
+				TIMELINE_H,
+				TIMELINE_M,
+				TIMELINE_S,
+				DTB_PTH,
+				PGALOG_PTH,
+				SVRLOG_PTH,
+				BCK_PTH,
+				TO_CHAR(RESTORE_STRTDTM,'YYYY-MM-DD HH24:MI:SS') AS RESTORE_STRTDTM,
+				TO_CHAR(RESTORE_ENDDTM,'YYYY-MM-DD HH24:MI:SS') AS RESTORE_ENDDTM,
+				RESTORE_CNDT,
+				RESTORE_FLAG,
+				ASIS_FLAG,
+				RESTORE_DIR,
+				EXELOG,
+				REGR_ID,
+				REG_DTM
+	      FROM T_RMAN_RESTORE A
+	      WHERE 1=1		  
+	       <if test="restore_strtdtm != null and restore_strtdtm != '' ">
+      		<if test="restore_enddtm != null and restore_enddtm != '' ">
+      			AND (
+      				TO_DATE(to_char(RESTORE_STRTDTM,'YYYY-MM-DD'),'YYYY-MM-DD') BETWEEN TO_DATE(#{restore_strtdtm},'YYYY-MM-DD') AND TO_DATE(#{restore_enddtm},'YYYY-MM-DD')
+      				OR
+      				TO_DATE(to_char(RESTORE_STRTDTM,'YYYY-MM-DD'),'YYYY-MM-DD') BETWEEN TO_DATE(#{restore_strtdtm},'YYYY-MM-DD') AND TO_DATE(#{restore_enddtm},'YYYY-MM-DD')
+      				)
+      		</if>
+      	</if>
+	     <if test="restore_cndt != null and restore_cndt != '' ">
+	      AND RESTORE_CNDT=#{restore_cndt}
+	      </if>
+	      <if test="restore_nm != null and restore_nm != '' ">
+	      AND RESTORE_NM=#{restore_nm}
+	      </if>  
+	      ORDER BY RESTORE_SN DESC
+	      )AA	
+	</select>
+</mapper>

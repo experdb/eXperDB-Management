@@ -1,8 +1,11 @@
 package com.k4m.dx.tcontrol.restore.web;
 
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -11,6 +14,7 @@ import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.util.ResourceUtils;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -27,6 +31,7 @@ import com.k4m.dx.tcontrol.common.service.AgentInfoVO;
 import com.k4m.dx.tcontrol.common.service.CmmnServerInfoService;
 import com.k4m.dx.tcontrol.common.service.HistoryVO;
 import com.k4m.dx.tcontrol.login.service.LoginVO;
+import com.k4m.dx.tcontrol.restore.service.RestoreBackrestVO;
 import com.k4m.dx.tcontrol.restore.service.RestoreDumpVO;
 import com.k4m.dx.tcontrol.restore.service.RestoreRmanVO;
 import com.k4m.dx.tcontrol.restore.service.RestoreService;
@@ -81,6 +86,19 @@ public class RestoreHistoryController {
 		menuAut = cu.selectMenuAut(menuAuthorityService, "MN000303");
 		
 		ModelAndView mv = new ModelAndView();
+		
+		String pgbackrest_useyn = "";
+
+		Properties props = new Properties();
+		try {
+			props.load(new FileInputStream(
+					ResourceUtils.getFile("classpath:egovframework/tcontrolProps/globals.properties")));
+			pgbackrest_useyn = props.getProperty("pgbackrest.useyn").toString().toUpperCase();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 		try {
 			//읽기 권한이 없는경우 에러페이지 호출 [추후 Exception 처리예정]
 			if(menuAut.get(0).get("read_aut_yn").equals("N")){
@@ -94,6 +112,7 @@ public class RestoreHistoryController {
 				
 				mv.addObject("read_aut_yn", menuAut.get(0).get("read_aut_yn"));
 				mv.addObject("wrt_aut_yn", menuAut.get(0).get("wrt_aut_yn"));
+				mv.addObject("pgbackrest_useyn", pgbackrest_useyn);
 
 				mv.setViewName("restore/restoreHistory");
 			}
@@ -320,4 +339,34 @@ public class RestoreHistoryController {
 		
 		return mv;
 	}
+	
+	
+	
+	/**
+	 * Backrest restore Log List
+	 * @param restoreRmanVO, historyVO, request
+	 * @return List<WorkLogVO>
+	 * @throws Exception
+	 */
+	@RequestMapping(value="/backrestRestoreHistory.do")
+	@ResponseBody
+	public List<RestoreBackrestVO> backrestRestoreHistory(@ModelAttribute("restoreRmanVO") RestoreBackrestVO restoreBackrestVO, HttpServletRequest request, @ModelAttribute("historyVO") HistoryVO historyVO) throws Exception{
+		List<RestoreBackrestVO> resultSet = null;
+
+		// 화면접근이력 이력 남기기
+		try {
+			CmmnUtils.saveHistory(request, historyVO);
+			historyVO.setExe_dtl_cd("DX-T0133_02");
+			accessHistoryService.insertHistory(historyVO);
+			
+			resultSet = restoreService.backrestRestoreHistory(restoreBackrestVO);
+		} catch (Exception e2) {
+			// TODO Auto-generated catch block
+			e2.printStackTrace();
+		}
+
+		return resultSet;
+	}
+	
+	
 }

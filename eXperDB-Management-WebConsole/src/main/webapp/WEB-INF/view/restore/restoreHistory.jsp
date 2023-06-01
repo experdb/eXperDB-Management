@@ -26,7 +26,8 @@
 <script type="text/javascript">
 	var tableRman = null;
 	var tableDump = null;
-	var tabGbn = nvlPrmSet("${tabGbn}", "rman");
+	var tableBackrest = null;
+	var tabGbn = "";
 	var searchInit = "";
 
 	/* ********************************************************
@@ -34,12 +35,21 @@
 	 ******************************************************** */
 	$(window.document).ready(function() {
 		
+		if("${pgbackrest_useyn}" == "Y") {
+			tabGbn = "backrest";
+		}else{
+			tabGbn = nvlPrmSet("${tabGbn}", "rman");
+		}
+		
+		//복원이력 구분(pgbackrest)
+		fn_pgbackrestAut();
+		
 		//검색조건 초기화
 		selectInitTab(tabGbn);
 
 		//작업기간 calender setting
 		dateCalenderSetting();
-
+		
 		//조회
 		if(tabGbn != ""){
 			selectTab(tabGbn);
@@ -57,6 +67,8 @@
 
 			if(tabGbn == "rman"){
 				fn_get_rman_list();
+			}else if (tabGbn == "backrest"){
+				fn_get_backrest_list();		
 			}else{
 				fn_get_dump_list();
 			}
@@ -68,25 +80,34 @@
 	 ******************************************************** */
 	function selectInitTab(intab){
 		tabGbn = intab;
-		if(intab == "rman"){			
+		if(intab == "rman"){		
 			$(".search_rman").show();
 			$(".search_dump").hide();
+			$(".search_backrest").hide();
 			$("#logRmanListDiv").show();
 			$("#logDumpListDiv").hide();
-
+			$("#backrestDataTableDiv").hide();	
+			seachParamInit(intab);
+		}else if(intab == "backrest"){
+			$(".search_rman").hide();
+			$(".search_dump").hide();
+			$("#logRmanListDiv").hide();
+			$("#logDumpListDiv").hide();
+			$("#backrestDataTableDiv").show();			
 			seachParamInit(intab);
 		}else{				
 			$(".search_rman").hide();
 			$(".search_dump").show();
 			$("#logRmanListDiv").hide();
 			$("#logDumpListDiv").show();
-
+			$("#backrestDataTableDiv").hide();
 			seachParamInit(intab);
 		}
 
 		//테이블 setting
 		fn_rman_init();
 		fn_dump_init();
+		fn_backrest_init();
 	}
 
 	/* ********************************************************
@@ -157,6 +178,25 @@
 	    $('#restore_enddtm_div').datepicker('updateDates');
 	}
 	
+	
+	/* ********************************************************
+	 * pgbackrest 사용시,
+	 ******************************************************** */
+	function fn_pgbackrestAut(){
+		if("${pgbackrest_useyn}" == "Y"){
+			selectChkTab = "backrest";
+			check = "backrest";
+
+			$("#server-tab-1").text("복구이력");
+		}else{
+			selectChkTab = "rman";
+			check = "rman";
+
+			$("#server-tab-1").text("긴급/시점 복원이력");
+		}
+	}
+	
+	
 	/* ********************************************************
 	 * calender valid 체크
 	 ******************************************************** */
@@ -187,16 +227,25 @@
 			$(".search_dump").hide();
 			$("#logRmanListDiv").show();
 			$("#logDumpListDiv").hide();
-	
+			$("#backrestDataTableDiv").hide();
 			seachParamInit(intab);
 	
 			fn_get_rman_list();
+		}else if(intab == "backrest"){
+			$(".search_rman").hide();
+			$(".search_dump").hide();
+			$("#logRmanListDiv").hide();
+			$("#logDumpListDiv").hide();
+			$("#backrestDataTableDiv").show();
+			seachParamInit(intab);		
+			fn_get_backrest_list();
+			
 		}else{
 			$(".search_rman").hide();
 			$(".search_dump").show();
 			$("#logRmanListDiv").hide();
 			$("#logDumpListDiv").show();
-	
+			$("#backrestDataTableDiv").hide();
 			seachParamInit(intab);
 			fn_get_dump_list();
 		}
@@ -321,6 +370,90 @@
 	    $(window).trigger('resize'); 
 	}
 
+	
+	/* ********************************************************
+	 * Backrest Data Table initialization
+	 ******************************************************** */
+	 function fn_backrest_init(){
+		tableBackrest = $('#backrestDataTable').DataTable({
+			scrollY: "300px",
+			scrollX: true,	
+			bDestroy: true,
+			paging : true,
+			processing : true,
+			searching : false,	
+			deferRender : true,
+			bSort: false,
+			columns : [
+						{data : "idx", className : "dt-center", defaultContent : ""},
+						{data : "restore_cndt",
+							render : function(data, type, full, meta) {
+								var html = '';
+								if (full.restore_cndt == '0') {
+									html += "<div class='badge badge-light' style='background-color: transparent !important;font-size: 0.875rem;'>";
+									html += "	<i class='fa fa-check-circle text-primary' >";
+									html += '&nbsp;<spring:message code="common.success" /></i>';
+									html += "</div>";
+								} else if (full.restore_cndt == '1'){
+									html += "<div class='badge badge-light' style='background-color: transparent !important;font-size: 0.875rem;'>";
+									html += "	<i class='fa fa-play text-warning' >";
+									html += '&nbsp;<spring:message code="etc.etc37" />';
+									html += "</div>";
+									
+								} else if (full.restore_cndt == '2'){
+									html += "<div class='badge badge-pill badge-info' style='color: #fff;'>";
+									html += "	<i class='fa fa-spin fa-spinner mr-2' ></i>";
+									html += '&nbsp;<spring:message code="restore.progress" />';
+									html += "</div>";
+								} else {
+									html += "<div class='badge badge-light' style='background-color: transparent !important;font-size: 0.875rem;'>";
+									html += "	<i class='fa fa-times text-danger' >";
+									html += '&nbsp;<spring:message code="common.failed" /></i>';
+									html += "</div>";
+								}								
+								return html;
+							},
+							className : "dt-center",
+							defaultContent : ""
+						},	
+						{ data: "restore_nm", className: "dt-center", defaultContent: ""},
+						{ data: "restore_exp", className: "dt-left", defaultContent: ""},		
+						{ data: "db_svr_nm", className: "dt-center", defaultContent: ""},	
+						{
+							data : "restore_flag",
+							render : function(data, type, full, meta) {
+								var html = '';
+								if (full.asis_flag == '0') {
+									html += "완전복구";
+								} else if (full.asis_flag == '1'){
+									html += "시점복구";
+								} 				
+								return html;
+							},
+							className : "dt-center",
+							defaultContent : ""
+						},	
+						{ data: "restore_cndt", className: "dt-center", defaultContent: ""},
+						{ data: "restore_cndt", className: "dt-center", defaultContent: ""},				
+			]
+		});
+
+		tableBackrest.tables().header().to$().find('th:eq(0)').css('min-width', '10px');
+		tableBackrest.tables().header().to$().find('th:eq(1)').css('min-width', '150px');
+		tableBackrest.tables().header().to$().find('th:eq(2)').css('min-width', '150px');
+		tableBackrest.tables().header().to$().find('th:eq(3)').css('min-width', '200px');
+		tableBackrest.tables().header().to$().find('th:eq(4)').css('min-width', '100px');
+		tableBackrest.tables().header().to$().find('th:eq(5)').css('min-width', '115px');
+		tableBackrest.tables().header().to$().find('th:eq(6)').css('min-width', '115px');
+		tableBackrest.tables().header().to$().find('th:eq(7)').css('min-width', '115px');
+		$(window).trigger('resize'); 
+	}	
+	
+	
+	
+	
+	
+	
 	/* ********************************************************
 	 * Dump Data Table initialization
 	 ******************************************************** */
@@ -472,6 +605,51 @@
 		});
 	}
 
+	
+	
+	/* ********************************************************
+	 * Get Backrest Log List
+	 ******************************************************** */
+	function fn_get_backrest_list(){
+		if(!calenderValid()) {
+			return;
+		}
+		
+ 		$.ajax({
+			url : "/backrestRestoreHistory.do",
+		  	data : {
+		  		restore_strtdtm : $("#restore_strtdtm").val(),
+		  		restore_enddtm : $("#restore_enddtm").val(),
+		  		restore_cndt : $("#restore_cndt").val(),
+		  		restore_nm : nvlPrmSet($('#restore_nm').val(), ""),
+		  	},
+			dataType : "json",
+			type : "post",
+			beforeSend: function(xhr) {
+				xhr.setRequestHeader("AJAX", true);
+			},
+			error : function(xhr, status, error) {
+				if(xhr.status == 401) {
+					showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
+				} else if(xhr.status == 403) {
+					showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
+				} else {
+					showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
+				}
+			},
+			success : function(result) {
+				tableBackrest.rows({selected: true}).deselect();
+				tableBackrest.clear().draw();
+
+				if (nvlPrmSet(result, "") != '') {
+					tableBackrest.rows.add(result).draw();
+				}
+			}
+		});
+	}
+	
+	
+	
 	/* ********************************************************
 	 * Get Dump Log List
 	 ******************************************************** */
@@ -748,6 +926,39 @@
 										</thead>
 									</table>
 							 	</div>
+
+
+
+								<div class="col-12" id="backrestDataTableDiv" style="diplay:none;">
+									<div class="table-responsive">
+									   <div id="order-listing_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
+										   <div class="row">
+											   <div class="col-sm-12 col-md-6">
+												   <div class="dataTables_length" id="order-listing_length">
+												   </div>
+											   </div>
+										   </div>
+									   </div>
+								   </div>
+
+								   <table id="backrestDataTable" class="table table-hover table-striped system-tlb-scroll" style="width:100%;">
+										<thead>
+											<tr class="bg-info text-white">
+												<th width="30"><spring:message code="common.no" /></th>
+												<th width="100" class="dt-center">상태</th>
+												<th width="100"><spring:message code="restore.Recovery_name" /></th>
+												<th width="150"><spring:message code="restore.Recovery_Description" /></th>
+												<th width="100" class="dt-center">복구서버</th>
+												<th width="100" class="dt-center">복구유형</th>
+												<th width="100" class="dt-center">복구 사이즈</th>
+												<th width="100" class="dt-center">복구 수행시간</th>
+											</tr>
+										</thead>
+									</table>
+								</div>
+
+
+
 
 								<div class="col-12" id="logDumpListDiv">
  									<div class="table-responsive">

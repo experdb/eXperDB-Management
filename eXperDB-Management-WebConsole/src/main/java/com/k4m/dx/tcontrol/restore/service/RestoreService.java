@@ -72,4 +72,7 @@ public interface RestoreService {
 
 
 	List<WorkLogVO> selectDumpRestoreLogList(WorkLogVO workLogVO) throws Exception;
+
+
+	List<RestoreBackrestVO> backrestRestoreHistory(RestoreBackrestVO restoreBackrestVO) throws Exception;
 }
