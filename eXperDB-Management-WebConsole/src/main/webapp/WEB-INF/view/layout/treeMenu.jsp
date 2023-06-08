@@ -7,6 +7,7 @@
 	var scale_yn_chk = "";
 	var transfer_ora_chk = "";
 	var bnr_yn_chk = "";
+	var pgbackrest_yn_chk = "";
 
 	$(window.document).ready(function() {
 		$.ajax({
@@ -58,6 +59,7 @@
 				transfer_ora_chk = result.transfer_ora_chk;
 				transfer_mon_menu = result.transfer_mon_menu;
 				bnr_yn_chk =result.bnr_yn_chk;
+				pgbackrest_yn_chk = result.pgbackrest_yn_chk;
 			}
 		});
 
@@ -283,24 +285,37 @@
 												 || (aut.length != 0 && aut[index].dump_restore_aut_yn == "Y") || (aut.length != 0 && aut[index].restore_his_aut_yn == "Y")
 											){
 												menuJson +=	', "nodes": [';
+												
+												if(pgbackrest_yn_chk == "Y"){
+													if(aut.length != 0 && aut[index].backrest_restore_aut_yn == "Y"){
+														menuJson +=	'{' +
+																		'"icon": "fa fa-cog",' +
+																		'"text": "복원설정",' +
+																		'"url": "/backrestRestore.do?db_svr_id='+item.db_svr_id+'",' +
+																		'"id": "backresetRestore'+item.db_svr_id+'"' +
+																	'},';
+													}
 													
-												if(aut.length != 0 && aut[index].emergency_restore_aut_yn == "Y"){
-													menuJson +=	'{' +
-																	'"icon": "fa fa-bell",' +
-																	'"text": "<spring:message code="restore.Emergency_Recovery"/>",' +
-																	'"url": "/emergencyRestore.do?db_svr_id='+item.db_svr_id+'",' +
-																	'"id": "emergencyRestore'+item.db_svr_id+'"' +
-																'},';
-												}
+												}else{
+													if(aut.length != 0 && aut[index].emergency_restore_aut_yn == "Y"){
+														menuJson +=	'{' +
+																		'"icon": "fa fa-bell",' +
+																		'"text": "<spring:message code="restore.Emergency_Recovery"/>",' +
+																		'"url": "/emergencyRestore.do?db_svr_id='+item.db_svr_id+'",' +
+																		'"id": "emergencyRestore'+item.db_svr_id+'"' +
+																	'},';
+													}
 
-												if(aut.length != 0 && aut[index].point_restore_aut_yn == "Y"){
-													menuJson +=	'{' +
-																	'"icon": "mdi mdi-backup-restore",' +
-																	'"text": "<spring:message code="restore.Point-in-Time_Recovery"/>",' +
-																	'"url": "/timeRestore.do?db_svr_id='+item.db_svr_id+'",' +
-																	'"id": "timeRestore'+item.db_svr_id+'"' +
-																'},';
+													if(aut.length != 0 && aut[index].point_restore_aut_yn == "Y"){
+														menuJson +=	'{' +
+																		'"icon": "mdi mdi-backup-restore",' +
+																		'"text": "<spring:message code="restore.Point-in-Time_Recovery"/>",' +
+																		'"url": "/timeRestore.do?db_svr_id='+item.db_svr_id+'",' +
+																		'"id": "timeRestore'+item.db_svr_id+'"' +
+																	'},';
+													}
 												}
+												
 
 												if(aut.length != 0 && aut[index].dump_restore_aut_yn == "Y"){
 													menuJson +=	'{' +

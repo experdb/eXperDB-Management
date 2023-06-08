@@ -2696,4 +2696,55 @@ public JSONObject pgbackrestImmediateStart(String ip, int port, JSONObject jObj)
 		return objList;
 	}
 	
+	public JSONObject executeBackrestRestore(String ip, int port, JSONObject jObj) {
+		JSONObject objList = null;
+		
+		ClientAdapter CA = new ClientAdapter(ip, port);
+		
+		jObj.put(ClientProtocolID.DX_EX_CODE, ClientTranCodeType.DxT053);
+
+		try {
+			CA.open();
+			objList = CA.dxT053(jObj);
+			CA.close();
+		} catch (Exception e) {			
+			e.printStackTrace();
+		}
+		
+		return objList;
+	}
+	
+	public JSONObject getBackrestRestoreLog(String IP, int PORT, JSONObject jObj) {
+		
+		JSONObject objList;
+		JSONObject result = new JSONObject();
+
+		try {
+			jObj.put(ClientProtocolID.DX_EX_CODE, ClientTranCodeType.DxT054);
+			
+			ClientAdapter CA = new ClientAdapter(IP, PORT);
+			
+			CA.open();
+			objList = CA.dxT054(jObj);
+			CA.close();
+
+			String strErrMsg = String.valueOf(objList.get(ClientProtocolID.ERR_MSG));
+			String strErrCode = String.valueOf(objList.get(ClientProtocolID.ERR_CODE));
+			String strDxExCode = String.valueOf(objList.get(ClientProtocolID.DX_EX_CODE));
+			String strResultCode = String.valueOf(objList.get(ClientProtocolID.RESULT_CODE));
+			String strResultData = String.valueOf(objList.get(ClientProtocolID.RESULT_DATA));
+			
+			result.put(ClientProtocolID.ERR_MSG, strErrMsg);
+			result.put(ClientProtocolID.ERR_CODE, strErrCode);
+			result.put(ClientProtocolID.DX_EX_CODE, strDxExCode);
+			result.put(ClientProtocolID.RESULT_CODE, strResultCode);
+			result.put(ClientProtocolID.RESULT_DATA, strResultData);
+			
+		} catch (Exception e) {			
+			e.printStackTrace();
+		}		
+		
+		return result;
+	}
+	
 }

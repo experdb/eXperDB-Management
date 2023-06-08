@@ -962,4 +962,21 @@
 				
     </update>
     
+    <update id="updateBackrestRestore"  parameterType="RmanRestoreVO">
+   		/**
+	 	* Query ID : updateBackrestRestore
+	 	* Description : backrest restore update
+	 	* Author : 박유라
+	 	**/
+		UPDATE T_RMAN_RESTORE
+		SET
+			RESTORE_CNDT = #{RESTORE_CNDT}
+			, RESTORE_SIZE = #{RESTORE_SIZE}
+			, ELAPSED_TIME =  #{ELAPSED_TIME}
+			, RESTORE_ENDDTM = now()
+
+		WHERE
+			 EXELOG = #{EXELOG}
+    </update>
+    
 </mapper>

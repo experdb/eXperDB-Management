@@ -136,7 +136,9 @@
 				location.href = "/securityKeySet.do";
 			} else if (rstGbn == "backup") {
 				fn_backupHistory_move();
-			} else if (rstGbn == "rman_restore") {
+			} else if(rstGbn == "backrest_restore"){
+				fn_bckr_restore_History_move();
+			}else if (rstGbn == "rman_restore") {
 				fn_restoreLogCall();
 			}else if(rstGbn =="insertScd"){
 				location.href = "/selectScheduleListView.do";

@@ -542,21 +542,29 @@
     </select>
     
     <select id="selectAgentInfo" parameterType="dbServerVO" resultType="dbServerVO">
-          SELECT
-          	   (ROW_NUMBER() OVER()) AS ROWNUM,
-               A.pgdata_pth,
-               A.pghome_pth,
-               B.ipadr,
-               B.portno,
-               B.master_gbn,
-               A.svr_spr_usr_id,
-               B.db_svr_ipadr_id
-          FROM T_DBSVR_I A, T_DBSVRIPADR_I B
-         WHERE
-           A.DB_SVR_ID = B.DB_SVR_ID
-           <if test="ipadr != null and ipadr != '' ">
-      		   AND B.ipadr LIKE CONCAT('%',#{ipadr},'%')
-      	   </if>
+    
+    	  SELECT	
+	        (ROW_NUMBER() OVER()) AS ROWNUM,
+			(ROW_NUMBER() OVER()) AS IDX,
+			AA.*
+          FROM (SELECT
+              	 A.pgdata_pth,
+              	 A.pghome_pth,
+            	 B.ipadr,
+           	   	 B.portno,
+              	 B.master_gbn,
+              	 A.svr_spr_usr_id,
+             	 B.db_svr_ipadr_id,
+               	 B.svr_host_nm,
+               	 B.db_svr_id
+          	FROM T_DBSVR_I A, T_DBSVRIPADR_I B
+         	WHERE
+           		B.DB_SVR_ID = #{db_svr_id}
+           		AND B.DB_SVR_ID = A.DB_SVR_ID
+           		<if test="ipadr != null and ipadr != '' ">
+      		   		AND B.ipadr LIKE CONCAT('%',#{ipadr},'%')
+      	   		</if>
+      	   		order by 3,5)AA;
 			
     </select>
     

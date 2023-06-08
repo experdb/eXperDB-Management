@@ -306,6 +306,8 @@ public class ProtocolID {
 	public static final String CPS_TYPE = "CPS_TYPE";
 	public static final String CUSTOM_MAP = "CUSTOM_MAP";
 	public static final String SPR_USR_ID = "SPR_USR_ID";
+	public static final String EXELOG = "EXELOG";
+	public static final String TIME_RESTORE = "TIME_RESTORE";
 	
 	//==============================================================
 	//프록시 에이전트 코드 추가

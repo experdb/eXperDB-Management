@@ -32,7 +32,9 @@
 				AA.RESTORE_DIR,
 				AA.EXELOG,
 				AA.REGR_ID,
-				AA.REG_DTM
+				AA.REG_DTM,
+				AA.RESTORE_SIZE,
+				AA.ELAPSED_TIME
 		  FROM(	
 	      SELECT 
 	      		RESTORE_SN,
@@ -55,7 +57,9 @@
 				RESTORE_DIR,
 				EXELOG,
 				REGR_ID,
-				REG_DTM
+				REG_DTM,
+				RESTORE_SIZE,
+				ELAPSED_TIME
 	      FROM T_RMAN_RESTORE A
 	      WHERE 1=1		  
 	       <if test="restore_strtdtm != null and restore_strtdtm != '' ">

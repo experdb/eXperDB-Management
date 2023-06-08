@@ -83,12 +83,18 @@ public class DbSvrAuthorityController {
 				mv.addObject("wrt_aut_yn", menuAut.get(0).get("wrt_aut_yn"));
 				
 				String scale_yn_chk = "";
+				String pgbackrest_yn_chk = "";
 				
 				if (props.get("scale") != null) {
 					scale_yn_chk = props.get("scale").toString();
 				}
 				
+				if (props.get("pgbackrest.useyn") != null) {
+					pgbackrest_yn_chk = props.get("pgbackrest.useyn").toString();
+				}
+				
 				mv.addObject("scale_yn_chk", scale_yn_chk);
+				mv.addObject("pgbackrest_yn_chk", pgbackrest_yn_chk);
 
 				mv.setViewName("admin/dbAuthority/dbServerAuthority");
 			}
@@ -248,12 +254,17 @@ public class DbSvrAuthorityController {
 
 				String scale_yn_chk = "";
 				String trans_yn_chk ="";
+				String pgbackrest_yn_chk ="";
+				
 				
 				if (props.get("transfer") != null) {
 					trans_yn_chk = props.get("transfer").toString();
 				}
 				if (props.get("scale") != null) {
 					scale_yn_chk = props.get("scale").toString();
+				}
+				if (props.get("pgbackrest.useyn") != null) {
+					pgbackrest_yn_chk = props.get("pgbackrest.useyn").toString();
 				}
 						
 				String strRows = request.getParameter("datasArr").toString().replaceAll("&quot;", "\"");
@@ -272,7 +283,7 @@ public class DbSvrAuthorityController {
 					
 					jval.put("scale_yn_chk", scale_yn_chk);
 					jval.put("trans_yn_chk", trans_yn_chk);
-					
+					jval.put("pgbackrest_yn_chk", pgbackrest_yn_chk);
 
 					System.out.println("trans_yn_chk = " + jval.get("trans_yn_chk"));
 					
@@ -339,6 +350,7 @@ public class DbSvrAuthorityController {
 			String transfer_ora_chk = "";
 			String transfer_mon_menu = "";
 			String bnr_yn_chk="";
+			String pgbackrest_yn_chk="";
 			
 			if (props.get("scale") != null) {
 				scale_yn_chk = props.get("scale").toString();
@@ -356,10 +368,15 @@ public class DbSvrAuthorityController {
 				bnr_yn_chk = props.get("bnr.useyn").toString();
 			}
 			
+			if (props.get("pgbackrest.useyn") != null) {
+				pgbackrest_yn_chk = props.get("pgbackrest.useyn").toString();
+			}
+			
 			result.put("scale_yn_chk", scale_yn_chk);
 			result.put("transfer_ora_chk", transfer_ora_chk);
 			result.put("transfer_mon_menu", transfer_mon_menu);
 			result.put("bnr_yn_chk", bnr_yn_chk);
+			result.put("pgbackrest_yn_chk", pgbackrest_yn_chk);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

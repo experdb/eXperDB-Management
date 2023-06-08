@@ -36,3 +36,13 @@ INSERT INTO T_BACKREST_OPT_I (OPT_ID, OPT_GBN, OPT_NM, OPT_EXP) VALUES(12, 0, 'r
 INSERT INTO T_BACKREST_OPT_I (OPT_ID, OPT_GBN, OPT_NM, OPT_EXP) VALUES(13, 0, 'repo-retention-diff', '보존할 차등백업 수');
 INSERT INTO T_BACKREST_OPT_I (OPT_ID, OPT_GBN, OPT_NM, OPT_EXP) VALUES(14, 2, 'db-include', '특정 데이터베이스 복원');
 INSERT INTO T_BACKREST_OPT_I (OPT_ID, OPT_GBN, OPT_NM, OPT_EXP) VALUES(15, 2, 'db-exclude', '특정 데이터베이스를 제외한 나머지 복원');
+
+ALTER TABLE t_usrdbsvraut_i ADD COLUMN backrest_aut_yn varchar(1) ;
+ALTER TABLE t_usrdbsvraut_i ADD COLUMN backrest_restore_aut_yn varchar(1) ;
+COMMENT ON COLUMN t_usrdbsvraut_i.backrest_aut_yn IS 'backrest_여부';
+COMMENT ON COLUMN t_usrdbsvraut_i.backrest_restore_aut_yn IS '복원_설정_권한_여부';		
+
+ALTER TABLE t_rman_restore ADD COLUMN restore_size varchar(10) ;
+ALTER TABLE t_rman_restore ADD COLUMN elapsed_time varchar(100) ;
+COMMENT ON COLUMN t_rman_restore.restore_size IS '복원_파일_크기';
+COMMENT ON COLUMN t_rman_restore.elapsed_time IS '복원_소요시간';

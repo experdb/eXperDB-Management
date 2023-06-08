@@ -17,6 +17,7 @@
 	var svrBckCheck = 'local';
 	var selectedAgentServer = null;
 	var backrestServerTable = null;
+	var db_info_arr = [];
 	
 	$(window.document).ready(function() {
 		
@@ -62,7 +63,15 @@
 			destroy: true,
 			columns : [
 						{data : "rownum", defaultContent : "", className : "dt-center"}, 
-						{data : "master_gbn", className : "dt-center", defaultContent : ""},
+						{data : "master_gbn", className : "dt-center", defaultContent : "",
+						render: function(data, type, full, meta){
+							if(data == "M"){
+								data = '<div class="badge badge-pill badge-success" title="" style="margin-right: 30px;"><b>Primary</b></div>'
+							}else if(data == "S"){
+								data = '<i class="mdi mdi-subdirectory-arrow-right" style="margin-left: 50px;"><div class="badge badge-pill badge-outline-warning" title="" style="margin-right: 30px"><b>Standby</b></div>'
+							}
+							return data;
+						}},
 						{data : "ipadr", defaultContent : "" },
 						{data : "portno", defaultContent: "" },
 						{data : "svr_spr_usr_id", defaultContent : ""},
@@ -519,8 +528,24 @@
 				backrestServerTable.rows({selected: true}).deselect();
 				backrestServerTable.clear().draw();
 
+				var db_server_data = data['agent_list'];
+
+				for(var i=0; i < db_server_data.length; i++){
+					if(db_server_data[i].master_gbn == "M"){
+						db_info_arr.push(db_server_data[i]);
+						for(var j=0; j < db_server_data.length; j++){
+							if(db_server_data[j].master_gbn == "S"){
+								if(db_server_data[i].db_svr_id == db_server_data[j].db_svr_id){
+									db_info_arr.push(db_server_data[j]);
+								}
+							}
+						}
+
+					}
+				}
+
 				if (nvlPrmSet(data, "") != '') {
-					backrestServerTable.rows.add(data['agent_list']).draw();
+					backrestServerTable.rows.add(db_info_arr).draw();
 				}
 			}
 		});
@@ -543,7 +568,7 @@
 			async : false,
 			url : "/popup/workBackrestWrite.do",
 			data : {
-				db_svr_id : $("#db_svr_id", "#findList").val(),
+				db_svr_id : selectedAgent.db_svr_id,
 				wrk_nm : nvlPrmSet($('#ins_wrk_nm_bckr', '#workRegFormBckr').val(), "").trim(),
 				wrk_exp : nvlPrmSet($('#ins_wrk_exp_bckr', '#workRegFormBckr').val(), ""),
 				cps_yn : $("#ins_cps_brkr_yn", "#workRegFormBckr").val(),

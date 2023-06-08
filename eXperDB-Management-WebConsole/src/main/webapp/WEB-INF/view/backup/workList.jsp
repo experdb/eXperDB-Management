@@ -329,7 +329,7 @@
 		if(selectChkTab == "rman"){
 			datas = tableRman.rows('.selected').data();
 		} else if(selectChkTab == "backrest"){
-
+			datas = tableBackrest.rows('.selected').data();
 		} else{
 			datas = tableDump.rows('.selected').data();
 		}
@@ -348,13 +348,19 @@
 				wrk_id_List.push( tableRman.rows('.selected').data()[i].wrk_id);   
 			}
 		} else if(selectChkTab == "backrest"){
-
+			for (var i = 0; i < datas.length; i++) {
+				bck_wrk_id_List.push( tableBackrest.rows('.selected').data()[i].bck_wrk_id);   
+				wrk_id_List.push( tableBackrest.rows('.selected').data()[i].wrk_id);   
+			}
 		} else {
 			for (var i = 0; i < datas.length; i++) {
 				bck_wrk_id_List.push( tableDump.rows('.selected').data()[i].bck_wrk_id);   
 				wrk_id_List.push( tableDump.rows('.selected').data()[i].wrk_id);   
 			}
 		}
+
+		console.log(bck_wrk_id_List);
+		console.log(wrk_id_List);
 		
 		$.ajax({
 			url : "/popup/scheduleCheck.do",
@@ -386,10 +392,13 @@
 				confile_title = '<spring:message code="backup_management.dumpBck"/>' + " " + '<spring:message code="button.delete" />' + " " + '<spring:message code="common.request" />';
 
 				if(selectChkTab == "rman"){
+					confile_title = 'Online백업 삭제 요청' + " " + '<spring:message code="button.delete" />' + " " + '<spring:message code="common.request" />';
 					$('#con_multi_gbn', '#findConfirmMulti').val("del_rman");
 				} else if(selectChkTab == "backrest"){
-
+					confile_title = 'Backrest백업 삭제 요청' + " " + '<spring:message code="button.delete" />' + " " + '<spring:message code="common.request" />';
+					$('#con_multi_gbn', '#findConfirmMulti').val("del_backrest");
 				}else {
+					confile_title = '<spring:message code="backup_management.dumpBck"/>' + " " + '<spring:message code="button.delete" />' + " " + '<spring:message code="common.request" />';
 					$('#con_multi_gbn', '#findConfirmMulti').val("del_dump");
 				}
 
@@ -433,7 +442,9 @@
 					
 					if (gbn == "del_rman") {
 						fn_get_rman_list();
-					} else if(gbn == "del_dump"){
+					} else if(gbn == "del_backrest"){
+						fn_get_backrest_list();
+					}else{
 						fn_get_dump_list();
 					}
 				}else{

@@ -349,6 +349,10 @@ public class SystemServiceImpl implements SystemService{
 		systemDAO.updateBackrestWrk(vo);
 	}
 	
+	@Override
+	public void updateBackrestRestore(RmanRestoreVO vo) throws Exception {
+		systemDAO.updateBackrestRestore(vo);
+	}
 	
 
 }

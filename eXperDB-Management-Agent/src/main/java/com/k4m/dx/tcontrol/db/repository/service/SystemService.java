@@ -201,4 +201,11 @@ public interface SystemService {
 	 * @throws Exception
 	 */
 	public void updateBackrestWrk(WrkExeVO vo) throws Exception;
+	
+	/**
+	 * pgbackrest 복원 완료시 업데이트
+	 * @param RmanRestoreVO 
+	 * @throws Exception
+	 */
+	public void updateBackrestRestore(RmanRestoreVO vo) throws Exception;
 }

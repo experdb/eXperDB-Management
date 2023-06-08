@@ -301,6 +301,7 @@ public class ClientProtocolID {
 	public static final String MASTER_IP = "MASTER_IP";
 	public static final String MASTER_DBMS_PORT = "MASTER_DBMS_PORT";
 	public static final String MASTER_DBMS_USER = "MASTER_DBMS_USER";
-	
+	public static final String TIME_RESTORE = "TIME_RESTORE";
+	public static final String EXELOG = "EXELOG";
 	
 }

@@ -26,6 +26,7 @@
 	var datasArr = new Array();
 	
 	var scale_yn_chk = "${scale_yn_chk}";
+	var pgbackrest_yn_chk = "${pgbackrest_yn_chk}";
 
 	$(window.document).ready(function() {
 		fn_buttonAut();
@@ -181,25 +182,38 @@
 					html1+='		<td class="pl-3" style="font-weight: bold;"><spring:message code="restore.Recovery_Management" /></td>';
 					html1+='		<td></td>';
 					html1+='	</tr>';
+
+					if(pgbackrest_yn_chk == "Y"){
+						html1+='	<tr>';
+						html1+='		<td class="pl-5">복원설정</td>';
+						html1+='		<td>';
+						html1+='			<div class="inp_chk">';
+						html1+='				<input type="checkbox" id="'+item.db_svr_id+'_backrest_restore" name="backrest_restore_aut" onClick="fn_userCheck();" />';
+						html1+='				<label for="'+item.db_svr_id+'_backrest_restore"></label>';
+						html1+='			</div>';
+						html1+='		</td>';
+						html1+='	</tr>';
+					}else{
+						html1+='	<tr>';
+						html1+='		<td class="pl-5"><spring:message code="restore.Emergency_Recovery" /></td>';
+						html1+='		<td>';
+						html1+='			<div class="inp_chk">';
+						html1+='				<input type="checkbox" id="'+item.db_svr_id+'_emergency_restore" name="emergency_restore_aut" onClick="fn_userCheck();" />';
+						html1+='				<label for="'+item.db_svr_id+'_emergency_restore"></label>';
+						html1+='			</div>';
+						html1+='		</td>';
+						html1+='	</tr>';
+						html1+='	<tr>';
+						html1+='		<td class="pl-5"><spring:message code="restore.Point-in-Time_Recovery" /></td>';
+						html1+='		<td>';
+						html1+='			<div class="inp_chk">';
+						html1+='				<input type="checkbox" id="'+item.db_svr_id+'_point_restore" name="point_restore_aut" onClick="fn_userCheck();" />';
+						html1+='				<label for="'+item.db_svr_id+'_point_restore"></label>';
+						html1+='			</div>';
+						html1+='		</td>';
+						html1+='	</tr>';
+					}
 					
-					html1+='	<tr>';
-					html1+='		<td class="pl-5"><spring:message code="restore.Emergency_Recovery" /></td>';
-					html1+='		<td>';
-					html1+='			<div class="inp_chk">';
-					html1+='				<input type="checkbox" id="'+item.db_svr_id+'_emergency_restore" name="emergency_restore_aut" onClick="fn_userCheck();" />';
-					html1+='				<label for="'+item.db_svr_id+'_emergency_restore"></label>';
-					html1+='			</div>';
-					html1+='		</td>';
-					html1+='	</tr>';
-					html1+='	<tr>';
-					html1+='		<td class="pl-5"><spring:message code="restore.Point-in-Time_Recovery" /></td>';
-					html1+='		<td>';
-					html1+='			<div class="inp_chk">';
-					html1+='				<input type="checkbox" id="'+item.db_svr_id+'_point_restore" name="point_restore_aut" onClick="fn_userCheck();" />';
-					html1+='				<label for="'+item.db_svr_id+'_point_restore"></label>';
-					html1+='			</div>';
-					html1+='		</td>';
-					html1+='	</tr>';
 					html1+='	<tr>';
 					html1+='		<td class="pl-5"><spring:message code="restore.Dump_Recovery" /></td>';
 					html1+='		<td>';
@@ -392,6 +406,8 @@
 					}
 				},
 				success : function(result) {
+					console.log(result);
+
 					if(result.length != 0){
 						for(var i = 0; i<result.length; i++){  
  							if (scale_yn_chk == "Y") {
@@ -438,20 +454,30 @@
 								document.getElementById(result[i].db_svr_id+"_bck_scdr").checked = false;
 							}
 
-							//긴급복구 권한
-							if(result.length != 0 && result[i].emergency_restore_aut_yn == "Y"){
-								document.getElementById(result[i].db_svr_id+"_emergency_restore").checked = true;
+							
+							if(pgbackrest_yn_chk == "Y"){
+								//복구설정 권한
+								if(result.length != 0 && result[i].backrest_restore_aut_yn == "Y"){
+									document.getElementById(result[i].db_svr_id+"_backrest_restore").checked = true;
+								}else{
+									document.getElementById(result[i].db_svr_id+"_backrest_restore").checked = false;
+								}
 							}else{
-								document.getElementById(result[i].db_svr_id+"_emergency_restore").checked = false;
-							}
+								//긴급복구 권한
+								if(result.length != 0 && result[i].emergency_restore_aut_yn == "Y"){
+									document.getElementById(result[i].db_svr_id+"_emergency_restore").checked = true;
+								}else{
+									document.getElementById(result[i].db_svr_id+"_emergency_restore").checked = false;
+								}
 
-							//시점복구 권한
-							if(result.length != 0 && result[i].point_restore_aut_yn == "Y"){
-								document.getElementById(result[i].db_svr_id+"_point_restore").checked = true;
-							}else{
-								document.getElementById(result[i].db_svr_id+"_point_restore").checked = false;
+								//시점복구 권한
+								if(result.length != 0 && result[i].point_restore_aut_yn == "Y"){
+									document.getElementById(result[i].db_svr_id+"_point_restore").checked = true;
+								}else{
+									document.getElementById(result[i].db_svr_id+"_point_restore").checked = false;
+								}
 							}
-
+							
 							//덤프복구 권한
 							if(result.length != 0 && result[i].dump_restore_aut_yn == "Y"){
 								document.getElementById(result[i].db_svr_id+"_dump_restore").checked = true;
@@ -550,8 +576,14 @@
 						document.getElementById(svr_server[0].db_svr_id+"_bck_cng").checked = false;
 						document.getElementById(svr_server[0].db_svr_id+"_bck_hist").checked = false;
 						document.getElementById(svr_server[0].db_svr_id+"_bck_scdr").checked = false;
-						document.getElementById(svr_server[0].db_svr_id+"_emergency_restore").checked = false;
-						document.getElementById(svr_server[0].db_svr_id+"_point_restore").checked = false;
+
+						if(pgbackrest_yn_chk == "Y"){
+							document.getElementById(svr_server[0].db_svr_id+"_backrest_restore").checked = false;
+						}else{
+							document.getElementById(svr_server[0].db_svr_id+"_emergency_restore").checked = false;
+							document.getElementById(svr_server[0].db_svr_id+"_point_restore").checked = false;
+						}
+						
 						document.getElementById(svr_server[0].db_svr_id+"_dump_restore").checked = false;
 						document.getElementById(svr_server[0].db_svr_id+"_restore_hist").checked = false;
 						document.getElementById(svr_server[0].db_svr_id+"_acs_cntr").checked = false;
@@ -626,30 +658,62 @@
 		/* 2020.03.03 scale 추가 */
 		if("${sessionScope.session.pg_audit}"== "Y"){
 			if (scale_yn_chk == "Y") {
-				if("${sessionScope.session.transfer}"== "Y"){
-					var array = new Array("_scale_cng", "_scale", "_scale_hist", "_bck_cng","_bck_hist","_bck_scdr","_emergency_restore","_point_restore","_dump_restore","_restore_hist","_transSetting", "_trans_dbms_aut", "_trans_con_aut", "_trans_mtr_aut", "_acs_cntr","_policy_change_his","_adt_cng","_adt_hist","_script_cng","_script_his");
+				if(pgbackrest_yn_chk == "Y"){
+					if("${sessionScope.session.transfer}"== "Y"){
+						var array = new Array("_scale_cng", "_scale", "_scale_hist", "_bck_cng","_bck_hist","_bck_scdr","_backrest_restore","_dump_restore","_restore_hist","_transSetting", "_trans_dbms_aut", "_trans_con_aut", "_trans_mtr_aut", "_acs_cntr","_policy_change_his","_adt_cng","_adt_hist","_script_cng","_script_his");
+					}else{
+						var array = new Array("_scale_cng", "_scale", "_scale_hist", "_bck_cng","_bck_hist","_bck_scdr","_backrest_restore","_dump_restore","_restore_hist","_acs_cntr","_policy_change_his","_adt_cng","_adt_hist","_script_cng","_script_his");
+					}
 				}else{
-					var array = new Array("_scale_cng", "_scale", "_scale_hist", "_bck_cng","_bck_hist","_bck_scdr","_emergency_restore","_point_restore","_dump_restore","_restore_hist","_acs_cntr","_policy_change_his","_adt_cng","_adt_hist","_script_cng","_script_his");
-				}		
+					if("${sessionScope.session.transfer}"== "Y"){
+						var array = new Array("_scale_cng", "_scale", "_scale_hist", "_bck_cng","_bck_hist","_bck_scdr","_emergency_restore","_point_restore","_dump_restore","_restore_hist","_transSetting", "_trans_dbms_aut", "_trans_con_aut", "_trans_mtr_aut", "_acs_cntr","_policy_change_his","_adt_cng","_adt_hist","_script_cng","_script_his");
+					}else{
+						var array = new Array("_scale_cng", "_scale", "_scale_hist", "_bck_cng","_bck_hist","_bck_scdr","_emergency_restore","_point_restore","_dump_restore","_restore_hist","_acs_cntr","_policy_change_his","_adt_cng","_adt_hist","_script_cng","_script_his");
+					}
+				}	
 			} else {
-				if("${sessionScope.session.transfer}"== "Y"){
-					var array = new Array("_bck_cng","_bck_hist","_bck_scdr","_emergency_restore","_point_restore","_dump_restore","_restore_hist","_transSetting", "_trans_dbms_aut", "_trans_con_aut", "_trans_mtr_aut", "_acs_cntr","_policy_change_his","_adt_cng","_adt_hist","_script_cng","_script_his");
+				if(pgbackrest_yn_chk == "Y"){
+					if("${sessionScope.session.transfer}"== "Y"){
+						var array = new Array("_bck_cng","_bck_hist","_bck_scdr","_backrest_restore","_dump_restore","_restore_hist","_transSetting", "_trans_dbms_aut", "_trans_con_aut", "_trans_mtr_aut", "_acs_cntr","_policy_change_his","_adt_cng","_adt_hist","_script_cng","_script_his");
+					}else{
+						var array = new Array("_bck_cng","_bck_hist","_bck_scdr","_backrest_restore","_dump_restore","_restore_hist","_acs_cntr","_policy_change_his","_adt_cng","_adt_hist","_script_cng","_script_his");
+					}
 				}else{
-					var array = new Array("_bck_cng","_bck_hist","_bck_scdr","_emergency_restore","_point_restore","_dump_restore","_restore_hist","_acs_cntr","_policy_change_his","_adt_cng","_adt_hist","_script_cng","_script_his");
+					if("${sessionScope.session.transfer}"== "Y"){
+						var array = new Array("_bck_cng","_bck_hist","_bck_scdr","_emergency_restore","_point_restore","_dump_restore","_restore_hist","_transSetting", "_trans_dbms_aut", "_trans_con_aut", "_trans_mtr_aut", "_acs_cntr","_policy_change_his","_adt_cng","_adt_hist","_script_cng","_script_his");
+					}else{
+						var array = new Array("_bck_cng","_bck_hist","_bck_scdr","_emergency_restore","_point_restore","_dump_restore","_restore_hist","_acs_cntr","_policy_change_his","_adt_cng","_adt_hist","_script_cng","_script_his");
+					}
 				}
 			}
 		}else{
 			if (scale_yn_chk == "Y") {
-				if("${sessionScope.session.transfer}"== "Y"){
-					var array = new Array("_scale_cng", "_scale", "_scale_hist", "_bck_cng","_bck_hist","_bck_scdr","_emergency_restore","_point_restore","_dump_restore","_restore_hist","_transSetting", "_trans_dbms_aut", "_trans_con_aut", "_trans_mtr_aut", "_acs_cntr","_policy_change_his","_script_cng","_script_his");
+				if(pgbackrest_yn_chk == "Y"){
+					if("${sessionScope.session.transfer}"== "Y"){
+						var array = new Array("_scale_cng", "_scale", "_scale_hist", "_bck_cng","_bck_hist","_bck_scdr","_backrest_restore","_dump_restore","_restore_hist","_transSetting", "_trans_dbms_aut", "_trans_con_aut", "_trans_mtr_aut", "_acs_cntr","_policy_change_his","_script_cng","_script_his");
+					}else{
+						var array = new Array("_scale_cng", "_scale", "_scale_hist", "_bck_cng","_bck_hist","_bck_scdr","_backrest_restore","_dump_restore","_restore_hist","_acs_cntr","_policy_change_his","_script_cng","_script_his");
+					}
 				}else{
-					var array = new Array("_scale_cng", "_scale", "_scale_hist", "_bck_cng","_bck_hist","_bck_scdr","_emergency_restore","_point_restore","_dump_restore","_restore_hist","_acs_cntr","_policy_change_his","_script_cng","_script_his");
-				}	
-			} else {				
-				if("${sessionScope.session.transfer}"== "Y"){
-					var array = new Array("_bck_cng","_bck_hist","_bck_scdr","_emergency_restore","_point_restore","_dump_restore","_restore_hist","_transSetting", "_trans_dbms_aut", "_trans_con_aut", "_trans_mtr_aut", "_acs_cntr","_policy_change_his","_script_cng","_script_his");
+					if("${sessionScope.session.transfer}"== "Y"){
+						var array = new Array("_scale_cng", "_scale", "_scale_hist", "_bck_cng","_bck_hist","_bck_scdr","_emergency_restore","_point_restore","_dump_restore","_restore_hist","_transSetting", "_trans_dbms_aut", "_trans_con_aut", "_trans_mtr_aut", "_acs_cntr","_policy_change_his","_script_cng","_script_his");
+					}else{
+						var array = new Array("_scale_cng", "_scale", "_scale_hist", "_bck_cng","_bck_hist","_bck_scdr","_emergency_restore","_point_restore","_dump_restore","_restore_hist","_acs_cntr","_policy_change_his","_script_cng","_script_his");
+					}
+				}
+			} else {			
+				if(pgbackrest_yn_chk == "Y"){
+					if("${sessionScope.session.transfer}"== "Y"){
+						var array = new Array("_bck_cng","_bck_hist","_bck_scdr","_backrest_restore","_dump_restore","_restore_hist","_transSetting", "_trans_dbms_aut", "_trans_con_aut", "_trans_mtr_aut", "_acs_cntr","_policy_change_his","_script_cng","_script_his");
+					}else{
+						var array = new Array("_bck_cng","_bck_hist","_bck_scdr","_backrest_restore","_dump_restore","_restore_hist","_acs_cntr","_policy_change_his","_script_cng","_script_his");
+					}
 				}else{
-					var array = new Array("_bck_cng","_bck_hist","_bck_scdr","_emergency_restore","_point_restore","_dump_restore","_restore_hist","_acs_cntr","_policy_change_his","_script_cng","_script_his");
+					if("${sessionScope.session.transfer}"== "Y"){
+						var array = new Array("_bck_cng","_bck_hist","_bck_scdr","_emergency_restore","_point_restore","_dump_restore","_restore_hist","_transSetting", "_trans_dbms_aut", "_trans_con_aut", "_trans_mtr_aut", "_acs_cntr","_policy_change_his","_script_cng","_script_his");
+					}else{
+						var array = new Array("_bck_cng","_bck_hist","_bck_scdr","_emergency_restore","_point_restore","_dump_restore","_restore_hist","_acs_cntr","_policy_change_his","_script_cng","_script_his");
+					}
 				}	
 			}
 		}
@@ -694,6 +758,7 @@
 			var bck_cng_aut = $("input[name='bck_cng_aut']");
 			var bck_hist_aut = $("input[name='bck_hist_aut']");
 			var bck_scdr_aut = $("input[name='bck_scdr_aut']");
+			var backrest_restore_aut  = $("input[name='backrest_restore_aut']");
 			var emergency_restore_aut  = $("input[name='emergency_restore_aut']");
 			var point_restore_aut = $("input[name='point_restore_aut']");
 			var dump_restore_aut = $("input[name='dump_restore_aut']");
@@ -779,18 +844,27 @@
 					rows.bck_scdr_aut_yn = "N";
 				}
 
-				if(emergency_restore_aut[i].checked){ //선택되어 있으면 배열에 값을 저장함
-					rows.emergency_restore_aut_yn= "Y"; 
-					autCheck++;
+				if(pgbackrest_yn_chk == "Y"){
+					if(backrest_restore_aut[i].checked){ //선택되어 있으면 배열에 값을 저장함
+						rows.backrest_restore_aut_yn= "Y"; 
+						autCheck++;
+					}else{
+						rows.backrest_restore_aut_yn = "N";
+					}
 				}else{
-					rows.emergency_restore_aut_yn = "N";
-				}
+					if(emergency_restore_aut[i].checked){ //선택되어 있으면 배열에 값을 저장함
+						rows.emergency_restore_aut_yn= "Y"; 
+						autCheck++;
+					}else{
+						rows.emergency_restore_aut_yn = "N";
+					}
 
-				if(point_restore_aut[i].checked){ //선택되어 있으면 배열에 값을 저장함
-					rows.point_restore_aut_yn = "Y"; 
-					autCheck++;
-				}else{
-					rows.point_restore_aut_yn = "N";
+					if(point_restore_aut[i].checked){ //선택되어 있으면 배열에 값을 저장함
+						rows.point_restore_aut_yn = "Y"; 
+						autCheck++;
+					}else{
+						rows.point_restore_aut_yn = "N";
+					}
 				}
 
 				if(dump_restore_aut[i].checked){ //선택되어 있으면 배열에 값을 저장함

@@ -29,6 +29,7 @@
 	var tableBackrest = null;
 	var tabGbn = "";
 	var searchInit = "";
+	var interval = null;
 
 	/* ********************************************************
 	 * Data initialization
@@ -87,13 +88,15 @@
 			$("#logRmanListDiv").show();
 			$("#logDumpListDiv").hide();
 			$("#backrestDataTableDiv").hide();	
+			$("#backRestRestoreActiveLogDiv").hide();
 			seachParamInit(intab);
 		}else if(intab == "backrest"){
 			$(".search_rman").hide();
 			$(".search_dump").hide();
 			$("#logRmanListDiv").hide();
 			$("#logDumpListDiv").hide();
-			$("#backrestDataTableDiv").show();			
+			$("#backrestDataTableDiv").show();		
+			$("#backRestRestoreActiveLogDiv").show();	
 			seachParamInit(intab);
 		}else{				
 			$(".search_rman").hide();
@@ -101,6 +104,7 @@
 			$("#logRmanListDiv").hide();
 			$("#logDumpListDiv").show();
 			$("#backrestDataTableDiv").hide();
+			$("#backRestRestoreActiveLogDiv").hide();
 			seachParamInit(intab);
 		}
 
@@ -228,6 +232,7 @@
 			$("#logRmanListDiv").show();
 			$("#logDumpListDiv").hide();
 			$("#backrestDataTableDiv").hide();
+			$("#backRestRestoreActiveLogDiv").hide();
 			seachParamInit(intab);
 	
 			fn_get_rman_list();
@@ -237,6 +242,7 @@
 			$("#logRmanListDiv").hide();
 			$("#logDumpListDiv").hide();
 			$("#backrestDataTableDiv").show();
+			$("#backRestRestoreActiveLogDiv").show();
 			seachParamInit(intab);		
 			fn_get_backrest_list();
 			
@@ -246,6 +252,7 @@
 			$("#logRmanListDiv").hide();
 			$("#logDumpListDiv").show();
 			$("#backrestDataTableDiv").hide();
+			$("#backRestRestoreActiveLogDiv").hide();
 			seachParamInit(intab);
 			fn_get_dump_list();
 		}
@@ -423,9 +430,9 @@
 							data : "restore_flag",
 							render : function(data, type, full, meta) {
 								var html = '';
-								if (full.asis_flag == '0') {
+								if (full.restore_flag == '0') {
 									html += "완전복구";
-								} else if (full.asis_flag == '1'){
+								} else if (full.restore_flag == '1'){
 									html += "시점복구";
 								} 				
 								return html;
@@ -433,9 +440,42 @@
 							className : "dt-center",
 							defaultContent : ""
 						},	
-						{ data: "restore_cndt", className: "dt-center", defaultContent: ""},
-						{ data: "restore_cndt", className: "dt-center", defaultContent: ""},				
-			]
+						{ data: "restore_size", className: "dt-center", defaultContent: "",
+							render : function(data, type, full, meta){
+							var html = ''; 
+							
+							if(full.restore_size != 0){
+								html += "<div class='badge badge-light' style='background-color: transparent !important;font-size: 0.875rem;'>";
+								html += "	<i class='ti-files text-primary' >";
+								html += '&nbsp;' + full.restore_size + '</i>';
+								html += "</div>";
+							}
+							return html;							
+						},},
+						{ data: "elapsed_time", className: "dt-center", defaultContent: "",
+							render : function(data, type, full, meta) {
+								var html = '';
+								if(full.elapsed_time != undefined ){
+									var seconds = parseInt((full.elapsed_time/1000)%60)
+        							, minutes = parseInt((full.elapsed_time/(1000*60))%60)
+						            , hours = parseInt((full.elapsed_time/(1000*60*60))%24);
+
+							        hours = (hours < 10) ? "0" + hours : hours;
+							        minutes = (minutes < 10) ? "0" + minutes : minutes;
+							        seconds = (seconds < 10) ? "0" + seconds : seconds;
+								
+									html = "<div class='badge badge-pill badge-primary'>";
+									html += "	<i class='mdi mdi-timer mr-2'></i>";
+									html += hours + ":" + minutes + ":" + seconds;
+									html += "</div>";	
+								
+									return html;	
+								}else{
+									return;
+								}
+							}
+						}		
+			],'select': {'style': 'single'}
 		});
 
 		tableBackrest.tables().header().to$().find('th:eq(0)').css('min-width', '10px');
@@ -748,6 +788,130 @@
 			}
 		});	
 	}
+
+
+	/* ********************************************************
+	 * Get backrest Log
+	 ******************************************************** */
+	 $(function() {
+		$('#backrestDataTable tbody').on('click', 'tr', function() {
+			if($(this).hasClass('selected')){
+				realTimeLog()
+			}else {
+				tableBackrest.$('tr.selected').removeClass('selected');
+				$(this).addClass('selected');
+				realTimeLog();
+			}
+			$('#backRestRestoreAcitveLog').text("");
+		})
+	});
+
+	function realTimeLog(){
+		$(function() {
+			var state = "";
+			if(tableBackrest.row('.selected').data() != null || tableBackrest.row('.selected').data() != undefined){
+				state = tableBackrest.row('.selected').data().restore_cndt;
+			}
+
+			if(state == "2"){
+				var resultCode = -1;
+				document.getElementById("log_starter").style.display = '';
+			
+				interval = setInterval(function() {
+					if(resultCode == -1){
+						$.ajax({
+							url : "/selectBackrestRestoreLog.do",
+							data : {
+								exelog : tableBackrest.row('.selected').data().exelog,
+								ipadr : tableBackrest.row('.selected').data().db_svr_nm,
+							},
+							dataType : "json",
+							type : "post",
+							beforeSend: function(xhr) {
+								xhr.setRequestHeader("AJAX", true);
+							},
+							error : function(xhr, status, error) {
+								if(xhr.status == 401) {
+									showSwalIcon('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error');
+									top.location.href = "/";
+								} else if(xhr.status == 403) {
+									showSwalIcon('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error');									top.location.href = "/";
+								} else {
+									showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
+								}
+							},
+							success : function(result) {
+								if($('#log_starter').text() == 'Log Stop'){
+									resultCode = result.RESULT_DATA.indexOf('successfully');
+									
+									$('#backRestRestoreAcitveLog').text(result.RESULT_DATA);
+									$('#backRestRestoreAcitveLog').scrollTop($('#backRestRestoreAcitveLog')[0].scrollHeight);	
+								}		
+							}
+						});
+						$('#loading').hide();
+					}else {
+						document.getElementById("log_starter").style.display = 'none';
+						clearInterval(interval);
+						fn_get_backrest_list()
+						$('#loading').hide();
+					}
+				}, 5000);
+			}else{
+				document.getElementById("log_starter").style.display = 'none';
+				$.ajax({
+					url : "/selectBackrestRestoreLog.do",
+					data : {
+						exelog : tableBackrest.row('.selected').data().exelog,
+						ipadr : tableBackrest.row('.selected').data().db_svr_nm,
+					},
+					dataType : "json",
+					type : "post",
+					beforeSend: function(xhr) {
+						xhr.setRequestHeader("AJAX", true);
+					},
+					error : function(xhr, status, error) {
+						if(xhr.status == 401) {
+							showSwalIcon('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error');
+							top.location.href = "/";
+						} else if(xhr.status == 403) {
+							showSwalIcon('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error');
+							top.location.href = "/";
+						} else {
+							showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
+						}
+					},
+					success : function(result) {
+						$('#backRestRestoreAcitveLog').text(result.RESULT_DATA);
+						$('#backRestRestoreAcitveLog').scrollTop($('#backRestRestoreAcitveLog')[0].scrollHeight);
+					}
+				})
+			}
+		});
+	}
+
+	function stopInterval(){
+		var selectedRow = tableBackrest.row('.selected').data();
+		var logText = $('#log_starter').text();
+
+		if(selectedRow != undefined || selectedRow != null){
+			var logText = $('#log_starter').text();
+	
+			if(logText == 'Log Stop'){
+				showSwalIcon('실시간 로그 중지', '<spring:message code="common.close" />', '', 'success');
+				$('#log_starter').text('Log Restart');
+				$('#log_starter').removeClass('btn-danger');
+				$('#log_starter').addClass('btn-success');	
+			}else{
+				showSwalIcon('실시간 로그 재시작', '<spring:message code="common.close" />', '', 'success');
+				$('#log_starter').text('Log Stop');
+				$('#log_starter').removeClass('btn-success');
+				$('#log_starter').addClass('btn-danger');
+				interval = setInterval(realTimeLog, 5000);
+			}
+		}
+	}
+
 </script>
 
 <%@include file="../popup/restoreLogView.jsp"%>
@@ -993,6 +1157,26 @@
 							 	</div>
 						 	</div>
 						</div>
+					</div>
+					
+					<br>
+					<div id="backRestRestoreActiveLogDiv" >	
+						<h4>※ Restore Active Log</h4>
+						<div class="card my-sm-2" >	
+							<div class="col-12">
+								<div class="card-body">
+									<div class="row">
+										<table id="backrestLog" class="table table-hover table-striped system-tlb-scroll" style="width:100%;">
+											<tr class="bg-info text-white" style="height: 70px;">
+												<th>Log Message</th> 
+												<th class="float-right"><button id="log_starter" type="button" class="btn btn-danger" onclick="stopInterval()" style="display: none;">Log Stop</button></th>
+											</tr>
+										</table>
+										<textarea id="backRestRestoreAcitveLog" rows=10 style="width:100%" disabled onfocus="this.value = this.value;"></textarea>
+									</div> 
+								</div>
+							</div>
+						</div> 
 					</div>
 				</div>
 				<!-- content-wrapper ends -->

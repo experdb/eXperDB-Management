@@ -266,7 +266,7 @@ function fn_get_dump_list(){
  * confirm result
  ******************************************************** */
 function fnc_confirmMultiRst(gbn){
-	if (gbn == "del_rman" || gbn == "del_dump") {
+	if (gbn == "del_rman" || gbn == "del_dump" || gbn == "del_backrest") {
 		fn_deleteWork(gbn);
 	}else if(gbn == "bckr_cst_del"){
 		fn_deleteCustom();

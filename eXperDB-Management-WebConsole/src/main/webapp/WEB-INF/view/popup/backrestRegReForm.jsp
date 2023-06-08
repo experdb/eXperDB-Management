@@ -45,7 +45,7 @@
 
 	function fn_init_backrest_mod_form() {
 		backrestBckServerTable = $('#mod_backrest_svr_Info').DataTable({
-			scrollY : "50px",
+			scrollY : "60px",
 			bSort: false,
 			scrollX: false,	
 			searching : false,
@@ -54,7 +54,15 @@
 			destroy: true,
 			columns : [
 						{data : "rownum", defaultContent : "", className : "dt-center"}, 
-						{data : "master_gbn", className : "dt-center", defaultContent : ""},
+						{data : "master_gbn", className : "dt-center", defaultContent : "",
+						render: function(data, type, full, meta){
+							if(data == "M"){
+								data = '<div class="badge badge-pill badge-success" title="" style="margin-right: 30px;"><b>Primary</b></div>'
+							}else if(data == "S"){
+								data = '<div class="badge badge-pill badge-outline-warning" title="" style="margin-right: 30px"><b>Standby</b></div>'
+							}
+							return data;
+						}},
 						{data : "ipadr", defaultContent : "" },
 						{data : "portno", defaultContent: "" },
 						{data : "svr_spr_usr_id", defaultContent : ""},

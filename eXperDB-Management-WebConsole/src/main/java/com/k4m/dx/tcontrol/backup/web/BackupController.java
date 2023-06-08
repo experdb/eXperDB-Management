@@ -2006,8 +2006,8 @@ public class BackupController {
 	/**
 	 * Backrest config 정보
 	 * 
-	 * @param
-	 * @return resultSet
+	 * @param request
+	 * @return String
 	 * @throws Exception
 	 */
 	@SuppressWarnings("unchecked")
@@ -2094,7 +2094,7 @@ public class BackupController {
 	/**
 	 * Backrest config 삭제
 	 * 
-	 * @param workVO
+	 * @param workVO, dbServerVO
 	 * @return
 	 * @throws Exception
 	 */
@@ -2121,6 +2121,13 @@ public class BackupController {
 		}
 	}
 	
+	/**
+	 * Backrest backup, log 경로 조회
+	 * 
+	 * @param workVO, historyVO, request
+	 * @return JSONObject
+	 * @throws Exception
+	 */
 	@SuppressWarnings("unchecked")
 	@RequestMapping(value = "/backup/backrestPath.do")
 	@ResponseBody
@@ -2146,5 +2153,39 @@ public class BackupController {
 		
 		return result;
 	}
+	
+	/**
+	 * Backrest backup, log 경로 조회
+	 * 
+	 * @param request
+	 * @return JSONObject
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/selectBackrestRestoreLog.do")
+	@ResponseBody
+	public JSONObject selectBackrestRestoreLog(HttpServletRequest request) throws Exception {
+		
+		String IP = request.getParameter("ipadr");
+		
+		AgentInfoVO vo = new AgentInfoVO();
+		vo.setIPADR(IP);
+		AgentInfoVO agentInfo = (AgentInfoVO) cmmnServerInfoService.selectAgentInfo(vo);
+
+		int PORT = agentInfo.getSOCKET_PORT();
+				
+		JSONObject jObj = new JSONObject();
+		
+		String exelog = request.getParameter("exelog");
+		
+		jObj.put(ClientProtocolID.EXELOG, exelog);
+		
+		ClientInfoCmmn cic = new ClientInfoCmmn();
+		JSONObject result = new JSONObject(); 
+		result = cic.getBackrestRestoreLog(IP, PORT, jObj);
+
+		return result;
+	}
+	
+	
 	
 }

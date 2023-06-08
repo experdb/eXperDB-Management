@@ -250,6 +250,10 @@ public class SystemDAO {
 	public void updateBackrestWrk(WrkExeVO vo) {
 		session.update("system.updateBackrestWrk", vo);
 	}
+	
+	public void updateBackrestRestore(RmanRestoreVO vo) {
+		session.update("system.updateBackrestRestore", vo);
+	}
 }
 
 

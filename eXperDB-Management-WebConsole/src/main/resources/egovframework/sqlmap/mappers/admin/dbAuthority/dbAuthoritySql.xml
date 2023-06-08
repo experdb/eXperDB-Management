@@ -217,6 +217,7 @@
              , A.TRANS_CON_CNG_AUT_YN
              , A.TRANS_MTR_AUT_YN
              , C.IPADR
+             , A.BACKREST_RESTORE_AUT_YN
           FROM T_USRDBSVRAUT_I A, T_DBSVR_I B,T_DBSVRIPADR_I C
          WHERE 1 = 1
            AND A.DB_SVR_ID = B.DB_SVR_ID
@@ -260,6 +261,11 @@
              ,TRANS_DBMS_CNG_AUT_YN = #{trans_dbms_cng_aut_yn}
              ,TRANS_CON_CNG_AUT_YN = #{trans_con_cng_aut_yn}
 	    	   ,TRANS_MTR_AUT_YN = #{trans_mtr_aut_yn}
+          </if>
+          
+          <if test='pgbackrest_yn_chk != null and (pgbackrest_yn_chk eq "Y".toString())'>
+          	  , BACKREST_AUT_YN = #{pgbackrest_yn_chk} 
+              , BACKREST_RESTORE_AUT_YN = #{backrest_restore_aut_yn}     
           </if>
 
          WHERE USR_ID=#{usr_id}
@@ -375,8 +381,12 @@
                 , transSetting_aut_yn
                 , TRANS_DBMS_CNG_AUT_YN
                 , TRANS_CON_CNG_AUT_YN
-	    	      , TRANS_MTR_AUT_YN
-                
+	    	      , TRANS_MTR_AUT_YN 
+          </if>
+          
+          <if test='pgbackrest_yn_chk != null and (pgbackrest_yn_chk eq "Y".toString())'>      
+                , BACKREST_AUT_YN
+                , BACKREST_RESTORE_AUT_YN
           </if>
 
                   )
@@ -402,6 +412,7 @@
                   , #{point_restore_aut_yn}
                   , #{dump_restore_aut_yn}
                   , #{restore_his_aut_yn}
+                  , #{restore_his_aut_yn}
                   
          <if test='scale_yn_chk != null and (scale_yn_chk eq "Y".toString())'>
                 , #{scale_cng_aut_yn}
@@ -414,6 +425,11 @@
                 , #{trans_dbms_cng_aut_yn}
                 , #{trans_con_cng_aut_yn}
 	    	      , #{trans_mtr_aut_yn}
+          </if>
+          
+          <if test='pgbackrest_yn_chk != null and (pgbackrest_yn_chk eq "Y".toString())'>      
+                , #{pgbackrest_yn_chk}
+                , #{backrest_restore_aut_yn}
           </if>
                   )
    </insert>
