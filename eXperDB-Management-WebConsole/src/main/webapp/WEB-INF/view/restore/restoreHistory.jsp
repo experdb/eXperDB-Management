@@ -796,7 +796,6 @@
 	 $(function() {
 		$('#backrestDataTable tbody').on('click', 'tr', function() {
 			if($(this).hasClass('selected')){
-				realTimeLog()
 			}else {
 				tableBackrest.$('tr.selected').removeClass('selected');
 				$(this).addClass('selected');
@@ -817,7 +816,7 @@
 				var resultCode = -1;
 				document.getElementById("log_starter").style.display = '';
 			
-				interval = setInterval(function() {
+				interval = setInterval(function() {					
 					if(resultCode == -1){
 						$.ajax({
 							url : "/selectBackrestRestoreLog.do",
@@ -851,13 +850,14 @@
 						});
 						$('#loading').hide();
 					}else {
-						document.getElementById("log_starter").style.display = 'none';
 						clearInterval(interval);
-						fn_get_backrest_list()
+						fn_get_backrest_list();
+						document.getElementById("log_starter").style.display = 'none';
 						$('#loading').hide();
 					}
 				}, 5000);
 			}else{
+				clearInterval(interval);
 				document.getElementById("log_starter").style.display = 'none';
 				$.ajax({
 					url : "/selectBackrestRestoreLog.do",
@@ -898,6 +898,7 @@
 			var logText = $('#log_starter').text();
 	
 			if(logText == 'Log Stop'){
+				clearInterval(interval);
 				showSwalIcon('실시간 로그 중지', '<spring:message code="common.close" />', '', 'success');
 				$('#log_starter').text('Log Restart');
 				$('#log_starter').removeClass('btn-danger');
@@ -907,7 +908,7 @@
 				$('#log_starter').text('Log Stop');
 				$('#log_starter').removeClass('btn-success');
 				$('#log_starter').addClass('btn-danger');
-				interval = setInterval(realTimeLog, 5000);
+				realTimeLog();
 			}
 		}
 	}
