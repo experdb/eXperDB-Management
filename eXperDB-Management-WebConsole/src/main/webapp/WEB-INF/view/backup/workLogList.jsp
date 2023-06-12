@@ -865,7 +865,7 @@
 
 	function realTimeLog(){
 		$(function() {
-			var state
+			var state;
 			if(tableBackrest.row('.selected').data() != null || tableBackrest.row('.selected').data() != undefined){
 				state = tableBackrest.row('.selected').data().exe_rslt_cd
 			}
@@ -928,20 +928,19 @@
 								success : function(result) {
 									if($('#log_starter').text() == 'Log Stop'){
 										resultCode = result.RESULT_DATA.indexOf('successfully');
-										 
+										
 										$('#backRestAcitveLog').text(result.RESULT_DATA);
 										$('#backRestAcitveLog').scrollTop($('#backRestAcitveLog')[0].scrollHeight);	
+										
 									}else {
-										fn_get_backrest_list()
-
+										fn_get_backrest_list();
 									}
-									
 								}
 							});
 							$('#loading').hide();
 						}else {
 							clearInterval(interval);
-							fn_get_backrest_list()
+							fn_get_backrest_list();
 							$('#loading').hide();
 						}
 					}, 5000);
@@ -1264,7 +1263,7 @@
 												<th class="float-right"><button id="log_starter" type="button" class="btn btn-danger" onclick="stopInterval()">Log Stop</button></th>
 											</tr>
 										</table>
-										<textarea id="backRestAcitveLog" rows=10 style="width:100%" disabled onfocus="this.value = this.value;"></textarea>
+										<textarea id="backRestAcitveLog" rows=10 style="width:100%;" disabled onfocus="this.value = this.value;"></textarea>
 									</div> 
 								</div>
 							</div>

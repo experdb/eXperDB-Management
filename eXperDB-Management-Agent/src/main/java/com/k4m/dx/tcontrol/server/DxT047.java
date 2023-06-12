@@ -150,14 +150,14 @@ public class DxT047 extends SocketCtl{
 				
 				int jsonSize = jsonNode.findValue("backup").size();
 			
-				long repoSizeInt = jsonNode.findValue("backup").path(jsonSize-1).path("info").path("repository").path("size").asLong();
-				long dbSizeInt = jsonNode.findValue("backup").path(jsonSize-1).path("info").path("size").asLong();
+				long repoSizeInt = jsonNode.findValue("backup").path(jsonSize-1).path("info").path("repository").path("delta").asLong();
+				long dbSizeInt = jsonNode.findValue("backup").path(jsonSize-1).path("info").path("delta").asLong();
 				int startTimeInt = jsonNode.findValue("backup").path(jsonSize-1).path("timestamp").path("start").asInt();
 				int stopTimeInt = jsonNode.findValue("backup").path(jsonSize-1).path("timestamp").path("stop").asInt(); 
 				
 				String startDateStr = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date(startTimeInt * 1000L));
 				String stopDateStr = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date(stopTimeInt * 1000L));
-							
+				
 				WrkExeVO endVO = new WrkExeVO();
 				endVO.setEXE_SN(exe_sn);
 				endVO.setWRK_STRT_DTM(startDateStr);
@@ -169,6 +169,7 @@ public class DxT047 extends SocketCtl{
 				endVO.setRSLT_MSG(retVal + " " + strResultMessage);
 				
 				service.updateBackrestWrk(endVO);
+				
 			}else {
 				
 				errLogger.error("[ERROR] DxT047 {} ", retVal + " " + strResultMessage);

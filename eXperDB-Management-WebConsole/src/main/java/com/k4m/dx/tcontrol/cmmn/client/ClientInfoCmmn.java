@@ -148,7 +148,7 @@ public class ClientInfoCmmn implements Runnable{
 						
 			for (int i = 0; i < resultWork.size(); i++) {				
 								
-				//BACKUP (RMAN/DUMP)
+				//BACKUP (RMAN/BACKREST/DUMP)
 				if(resultWork.get(i).get("bsn_dscd").equals("TC001901")){
 
 					JSONArray arrCmd = new JSONArray();			
@@ -165,7 +165,19 @@ public class ClientInfoCmmn implements Runnable{
 						objJob.put(ClientProtocolID.BCK_OPT_CD, resultWork.get(i).get("bck_opt_cd")); // 백업종류
 						objJob.put(ClientProtocolID.BCK_FILE_PTH, resultWork.get(i).get("bck_pth")); // 저장경로
 						objJob.put(ClientProtocolID.BCK_FILENM, ""); // 저장파일명					
-					} else {
+					}else if (resultWork.get(i).get("bck_bsn_dscd").equals("TC000205")) {
+						reqJObj.put(ClientProtocolID.SERVER_IP, IP);
+						reqJObj.put(ClientProtocolID.LOG_PATH, resultWork.get(i).get("log_file_pth"));
+						reqJObj.put(ClientProtocolID.BCK_FILENM, resultWork.get(i).get("bck_filenm"));
+						reqJObj.put(ClientProtocolID.BCK_FILE_PTH, resultWork.get(i).get("bck_pth"));
+						reqJObj.put(ClientProtocolID.WRK_NM, resultWork.get(i).get("wrk_nm"));
+						reqJObj.put(ClientProtocolID.WRK_ID, resultWork.get(i).get("wrk_id"));
+						reqJObj.put(ClientProtocolID.BCK_OPT_CD, resultWork.get(i).get("bck_opt_cd"));
+						reqJObj.put(ClientProtocolID.BCK_TYPE, resultWork.get(i).get("bck_opt_cd_nm"));
+						reqJObj.put(ClientProtocolID.DB_ID, resultWork.get(i).get("db_id"));
+						reqJObj.put(ClientProtocolID.USER_ID, resultWork.get(i).get("lst_mdfr_id"));
+					}
+					else {
 						System.out.println("> > > > > > > > > > > > > DUMP Backup START");
 						System.out.println("> CMD = "+CMD.get(i));
 						objJob.put(ClientProtocolID.BCK_OPT_CD, ""); // 백업종류
@@ -206,26 +218,34 @@ public class ClientInfoCmmn implements Runnable{
 						arrCmd.add(j, objJob4);
 					}
 					
+					if(resultWork.get(i).get("bck_bsn_dscd").equals("TC000205")) {
+						reqJObj.put(ClientProtocolID.DX_EX_CODE, ClientTranCodeType.DxT047);
+						ClientAdapter CA = new ClientAdapter(IP, PORT);
+						CA.open();
+						outputObj = CA.dxT047(reqJObj);
+						CA.close();
+					}else {
+						JSONObject serverObj = new JSONObject();
+
+						serverObj.put(ClientProtocolID.SERVER_NAME, "");
+						serverObj.put(ClientProtocolID.SERVER_IP, "");
+						serverObj.put(ClientProtocolID.SERVER_PORT, "");
+
+						reqJObj.put(ClientProtocolID.DX_EX_CODE, ClientTranCodeType.DxT005);
+						reqJObj.put(ClientProtocolID.SERVER_INFO, serverObj);
+						reqJObj.put(ClientProtocolID.ARR_CMD, arrCmd);
+
+						ClientAdapter CA = new ClientAdapter(IP, PORT);
+						CA.open();
+						outputObj = CA.dxT005(reqJObj);
+						CA.close();
+				
+						System.out.println(">> > > > > > > > > >> > >  > > Backup END");
+						System.out.println(" ");
+						System.out.println(" ");
+						System.out.println(" ");
+					}
 					
-					JSONObject serverObj = new JSONObject();
-
-					serverObj.put(ClientProtocolID.SERVER_NAME, "");
-					serverObj.put(ClientProtocolID.SERVER_IP, "");
-					serverObj.put(ClientProtocolID.SERVER_PORT, "");
-
-					reqJObj.put(ClientProtocolID.DX_EX_CODE, ClientTranCodeType.DxT005);
-					reqJObj.put(ClientProtocolID.SERVER_INFO, serverObj);
-					reqJObj.put(ClientProtocolID.ARR_CMD, arrCmd);
-
-					ClientAdapter CA = new ClientAdapter(IP, PORT);
-					CA.open();
-					outputObj = CA.dxT005(reqJObj);
-					CA.close();
-			
-					System.out.println(">> > > > > > > > > >> > >  > > Backup END");
-					System.out.println(" ");
-					System.out.println(" ");
-					System.out.println(" ");
 				
 				//배치 실행
 				}else if(resultWork.get(i).get("bsn_dscd").equals("TC001902")){

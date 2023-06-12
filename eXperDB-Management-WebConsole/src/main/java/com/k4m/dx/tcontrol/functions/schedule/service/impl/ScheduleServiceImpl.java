@@ -318,6 +318,12 @@ public class ScheduleServiceImpl extends EgovAbstractServiceImpl  implements Sch
 	public void deleteSchedule(String scd_id) throws Exception {
 		scheduleDAO.deleteSchedule(scd_id);	
 	}
+
+
+	@Override
+	public String selectIpadr(String db_svr_ipadr_id) throws Exception {
+		return scheduleDAO.selectIpadr(db_svr_ipadr_id);
+	}
 	
 
 }
