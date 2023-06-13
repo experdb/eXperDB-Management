@@ -864,6 +864,9 @@
 	});
 
 	function realTimeLog(){
+		$('#log_starter').text('Log Stop');
+		$('#log_starter').removeClass('btn-success');
+		$('#log_starter').addClass('btn-danger');
 		$(function() {
 			var state;
 			if(tableBackrest.row('.selected').data() != null || tableBackrest.row('.selected').data() != undefined){
