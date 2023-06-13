@@ -895,7 +895,6 @@
 		var logText = $('#log_starter').text();
 
 		if(selectedRow != undefined || selectedRow != null){
-			var logText = $('#log_starter').text();
 	
 			if(logText == 'Log Stop'){
 				clearInterval(interval);
@@ -976,7 +975,7 @@
 				<div class="card-body">
 					<ul class="nav nav-pills nav-pills-setting nav-justified" id="server-tab" role="tablist" style="border:none;">
 						<li class="nav-item">
-							<a class="nav-link active" id="server-tab-1" data-toggle="pill" href="#subTab-1" role="tab" aria-controls="subTab-1" aria-selected="true" onclick="selectTab('rman');" >
+							<a class="nav-link active" id="server-tab-1" data-toggle="pill" href="#subTab-1" role="tab" aria-controls="subTab-1" aria-selected="true" onclick="selectTab(selectChkTab);" >
 								<spring:message code="restore.Emergency_Point-in-Time" /> <spring:message code="restore.Recovery_history" />
 							</a>
 						</li>
