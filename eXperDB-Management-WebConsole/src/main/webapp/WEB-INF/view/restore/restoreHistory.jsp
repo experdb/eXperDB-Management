@@ -234,7 +234,6 @@
 			$("#backrestDataTableDiv").hide();
 			$("#backRestRestoreActiveLogDiv").hide();
 			seachParamInit(intab);
-	
 			fn_get_rman_list();
 		}else if(intab == "backrest"){
 			$(".search_rman").hide();
@@ -245,7 +244,7 @@
 			$("#backRestRestoreActiveLogDiv").show();
 			seachParamInit(intab);		
 			fn_get_backrest_list();
-			
+			$('#backRestRestoreAcitveLog').text('');
 		}else{
 			$(".search_rman").hide();
 			$(".search_dump").show();
