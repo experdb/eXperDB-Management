@@ -964,7 +964,7 @@ public class BackupController {
 					
 					if (fileContent.contains("repo1-s3-key-secret=")) {
 						String s3SecretKeyLine = fileContent;
-						String s3SecretKeyValue = s3SecretKeyLine.replaceAll("repo1-s3-key-secrete=", "");
+						String s3SecretKeyValue = s3SecretKeyLine.replaceAll("repo1-s3-key-secret=", "");
 
 						mv.addObject("s3_secretKey_mod", s3SecretKeyValue);
 					}
