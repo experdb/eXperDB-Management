@@ -388,10 +388,12 @@ function fn_insert_chogihwa(gbn, result) {
 		
 		fn_insertWorkPopStart();
 	} else if (gbn == "backrest") {
+		fn_bckr_opt_reset();
 		document.getElementById("bck_srv_local_check").style.backgroundColor = "white"
 		document.getElementById("bck_srv_remote_check").style.backgroundColor = "#e7e7e7"
 		document.getElementById("bck_srv_cloud_check").style.backgroundColor = "#e7e7e7"
-
+		document.getElementById("ins_bak_path_label").style.display = ""
+		document.getElementById("ins_bckr_pth").style.display = ""
 
 		$("#remote_opt").hide();
 		$("#cloud_opt").hide();
@@ -400,6 +402,7 @@ function fn_insert_chogihwa(gbn, result) {
 		$("#bckr_standby_alert", "#workRegFormBckr").hide();
 
 		fn_deleteCustom();
+		db_info_arr = [];
 		custom_map.clear();
         custom_map_before.clear();
 		custom_save_chk = false;

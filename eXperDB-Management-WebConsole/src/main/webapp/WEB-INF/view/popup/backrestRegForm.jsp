@@ -54,9 +54,9 @@
 
 	function fn_init_backrest_reg_form() {
 		backrestServerTable = $('#backrest_svr_info').DataTable({
-			scrollY : "110px",
-			bSort: false,
+			scrollY : "125px",
 			scrollX: false,	
+			bSort: false,
 			searching : false,
 			paging : false,
 			deferRender : true,
@@ -83,9 +83,9 @@
 		backrestServerTable.tables().header().to$().find('th:eq(0)').css('min-width', '30px');
 		backrestServerTable.tables().header().to$().find('th:eq(1)').css('min-width', '150px');
 		backrestServerTable.tables().header().to$().find('th:eq(2)').css('min-width', '200px');
-		backrestServerTable.tables().header().to$().find('th:eq(3)').css('min-width', '150px');
+		backrestServerTable.tables().header().to$().find('th:eq(3)').css('min-width', '160px');
 		backrestServerTable.tables().header().to$().find('th:eq(4)').css('min-width', '170px');
-		backrestServerTable.tables().header().to$().find('th:eq(5)').css('min-width', '480px');
+		backrestServerTable.tables().header().to$().find('th:eq(5)').css('min-width', '465px');
 		backrestServerTable.tables().header().to$().find('th:eq(6)').css('min-width', '0px');
 
 		$(window).trigger('resize'); 
@@ -145,6 +145,9 @@
 		var bckSrvLocal = document.getElementById("bck_srv_local_check"); 
 		var bckSrvRemote = document.getElementById("bck_srv_remote_check"); 
 		var bckSrvCloud = document.getElementById("bck_srv_cloud_check");
+
+		var ins_bak_path_label = document.getElementById("ins_bak_path_label");
+		var ins_bckr_pth = document.getElementById("ins_bckr_pth");
 		
 		if(svrBckCheck !== svrBckRadioCheck){
 			fn_bckr_opt_reset();
@@ -156,6 +159,8 @@
 			bckSrvLocal.style.backgroundColor = "white"
 			bckSrvRemote.style.backgroundColor = "#e7e7e7"
 			bckSrvCloud.style.backgroundColor = "#e7e7e7"
+			ins_bak_path_label.style.display = ""
+			ins_bckr_pth.style.display = ""
 
 			$("#local_radio").prop("checked", true);
 
@@ -165,6 +170,8 @@
 			bckSrvLocal.style.backgroundColor = "#e7e7e7"
 			bckSrvRemote.style.backgroundColor = "white"
 			bckSrvCloud.style.backgroundColor = "#e7e7e7"
+			ins_bak_path_label.style.display = ""
+			ins_bckr_pth.style.display = ""
 
 			$("#remote_radio").prop("checked", true);
 
@@ -174,6 +181,8 @@
 			bckSrvLocal.style.backgroundColor = "#e7e7e7"
 			bckSrvRemote.style.backgroundColor = "#e7e7e7"
 			bckSrvCloud.style.backgroundColor = "white"
+			ins_bak_path_label.style.display = "none"
+			ins_bckr_pth.style.display = "none"
 
 			$("#cloud_radio").prop("checked", true);
 
@@ -231,13 +240,18 @@
 	 function fn_ins_wrk_bckr_nmChk() {
 		$('#ins_wrk_nmChk_bckr', '#workRegFormBckr').val("fail");
 		
-		$("#ins_wrk_nmChk_bckr_alert", "#workRegFormBckr").html('');
-		$("#ins_wrk_nmChk_bckr_alert", "#workRegFormBckr").hide();
+		$("#ins_wrk_nm_bckr_alert", "#workRegFormBckr").html('');
+		$("#ins_wrk_nm_bckr_alert", "#workRegFormBckr").hide();
 	}
 
 	function fn_bckr_opt_reset(){
+		$("#ins_wrk_nm_bckr_alert", "#workRegFormBckr").html("");
+		$("#ins_wrk_nm_bckr_alert", "#workRegFormBckr").hide();
+
 		//백업옵션 초기화
 		$("#ins_bckr_opt_cd", "#workRegFormBckr").val('').prop("selected", true);	//백업유형
+		$("#ins_bckr_opt_cd_alert", "#workRegFormBckr").html("");
+		$("#ins_bckr_opt_cd_alert", "#workRegFormBckr").hide();
 		// $("#ins_bckr_pth", "#workRegFormBckr").val("");	//백업경로
 		$("#ins_bckr_cnt", "#workRegFormBckr").val(2); //풀백업보관일
 		// $("#ins_bckr_log_pth", "#workRegFormBckr").val("");	//로그경로
@@ -266,8 +280,8 @@
 		//기본옵션 alert창 초기화
 		$("#ins_bckr_opt_cd_alert", "#workRegFormBckr").html("");
 		$("#ins_bckr_opt_cd_alert", "#workRegFormBckr").hide();
-		$("#ins_bckr_pth_alert", "#workRegFormBckr").html("");
-		$("#ins_bckr_pth_alert", "#workRegFormBckr").hide();
+		// $("#ins_bckr_pth_alert", "#workRegFormBckr").html("");
+		// $("#ins_bckr_pth_alert", "#workRegFormBckr").hide();
 		$("#ins_bckr_cnt_alert", "#workRegFormBckr").html("");
 		$("#ins_bckr_cnt_alert", "#workRegFormBckr").hide();
 		$("#ins_bckr_log_pth_alert", "#workRegFormBckr").html("");
@@ -540,7 +554,6 @@
 								}
 							}
 						}
-
 					}
 				}
 
@@ -559,6 +572,21 @@
 			$("#ins_cps_brkr_yn", "#workRegFormBckr").val("Y");
 		} else {
 			$("#ins_cps_brkr_yn", "#workRegFormBckr").val("N");
+		}
+
+		var cloud_map = new Map();
+		var cloud_data = null;
+
+		if(svrBckCheck == "cloud"){
+			cloud_map.set("s3_bucket", nvlPrmSet($('#ins_cloud_bckr_s3_buk', '#workRegFormBckr').val(), "").trim());
+			cloud_map.set("s3_region", nvlPrmSet($('#ins_cloud_bckr_s3_rgn', '#workRegFormBckr').val(), "").trim());
+			cloud_map.set("s3_key", nvlPrmSet($('#ins_cloud_bckr_s3_key', '#workRegFormBckr').val(), "").trim());
+			cloud_map.set("s3_endpoint", nvlPrmSet($('#ins_cloud_bckr_s3_npt', '#workRegFormBckr').val(), "").trim());
+			cloud_map.set("s3_path", nvlPrmSet($('#ins_cloud_bckr_s3_pth', '#workRegFormBckr').val(), "").trim());
+			cloud_map.set("s3_key-secret", nvlPrmSet($('#ins_cloud_bckr_s3_scrk', '#workRegFormBckr').val(), "").trim());
+			cloud_map.set("cloud_type", $("#ins_bckr_cld_opt_cd", '#workRegFormBckr').val());
+
+			cloud_data = JSON.stringify(Object.fromEntries(cloud_map))
 		}
 
 		var selectedAgent = $('#backrest_svr_info').DataTable().rows('.selected').data()[0];
@@ -588,7 +616,8 @@
 				master_gbn: selectedAgent.master_gbn,
 				db_svr_ipadr_id: selectedAgent.db_svr_ipadr_id,
 				backrest_gbn: svrBckCheck,
-				custom_map: custom_data
+				custom_map: custom_data,
+				cloud_map: cloud_data
 			},
 			type : "post",
 			beforeSend: function(xhr) {
@@ -709,7 +738,7 @@
 										<div class="alert alert-info " style="display:none; width: 300px; margin-bottom: 0px;" id="bckr_standby_alert" ></div>
 									</div>
 									
-									<div class="col-12" id="backrest_svr_info_div" style="diplay:none;">
+									<div class="col-12" id="backrest_svr_info_div" >
 										<div class="table-responsive">
 									   		<div id="order-listing_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
 										   		<div class="row">
@@ -727,9 +756,9 @@
 													<th width="30" class="dt-center"><spring:message code="common.no" /></th>
 													<th width="150" class="dt-center">유형</th>
 													<th width="200">IP</th>
-													<th width="150">PORT</th>
+													<th width="160">PORT</th>
 													<th width="170">USER</th>
-													<th width="480">DATA_PATH</th>
+													<th width="465">DATA_PATH</th>
 													<th width="0"></th>
 												</tr>
 											</thead>
@@ -841,8 +870,8 @@
 												<div class="col-sm-2_2" style="margin-top: 5px;">
 													<select class="form-control form-control-xsm" style="width:120px; color: black;" name="ins_bckr_cld_opt_cd" id="ins_bckr_cld_opt_cd" tabindex=3>
 														<option selected>S3</option>
-														<option>Azure</option>
-														<option>GCS</option>
+														<option disabled>Azure</option>
+														<option disabled>GCS</option>
 													</select>
 												</div>
 											</div>
@@ -964,13 +993,13 @@
 												</select>
 											</div>
 
-											<label for="ins_bckr_opt_path" class="col-sm-1_8 col-form-label pop-label-index" style="padding-top:7px; margin-left: 30px;">
+											<label id="ins_bak_path_label" for="ins_bckr_opt_path" class="col-sm-1_8 col-form-label pop-label-index" style="padding-top:7px; margin-left: 30px;">
 												<i class="item-icon fa fa-dot-circle-o"></i>
 												백업 경로
 											</label>
 
 											<div class="col-sm-5">
-												<input type="text" class="form-control form-control-xsm" maxlength="100" id="ins_bckr_pth" name="ins_bckr_pth" style="width: 400px;" readonly/>
+												<input type="text" class="form-control form-control-xsm" maxlength="100" id="ins_bckr_pth" name="ins_bckr_pth" style="width: 410px;" readonly/>
 											</div>
 
 											<!-- <div class="col-sm-2" style="margin-top: -2px;">
@@ -1020,18 +1049,20 @@
 												<input type="number" class="form-control form-control-xsm" maxlength="100" id="ins_bckr_cnt" name="ins_bckr_cnt" value="2" min="2" style="width: 120px;" onchange="fn_backrest_chg_alert(this)" onclick="fn_backrest_ip_select_check()"/>
 											</div>
 
-											<label for="ins_bckr_opt_log_path" class="col-sm-1_8 col-form-label pop-label-index" style="padding-top:7px; margin-left: 30px;">
-												<i class="item-icon fa fa-dot-circle-o"></i>
-												로그 경로
-											</label>
+											<div id="ins_log_path_label">
+												<label for="ins_bckr_opt_log_path" class="col-sm-1_8 col-form-label pop-label-index" style="padding-top:7px; margin-left: 30px;">
+													<i class="item-icon fa fa-dot-circle-o"></i>
+													로그 경로
+												</label>
+											</div>
 
 											<div class="col-sm-4">
-												<input type="text" class="form-control form-control-xsm" maxlength="100" id="ins_bckr_log_pth" name="ins_bckr_log_pth" style="width: 280px;" onchange="fn_backrest_chg_alert(this)" onclick="fn_backrest_ip_select_check()"/>
+												<input type="text" class="form-control form-control-xsm" maxlength="100" id="ins_bckr_log_pth" name="ins_bckr_log_pth" style="width: 410px;" onchange="fn_backrest_chg_alert(this)" onclick="fn_backrest_ip_select_check()"/>
 											</div>
 
-											<div class="col-sm-2" style="margin-top: -2px;">
+											<!-- <div class="col-sm-2" style="margin-top: -2px;">
 												<button type="button" class="btn btn-inverse-info btn-fw" style="width: 100px; padding: 10px;"><spring:message code="common.dir_check" /></button>
-											</div>
+											</div> -->
 										</div>
 
 										<div class="d-flex" style="width: 500px; margin: 0px 0px 0 30px;">

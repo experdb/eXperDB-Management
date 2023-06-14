@@ -2075,6 +2075,9 @@ public class BackupController {
 			jObj.put(ClientProtocolID.PRCS_CNT, request.getParameter("prcs_cnt"));
 			jObj.put(ClientProtocolID.CPS_TYPE, request.getParameter("cps_type"));
 			jObj.put(ClientProtocolID.CUSTOM_MAP, paramMap.get("custom_map"));
+			if(workVO.getBackrest_gbn().equals("cloud")) {
+				jObj.put(ClientProtocolID.CLOUD_MAP, paramMap.get("cloud_map"));
+			}
 			
 			if(masterServer != null) {
 				jObj.put(ClientProtocolID.MASTER_PGDATA, masterServer.getPgdata_pth());
@@ -2154,37 +2157,7 @@ public class BackupController {
 		return result;
 	}
 	
-	/**
-	 * Backrest backup, log 경로 조회
-	 * 
-	 * @param request
-	 * @return JSONObject
-	 * @throws Exception
-	 */
-	@RequestMapping(value = "/selectBackrestRestoreLog.do")
-	@ResponseBody
-	public JSONObject selectBackrestRestoreLog(HttpServletRequest request) throws Exception {
-		
-		String IP = request.getParameter("ipadr");
-		
-		AgentInfoVO vo = new AgentInfoVO();
-		vo.setIPADR(IP);
-		AgentInfoVO agentInfo = (AgentInfoVO) cmmnServerInfoService.selectAgentInfo(vo);
-
-		int PORT = agentInfo.getSOCKET_PORT();
-				
-		JSONObject jObj = new JSONObject();
-		
-		String exelog = request.getParameter("exelog");
-		
-		jObj.put(ClientProtocolID.EXELOG, exelog);
-		
-		ClientInfoCmmn cic = new ClientInfoCmmn();
-		JSONObject result = new JSONObject(); 
-		result = cic.getBackrestRestoreLog(IP, PORT, jObj);
-
-		return result;
-	}
+	
 	
 	
 	

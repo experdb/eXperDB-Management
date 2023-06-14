@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.k4m.dx.tcontrol.admin.accesshistory.service.AccessHistoryService;
@@ -158,8 +159,38 @@ public class BackrestRestoreController {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		
+	}
+	
+	/**
+	 * Backrest restore, log 경로 조회
+	 * 
+	 * @param request
+	 * @return JSONObject
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/selectBackrestRestoreLog.do")
+	@ResponseBody
+	public JSONObject selectBackrestRestoreLog(HttpServletRequest request) throws Exception {
+		
+		String IP = request.getParameter("ipadr");
+		
+		AgentInfoVO vo = new AgentInfoVO();
+		vo.setIPADR(IP);
+		AgentInfoVO agentInfo = (AgentInfoVO) cmmnServerInfoService.selectAgentInfo(vo);
 
+		int PORT = agentInfo.getSOCKET_PORT();
+				
+		JSONObject jObj = new JSONObject();
 		
+		String exelog = request.getParameter("exelog");
 		
+		jObj.put(ClientProtocolID.EXELOG, exelog);
+		
+		ClientInfoCmmn cic = new ClientInfoCmmn();
+		JSONObject result = new JSONObject(); 
+		result = cic.getBackrestRestoreLog(IP, PORT, jObj);
+
+		return result;
 	}
 }

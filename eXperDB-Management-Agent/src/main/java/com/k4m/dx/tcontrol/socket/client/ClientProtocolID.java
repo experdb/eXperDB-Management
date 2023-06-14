@@ -269,6 +269,7 @@ public class ClientProtocolID {
 	public static final String PRCS_CNT = "PRCS_CNT";
 	public static final String CPS_TYPE = "CPS_TYPE";
 	public static final String CUSTOM_MAP = "CUSTOM_MAP";
+	public static final String CLOUD_MAP = "CLOUD_MAP";
 	public static final String SPR_USR_ID = "SPR_USR_ID";
 	public static final String MASTER_PGDATA = "MASTER_PGDATA";
 	public static final String MASTER_IP = "MASTER_IP";

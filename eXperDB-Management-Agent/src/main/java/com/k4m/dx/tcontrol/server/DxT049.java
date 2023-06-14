@@ -53,6 +53,9 @@ public class DxT049 extends SocketCtl{
 			
 			String pghomePathCmd = "echo $PGHOME";
 			String pghomePath =  util.getPidExec(pghomePathCmd);
+			
+			String hostUserCmd = "echo $HOSTUSER";
+			String hostUser =  util.getPidExec(hostUserCmd);
 
 			String backrestConfigPath = pghomePath + "/etc/pgbackrest/pgbackrest.conf";
 			
@@ -74,7 +77,6 @@ public class DxT049 extends SocketCtl{
 			
 			bw2.write(content.toString());
 			bw2.close();
-			
 			
 			String configPath = pghomePath + "/etc/pgbackrest/default.conf";
 			filePath = pghomePath + "/etc/pgbackrest/config/" + String.valueOf(jObj.get(ProtocolID.BCK_FILENM));
@@ -111,7 +113,6 @@ public class DxT049 extends SocketCtl{
 			
 			String fileContent;
 			while((fileContent = br.readLine()) != null) {
-				fileContent = fileContent.replaceAll("#repo1-path=", "repo1-path=" + backrestPath);
 				fileContent = fileContent.replaceAll("#repo1-retention-full=", "repo1-retention-full=" + String.valueOf(jObj.get(ClientProtocolID.BCK_MTN_ECNT)));
 				fileContent = fileContent.replaceAll("#log-path=", "log-path=" + String.valueOf(jObj.get(ClientProtocolID.LOG_PATH)));
 				fileContent = fileContent.replaceAll("#log-level-console=detail", "log-level-console=detail");
@@ -119,7 +120,7 @@ public class DxT049 extends SocketCtl{
 				
 				if(String.valueOf(jObj.get(ClientProtocolID.MASTER_GBN)).equals("S")) {
 					fileContent = fileContent.replaceAll("#pg1-path=", "pg1-path=" + String.valueOf(jObj.get(ClientProtocolID.MASTER_PGDATA)));
-					fileContent = fileContent.replaceAll("#pg1-host-user=experdb", "pg1-host-user=experdb");
+					fileContent = fileContent.replaceAll("#pg1-host-user=", "pg1-host-user=" + hostUser);
 					fileContent = fileContent.replaceAll("#pg1-host=", "pg1-host=" + String.valueOf(jObj.get(ClientProtocolID.MASTER_IP)));
 					fileContent = fileContent.replaceAll("#pg1-port=", "pg1-port=" + String.valueOf(jObj.get(ClientProtocolID.MASTER_DBMS_PORT)));
 					fileContent = fileContent.replaceAll("#pg1-user=", "pg1-user=" + String.valueOf(jObj.get(ClientProtocolID.MASTER_DBMS_USER)));
@@ -131,6 +132,53 @@ public class DxT049 extends SocketCtl{
 				
 				fileContent = fileContent.replaceAll("#repo1-gbn=", "#repo1-gbn=" + String.valueOf(jObj.get(ClientProtocolID.STORAGE_OPT)));
 				fileContent = fileContent.replaceAll("#process-max=", "process-max=" + prcs_cnt);
+				
+				if(String.valueOf(jObj.get(ClientProtocolID.STORAGE_OPT)).toLowerCase().equals("cloud")) {
+					ArrayList<String> cloudKeyList = new ArrayList<String>();
+					ArrayList<String> cloudValueList = new ArrayList<String>();
+
+					if(jObj.get(ClientProtocolID.CLOUD_MAP) == null || jObj.get(ClientProtocolID.CLOUD_MAP).equals("")) {
+						
+					}else {
+						try {
+							JSONParser parser = new JSONParser();
+							JSONObject jsonObject = (JSONObject) parser.parse(String.valueOf(jObj.get(ClientProtocolID.CLOUD_MAP)));
+							Iterator<String> cloudKeys = jsonObject.keySet().iterator();
+							
+							while(cloudKeys.hasNext()){
+				                String key = cloudKeys.next().toString();
+				                cloudKeyList.add(key);
+				                cloudValueList.add(String.valueOf(jsonObject.get(key)));
+				            }
+							
+						} catch (ParseException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						}
+					}
+					
+					if(cloudKeyList.size() != 0) {
+						for(int i=0; i < cloudKeyList.size(); i++) {
+							if(cloudKeyList.get(i).equals("s3_bucket")) {
+								fileContent = fileContent.replaceAll("#repo1-s3-bucket=", "repo1-s3-bucket=" + cloudValueList.get(i));
+							}else if(cloudKeyList.get(i).equals("s3_region")) {
+								fileContent = fileContent.replaceAll("#repo1-s3-region=", "repo1-s3-region=" + cloudValueList.get(i));
+							}else if(cloudKeyList.get(i).equals("s3_key")) {
+								fileContent = fileContent.replaceAll("#repo1-s3-key=", "repo1-s3-key=" + cloudValueList.get(i));
+							}else if(cloudKeyList.get(i).equals("s3_endpoint")) {
+								fileContent = fileContent.replaceAll("#repo1-s3-endpoint=", "repo1-s3-endpoint=" + cloudValueList.get(i));
+							}else if(cloudKeyList.get(i).equals("s3_path")) {
+								fileContent = fileContent.replaceAll("#repo1-path=", "repo1-path=" + cloudValueList.get(i));
+							}else if(cloudKeyList.get(i).equals("s3_key-secret")) {
+								fileContent = fileContent.replaceAll("#repo1-s3-key-secret=", "repo1-s3-key-secret=" + cloudValueList.get(i));
+							}else if(cloudKeyList.get(i).equals("cloud_type")) {
+								fileContent = fileContent.replaceAll("#repo1-type=", "repo1-type=" + cloudValueList.get(i).toLowerCase());
+							}
+						}
+					}
+				}else {
+					fileContent = fileContent.replaceAll("#repo1-path=", "repo1-path=" + backrestPath);
+				}
 				
 				if(String.valueOf(jObj.get(ProtocolID.CPS_YN)).equals("Y")) {
 					if(cps_type.toString().equals("gzip")) {
