@@ -945,7 +945,7 @@
 												</label>
 
 												<div class="col-sm-2">
-													<input type="password" class="form-control form-control-xsm" maxlength="50" id="ins_cloud_bckr_s3_scrk" name="ins_cloud_bckr_s3_scrk" style="width: 220px;" placeholder="S3 secret Key를 입력해주세요" onchange="fn_backrest_chg_alert(this)"/>
+													<input type="password" class="form-control form-control-xsm" maxlength="100" id="ins_cloud_bckr_s3_scrk" name="ins_cloud_bckr_s3_scrk" style="width: 220px;" placeholder="S3 secret Key를 입력해주세요" onchange="fn_backrest_chg_alert(this)"/>
 												</div>
 											</div>
 

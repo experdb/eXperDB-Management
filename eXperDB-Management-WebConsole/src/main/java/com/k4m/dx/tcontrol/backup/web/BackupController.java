@@ -909,6 +909,7 @@ public class BackupController {
 			boolean readFromCustomLine = false;
 			Map<String, Object> customMap = new HashMap<String, Object>();
 			
+			String gbn = "";
 			String fileContent;
 			while ((fileContent = br.readLine()) != null) {
 				if (fileContent.contains("process-max")) {
@@ -923,6 +924,64 @@ public class BackupController {
 					String compressTypeValue = compressTypeLine.replaceAll("compress-type=", "");
 
 					mv.addObject("cps_type_mod", compressTypeValue);
+				}
+				
+				if (fileContent.contains("#repo1-gbn=")) {
+					String repoGbnLine = fileContent;
+					String repoGbnValue = repoGbnLine.replaceAll("#repo1-gbn=", "");
+
+					gbn = repoGbnValue;
+				}
+				
+				if(gbn.equals("cloud")) {
+					if (fileContent.contains("repo1-type=")) {
+						String repoTypeLine = fileContent;
+						String repoTypeValue = repoTypeLine.replaceAll("repo1-type=", "");
+
+						mv.addObject("repo_type_mod", repoTypeValue);
+					}
+					
+					if (fileContent.contains("repo1-s3-bucket=")) {
+						String s3BucketLine = fileContent;
+						String s3BucketValue = s3BucketLine.replaceAll("repo1-s3-bucket=", "");
+
+						mv.addObject("s3_bucket_mod", s3BucketValue);
+					}
+					
+					if (fileContent.contains("repo1-s3-endpoint=")) {
+						String s3EndPointLine = fileContent;
+						String s3EndPointValue = s3EndPointLine.replaceAll("repo1-s3-endpoint=", "");
+
+						mv.addObject("s3_endPoint_mod", s3EndPointValue);
+					}
+					
+					if (fileContent.contains("repo1-s3-key=")) {
+						String s3KeytLine = fileContent;
+						String s3KeyValue = s3KeytLine.replaceAll("repo1-s3-key=", "");
+
+						mv.addObject("s3_key_mod", s3KeyValue);
+					}
+					
+					if (fileContent.contains("repo1-s3-key-secret=")) {
+						String s3SecretKeyLine = fileContent;
+						String s3SecretKeyValue = s3SecretKeyLine.replaceAll("repo1-s3-key-secrete=", "");
+
+						mv.addObject("s3_secretKey_mod", s3SecretKeyValue);
+					}
+					
+					if (fileContent.contains("repo1-s3-region=")) {
+						String s3RegionLine = fileContent;
+						String s3RegionValue = s3RegionLine.replaceAll("repo1-s3-region=", "");
+
+						mv.addObject("s3_region_mod", s3RegionValue);
+					}
+					
+					if (fileContent.contains("repo1-path")) {
+						String s3PathLine = fileContent;
+						String s3PathValue = s3PathLine.replaceAll("repo1-path=", "");
+
+						mv.addObject("s3_path_mod", s3PathValue);
+					}
 				}
 
 				if (readFromCustomLine) {

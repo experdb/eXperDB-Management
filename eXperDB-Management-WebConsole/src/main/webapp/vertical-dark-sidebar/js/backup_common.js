@@ -540,6 +540,9 @@ function fn_update_chogihwa(gbn, result) {
 		var bckSrvLocalMod = document.getElementById("mod_bck_srv_local_check"); 
 		var bckSrvRemoteMod = document.getElementById("mod_bck_srv_remote_check"); 
 		var bckSrvCloudMod = document.getElementById("mod_bck_srv_cloud_check");
+		var mod_bck_path_label = document.getElementById("mod_bck_path_label"); 
+		var mod_bckr_pth = document.getElementById("mod_bckr_pth");
+
 
 		mod_restore_check = result.workInfo[0].backrest_gbn
 
@@ -548,6 +551,10 @@ function fn_update_chogihwa(gbn, result) {
 			bckSrvLocalMod.style.backgroundColor = "white"
 			bckSrvRemoteMod.style.backgroundColor = "#e7e7e7"
 			bckSrvCloudMod.style.backgroundColor = "#e7e7e7"
+			mod_bck_path_label.style.display = "";
+			mod_bckr_pth.style.display = "";
+
+			$("#mod_bckr_pth", "#workRegReFormBckr").val(nvlPrmSet(result.workInfo[0].bck_pth, ""));						//백업경로
 
 			$("#mod_remote_opt").hide();
 			$("#mod_cloud_opt").hide();
@@ -556,6 +563,10 @@ function fn_update_chogihwa(gbn, result) {
 			bckSrvLocalMod.style.backgroundColor = "#e7e7e7"
 			bckSrvRemoteMod.style.backgroundColor = "white"
 			bckSrvCloudMod.style.backgroundColor = "#e7e7e7"
+			mod_bck_path_label.style.display = "";
+			mod_bckr_pth.style.display = "";
+
+			$("#mod_bckr_pth", "#workRegReFormBckr").val(nvlPrmSet(result.workInfo[0].bck_pth, ""));						//백업경로
 
 			$("#mod_remote_opt").show();
 			$("#mod_cloud_opt").hide();
@@ -564,13 +575,29 @@ function fn_update_chogihwa(gbn, result) {
 			bckSrvLocalMod.style.backgroundColor = "#e7e7e7"
 			bckSrvRemoteMod.style.backgroundColor = "#e7e7e7"
 			bckSrvCloudMod.style.backgroundColor = "white"
+			mod_bck_path_label.style.display = "none";
+			mod_bckr_pth.style.display = "none";
+
+			var repo_type = null;
+			if(result.repo_type_mod == "s3"){
+				repo_type = "S3"
+			}
+
+			$("#mod_bckr_cld_opt_cd", "#workRegReFormBckr").val(nvlPrmSet(repo_type, "")).prop("selected", true); //cloud type
+
+			$("#mod_cloud_bckr_s3_pth", "#workRegReFormBckr").val(nvlPrmSet(result.s3_path_mod, ""));						//s3-path
+			$("#mod_cloud_bckr_s3_buk", "#workRegReFormBckr").val(nvlPrmSet(result.s3_bucket_mod, ""));						
+			$("#mod_cloud_bckr_s3_npt", "#workRegReFormBckr").val(nvlPrmSet(result.s3_endPoint_mod, ""));	
+			$("#mod_cloud_bckr_s3_key", "#workRegReFormBckr").val(nvlPrmSet(result.s3_key_mod, ""));	
+			$("#mod_cloud_bckr_s3_scrk", "#workRegReFormBckr").val(nvlPrmSet(result.s3_secretKey_mod, ""));	
+			$("#mod_cloud_bckr_s3_rgn", "#workRegReFormBckr").val(nvlPrmSet(result.s3_region_mod, ""));	
 
 			$("#mod_remote_opt").hide();
 			$("#mod_cloud_opt").show();
 		}
 
 		$("#mod_bckr_opt_cd", "#workRegReFormBckr").val(nvlPrmSet(result.workInfo[0].bck_opt_cd, "")).prop("selected", true); //백업옵션
-		$("#mod_bckr_pth", "#workRegReFormBckr").val(nvlPrmSet(result.workInfo[0].bck_pth, ""));						//백업경로
+		
 
 		$("#mod_bckr_cnt", "#workRegReFormBckr").val(nvlPrmSet(result.workInfo[0].bck_mtn_ecnt, ""));					//풀백업 유지개수
 		$("#mod_bckr_log_pth", "#workRegReFormBckr").val(nvlPrmSet(result.workInfo[0].log_file_pth, ""));				//로그경로

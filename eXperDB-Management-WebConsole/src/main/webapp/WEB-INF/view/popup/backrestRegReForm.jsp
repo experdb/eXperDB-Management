@@ -302,6 +302,23 @@
 			$("#mod_cps_brkr_yn", "#workRegReFormBckr").val("N");
 		}
 
+		var cloud_map = new Map();
+		var cloud_data = null;
+
+		console.log(mod_restore_check);
+
+		if(mod_restore_check == "cloud"){
+			cloud_map.set("s3_bucket", nvlPrmSet($('#mod_cloud_bckr_s3_buk', '#workRegReFormBckr').val(), "").trim());
+			cloud_map.set("s3_region", nvlPrmSet($('#mod_cloud_bckr_s3_rgn', '#workRegReFormBckr').val(), "").trim());
+			cloud_map.set("s3_key", nvlPrmSet($('#mod_cloud_bckr_s3_key', '#workRegReFormBckr').val(), "").trim());
+			cloud_map.set("s3_endpoint", nvlPrmSet($('#mod_cloud_bckr_s3_npt', '#workRegReFormBckr').val(), "").trim());
+			cloud_map.set("s3_path", nvlPrmSet($('#mod_cloud_bckr_s3_pth', '#workRegReFormBckr').val(), "").trim());
+			cloud_map.set("s3_key-secret", nvlPrmSet($('#mod_cloud_bckr_s3_scrk', '#workRegReFormBckr').val(), "").trim());
+			cloud_map.set("cloud_type", $("#mod_bckr_cld_opt_cd", '#workRegReFormBckr').val());
+
+			cloud_data = JSON.stringify(Object.fromEntries(cloud_map))
+		}
+
 		var selectedAgent = $('#mod_backrest_svr_Info').DataTable().rows().data()[0];
 		var custom_data = JSON.stringify(Object.fromEntries(custom_map))		
 
@@ -331,7 +348,8 @@
 				master_gbn: selectedAgent.master_gbn,
 				db_svr_ipadr_id: selectedAgent.db_svr_ipadr_id,
 				backrest_gbn: mod_restore_check,
-				custom_map: custom_data
+				custom_map: custom_data,
+				cloud_map: cloud_data
 			},
 			type : "post",
 			beforeSend: function(xhr) {
@@ -553,8 +571,8 @@
 												<div class="col-sm-2_2" style="margin-top: 5px;">
 													<select class="form-control form-control-xsm" style="width:120px; color: black;" name="mod_bckr_cld_opt_cd" id="mod_bckr_cld_opt_cd" tabindex=3>
 														<option selected>S3</option>
-														<option>Azure</option>
-														<option>GCS</option>
+														<option disabled>Azure</option>
+														<option disabled>GCS</option>
 													</select>
 												</div>
 											</div>
@@ -628,7 +646,7 @@
 												</label>
 
 												<div class="col-sm-2">
-													<input type="password" class="form-control form-control-xsm" maxlength="50" id="mod_cloud_bckr_s3_scrk" name="mod_cloud_bckr_s3_scrk" style="width: 220px;" placeholder="S3 secret Key를 입력해주세요"/>
+													<input type="password" class="form-control form-control-xsm" maxlength="100" id="mod_cloud_bckr_s3_scrk" name="mod_cloud_bckr_s3_scrk" style="width: 220px;" placeholder="S3 secret Key를 입력해주세요"/>
 												</div>
 											</div>
 
@@ -676,13 +694,13 @@
 												</select>
 											</div>
 
-											<label for="mod_bckr_opt_path" class="col-sm-1_8 col-form-label pop-label-index" style="padding-top:7px; margin-left: 30px;">
+											<label id="mod_bck_path_label" for="mod_bckr_opt_path" class="col-sm-1_8 col-form-label pop-label-index" style="padding-top:7px; margin-left: 30px;">
 												<i class="item-icon fa fa-dot-circle-o"></i>
 												백업 경로
 											</label>
 
 											<div class="col-sm-4">
-												<input type="text" class="form-control form-control-xsm" maxlength="100" id="mod_bckr_pth" name="mod_bckr_pth" style="width: 280px;" readonly/>
+												<input type="text" class="form-control form-control-xsm" maxlength="100" id="mod_bckr_pth" name="mod_bckr_pth" style="width: 410px;" readonly/>
 											</div>
 										</div>
 
@@ -734,12 +752,12 @@
 											</label>
 
 											<div class="col-sm-4">
-												<input type="text" class="form-control form-control-xsm" maxlength="100" id="mod_bckr_log_pth" name="mod_bckr_log_pth" style="width: 280px;" onchange="fn_backrest_chg_alert(this)"/>
+												<input type="text" class="form-control form-control-xsm" maxlength="100" id="mod_bckr_log_pth" name="mod_bckr_log_pth" style="width: 410px;" onchange="fn_backrest_chg_alert(this)"/>
 											</div>
 
-											<div class="col-sm-2" style="margin-top: -2px;">
+											<!-- <div class="col-sm-2" style="margin-top: -2px;">
 												<button type="button" class="btn btn-inverse-info btn-fw" style="width: 100px; padding: 10px;"><spring:message code="common.dir_check" /></button>
-											</div>
+											</div> -->
 										</div>
 
 										<div class="d-flex" style="width: 500px; margin: 0px 0px 0 30px;">
