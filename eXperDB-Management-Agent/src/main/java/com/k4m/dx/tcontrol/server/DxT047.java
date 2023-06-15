@@ -60,39 +60,34 @@ public class DxT047 extends SocketCtl{
 		context = new ClassPathXmlApplicationContext(new String[] { "context-tcontrol.xml" });
 		SystemServiceImpl service = (SystemServiceImpl) context.getBean("SystemService");
 		socketLogger.info("DxT047.execute : " + strDxExCode);
-				
+		
 		byte[] sendBuff = null;
 		String strErrCode = "";
 		String strErrMsg = "";
 		String strSuccessCode = "0";
 		String strResultCode = TC001701;
 		int scd_id = 0;
-		
 		JSONObject outputObj = new JSONObject();
-		
 		try {
 			
 			int exe_sn = service.selectQ_WRKEXE_G_01_SEQ();
 			scd_id = service.selectScd_id();
 			int exe_grp_sn = service.selectQ_WRKEXE_G_02_SEQ();
-						
 			String ipadr = (String) jObj.get(ClientProtocolID.SERVER_IP);
-			
 			int ipadrId = service.selectDbSvrIpAdrId(ipadr);
-			
 			String configPath = "$PGHOME/etc/pgbackrest/config/";
 			String fullPath = configPath + jObj.get(ProtocolID.BCK_FILENM);
-		
 			String backupType = (String) jObj.get(ProtocolID.BCK_TYPE);
 			String logPath = (String) jObj.get(ProtocolID.LOG_PATH);
-			
 			SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMddHHmmss");
 			String now = dateFormat.format(new Date());
 			String logFileName = jObj.get(ProtocolID.WRK_NM) + "_" +  now + ".log";
 			String logFullPath = logPath + "/" + logFileName;
-			
+			String scd_id_schedule = "";
+			if(jObj.get(ClientProtocolID.WRK_TYPE).equals("schedule")) {
+				 scd_id_schedule = jObj.get(ClientProtocolID.SCD_ID).toString();
+			}
 			String bck_file_pth = (String) jObj.get(ClientProtocolID.BCK_FILE_PTH);
-			String bck_filenm = (String) jObj.get(ClientProtocolID.BCK_FILENM);
 			String usr_id = (String) jObj.get(ClientProtocolID.USER_ID);
 			String wrk_nm = (String) jObj.get(ClientProtocolID.WRK_NM);
 			String wrk_idStr = jObj.get(ClientProtocolID.WRK_ID).toString();
@@ -100,10 +95,10 @@ public class DxT047 extends SocketCtl{
 			String bck_opt_cd = (String) jObj.get(ClientProtocolID.BCK_OPT_CD);
 			int wrk_id = Integer.parseInt(wrk_idStr);
 			int db_id = Integer.parseInt(db_idStr);
-			
 			WrkExeVO vo = new WrkExeVO();
 			
 			vo.setEXE_RSLT_CD(TC001802);
+			vo.setSCD_CNDT(TC001802);
 			vo.setEXE_GRP_SN(exe_grp_sn);
 			vo.setEXE_SN(exe_sn);
 			vo.setSCD_ID(scd_id);
@@ -116,18 +111,22 @@ public class DxT047 extends SocketCtl{
 			vo.setWRK_ID(wrk_id);
 			vo.setDB_ID(db_id);
 			vo.setBCK_OPT_CD(bck_opt_cd);
-			
-			service.insertPgbackrestBackup(vo);
 
+			if(jObj.get(ClientProtocolID.WRK_TYPE).equals("schedule")) {
+				vo.setBACKREST_SCD_ID(Integer.parseInt(scd_id_schedule));
+			}
+			service.insertPgbackrestBackup(vo);
+			
+			if(jObj.get(ClientProtocolID.WRK_TYPE).equals("schedule")) {
+				service.updateSCD_CNDT(vo);	
+			}
 			if(bck_opt_cd.equals("TC000302")) {
 				backupType = "incr";
 			}
 			String lowerBckType = backupType.toLowerCase();
-			
 			String strCmd = "pgbackrest --stanza=experdb --config=" + fullPath + " --type=" + lowerBckType + " backup > " + logPath + "/" + logFileName;
-						
-			RunCommandExec r = new RunCommandExec(strCmd);
 			
+			RunCommandExec r = new RunCommandExec(strCmd);
 			r.start();
 			try {
 				r.join();
@@ -136,28 +135,25 @@ public class DxT047 extends SocketCtl{
 			}
 			String retVal = r.call();
 			String strResultMessage = r.getMessage();
+			
 			if(retVal.equals("success")) {
-				
 				String succesCmd = "pgbackrest --stanza=experdb --config=" + fullPath + " info --output=json";
-				
 				CommonUtil util = new CommonUtil();
 				
 				// 작업 완료 시 info 값으로 DB 값 업데이트
 				String successObj = util.getPidExec(succesCmd);
-
 				ObjectMapper mapper = new ObjectMapper();
 				JsonNode jsonNode = mapper.readTree(successObj);
 				
 				int jsonSize = jsonNode.findValue("backup").size();
-			
 				long repoSizeInt = jsonNode.findValue("backup").path(jsonSize-1).path("info").path("repository").path("delta").asLong();
 				long dbSizeInt = jsonNode.findValue("backup").path(jsonSize-1).path("info").path("delta").asLong();
 				int startTimeInt = jsonNode.findValue("backup").path(jsonSize-1).path("timestamp").path("start").asInt();
-				int stopTimeInt = jsonNode.findValue("backup").path(jsonSize-1).path("timestamp").path("stop").asInt(); 
+				int stopTimeInt = jsonNode.findValue("backup").path(jsonSize-1).path("timestamp").path("stop").asInt();
 				
 				String startDateStr = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date(startTimeInt * 1000L));
 				String stopDateStr = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date(stopTimeInt * 1000L));
-				
+							
 				WrkExeVO endVO = new WrkExeVO();
 				endVO.setEXE_SN(exe_sn);
 				endVO.setWRK_STRT_DTM(startDateStr);
@@ -168,8 +164,12 @@ public class DxT047 extends SocketCtl{
 				endVO.setDB_SZ(dbSizeInt);
 				endVO.setRSLT_MSG(retVal + " " + strResultMessage);
 				
+				if(jObj.get(ClientProtocolID.WRK_TYPE).equals("schedule")) {
+					endVO.setSCD_CNDT(TC001801);
+					endVO.setBACKREST_SCD_ID(Integer.parseInt(scd_id_schedule));
+					service.updateSCD_CNDT(endVO);
+				}
 				service.updateBackrestWrk(endVO);
-				
 			}else {
 				
 				errLogger.error("[ERROR] DxT047 {} ", retVal + " " + strResultMessage);

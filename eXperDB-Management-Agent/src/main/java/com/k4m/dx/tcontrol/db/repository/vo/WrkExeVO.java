@@ -37,6 +37,7 @@ public class WrkExeVO {
 	private String WRK_NM;
 	private int DB_SVR_IPADR_ID;
 	private long DB_SZ;
+	private int BACKREST_SCD_ID;
 	
 	public int getDB_SVR_IPADR_ID() {
 		return DB_SVR_IPADR_ID;
@@ -126,8 +127,8 @@ public class WrkExeVO {
 	public int getTLI() {
 		return TLI;
 	}
-	public void setTLI(int tLI) {
-		TLI = tLI;
+	public void setTLI(int TLI) {
+		TLI = this.TLI;
 	}
 	public long getFILE_SZ() {
 		return FILE_SZ;
@@ -176,6 +177,12 @@ public class WrkExeVO {
 	}
 	public void setDB_SZ(long dB_SZ) {
 		DB_SZ = dB_SZ;
+	}
+	public int getBACKREST_SCD_ID() {
+		return BACKREST_SCD_ID;
+	}
+	public void setBACKREST_SCD_ID(int bACKREST_SCD_ID) {
+		BACKREST_SCD_ID = bACKREST_SCD_ID;
 	}
 	
 	

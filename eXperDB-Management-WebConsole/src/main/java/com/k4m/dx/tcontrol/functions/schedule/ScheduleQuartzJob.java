@@ -37,7 +37,7 @@ public class ScheduleQuartzJob implements Job{
 	
 	private ConfigurableApplicationContext context;
 	
-		
+	public String backrest_scd_id;
 
 	
 	
@@ -153,6 +153,7 @@ public class ScheduleQuartzJob implements Job{
 							}else if (resultWork.get(i).get("bck_bsn_dscd").equals("TC000205")) {
 								BCK_NM.add("backrest");
 								CMD.add("backrest");
+								backrest_scd_id = scd_id;
 							}
 							
 							// 백업 내용이 RMAN 백업일경우
@@ -536,7 +537,7 @@ public class ScheduleQuartzJob implements Job{
 				}
 				for (int i = 0; i < BCKNM.size(); i++) {
 					if(BCKNM.get(i).equals("backrest")){
-						IP = scheduleService.selectIpadr(resultWork.get(i).get("db_svr_ipadr_id").toString());
+						IP = scheduleService.selectIpadr(backrest_scd_id);
 						}
 					}
 				

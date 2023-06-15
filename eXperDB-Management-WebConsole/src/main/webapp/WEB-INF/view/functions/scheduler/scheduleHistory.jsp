@@ -113,7 +113,7 @@
 	    columns : [
 		         	{data: "rownum", className: "dt-center", defaultContent: ""}, 
 		         	{data : "scd_nm", className : "dt-left", defaultContent : ""
-		    			,"render": function (data, type, full) {				
+		    			,"render": function (data, type, full) {			
 		    				  return '<span onClick=javascript:fn_scdLayer("'+full.scd_id+'"); class="bold">' + full.scd_nm + '</span>';
 		    			}
 		    		},
@@ -191,7 +191,6 @@
 			showSwalIcon('<spring:message code="message.msg15" />', '<spring:message code="common.close" />', '', 'error');
 			return false;
 		}
-
 		$.ajax({
 			url : "/selectScheduleHistoryNew.do",
 			data : {
@@ -220,7 +219,7 @@
 			success : function(result) {
 				table.rows({selected: true}).deselect();
 				table.clear().draw();
-	
+				
 				if (nvlPrmSet(result, "") != '') {
 					table.rows.add(result).draw();
 				}

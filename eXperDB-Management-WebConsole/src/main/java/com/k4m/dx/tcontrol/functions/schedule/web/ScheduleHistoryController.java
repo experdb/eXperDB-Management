@@ -167,7 +167,7 @@ public class ScheduleHistoryController {
 				param.put("order_type", order_type);
 				param.put("order", order);
 				param.put("usr_id", usr_id);
-	
+				
 				System.out.println("********PARAMETER*******");
 				System.out.println("DB서버 : "+ "%"+db_svr_nm+"%");
 				System.out.println("스케줄명 : "+ "%"+scd_nm+"%");

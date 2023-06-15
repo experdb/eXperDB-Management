@@ -2028,6 +2028,8 @@ public class BackupController {
 		jObj.put(ClientProtocolID.BCK_TYPE, request.getParameter("bck_opt_cd_nm"));
 		jObj.put(ClientProtocolID.DB_ID, request.getParameter("db_id"));
 		jObj.put(ClientProtocolID.USER_ID, usr_id);
+		jObj.put(ClientProtocolID.WRK_TYPE, "");
+
 		
 		JSONObject result = new JSONObject();
 		ClientInfoCmmn cic = new ClientInfoCmmn();

@@ -166,6 +166,7 @@ public class ClientInfoCmmn implements Runnable{
 						objJob.put(ClientProtocolID.BCK_FILE_PTH, resultWork.get(i).get("bck_pth")); // 저장경로
 						objJob.put(ClientProtocolID.BCK_FILENM, ""); // 저장파일명					
 					}else if (resultWork.get(i).get("bck_bsn_dscd").equals("TC000205")) {
+						reqJObj.put(ClientProtocolID.SCD_ID, resultWork.get(i).get("scd_id"));
 						reqJObj.put(ClientProtocolID.SERVER_IP, IP);
 						reqJObj.put(ClientProtocolID.LOG_PATH, resultWork.get(i).get("log_file_pth"));
 						reqJObj.put(ClientProtocolID.BCK_FILENM, resultWork.get(i).get("bck_filenm"));
@@ -176,6 +177,7 @@ public class ClientInfoCmmn implements Runnable{
 						reqJObj.put(ClientProtocolID.BCK_TYPE, resultWork.get(i).get("bck_opt_cd_nm"));
 						reqJObj.put(ClientProtocolID.DB_ID, resultWork.get(i).get("db_id"));
 						reqJObj.put(ClientProtocolID.USER_ID, resultWork.get(i).get("lst_mdfr_id"));
+						reqJObj.put(ClientProtocolID.WRK_TYPE, "schedule");
 					}
 					else {
 						System.out.println("> > > > > > > > > > > > > DUMP Backup START");
@@ -2585,6 +2587,7 @@ public JSONObject pgbackrestImmediateStart(String ip, int port, JSONObject jObj)
 
 		try {
 			jObj.put(ClientProtocolID.DX_EX_CODE, ClientTranCodeType.DxT047);
+			jObj.put(ClientProtocolID.WRK_TYPE, "");
 			
 			ClientAdapter CA = new ClientAdapter(ip, port);
 			
