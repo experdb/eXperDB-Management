@@ -918,11 +918,20 @@
 			, EXE_RSLT_CD
 			, WRK_NM
 			, DB_SVR_IPADR_ID
+			, SCD_NM
 	 	)
 	 	VALUES
 	 	(
 			#{EXE_SN}
-			, #{SCD_ID}
+			<choose>
+				<when test="BACKREST_SCD_ID !=null and BACKREST_SCD_ID != ''" >
+				, (SELECT SCD_ID FROM T_SCD_M WHERE SCD_ID = #{BACKREST_SCD_ID})::numeric
+				</when>
+				<otherwise>
+				, #{SCD_ID}
+				</otherwise>
+			</choose>
+			
 			, #{WRK_ID}
 			, now()
 			, now()
@@ -939,6 +948,14 @@
 			, #{EXE_RSLT_CD}
 			, #{WRK_NM}
 			, #{DB_SVR_IPADR_ID}
+			<choose>
+				<when test="BACKREST_SCD_ID !=null and BACKREST_SCD_ID != ''" >
+				, (SELECT SCD_ID FROM T_SCD_M WHERE SCD_ID = #{BACKREST_SCD_ID})::numeric
+				</when>
+				<otherwise>
+				, null
+				</otherwise>
+			</choose>
 	 	)	 	
     </insert>
     
@@ -957,6 +974,9 @@
 			, DB_SZ = #{DB_SZ}
 			, BCK_FILENM = #{BCK_FILENM}
 			, RSLT_MSG = #{RSLT_MSG}
+		<if test="BACKREST_SCD_ID !=null and BACKREST_SCD_ID != ''" >
+			, SCD_ID = (SELECT SCD_ID FROM T_SCD_M WHERE SCD_ID = #{BACKREST_SCD_ID})::numeric
+		</if>
 		WHERE
 			EXE_SN = #{EXE_SN}
 				
