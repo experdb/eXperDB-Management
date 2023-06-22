@@ -1375,6 +1375,15 @@ public class BackupController {
 
 		String wrk_id_Rows = request.getParameter("wrk_id_List").toString().replaceAll("&quot;", "\"");
 		JSONArray wrk_ids = (JSONArray) new JSONParser().parse(wrk_id_Rows);
+		
+		String backupGbn = request.getParameter("backup_gbn").toString();
+		
+		String wrk_bck_server_Rows = request.getParameter("wrk_bck_server_list").toString().replaceAll("&quot;", "\"");
+		JSONArray wrk_bck_servers = (JSONArray) new JSONParser().parse(wrk_bck_server_Rows);
+		
+		String bck_filenm_Rows = request.getParameter("bck_filenm_list").toString().replaceAll("&quot;", "\"");
+		JSONArray bck_filenms = (JSONArray) new JSONParser().parse(bck_filenm_Rows);
+		
 
 		// 화면접근이력 이력 남기기
 		try {
@@ -1389,6 +1398,31 @@ public class BackupController {
 			for (int i = 0; i < bck_wrk_ids.size(); i++) {
 				int bck_wrk_id = Integer.parseInt(bck_wrk_ids.get(i).toString());
 				int wrk_id = Integer.parseInt(wrk_ids.get(i).toString());
+				
+				if(backupGbn.equals("del_backrest")) {
+					ClientInfoCmmn cic = new ClientInfoCmmn();
+					JSONObject result2 = new JSONObject();
+					
+					String wrk_bck_server = wrk_bck_servers.get(i).toString();
+					String bck_filenm = bck_filenms.get(i).toString();
+					
+					try {
+						AgentInfoVO vo = new AgentInfoVO();
+						vo.setIPADR(wrk_bck_server);
+						AgentInfoVO agentInfo = (AgentInfoVO) cmmnServerInfoService.selectAgentInfo(vo);
+
+						int port = agentInfo.getSOCKET_PORT();
+						JSONObject jObj = new JSONObject();
+						
+						jObj.put(ClientProtocolID.BCK_FILENM, bck_filenm);
+						
+						result2 = cic.deleteBackrestConf(wrk_bck_server, port, jObj);
+
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+					
+				}
 
 				// WORK 옵션 삭제
 				backupService.deleteWorkOpt(bck_wrk_id);

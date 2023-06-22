@@ -31,6 +31,8 @@
 	var tabGbn = "${tabGbn}";
 	var bck_wrk_id_List = [];
 	var wrk_id_List = [];
+	var wrk_bck_server_list = [];
+	var bck_filenm_list = [];
 	var confile_title = "";
 	var immediate_data = null;
 	var workJsonData = null;
@@ -336,6 +338,8 @@
 
 		bck_wrk_id_List = [];
 		wrk_id_List = [];
+		wrk_bck_server_list = [];
+		bck_filenm_list = [];
 
 		if (datas.length <= 0) {
 			showSwalIcon('<spring:message code="message.msg16"/>', '<spring:message code="common.close" />', '', 'error');
@@ -351,6 +355,8 @@
 			for (var i = 0; i < datas.length; i++) {
 				bck_wrk_id_List.push( tableBackrest.rows('.selected').data()[i].bck_wrk_id);   
 				wrk_id_List.push( tableBackrest.rows('.selected').data()[i].wrk_id);   
+				wrk_bck_server_list.push( tableBackrest.rows('.selected').data()[i].db_svr_ipadr);
+				bck_filenm_list.push( tableBackrest.rows('.selected').data()[i].wrk_nm);
 			}
 		} else {
 			for (var i = 0; i < datas.length; i++) {
@@ -358,9 +364,6 @@
 				wrk_id_List.push( tableDump.rows('.selected').data()[i].wrk_id);   
 			}
 		}
-
-		console.log(bck_wrk_id_List);
-		console.log(wrk_id_List);
 		
 		$.ajax({
 			url : "/popup/scheduleCheck.do",
@@ -420,7 +423,10 @@
 			url : "/popup/workDelete.do",
 		  	data : {
 		  		bck_wrk_id_List : JSON.stringify(bck_wrk_id_List),
-		  		wrk_id_List : JSON.stringify(wrk_id_List)
+		  		wrk_id_List : JSON.stringify(wrk_id_List),
+				backup_gbn : gbn,
+				wrk_bck_server_list : JSON.stringify(wrk_bck_server_list),
+				bck_filenm_list : JSON.stringify(bck_filenm_list)
 		  	},
 			dataType : "json",
 			type : "post",
