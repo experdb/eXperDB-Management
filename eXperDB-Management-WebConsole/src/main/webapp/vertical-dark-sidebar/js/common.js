@@ -545,11 +545,12 @@ function fn_workLayer(wrk_id){
 /* ********************************************************
  * backrest config 결과 정보
  ******************************************************** */
-function fn_backrestConfigLayer(wrk_id){
+function fn_backrestConfigLayer(wrk_id, backrest_gbn){
 	$.ajax({
 		url : "/selectBackrestConfigInfo.do",
 		data : {
-			wrk_id : wrk_id
+			wrk_id : wrk_id,
+			backrest_gbn: backrest_gbn
 		},
 		type : "post",
 		beforeSend: function(xhr) {

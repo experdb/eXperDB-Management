@@ -274,6 +274,8 @@ function fnc_confirmMultiRst(gbn){
 		fn_ImmediateStart();
 	}else if (gbn == "backrest_run_immediately"){
 		fn_BackrestImmediateStart();
+	}else if (gbn == "backrest_remote_run_immediately"){
+		fn_Backrest_remote_Immediate();
 	}
 }
 
@@ -567,7 +569,13 @@ function fn_update_chogihwa(gbn, result) {
 			mod_bckr_pth.style.display = "";
 
 			$("#mod_bckr_pth", "#workRegReFormBckr").val(nvlPrmSet(result.workInfo[0].bck_pth, ""));						//백업경로
-
+			
+			// SSH 정보
+			$("#mod_remt_str_ip", "#workRegReFormBckr").val(nvlPrmSet(result.remote_map.ip, ""));
+			$("#mod_remt_str_ssh", "#workRegReFormBckr").val(nvlPrmSet(result.remote_map.port, ""));
+			$("#mod_remt_str_usr", "#workRegReFormBckr").val(nvlPrmSet(result.remote_map.usr, ""));
+			$("#mod_remt_str_pw", "#workRegReFormBckr").val(nvlPrmSet(result.remote_map.pw, ""));
+			
 			$("#mod_remote_opt").show();
 			$("#mod_cloud_opt").hide();
 		}else{

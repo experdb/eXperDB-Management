@@ -73,7 +73,6 @@ public class ScheduleQuartzJob implements Job{
 			
 			// 1. 스케줄ID를 가져옴
 			String scd_id= dataMap.getString("scd_id");
-			
 			System.out.println("스케줄작업명 : " +jobContext.getJobDetail().getKey().getName());
 			System.out.println("스케줄ID : " +scd_id);
 			

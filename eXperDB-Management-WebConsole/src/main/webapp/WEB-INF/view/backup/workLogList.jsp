@@ -90,7 +90,6 @@
 		 * Click Latest Log
 		 ******************************************************** */
 		 if(tableBackrest != null){
-			 console.log(tableBackrest.rows(0).select())
 			 tableBackrest.row(0).click;
 		 }
 	});
@@ -637,6 +636,10 @@
 								return html;
 							} , 
 							className: "dt-center", defaultContent: ""},
+					{data: "remote_ip", className: "dt-center", defaultContent: "", visible: false},
+					{data: "remote_port", className: "dt-center", defaultContent: "", visible: false},
+					{data: "remote_usr", className: "dt-center", defaultContent: "", visible: false},
+					{data: "remote_pw", className: "dt-center", defaultContent: "", visible: false},
 				] 
 			});
 
@@ -840,7 +843,7 @@
 			success : function(result) {
  				tableBackrest.rows({selected: true}).deselect();
 				tableBackrest.clear().draw();
-
+				
 				if (nvlPrmSet(result, "") != '') {
 					tableBackrest.rows.add(result).draw();
 				}  
@@ -854,10 +857,14 @@
 	$(function() {
 		$('#logBackrestList tbody').on('click', 'tr', function() {
 			if($(this).hasClass('selected')){
+				$('#backRestAcitveLog').text('');
+				clearInterval(interval);
 				realTimeLog();
 			}else {
 				tableBackrest.$('tr.selected').removeClass('selected');
 				$(this).addClass('selected');
+				$('#backRestAcitveLog').text('');
+				clearInterval(interval);
 				realTimeLog();
 			}
 		})
@@ -872,6 +879,96 @@
 			if(tableBackrest.row('.selected').data() != null || tableBackrest.row('.selected').data() != undefined){
 				state = tableBackrest.row('.selected').data().exe_rslt_cd
 			}
+			var backrest_gbn = tableBackrest.row('.selected').data().backrest_gbn;
+			if(backrest_gbn == 'remote'){
+				if(state == 'TC001701'){
+					$.ajax({
+						url : "/selectBackrestLog.do",
+						data : {
+							log_path : tableBackrest.row('.selected').data().bck_filenm,
+							ipadr : tableBackrest.row('.selected').data().ipadr,
+							backrest_gbn : backrest_gbn,
+							remote_ip: tableBackrest.row('.selected').data().remote_ip,
+							remote_port: tableBackrest.row('.selected').data().remote_port,
+							remote_usr: tableBackrest.row('.selected').data().remote_usr,
+							remote_pw: tableBackrest.row('.selected').data().remote_pw
+						},
+						dataType : "json",
+						type : "post",
+						beforeSend: function(xhr) {
+							xhr.setRequestHeader("AJAX", true);
+						},
+						error : function(xhr, status, error) {
+							if(xhr.status == 401) {
+								showSwalIcon('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error');
+								top.location.href = "/";
+							} else if(xhr.status == 403) {
+								showSwalIcon('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error');
+								top.location.href = "/";
+							} else {
+								showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
+							}
+						},
+						success : function(result) {
+							console.log(result);
+							$('#backRestAcitveLog').text(result.RESULT_DATA);
+							$('#backRestAcitveLog').scrollTop($('#backRestAcitveLog')[0].scrollHeight);
+						}
+					})
+				}else if(state == 'TC001802'){
+					var resultCode = -1;
+					
+					interval = setInterval(function() {
+						if(resultCode == -1){
+							$.ajax({
+								url : "/selectBackrestLog.do",
+								data : {
+									log_path : tableBackrest.row('.selected').data().bck_filenm,
+									ipadr : tableBackrest.row('.selected').data().ipadr,
+									backrest_gbn : backrest_gbn,
+									remote_ip: tableBackrest.row('.selected').data().remote_ip,
+									remote_port: tableBackrest.row('.selected').data().remote_port,
+									remote_usr: tableBackrest.row('.selected').data().remote_usr,
+									remote_pw: tableBackrest.row('.selected').data().remote_pw
+								},
+								dataType : "json",
+								type : "post",
+								beforeSend: function(xhr) {
+									xhr.setRequestHeader("AJAX", true);
+								},
+								error : function(xhr, status, error) {
+									if(xhr.status == 401) {
+										showSwalIcon('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error');
+										top.location.href = "/";
+									} else if(xhr.status == 403) {
+										showSwalIcon('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error');
+										top.location.href = "/";
+									} else {
+										showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
+									}
+								},
+								success : function(result) {
+									if($('#log_starter').text() == 'Log Stop'){
+										resultCode = result.RESULT_DATA.indexOf('successfully');
+										
+										$('#backRestAcitveLog').text(result.RESULT_DATA);
+										$('#backRestAcitveLog').scrollTop($('#backRestAcitveLog')[0].scrollHeight);	
+										
+									}else {
+										fn_get_backrest_list();
+									}
+								}
+							});
+							$('#loading').hide();
+						}else {
+							clearInterval(interval);
+							fn_get_backrest_list();
+							$('#loading').hide();
+						}
+					}, 5000);
+				} 
+
+			}else {
 //				상태가 실행 중이면 ajax 여러번 실행 / 상태가 성공이면 한번만 실행
 				if(state == 'TC001701'){
 					$.ajax({
@@ -948,6 +1045,7 @@
 						}
 					}, 5000);
 				}
+			}
 		});
 	} 
 	
@@ -962,13 +1060,11 @@
 			
 			if(selectedRow.exe_rslt_cd != 'TC001701' && logText == 'Log Stop'){
 				showSwalIcon('실시간 로그 중지', '<spring:message code="common.close" />', '', 'success');
-				//clearInterval(interval);
+				clearInterval(interval);
 				
 				$('#log_starter').text('Log Restart');
 				$('#log_starter').removeClass('btn-danger');
 				$('#log_starter').addClass('btn-success');
-			}else if (selectedRow.exe_rslt_cd == 'TC001701'){
-				
 			}else {
 				showSwalIcon('실시간 로그 재시작', '<spring:message code="common.close" />', '', 'success');
 				$('#log_starter').text('Log Stop');

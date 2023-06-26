@@ -7,6 +7,7 @@ import java.util.Map;
 import org.json.simple.JSONArray;
 
 import com.k4m.dx.tcontrol.admin.dbserverManager.service.DbServerVO;
+import com.k4m.dx.tcontrol.functions.schedule.service.WrkExeVO;
 
 public interface BackupService {
 
@@ -211,5 +212,16 @@ public interface BackupService {
 	public List<DbServerVO> selectBckServer(WorkVO workVO) throws Exception;
 	
 	public List<DbServerVO> selectMasterServer(DbServerVO dbServerVO) throws Exception;
+
+	public int selectQ_WRKEXE_G_01_SEQ() throws Exception;
+
+	public int selectScd_id() throws Exception;
+
+	public int selectQ_WRKEXE_G_02_SEQ() throws Exception;
 	
+	public void insertPgbackrestBackup(WrkExeVO wrkExeVO);
+	
+	public void updateBackrestWrk(WrkExeVO wrkExeVO);
+	
+	public WorkLogVO selectSshInfo(int wrkId);
 }

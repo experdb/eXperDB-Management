@@ -8,6 +8,7 @@ import java.time.Period;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -15,20 +16,25 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.codehaus.jackson.JsonNode;
+import org.codehaus.jackson.map.ObjectMapper;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.experdb.management.backup.cmmn.CmmnUtil;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.k4m.dx.tcontrol.admin.dbserverManager.service.DbServerVO;
+import com.k4m.dx.tcontrol.backup.service.BackupService;
 import com.k4m.dx.tcontrol.backup.service.WorkVO;
 import com.k4m.dx.tcontrol.cmmn.AES256;
 import com.k4m.dx.tcontrol.cmmn.AES256_KEY;
@@ -41,9 +47,11 @@ import com.k4m.dx.tcontrol.transfer.service.TransService;
 import com.k4m.dx.tcontrol.transfer.service.TransVO;
 
 import comm.experdb.management.pgbackrest.backupinfo.PgBackrestInfo;
-import comm.experdb.management.pgbackrest.cmmn.CmmnUtil;
 
 public class ClientInfoCmmn implements Runnable{
+	
+	@Autowired
+	private BackupService backupService;
 	
 	private ConfigurableApplicationContext context;
 	
@@ -138,6 +146,7 @@ public class ClientInfoCmmn implements Runnable{
 		try {
 			JSONObject reqJObj = new JSONObject();
 			JSONObject outputObj = new JSONObject();
+			JSONObject remoteInfo = new JSONObject();
 			
 			//작업완료
 			int j = 0;
@@ -166,18 +175,36 @@ public class ClientInfoCmmn implements Runnable{
 						objJob.put(ClientProtocolID.BCK_FILE_PTH, resultWork.get(i).get("bck_pth")); // 저장경로
 						objJob.put(ClientProtocolID.BCK_FILENM, ""); // 저장파일명					
 					}else if (resultWork.get(i).get("bck_bsn_dscd").equals("TC000205")) {
-						reqJObj.put(ClientProtocolID.SCD_ID, resultWork.get(i).get("scd_id"));
-						reqJObj.put(ClientProtocolID.SERVER_IP, IP);
-						reqJObj.put(ClientProtocolID.LOG_PATH, resultWork.get(i).get("log_file_pth"));
-						reqJObj.put(ClientProtocolID.BCK_FILENM, resultWork.get(i).get("bck_filenm"));
-						reqJObj.put(ClientProtocolID.BCK_FILE_PTH, resultWork.get(i).get("bck_pth"));
-						reqJObj.put(ClientProtocolID.WRK_NM, resultWork.get(i).get("wrk_nm"));
-						reqJObj.put(ClientProtocolID.WRK_ID, resultWork.get(i).get("wrk_id"));
-						reqJObj.put(ClientProtocolID.BCK_OPT_CD, resultWork.get(i).get("bck_opt_cd"));
-						reqJObj.put(ClientProtocolID.BCK_TYPE, resultWork.get(i).get("bck_opt_cd_nm"));
-						reqJObj.put(ClientProtocolID.DB_ID, resultWork.get(i).get("db_id"));
-						reqJObj.put(ClientProtocolID.USER_ID, resultWork.get(i).get("lst_mdfr_id"));
-						reqJObj.put(ClientProtocolID.WRK_TYPE, "schedule");
+						if(resultWork.get(i).get("remote_ip") != null){
+							remoteInfo.put("ip", resultWork.get(i).get("remote_ip").toString());
+							remoteInfo.put("port", resultWork.get(i).get("remote_port").toString());
+							remoteInfo.put("usr", resultWork.get(i).get("remote_usr").toString());
+							remoteInfo.put("pw", resultWork.get(i).get("remote_pw").toString());
+							remoteInfo.put(ClientProtocolID.SCD_ID, resultWork.get(i).get("scd_id"));
+							remoteInfo.put(ClientProtocolID.LOG_PATH, resultWork.get(i).get("log_file_pth"));
+							remoteInfo.put(ClientProtocolID.BCK_FILENM, resultWork.get(i).get("bck_filenm"));
+							remoteInfo.put(ClientProtocolID.BCK_FILE_PTH, resultWork.get(i).get("bck_pth"));
+							remoteInfo.put(ClientProtocolID.WRK_NM, resultWork.get(i).get("wrk_nm"));
+							remoteInfo.put(ClientProtocolID.WRK_ID, resultWork.get(i).get("wrk_id"));
+							remoteInfo.put(ClientProtocolID.BCK_OPT_CD, resultWork.get(i).get("bck_opt_cd"));
+							remoteInfo.put(ClientProtocolID.BCK_TYPE, resultWork.get(i).get("bck_opt_cd_nm"));
+							remoteInfo.put(ClientProtocolID.DB_ID, resultWork.get(i).get("db_id"));
+							remoteInfo.put(ClientProtocolID.USER_ID, resultWork.get(i).get("lst_mdfr_id"));
+							remoteInfo.put(ClientProtocolID.WRK_TYPE, "schedule");
+						}else {
+							reqJObj.put(ClientProtocolID.SCD_ID, resultWork.get(i).get("scd_id"));
+							reqJObj.put(ClientProtocolID.SERVER_IP, IP);
+							reqJObj.put(ClientProtocolID.LOG_PATH, resultWork.get(i).get("log_file_pth"));
+							reqJObj.put(ClientProtocolID.BCK_FILENM, resultWork.get(i).get("bck_filenm"));
+							reqJObj.put(ClientProtocolID.BCK_FILE_PTH, resultWork.get(i).get("bck_pth"));
+							reqJObj.put(ClientProtocolID.WRK_NM, resultWork.get(i).get("wrk_nm"));
+							reqJObj.put(ClientProtocolID.WRK_ID, resultWork.get(i).get("wrk_id"));
+							reqJObj.put(ClientProtocolID.BCK_OPT_CD, resultWork.get(i).get("bck_opt_cd"));
+							reqJObj.put(ClientProtocolID.BCK_TYPE, resultWork.get(i).get("bck_opt_cd_nm"));
+							reqJObj.put(ClientProtocolID.DB_ID, resultWork.get(i).get("db_id"));
+							reqJObj.put(ClientProtocolID.USER_ID, resultWork.get(i).get("lst_mdfr_id"));
+							reqJObj.put(ClientProtocolID.WRK_TYPE, "schedule");
+						}
 					}
 					else {
 						System.out.println("> > > > > > > > > > > > > DUMP Backup START");
@@ -221,11 +248,118 @@ public class ClientInfoCmmn implements Runnable{
 					}
 					
 					if(resultWork.get(i).get("bck_bsn_dscd").equals("TC000205")) {
-						reqJObj.put(ClientProtocolID.DX_EX_CODE, ClientTranCodeType.DxT047);
-						ClientAdapter CA = new ClientAdapter(IP, PORT);
-						CA.open();
-						outputObj = CA.dxT047(reqJObj);
-						CA.close();
+						if(remoteInfo.get("ip")!= null) {
+							CmmnUtil cu = new CmmnUtil();
+							JSONObject cmdInfo = new JSONObject();
+							
+							SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMddHHmmss");
+							String now = dateFormat.format(new Date());
+
+							cmdInfo.put("type", "backup");
+							cmdInfo.put("wrk_nm", remoteInfo.get(ClientProtocolID.WRK_NM));
+							cmdInfo.put("bck_filenm", remoteInfo.get(ClientProtocolID.BCK_FILENM));
+							cmdInfo.put("bck_opt_cd_nm", remoteInfo.get(ClientProtocolID.BCK_TYPE));
+							cmdInfo.put("log_file_pth", remoteInfo.get(ClientProtocolID.LOG_PATH));
+							cmdInfo.put("usr", remoteInfo.get("usr"));
+							cmdInfo.put("now", now);
+							
+							String cmd = cu.createBackrestCmd(cmdInfo);
+							
+							Map<String, Object> serverInfo = new HashMap<>();
+							serverInfo.put("ip", remoteInfo.get("ip"));
+							serverInfo.put("port", remoteInfo.get("port"));
+							serverInfo.put("usr", remoteInfo.get("usr"));
+							serverInfo.put("pw", remoteInfo.get("pw"));
+														
+							int exe_sn = backupService.selectQ_WRKEXE_G_01_SEQ();
+							int scd_id = backupService.selectScd_id();
+							int exe_grp_sn = backupService.selectQ_WRKEXE_G_02_SEQ();
+							String fullPath = remoteInfo.get(ClientProtocolID.LOG_PATH).toString() + "/" + remoteInfo.get(ClientProtocolID.WRK_NM) + "_" + now + ".log";
+							
+							WorkVO wrkVO = new WorkVO();
+							wrkVO.setDb_svr_ipadr(IP);
+							
+							List<DbServerVO> dbServer = backupService.selectBckServer(wrkVO);
+							int dbSvrIpadrId = dbServer.get(0).getDb_svr_ipadr_id();
+							
+							WrkExeVO vo = new WrkExeVO();
+							
+							vo.setExe_rslt_cd("TC001802");
+							vo.setScd_cndt("TC001802");
+							vo.setExe_grp_sn(exe_grp_sn);
+							vo.setExe_sn(exe_sn);
+							vo.setScd_id(scd_id);
+							vo.setBck_file_pth(remoteInfo.get(ClientProtocolID.BCK_FILE_PTH).toString());
+							vo.setBck_file_nm(fullPath);
+							vo.setFrst_regr_id(remoteInfo.get(ClientProtocolID.USER_ID).toString());
+							vo.setLst_mdfr_id(remoteInfo.get(ClientProtocolID.USER_ID).toString());
+							vo.setWrk_nm(remoteInfo.get(ClientProtocolID.WRK_NM).toString());
+							vo.setDb_svr_ipadr_id(dbSvrIpadrId);
+							vo.setWrk_id(Integer.parseInt(remoteInfo.get(ClientProtocolID.WRK_ID).toString()));
+							vo.setDb_id(Integer.parseInt(remoteInfo.get(ClientProtocolID.DB_ID).toString()));
+							vo.setBck_opt_cd(remoteInfo.get(ClientProtocolID.BCK_OPT_CD).toString());
+							vo.setBACKREST_SCD_ID(Integer.parseInt(resultWork.get(i).get("scd_id").toString()));
+							
+							backupService.insertPgbackrestBackup(vo);
+							
+							JSONObject result = cu.executeBackrest(serverInfo, cmd, "backrest", null);
+							int resultCode = Integer.parseInt(result.get("RESULT_CODE").toString());
+
+							if(resultCode == 0) {
+								cmdInfo.put("type", "info");
+								cmd = cu.createBackrestCmd(cmdInfo);
+								
+								JSONObject info = cu.executeBackrest(serverInfo, cmd, "backrest", null);
+								
+								String successObj = info.get("RESULT_DATA").toString();
+								ObjectMapper mapper = new ObjectMapper();
+								JsonNode jsonNode = mapper.readTree(successObj);
+																
+								int jsonSize = jsonNode.findValue("backup").size();
+								long repoSizeInt = jsonNode.findValue("backup").path(jsonSize-1).path("info").path("repository").path("delta").asLong();
+								long dbSizeInt = jsonNode.findValue("backup").path(jsonSize-1).path("info").path("delta").asLong();
+								int startTimeInt = jsonNode.findValue("backup").path(jsonSize-1).path("timestamp").path("start").asInt();
+								int stopTimeInt = jsonNode.findValue("backup").path(jsonSize-1).path("timestamp").path("stop").asInt();
+								
+								String startDateStr = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date(startTimeInt * 1000L));
+								String stopDateStr = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date(stopTimeInt * 1000L));
+																
+								WrkExeVO endVO = new WrkExeVO();
+								endVO.setWrk_strt_dtm(startDateStr);
+								endVO.setWrk_end_dtm(stopDateStr);
+								endVO.setExe_rslt_cd("TC001701");
+								endVO.setFile_sz(repoSizeInt);
+								endVO.setDB_SZ(dbSizeInt);
+								endVO.setBck_filenm(fullPath);
+								endVO.setRslt_msg("success");
+								endVO.setExe_sn(exe_sn);
+								endVO.setBACKREST_SCD_ID(Integer.parseInt(resultWork.get(i).get("scd_id").toString()));
+								
+								backupService.updateBackrestWrk(endVO);
+							}else {
+								SimpleDateFormat dateFormat2 = new SimpleDateFormat("yyyyMMddHHmmss");
+								String now2 = dateFormat.format(new Date());
+								
+								WrkExeVO endVO = new WrkExeVO();
+								
+								endVO.setWrk_strt_dtm(now);
+								endVO.setWrk_end_dtm(now2);
+								endVO.setExe_rslt_cd("TC001702");
+								endVO.setFile_sz(0);
+								endVO.setDB_SZ(0);
+								endVO.setBck_filenm(fullPath);
+								endVO.setRslt_msg("fail");
+								endVO.setExe_sn(exe_sn);
+								endVO.setBACKREST_SCD_ID(Integer.parseInt(resultWork.get(i).get("scd_id").toString()));
+								backupService.updateBackrestWrk(endVO);
+							}
+						}else {
+							reqJObj.put(ClientProtocolID.DX_EX_CODE, ClientTranCodeType.DxT047);
+							ClientAdapter CA = new ClientAdapter(IP, PORT);
+							CA.open();
+							outputObj = CA.dxT047(reqJObj);
+							CA.close();	
+						}
 					}else {
 						JSONObject serverObj = new JSONObject();
 
@@ -1182,7 +1316,9 @@ public class ClientInfoCmmn implements Runnable{
 		HashMap resultHp = (HashMap) objList.get(ClientProtocolID.RESULT_DATA);
 
 		String host = resultHp.get("CMD_HOSTNAME").toString();
+		String hostName = resultHp.get(ClientProtocolID.USER_NAME).toString();
 		result.put("host", host);
+		result.put("hostName", hostName);
 		
 		
 		} catch(Exception e) {

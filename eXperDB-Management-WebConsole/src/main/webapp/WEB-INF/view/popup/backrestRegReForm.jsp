@@ -16,6 +16,7 @@
 <script type="text/javascript">
 	var mod_restore_check = "";
 	var mod_cus_check = false;
+	var mod_remoteConn = "Fail";
 
 	$(window.document).ready(function() {
 		$("#workRegReFormBckr").validate({
@@ -223,6 +224,12 @@
 				
 				iChkCnt = iChkCnt + 1;
 			}
+			
+			if(mod_remoteConn != "Success"){
+				$("#mod_ssh_con_alert", "#workRegReFormBckr").html('연결 테스트를 해주세요.');
+				$("#mod_ssh_con_alert", "#workRegReFormBckr").show();
+				iChkCnt = iChkCnt + 1;
+			}
 		}
 
 		//Cloud 옵션 alert
@@ -305,7 +312,8 @@
 		var cloud_map = new Map();
 		var cloud_data = null;
 
-		console.log(mod_restore_check);
+		var remote_map = new Map();
+		var remote_data = null;
 
 		if(mod_restore_check == "cloud"){
 			cloud_map.set("s3_bucket", nvlPrmSet($('#mod_cloud_bckr_s3_buk', '#workRegReFormBckr').val(), "").trim());
@@ -317,8 +325,14 @@
 			cloud_map.set("cloud_type", $("#mod_bckr_cld_opt_cd", '#workRegReFormBckr').val());
 
 			cloud_data = JSON.stringify(Object.fromEntries(cloud_map))
+		}else if (mod_restore_check == 'remote'){
+			remote_map.set("remote_ip", nvlPrmSet($('#mod_remt_str_ip', '#workRegReFormBckr').val(), "").trim());
+			remote_map.set("remote_port", nvlPrmSet($('#mod_remt_str_ssh', '#workRegReFormBckr').val(), "").trim());
+			remote_map.set("remote_usr", nvlPrmSet($('#mod_remt_str_usr', '#workRegReFormBckr').val(), "").trim());
+			remote_map.set("remote_pw", nvlPrmSet($('#mod_remt_str_pw', '#workRegReFormBckr').val(), "").trim());
+			
+			remote_data = JSON.stringify(Object.fromEntries(remote_map));
 		}
-
 		var selectedAgent = $('#mod_backrest_svr_Info').DataTable().rows().data()[0];
 		var custom_data = JSON.stringify(Object.fromEntries(custom_map))		
 
@@ -349,7 +363,8 @@
 				db_svr_ipadr_id: selectedAgent.db_svr_ipadr_id,
 				backrest_gbn: mod_restore_check,
 				custom_map: custom_data,
-				cloud_map: cloud_data
+				cloud_map: cloud_data,
+				remote_map: remote_data
 			},
 			type : "post",
 			beforeSend: function(xhr) {
@@ -370,6 +385,7 @@
 					$('#pop_layer_mod_backrest').modal('hide');
 
 					fn_get_backrest_list();
+					mod_remoteConn = "Fail";
 				} else if (data == "I") { 
 					showSwalIcon('<spring:message code="backup_management.bckPath_fail" />', '<spring:message code="common.close" />', '', 'error');
 					$('#pop_layer_mod_backrest').modal('show');
@@ -386,6 +402,51 @@
 	function fn_mod_backrest_cancle() {
 		mod_cus_check = false;
 	}
+	
+function fn_re_ssh_connection(){
+		
+		var remote_ip = nvlPrmSet($('#mod_remt_str_ip', '#workRegReFormBckr').val(), "").trim();
+		var remote_port = nvlPrmSet($('#mod_remt_str_ssh', '#workRegReFormBckr').val(), "").trim();
+		var remote_usr = nvlPrmSet($('#mod_remt_str_usr', '#workRegReFormBckr').val(), "").trim();
+		var remote_pw = nvlPrmSet($('#mod_remt_str_pw', '#workRegReFormBckr').val(), "").trim();
+		
+		$.ajax({
+			url : "/backup/RemoteConn.do",
+			data : {
+				remote_ip : remote_ip,
+				remote_port : remote_port,
+				remote_usr : remote_usr,
+				remote_pw : remote_pw
+			},
+			dataType : "json",
+			type : "post",
+			beforeSend: function(xhr) {
+				xhr.setRequestHeader("AJAX", true);
+			},
+			error : function(xhr, status, error) {
+				if(xhr.status == 401) {
+					showSwalIconRst(message_msg02, closeBtn, '', 'error', 'top');
+				} else if(xhr.status == 403) {
+					showSwalIconRst(message_msg03, closeBtn, '', 'error', 'top');
+				} else {
+					showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), closeBtn, '', 'error');
+				}
+			},
+			success : function(data) {
+				if(data == 'success'){
+					showSwalIcon('<spring:message code="message.msg93" />', '<spring:message code="common.close" />', '', 'success');
+					mod_remoteConn = "Success";
+					$("#mod_ssh_con_alert", "#workRegReFormBckr").html("");
+					$("#mod_ssh_con_alert", "#workRegReFormBckr").hide();
+				}else {
+					showSwalIcon('<spring:message code="message.msg92" />', '<spring:message code="common.close" />', '', 'error');
+					mod_remoteConn = "Fail";
+				}
+				
+			}
+		})
+	}
+	
 
 </script>
 
@@ -521,23 +582,26 @@
 
 												<div class="d-flex" style="margin-bottom: 10px;">
 													<div class="col-sm-2_3">
-														<input type="text" class="form-control form-control-xsm" maxlength="50" id="mod_remt_str_ip" name="mod_remt_str_ip" style="width: 250px;" placeholder="IP를 입력해주세요" />
+														<input type="text" class="form-control form-control-xsm" maxlength="50" id="mod_remt_str_ip" name="mod_remt_str_ip" style="width: 250px;" placeholder="IP를 입력해주세요" readOnly />
 													</div>
 
 													<div class="col-sm-2" style="margin-left: 6px;">
-														<input type="text" class="form-control form-control-xsm" maxlength="3" id="mod_remt_str_ssh" name="mod_remt_str_ssh" style="width: 180px;" placeholder="SSH 포트"/>
+														<input type="text" class="form-control form-control-xsm" maxlength="3" id="mod_remt_str_ssh" name="mod_remt_str_ssh" style="width: 180px;" placeholder="SSH 포트" readOnly />
 													</div>
 
 													<div class="col-sm-2_3" style="margin-left: -30px;">
-														<input type="text" class="form-control form-control-xsm" maxlength="50" id="mod_remt_str_usr" name="mod_remt_str_usr" style="width: 250px;" placeholder="유저 명을 입력해주세요"/>
+														<input type="text" class="form-control form-control-xsm" maxlength="50" id="mod_remt_str_usr" name="mod_remt_str_usr" style="width: 250px;" placeholder="유저 명을 입력해주세요" readOnly />
 													</div>
 													
 													<div class="col-sm-2_3" style="margin-left: 6px;">
-														<input type="password" class="form-control form-control-xsm" maxlength="50" id="mod_remt_str_pw" name="mod_remt_str_pw" style="width: 250px;" placeholder="패스워드를 입력해주세요"/>
+														<input type="password" class="form-control form-control-xsm" maxlength="50" id="mod_remt_str_pw" name="mod_remt_str_pw" style="width: 250px;" placeholder="패스워드를 입력해주세요" readOnly />
 													</div>
 
-													<div class="col-sm-2" style="height: 20px; margin-top: 3px;">
-														<button type="button" class="btn btn-outline-primary" style="width: 60px;padding: 5px;">연결</button>
+													<div class="col-sm-1" style="height: 20px; margin-top: 3px;">
+														<button id="mod_ssh_conn" type="button" class="btn btn-outline-primary" style="width: 60px;padding: 5px;" onclick="fn_re_ssh_connection()">연결</button>
+													</div>
+													<div class="col-sm-2_3">
+														<div class="alert alert-danger" style="display:none; width: 250px; margin-left: -25px;" id="mod_ssh_con_alert"></div>
 													</div>
 												</div>
 
@@ -569,7 +633,7 @@
 												</label>
 
 												<div class="col-sm-2_2" style="margin-top: 5px;">
-													<select class="form-control form-control-xsm" style="width:120px; color: black;" name="mod_bckr_cld_opt_cd" id="mod_bckr_cld_opt_cd" tabindex=3>
+													<select class="form-control form-control-xsm" style="width:120px; color: black;" name="mod_bckr_cld_opt_cd" id="mod_bckr_cld_opt_cd" tabindex=3 >
 														<option selected>S3</option>
 														<option disabled>Azure</option>
 														<option disabled>GCS</option>
@@ -584,7 +648,7 @@
 												</label>
 
 												<div class="col-sm-3">
-													<input type="text" class="form-control form-control-xsm" maxlength="120" id="mod_cloud_bckr_s3_buk" name="mod_cloud_bckr_s3_buk" style="width: 270px;" placeholder="S3 Bucket을 입력해주세요"/>
+													<input type="text" class="form-control form-control-xsm" maxlength="120" id="mod_cloud_bckr_s3_buk" name="mod_cloud_bckr_s3_buk" style="width: 270px;" placeholder="S3 Bucket을 입력해주세요" readOnly/>
 												</div>
 
 												<label for="mod_cloud_opt_s3_rgn" class="col-sm-1 col-form-label pop-label-index" style="padding-top:7px;">
@@ -593,7 +657,7 @@
 												</label>
 
 												<div class="col-sm-2_8">
-													<input type="text" class="form-control form-control-xsm" maxlength="100" id="mod_cloud_bckr_s3_rgn" name="mod_cloud_bckr_s3_rgn" style="width: 240px;" placeholder="S3 Region을 입력해주세요"/>
+													<input type="text" class="form-control form-control-xsm" maxlength="100" id="mod_cloud_bckr_s3_rgn" name="mod_cloud_bckr_s3_rgn" style="width: 240px;" placeholder="S3 Region을 입력해주세요" readOnly/>
 												</div>
 
 												<label for="mod_cloud_opt_s3_key" class="col-sm-1_5 col-form-label pop-label-index" style="padding-top:7px; ">
@@ -602,7 +666,7 @@
 												</label>
 
 												<div class="col-sm-2">
-													<input type="password" class="form-control form-control-xsm" maxlength="50" id="mod_cloud_bckr_s3_key" name="mod_cloud_bckr_s3_key" style="width: 220px;" placeholder="S3 key를 입력해주세요"/>
+													<input type="password" class="form-control form-control-xsm" maxlength="50" id="mod_cloud_bckr_s3_key" name="mod_cloud_bckr_s3_key" style="width: 220px;" placeholder="S3 key를 입력해주세요" readOnly/>
 												</div>
 											</div>
 
@@ -628,7 +692,7 @@
 												</label>
 
 												<div class="col-sm-3">
-													<input type="text" class="form-control form-control-xsm" maxlength="120" id="mod_cloud_bckr_s3_npt" name="mod_cloud_bckr_s3_npt" style="width: 270px;" placeholder="S3 Endpoint를 입력해주세요"/>
+													<input type="text" class="form-control form-control-xsm" maxlength="120" id="mod_cloud_bckr_s3_npt" name="mod_cloud_bckr_s3_npt" style="width: 270px;" placeholder="S3 Endpoint를 입력해주세요" readOnly/>
 												</div>
 
 												<label for="mod_cloud_opt_s3_pth" class="col-sm-1 col-form-label pop-label-index" style="padding-top:7px;">
@@ -637,7 +701,7 @@
 												</label>
 
 												<div class="col-sm-2_8">
-													<input type="text" class="form-control form-control-xsm" maxlength="100" id="mod_cloud_bckr_s3_pth" name="mod_cloud_bckr_s3_pth" style="width: 240px;" placeholder="S3 path를 입력해주세요"/>
+													<input type="text" class="form-control form-control-xsm" maxlength="100" id="mod_cloud_bckr_s3_pth" name="mod_cloud_bckr_s3_pth" style="width: 240px;" placeholder="S3 path를 입력해주세요" readOnly/>
 												</div>
 
 												<label for="mod_cloud_opt_s3_scrk" class="col-sm-1_5 col-form-label pop-label-index" style="padding-top:7px;">
@@ -646,7 +710,7 @@
 												</label>
 
 												<div class="col-sm-2">
-													<input type="password" class="form-control form-control-xsm" maxlength="100" id="mod_cloud_bckr_s3_scrk" name="mod_cloud_bckr_s3_scrk" style="width: 220px;" placeholder="S3 secret Key를 입력해주세요"/>
+													<input type="password" class="form-control form-control-xsm" maxlength="100" id="mod_cloud_bckr_s3_scrk" name="mod_cloud_bckr_s3_scrk" style="width: 220px;" placeholder="S3 secret Key를 입력해주세요" readOnly/>
 												</div>
 											</div>
 

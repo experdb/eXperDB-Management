@@ -32,6 +32,10 @@
 	var bck_wrk_id_List = [];
 	var wrk_id_List = [];
 	var wrk_bck_server_list = [];
+	var wrk_bck_server_port_list = [];
+	var wrk_bck_server_usr_list = [];
+	var wrk_bck_server_pw_list = [];
+	var wrk_bck_gbn_list = [];
 	var bck_filenm_list = [];
 	var confile_title = "";
 	var immediate_data = null;
@@ -352,11 +356,19 @@
 				wrk_id_List.push( tableRman.rows('.selected').data()[i].wrk_id);   
 			}
 		} else if(selectChkTab == "backrest"){
-			for (var i = 0; i < datas.length; i++) {
+			for (var i = 0; i < datas.length; i++) {				
 				bck_wrk_id_List.push( tableBackrest.rows('.selected').data()[i].bck_wrk_id);   
-				wrk_id_List.push( tableBackrest.rows('.selected').data()[i].wrk_id);   
-				wrk_bck_server_list.push( tableBackrest.rows('.selected').data()[i].db_svr_ipadr);
+				wrk_id_List.push( tableBackrest.rows('.selected').data()[i].wrk_id);
+				if(tableBackrest.rows('.selected').data()[i].backrest_gbn == "remote"){
+					wrk_bck_server_list.push( tableBackrest.rows('.selected').data()[i].remote_ip );
+					wrk_bck_server_port_list.push( tableBackrest.rows('.selected').data()[i].remote_port );
+					wrk_bck_server_usr_list.push( tableBackrest.rows('.selected').data()[i].remote_usr );
+					wrk_bck_server_pw_list.push( tableBackrest.rows('.selected').data()[i].remote_pw );
+				}else{
+					wrk_bck_server_list.push( tableBackrest.rows('.selected').data()[i].db_svr_ipadr);	
+				}				
 				bck_filenm_list.push( tableBackrest.rows('.selected').data()[i].wrk_nm);
+				wrk_bck_gbn_list.push( tableBackrest.rows('.selected').data()[i].backrest_gbn );
 			}
 		} else {
 			for (var i = 0; i < datas.length; i++) {
@@ -419,6 +431,7 @@
 	 * 삭제 로직 처리
 	 ******************************************************** */
 	function fn_deleteWork(gbn) {
+		console.log(gbn);
 		$.ajax({
 			url : "/popup/workDelete.do",
 		  	data : {
@@ -426,7 +439,11 @@
 		  		wrk_id_List : JSON.stringify(wrk_id_List),
 				backup_gbn : gbn,
 				wrk_bck_server_list : JSON.stringify(wrk_bck_server_list),
-				bck_filenm_list : JSON.stringify(bck_filenm_list)
+				bck_filenm_list : JSON.stringify(bck_filenm_list),
+				wrk_bck_server_port_list : JSON.stringify(wrk_bck_server_port_list),
+				wrk_bck_server_usr_list : JSON.stringify(wrk_bck_server_usr_list),
+				wrk_bck_server_pw_list : JSON.stringify(wrk_bck_server_pw_list),
+				wrk_bck_gbn_list : JSON.stringify(wrk_bck_gbn_list),
 		  	},
 			dataType : "json",
 			type : "post",
@@ -481,8 +498,14 @@
 		}else if(selectChkTab == 'backrest'){
 			datas = tableBackrest.rows('.selected').data();
 			rowCnt = tableBackrest.rows('.selected').data().length;
-			$('#con_multi_gbn', '#findConfirmMulti').val("backrest_run_immediately");
-			confile_title = '<spring:message code="backup_management.backrestBck"/>' + " " + '<spring:message code="migration.run_immediately" />' + " " + '<spring:message code="common.request" />';
+			if(datas[0].backrest_gbn == 'remote'){
+				$('#con_multi_gbn', '#findConfirmMulti').val("backrest_remote_run_immediately");
+				confile_title = '<spring:message code="backup_management.backrestBck"/>' + " " + '<spring:message code="migration.run_immediately" />' + " " + '<spring:message code="common.request" />';
+			}else{
+				$('#con_multi_gbn', '#findConfirmMulti').val("backrest_run_immediately");
+				confile_title = '<spring:message code="backup_management.backrestBck"/>' + " " + '<spring:message code="migration.run_immediately" />' + " " + '<spring:message code="common.request" />';
+			}
+			
 		}else{
 			datas = tableDump.rows('.selected').data();
 			rowCnt = tableDump.rows('.selected').data().length;
@@ -647,7 +670,12 @@
 			data : {
 				db_svr_id : $("#db_svr_id", "#findList").val(),
 				bck_wrk_id : bck_wrk_id,
-				wrk_id : wrk_id
+				wrk_id : wrk_id,
+				backrest_gbn: tableBackrest.row('.selected').data().backrest_gbn,
+				remote_ip: tableBackrest.row('.selected').data().remote_ip,
+				remote_port: tableBackrest.row('.selected').data().remote_port,
+				remote_usr: tableBackrest.row('.selected').data().remote_usr,
+				remote_pw: tableBackrest.row('.selected').data().remote_pw
 			},
 			dataType : "json",
 			type : "post",
@@ -723,7 +751,7 @@
 						{data : "idx", className : "dt-center", defaultContent : ""},
 						{data : "wrk_nm", defaultContent : ""
 							,"render": function (data, type, full) {				
-								return '<span onClick=javascript:fn_backrestConfigLayer("'+full.wrk_id+'"); class="bold" data-toggle="modal" title="'+full.wrk_nm+'">' + full.wrk_nm + '</span>';
+								return '<span onClick=javascript:fn_backrestConfigLayer("'+full.wrk_id + '","' + full.backrest_gbn +'"); class="bold" data-toggle="modal" title="'+full.wrk_nm+'">' + full.wrk_nm + '</span>';
 							}},
 						{data : "wrk_exp", defaultContent : ""},
 						{data : "db_svr_ipadr", className : "dt-center", defaultContent: "" },
@@ -757,7 +785,11 @@
 						{data : "frst_reg_dtm", className: "dt-center", defaultContent : ""},
 						{data: "lst_mdfr_id", className: "dt-center", defaultContent: ""}, 
 						{data: "lst_mdf_dtm", className: "dt-center", defaultContent: ""}, 
-						{data : "bck_wrk_id", defaultContent : "", visible: false }
+						{data : "bck_wrk_id", defaultContent : "", visible: false },
+						{data : "remote_ip", className: "dt-center", defaultContent: "", visible: false},
+						{data : "remote_port", className: "dt-center", defaultContent: "", visible: false},
+						{data : "remote_usr", className: "dt-center", defaultContent: "", visible: false},
+						{data : "remote_pw", className: "dt-center", defaultContent: "", visible: false},
 			],'select': {'style': 'multi'}
 		});
 
@@ -777,6 +809,56 @@
 
 		$(window).trigger('resize'); 
 	}
+	
+	
+	/* ********************************************************
+	 * Backrest remote Immediate Start
+	 ******************************************************** */
+	 function fn_Backrest_remote_Immediate(){
+		 console.log(immediate_data[0]);
+		 $.ajax({
+				url : "/backrestImmediateStart.do",
+				data : {
+					bck_filenm : immediate_data[0].bck_filenm,
+					bck_opt_cd : immediate_data[0].bck_opt_cd,
+					bck_opt_cd_nm : immediate_data[0].bck_opt_cd_nm,
+					bck_pth : immediate_data[0].bck_pth,
+					log_file_pth : immediate_data[0].log_file_pth,
+					remote_ip : immediate_data[0].remote_ip,
+					remote_port : immediate_data[0].remote_port,
+					remote_usr : immediate_data[0].remote_usr,
+					remote_pw : immediate_data[0].remote_pw,
+					wrk_nm : immediate_data[0].wrk_nm,
+					wrk_id : immediate_data[0].wrk_id,
+					db_id : immediate_data[0].db_id,
+					db_svr_ipadr : immediate_data[0].db_svr_ipadr,
+					frst_regr_id : immediate_data[0].frst_regr_id,
+					lst_mdfr_id : immediate_data[0].lst_mdfr_id
+				},
+				type : "post",
+				async: true,
+				beforeSend: function(xhr) {
+					xhr.setRequestHeader("AJAX", true);
+					showSwalIconRst('<spring:message code="backup_management.msg02" />' + '\n' + '<spring:message code="backup_management.msg03" />', '<spring:message code="common.close" />', '', 'success', 'backup');
+				},
+				error : function(xhr, status, error) {
+					if(xhr.status == 401) {
+						showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
+					} else if(xhr.status == 403) {
+						showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
+					} else {
+						if (xhr.responseText != null) {
+							showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
+						} else {
+							showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : ", '<spring:message code="common.close" />', '', 'error');
+						}
+					}
+				},
+				success : function(result) {
+					
+				}
+			}); 
+	 }
 </script>
 
 <%@include file="../cmmn/workRmanInfo.jsp"%>

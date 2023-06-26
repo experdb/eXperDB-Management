@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -11,6 +12,7 @@ import java.io.StringReader;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -21,6 +23,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.codehaus.jackson.JsonNode;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -38,6 +41,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.experdb.management.backup.cmmn.CmmnUtil;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.k4m.dx.tcontrol.admin.accesshistory.service.AccessHistoryService;
 import com.k4m.dx.tcontrol.admin.dbauthority.service.DbAuthorityService;
 import com.k4m.dx.tcontrol.admin.dbserverManager.service.DbServerVO;
@@ -59,6 +64,7 @@ import com.k4m.dx.tcontrol.common.service.CmmnServerInfoService;
 import com.k4m.dx.tcontrol.common.service.HistoryVO;
 import com.k4m.dx.tcontrol.common.service.PageVO;
 import com.k4m.dx.tcontrol.functions.schedule.service.ScheduleService;
+import com.k4m.dx.tcontrol.functions.schedule.service.WrkExeVO;
 import com.k4m.dx.tcontrol.login.service.LoginVO;
 
 @Controller
@@ -605,6 +611,7 @@ public class BackupController {
 			HttpServletResponse response, HttpServletRequest request, @RequestParam Map<String, Object> paramMap)
 			throws IOException {
 		String result = "S";
+		String remoteGbn = request.getParameter("backrest_gbn");
 		WorkVO resultSet = null;
 
 		// WORK 명 중복체크
@@ -651,7 +658,7 @@ public class BackupController {
 				}
 			}
 
-			if (result.equals("S")) {
+			if (result.equals("S") && !remoteGbn.equals("remote")) {
 				try {
 					if(request.getParameter("master_gbn").toString().equals("M")) {
 						createBackrestConfig(workVO, dbServerVO, request, paramMap, null);
@@ -669,6 +676,86 @@ public class BackupController {
 					
 				} catch (Exception e) {
 					e.printStackTrace();
+				}
+			}else {
+				if(request.getParameter("master_gbn").toString().equals("M")) {	
+					workVO.setRemote_use("Y");
+					String file = createBackrestRemoteFile(workVO, dbServerVO, request, paramMap, null);
+					
+					String remoteMapStr = paramMap.get("remote_map").toString();
+
+					ObjectMapper mapper = new ObjectMapper();
+					Map<String,Object> remoteMap = mapper.readValue(remoteMapStr, Map.class);
+								
+					Map<String, Object> serverInfo = new HashMap<>();
+								
+					String bck_pth = request.getParameter("bck_pth");
+					String chk = bck_pth.substring(bck_pth.length()-1, bck_pth.length());
+					if(chk.equals("/")) {
+						bck_pth = bck_pth.substring(0, bck_pth.length()-1);
+						workVO.setBck_pth(bck_pth);
+					}
+					
+					String log_file_pth = request.getParameter("log_file_pth");
+					String chk2 = log_file_pth.substring(log_file_pth.length()-1, log_file_pth.length());
+					if(chk2.equals("/")) {
+						log_file_pth = log_file_pth.substring(0, log_file_pth.length()-1);
+						workVO.setLog_file_pth(log_file_pth);
+					}
+					
+					serverInfo.put("ip", remoteMap.get("remote_ip"));
+					serverInfo.put("port", remoteMap.get("remote_port"));
+					serverInfo.put("usr", remoteMap.get("remote_usr"));
+					serverInfo.put("pw", remoteMap.get("remote_pw"));
+					serverInfo.put("pth", "/home/remote/pgbackrest/config/" + request.getParameter("wrk_nm") + ".conf");
+
+					CmmnUtil cu = new CmmnUtil();
+					
+					cu.createBackrestConf(serverInfo, file);
+					
+					workVO.setRemote_ip(serverInfo.get("ip").toString());
+					workVO.setRemote_port(serverInfo.get("port").toString());
+					workVO.setRemote_usr(serverInfo.get("usr").toString());
+					workVO.setRemote_pw(serverInfo.get("pw").toString());
+					
+				}else {
+					try {
+						workVO.setRemote_use("Y");
+						List<DbServerVO> masterServer = backupService.selectMasterServer(dbServerVO);
+						
+						DbServerVO masterDbServerVO = new DbServerVO();
+						masterDbServerVO.setPgdata_pth(masterServer.get(0).getPgdata_pth());
+						masterDbServerVO.setPortno(masterServer.get(0).getPortno());
+						masterDbServerVO.setIpadr(masterServer.get(0).getIpadr());
+						masterDbServerVO.setSvr_spr_usr_id(masterServer.get(0).getSvr_spr_usr_id());
+						
+						String file = createBackrestRemoteFile(workVO, dbServerVO, request, paramMap, masterDbServerVO);
+						
+						String remoteMapStr = paramMap.get("remote_map").toString();
+
+						ObjectMapper mapper = new ObjectMapper();
+						Map<String,Object> remoteMap = mapper.readValue(remoteMapStr, Map.class);
+									
+						Map<String, Object> serverInfo = new HashMap<>();
+									
+						serverInfo.put("ip", remoteMap.get("remote_ip"));
+						serverInfo.put("port", remoteMap.get("remote_port"));
+						serverInfo.put("usr", remoteMap.get("remote_usr"));
+						serverInfo.put("pw", remoteMap.get("remote_pw"));
+						serverInfo.put("pth", "/home/remote/pgbackrest/config/" + request.getParameter("wrk_nm") + ".conf");
+						
+						CmmnUtil cu = new CmmnUtil();
+						
+						cu.createBackrestConf(serverInfo, file);
+						
+						workVO.setRemote_ip(serverInfo.get("ip").toString());
+						workVO.setRemote_port(serverInfo.get("port").toString());
+						workVO.setRemote_usr(serverInfo.get("usr").toString());
+						workVO.setRemote_pw(serverInfo.get("pw").toString());
+						
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
 				}
 			}
 
@@ -849,7 +936,7 @@ public class BackupController {
 
 		return mv;
 	}
-
+	
 	/**
 	 * Backrest Backup Reregistration View page
 	 * 
@@ -872,45 +959,81 @@ public class BackupController {
 			// TODO Auto-generated catch block
 			e2.printStackTrace();
 		}
+		String backrest_gbn = request.getParameter("backrest_gbn");
+		
+		workVO.setBck_bsn_dscd("TC000205");
 
-		// Get Backrest Backup Information
 		try {
-			workVO.setBck_bsn_dscd("TC000205");
-
-			List<WorkVO> selectedWork = backupService.selectWorkList(workVO);
-			List<DbServerVO> dbServerVO = backupService.selectBckServer(selectedWork.get(0));
-			mv.addObject("workInfo", selectedWork);
-			mv.addObject("bckSvrInfo", dbServerVO);
-
-			ClientInfoCmmn cic = new ClientInfoCmmn();
-			JSONObject resultObj = new JSONObject();
-
-			try {
-				AgentInfoVO vo = new AgentInfoVO();
-				vo.setIPADR(dbServerVO.get(0).getIpadr());
-				AgentInfoVO agentInfo = (AgentInfoVO) cmmnServerInfoService.selectAgentInfo(vo);
-
-				String ip = dbServerVO.get(0).getIpadr();
-				int port = agentInfo.getSOCKET_PORT();
-
-				JSONObject jObj = new JSONObject();
-				jObj.put(ClientProtocolID.WRK_NM, selectedWork.get(0).getWrk_nm());
-
-				resultObj = cic.selectBackrestConf(ip, port, jObj);
-
-				result = (String) resultObj.get(ClientProtocolID.RESULT_DATA);
-
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-
-			BufferedReader br = new BufferedReader(new StringReader(result));
-
-			boolean readFromCustomLine = false;
-			Map<String, Object> customMap = new HashMap<String, Object>();
 			
-			String gbn = "";
-			String fileContent;
+		List<WorkVO> selectedWork = backupService.selectWorkList(workVO);
+		List<DbServerVO> dbServerVO = backupService.selectBckServer(selectedWork.get(0));
+		mv.addObject("workInfo", selectedWork);
+		mv.addObject("bckSvrInfo", dbServerVO);
+		
+		// Get Backrest Backup Information (REMOTE / ELSE)
+		if(backrest_gbn.equals("remote")) {
+			CmmnUtil cu = new CmmnUtil();
+			Map<String, Object> serverInfo = new HashMap<>();
+			
+			String ip = request.getParameter("remote_ip");
+			String port= request.getParameter("remote_port");
+			String usr = request.getParameter("remote_usr");
+			String pw = request.getParameter("remote_pw");
+			
+			serverInfo.put("ip", ip);
+			serverInfo.put("port", port);
+			serverInfo.put("usr", usr);
+			serverInfo.put("pw", pw);
+			mv.addObject("remote_map", serverInfo);
+			
+			JSONObject cmdObj = new JSONObject();
+			
+			String wrkNm = selectedWork.get(0).getWrk_nm() + ".conf";
+			
+			cmdObj.put("type", "conf");
+			cmdObj.put("bck_filenm", wrkNm);
+			cmdObj.put("usr", usr);
+			
+			String cmd = cu.createBackrestCmd(cmdObj);
+			
+			result = cu.executeBackrest(serverInfo, cmd, "backrest", null).get("RESULT_DATA").toString();
+			
+		}else {
+			try {
+
+				ClientInfoCmmn cic = new ClientInfoCmmn();
+				JSONObject resultObj = new JSONObject();
+
+				try {
+					AgentInfoVO vo = new AgentInfoVO();
+					vo.setIPADR(dbServerVO.get(0).getIpadr());
+					AgentInfoVO agentInfo = (AgentInfoVO) cmmnServerInfoService.selectAgentInfo(vo);
+
+					String ip = dbServerVO.get(0).getIpadr();
+					int port = agentInfo.getSOCKET_PORT();
+
+					JSONObject jObj = new JSONObject();
+					jObj.put(ClientProtocolID.WRK_NM, selectedWork.get(0).getWrk_nm());
+
+					resultObj = cic.selectBackrestConf(ip, port, jObj);
+
+					result = (String) resultObj.get(ClientProtocolID.RESULT_DATA);
+
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			} catch (Exception e1) {
+				e1.printStackTrace();
+			}
+		}
+		BufferedReader br = new BufferedReader(new StringReader(result));
+
+		boolean readFromCustomLine = false;
+		Map<String, Object> customMap = new HashMap<String, Object>();
+		
+		String gbn = "";
+		String fileContent;
+		try {
 			while ((fileContent = br.readLine()) != null) {
 				if (fileContent.contains("process-max")) {
 					String processMaxLine = fileContent;
@@ -995,12 +1118,14 @@ public class BackupController {
 					readFromCustomLine = true;
 				}
 			}
-
-			mv.addObject("custom_map", customMap);
-
-		} catch (Exception e1) {
-			// TODO Auto-generated catch block
+		} catch (IOException e1) {
 			e1.printStackTrace();
+		}
+
+		mv.addObject("custom_map", customMap);
+		
+		}catch(Exception e) {
+			
 		}
 
 		// Get Incoding Code List
@@ -1191,7 +1316,8 @@ public class BackupController {
 			HttpServletResponse response, HttpServletRequest request, @RequestParam Map<String, Object> paramMap)
 			throws IOException {
 		String result = "S";
-
+		String gbn = request.getParameter("backrest_gbn");
+		
 		try {
 			// 화면접근이력 이력 남기기
 			CmmnUtils.saveHistory(request, historyVO);
@@ -1218,7 +1344,7 @@ public class BackupController {
 			}
 		}
 
-		if (result.equals("S")) {
+		if (result.equals("S") && ! gbn.equals("remote")) {
 			deleteBackrestConfig(workVO, dbServerVO);
 			
 			try {
@@ -1238,6 +1364,86 @@ public class BackupController {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}		
+		}else {
+			if(request.getParameter("master_gbn").toString().equals("M")) {	
+				workVO.setRemote_use("Y");
+				String file = createBackrestRemoteFile(workVO, dbServerVO, request, paramMap, null);
+				
+				String remoteMapStr = paramMap.get("remote_map").toString();
+
+				ObjectMapper mapper = new ObjectMapper();
+				Map<String,Object> remoteMap = mapper.readValue(remoteMapStr, Map.class);
+							
+				Map<String, Object> serverInfo = new HashMap<>();
+							
+				String bck_pth = request.getParameter("bck_pth");
+				String chk = bck_pth.substring(bck_pth.length()-1, bck_pth.length());
+				if(chk.equals("/")) {
+					bck_pth = bck_pth.substring(0, bck_pth.length()-1);
+					workVO.setBck_pth(bck_pth);
+				}
+				
+				String log_file_pth = request.getParameter("log_file_pth");
+				String chk2 = log_file_pth.substring(log_file_pth.length()-1, log_file_pth.length());
+				if(chk2.equals("/")) {
+					log_file_pth = log_file_pth.substring(0, log_file_pth.length()-1);
+					workVO.setLog_file_pth(log_file_pth);
+				}
+				
+				serverInfo.put("ip", remoteMap.get("remote_ip"));
+				serverInfo.put("port", remoteMap.get("remote_port"));
+				serverInfo.put("usr", remoteMap.get("remote_usr"));
+				serverInfo.put("pw", remoteMap.get("remote_pw"));
+				serverInfo.put("pth", "/home/remote/pgbackrest/config/" + request.getParameter("wrk_nm") + ".conf");
+
+				CmmnUtil cu = new CmmnUtil();
+				
+				cu.createBackrestConf(serverInfo, file);
+				
+				workVO.setRemote_ip(serverInfo.get("ip").toString());
+				workVO.setRemote_port(serverInfo.get("port").toString());
+				workVO.setRemote_usr(serverInfo.get("usr").toString());
+				workVO.setRemote_pw(serverInfo.get("pw").toString());
+				
+			}else {
+				try {
+					workVO.setRemote_use("Y");
+					List<DbServerVO> masterServer = backupService.selectMasterServer(dbServerVO);
+					
+					DbServerVO masterDbServerVO = new DbServerVO();
+					masterDbServerVO.setPgdata_pth(masterServer.get(0).getPgdata_pth());
+					masterDbServerVO.setPortno(masterServer.get(0).getPortno());
+					masterDbServerVO.setIpadr(masterServer.get(0).getIpadr());
+					masterDbServerVO.setSvr_spr_usr_id(masterServer.get(0).getSvr_spr_usr_id());
+					
+					String file = createBackrestRemoteFile(workVO, dbServerVO, request, paramMap, masterDbServerVO);
+					
+					String remoteMapStr = paramMap.get("remote_map").toString();
+
+					ObjectMapper mapper = new ObjectMapper();
+					Map<String,Object> remoteMap = mapper.readValue(remoteMapStr, Map.class);
+								
+					Map<String, Object> serverInfo = new HashMap<>();
+								
+					serverInfo.put("ip", remoteMap.get("remote_ip"));
+					serverInfo.put("port", remoteMap.get("remote_port"));
+					serverInfo.put("usr", remoteMap.get("remote_usr"));
+					serverInfo.put("pw", remoteMap.get("remote_pw"));
+					serverInfo.put("pth", "/home/remote/pgbackrest/config/" + request.getParameter("wrk_nm") + ".conf");
+					
+					CmmnUtil cu = new CmmnUtil();
+					
+					cu.createBackrestConf(serverInfo, file);
+					
+					workVO.setRemote_ip(serverInfo.get("ip").toString());
+					workVO.setRemote_port(serverInfo.get("port").toString());
+					workVO.setRemote_usr(serverInfo.get("usr").toString());
+					workVO.setRemote_pw(serverInfo.get("pw").toString());
+					
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
 		}
 
 		return result;
@@ -1384,7 +1590,26 @@ public class BackupController {
 		String bck_filenm_Rows = request.getParameter("bck_filenm_list").toString().replaceAll("&quot;", "\"");
 		JSONArray bck_filenms = (JSONArray) new JSONParser().parse(bck_filenm_Rows);
 		
-
+		String wrk_bck_gbn_list = request.getParameter("wrk_bck_gbn_list").toString().replaceAll("&quot;", "\"");
+		JSONArray gbns = (JSONArray) new JSONParser().parse(wrk_bck_gbn_list);
+		
+		JSONArray ports = null;
+		JSONArray usrs = null;
+		JSONArray pws = null;
+		
+		for (int i = 0; i < bck_wrk_ids.size(); i++) {
+			if(gbns.get(i).equals("remote")) {
+				String wrk_bck_server_port_list = request.getParameter("wrk_bck_server_port_list").toString().replaceAll("&quot;", "\"");
+				ports = (JSONArray) new JSONParser().parse(wrk_bck_server_port_list);
+				
+				String wrk_bck_server_usr_list = request.getParameter("wrk_bck_server_usr_list").toString().replaceAll("&quot;", "\"");
+				usrs = (JSONArray) new JSONParser().parse(wrk_bck_server_usr_list);
+				
+				String wrk_bck_server_pw_list = request.getParameter("wrk_bck_server_pw_list").toString().replaceAll("&quot;", "\"");
+				pws = (JSONArray) new JSONParser().parse(wrk_bck_server_pw_list);	
+			}
+		}
+		
 		// 화면접근이력 이력 남기기
 		try {
 			CmmnUtils.saveHistory(request, historyVO);
@@ -1395,10 +1620,50 @@ public class BackupController {
 		}
 
 		try {
+			for (int j = 0; j < gbns.size(); j++) {
+				if(gbns.get(j).toString().equals("remote")) {
+					
+					String wrk_bck_server = wrk_bck_servers.get(j).toString();
+					String bck_filenm = bck_filenms.get(j).toString();
+					String usr = usrs.get(j).toString();
+					int port = Integer.parseInt(ports.get(j).toString());
+					String pw = pws.get(j).toString();
+										
+					CmmnUtil cu = new CmmnUtil();
+					JSONObject cmdObj = new JSONObject();
+					
+					cmdObj.put("type", "chk");
+					cmdObj.put("usr", usrs.get(j).toString());
+					cmdObj.put("bck_filenm", bck_filenm);
+					
+					String cmd = cu.createBackrestCmd(cmdObj);
+					
+					Map<String, Object> serverInfo = new HashMap<>();
+					serverInfo.put("ip", wrk_bck_server);
+					serverInfo.put("usr", usr);
+					serverInfo.put("pw", pw);
+					serverInfo.put("port", port);
+					serverInfo.put("type", "backrest");
+										
+					String resultStr = cu.executeBackrest(serverInfo, cmd, "backrest", null).get("RESULT_DATA").toString();
+					
+					cmdObj.put("type", "remove");	
+					System.out.println(cmdObj);
+					cmd = cu.createBackrestCmd(cmdObj);
+					
+					if(resultStr.equals("S")) {
+						cu.executeBackrest(serverInfo, cmd, "backrest", null);
+						result = true;
+					}else {
+						result = false;
+					}
+				}
+			}
+			
 			for (int i = 0; i < bck_wrk_ids.size(); i++) {
 				int bck_wrk_id = Integer.parseInt(bck_wrk_ids.get(i).toString());
 				int wrk_id = Integer.parseInt(wrk_ids.get(i).toString());
-				
+
 				if(backupGbn.equals("del_backrest")) {
 					ClientInfoCmmn cic = new ClientInfoCmmn();
 					JSONObject result2 = new JSONObject();
@@ -1407,23 +1672,22 @@ public class BackupController {
 					String bck_filenm = bck_filenms.get(i).toString();
 					
 					try {
-						AgentInfoVO vo = new AgentInfoVO();
-						vo.setIPADR(wrk_bck_server);
-						AgentInfoVO agentInfo = (AgentInfoVO) cmmnServerInfoService.selectAgentInfo(vo);
+							AgentInfoVO vo = new AgentInfoVO();
+							vo.setIPADR(wrk_bck_server);
+							AgentInfoVO agentInfo = (AgentInfoVO) cmmnServerInfoService.selectAgentInfo(vo);
 
-						int port = agentInfo.getSOCKET_PORT();
-						JSONObject jObj = new JSONObject();
+							int port = agentInfo.getSOCKET_PORT();
+							JSONObject jObj = new JSONObject();
+							
+							jObj.put(ClientProtocolID.BCK_FILENM, bck_filenm);
+							
+							result2 = cic.deleteBackrestConf(wrk_bck_server, port, jObj);
 						
-						jObj.put(ClientProtocolID.BCK_FILENM, bck_filenm);
-						
-						result2 = cic.deleteBackrestConf(wrk_bck_server, port, jObj);
-
 					} catch (Exception e) {
 						e.printStackTrace();
 					}
 					
 				}
-
 				// WORK 옵션 삭제
 				backupService.deleteWorkOpt(bck_wrk_id);
 				// WORK 오브젝트 삭제
@@ -1432,9 +1696,11 @@ public class BackupController {
 				backupService.deleteBckWork(bck_wrk_id);
 				// 전체 작업 삭제
 				backupService.deleteWork(wrk_id);
+				
+				result = true;
 			}
 
-			result = true;
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 			txManager.rollback(status);
@@ -2089,12 +2355,33 @@ public class BackupController {
 		
 		String pullPath = request.getParameter("log_path");
 		
+		String backrest_gbn = request.getParameter("backrest_gbn");
+				
 		jObj.put(ClientProtocolID.CMD_BACKUP_PATH, pullPath);
 		
-		ClientInfoCmmn cic = new ClientInfoCmmn();
 		JSONObject result = new JSONObject(); 
-		result = cic.getBackrestLog(IP, PORT, jObj);
 
+		if(backrest_gbn.equals("remote")) {
+			String remote_ip = request.getParameter("remote_ip");
+			String remote_port = request.getParameter("remote_port");
+			String remote_usr = request.getParameter("remote_usr");
+			String remote_pw = request.getParameter("remote_pw");
+			String cmd = "cat " + pullPath; 
+			
+			CmmnUtil cu = new CmmnUtil();
+			
+			Map<String, Object> serverInfo = new HashMap<>();
+			serverInfo.put("ip", remote_ip);
+			serverInfo.put("port", remote_port);
+			serverInfo.put("usr", remote_usr);
+			serverInfo.put("pw", remote_pw);
+			
+			result = cu.executeBackrest(serverInfo, cmd, "backrest", null);
+		}else {
+			ClientInfoCmmn cic = new ClientInfoCmmn();
+			result = cic.getBackrestLog(IP, PORT, jObj);
+		}
+		
 		return result;
 	}
 
@@ -2112,29 +2399,165 @@ public class BackupController {
 		JSONObject resultObj = new JSONObject();
 		String result = null;
 		List<Map<String, Object>> resultWork = null;
+		String backrest_gbn = request.getParameter("backrest_gbn");
+		int wrk_id = Integer.parseInt(request.getParameter("wrk_id"));
+		
+		if(backrest_gbn.equals("remote")) {
+			try {
+				
+				CmmnUtil cu = new CmmnUtil();
+				WorkLogVO vo = backupService.selectSshInfo(wrk_id);
+				
+				Map<String, Object> serverInfo = new HashMap<>();
+				serverInfo.put("ip", vo.getRemote_ip());
+				serverInfo.put("port", vo.getRemote_port());
+				serverInfo.put("usr", vo.getRemote_usr());
+				serverInfo.put("pw", vo.getRemote_pw());
+				serverInfo.put("bck_filenm", vo.getBck_filenm());
+				
+				JSONObject cmdObj = new JSONObject();
+				cmdObj.put("bck_filenm", vo.getBck_filenm());
+				cmdObj.put("usr", vo.getRemote_usr());
+				cmdObj.put("type", "conf");
+				
+				String cmd = cu.createBackrestCmd(cmdObj);
+				
+				String conf = cu.executeBackrest(serverInfo, cmd, "backrest", null).get("RESULT_DATA").toString();
+				if(conf != null || conf != "") {
+					result = conf;
+				}
+			} catch (FileNotFoundException e) {
+				e.printStackTrace();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			
+		}else {
+			try {
+				resultWork = backupService.selectBckInfo(wrk_id);
 
+				AgentInfoVO vo = new AgentInfoVO();
+				vo.setIPADR((resultWork.get(0).get("db_svr_ipadr")).toString());
+				AgentInfoVO agentInfo = (AgentInfoVO) cmmnServerInfoService.selectAgentInfo(vo);
+
+				String ip = (resultWork.get(0).get("db_svr_ipadr")).toString();
+				int port = agentInfo.getSOCKET_PORT();
+
+				JSONObject jObj = new JSONObject();
+				jObj.put(ClientProtocolID.WRK_NM, resultWork.get(0).get("wrk_nm"));
+
+				resultObj = cic.selectBackrestConf(ip, port, jObj);
+
+				result = (String) resultObj.get(ClientProtocolID.RESULT_DATA);
+
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		
+		return result;
+	}
+	
+	/**
+	 * Backrest Remote cmd 생성
+	 * 
+	 * @param workVO, dbServerVO, request, paramMap
+	 * @return
+	 * @throws Exception
+	 */
+	@SuppressWarnings("unchecked")
+	public String createBackrestRemoteFile(WorkVO workVO, DbServerVO dbServerVO, HttpServletRequest request, Map<String, Object> paramMap, DbServerVO masterServer)	{
+		String conf = "";
 		try {
-			int wrk_id = Integer.parseInt(request.getParameter("wrk_id"));
-			resultWork = backupService.selectBckInfo(wrk_id);
-
+			ClientInfoCmmn cic = new ClientInfoCmmn();
 			AgentInfoVO vo = new AgentInfoVO();
-			vo.setIPADR((resultWork.get(0).get("db_svr_ipadr")).toString());
+			vo.setIPADR(dbServerVO.getIpadr());
 			AgentInfoVO agentInfo = (AgentInfoVO) cmmnServerInfoService.selectAgentInfo(vo);
 
-			String ip = (resultWork.get(0).get("db_svr_ipadr")).toString();
+			String ip = dbServerVO.getIpadr();
 			int port = agentInfo.getSOCKET_PORT();
+			Map<String, Object> hostResult = cic.getHostName(ip, port);
+			String hostUser = hostResult.get("hostName").toString();
+			
+			CmmnUtil cu = new CmmnUtil();
+			
+			String remoteMapStr = paramMap.get("remote_map").toString();
 
-			JSONObject jObj = new JSONObject();
-			jObj.put(ClientProtocolID.WRK_NM, resultWork.get(0).get("wrk_nm"));
+			ObjectMapper mapper = new ObjectMapper();
+			Map<String,Object> remoteMap = mapper.readValue(remoteMapStr, Map.class);
+						
+			Map<String, Object> serverInfo = new HashMap<>();
+						
+			serverInfo.put("ip", remoteMap.get("remote_ip"));
+			serverInfo.put("port", remoteMap.get("remote_port"));
+			serverInfo.put("usr", remoteMap.get("remote_usr"));
+			serverInfo.put("pw", remoteMap.get("remote_pw"));
+			
+			String defaultConfPth = "/home/" + serverInfo.get("usr") + "/pgbackrest/default.conf";
 
-			resultObj = cic.selectBackrestConf(ip, port, jObj);
-
-			result = (String) resultObj.get(ClientProtocolID.RESULT_DATA);
-
+			serverInfo.put("confPth", defaultConfPth);
+			
+			String cmd = "cat " + defaultConfPth;
+			JSONObject result = cu.executeBackrest(serverInfo, cmd, "file", null);
+			
+			conf = result.get("RESULT_DATA").toString();
+			
+			conf = conf.replaceAll("#pg1-path=", "pg1-path=" + dbServerVO.getPgdata_pth());
+			conf = conf.replaceAll("#pg1-host=", "pg1-host=" + dbServerVO.getIpadr());
+			conf = conf.replaceAll("#pg1-host-user=", "pg1-host-user=" + hostUser);
+			conf = conf.replaceAll("#pg1-host-port=", "pg1-host-port=" + remoteMap.get("remote_port").toString());
+			conf = conf.replaceAll("#pg1-port=", "pg1-port=" + String.valueOf(dbServerVO.getPortno()));
+			conf = conf.replaceAll("#pg1-user=", "pg1-user=" + String.valueOf(dbServerVO.getSvr_spr_usr_id()));
+			conf = conf.replaceAll("#repo1-gbn=", "#repo1-gbn=" + workVO.getBackrest_gbn());
+			// backup 경로 수정 필요
+			conf = conf.replaceAll("#repo1-path=", "repo1-path=/home/remote/pgbackrest/backup");
+			conf = conf.replaceAll("#repo1-retention-full=", "repo1-retention-full=" + String.valueOf(workVO.getBck_mtn_ecnt()));
+			// log경로 수정 필요
+			conf = conf.replaceAll("#log-path=", "log-path=" + "/home/remote/pgbackrest/logs");
+			conf = conf.replaceAll("#log-level-console=detail", "log-level-console=detail");
+			conf = conf.replaceAll("#log-level-file=detail", "log-level-file=detail");
+			
+			if(workVO.getCps_yn().equals("Y")) {
+				if(request.getParameter("cps_type").equals("gzip")) {
+					conf = conf.replaceAll("#compress-type=", "compress-type=gz");
+				}else {
+					conf = conf.replaceAll("#compress-type=", "compress-type=" + request.getParameter("cps_type"));
+				}
+			}else {
+				conf = conf.replaceAll("#compress=", "compress=" + workVO.getCps_yn());
+			}
+			
+			conf = conf.replaceAll("#process-max=", "process-max=" + request.getParameter("prcs_cnt"));
+			
+			if(paramMap.get("custom_map") == null || paramMap.get("custom_map").equals("")) {
+				
+			}else {
+				ArrayList<String> customKeyList = new ArrayList<String>();
+				ArrayList<String> customValueList = new ArrayList<String>();
+				
+				JSONParser parser = new JSONParser();
+				JSONObject jsonObject = (JSONObject) parser.parse(String.valueOf(paramMap.get("custom_map")));
+				Iterator<String> customKeys = jsonObject.keySet().iterator();
+				
+				while(customKeys.hasNext()){
+	                String key = customKeys.next().toString();
+	                customKeyList.add(key);
+	                customValueList.add(String.valueOf(jsonObject.get(key)));
+	            }
+				
+				if(customKeyList.size() != 0) {
+					conf += "\r\n";
+					for(int i=0; i < customKeyList.size(); i++) {
+						conf += customKeyList.get(i) + "=" + customValueList.get(i)+ "\r\n";
+					}
+				}
+			}
+			
 		} catch (Exception e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		return result;
+		return conf;	
 	}
 
 	/**
@@ -2252,7 +2675,169 @@ public class BackupController {
 		return result;
 	}
 	
+	/**
+	 * Backrest remote 연결 조회
+	 * 
+	 * @param request
+	 * @return String
+	 * @throws Exception
+	 */
+	@SuppressWarnings("unchecked")
+	@RequestMapping(value = "/backup/RemoteConn.do")
+	@ResponseBody
+	public String RemoteConnection(HttpServletRequest request) {
+		
+		String ip = request.getParameter("remote_ip");
+		int port = Integer.parseInt(request.getParameter("remote_port"));
+		String usr = request.getParameter("remote_usr");
+		String pw = request.getParameter("remote_pw");
+
+		String resultCode = "";
+		
+		Map<String, Object> serverInfo = new HashMap<>();
+		
+		serverInfo.put("ip", ip);
+		serverInfo.put("port", port);
+		serverInfo.put("usr", usr);
+		serverInfo.put("pw", pw);
+		
+		CmmnUtil cu = new CmmnUtil();
+		try {
+			JSONObject result = cu.executeBackrest(serverInfo, "whoami", "backrest", null);
+
+			if(result.get("RESULT_DATA").equals(usr)) {
+				resultCode = "success";
+			}
+		} catch (Exception e) {
+			resultCode = "fail";
+			e.printStackTrace();
+		}		
 	
+		return resultCode;
+	}
+	
+	/**
+	 * Backrest remote 백업 실행
+	 * 
+	 * @param request
+	 * @return String
+	 * @throws Exception
+	 */
+	@SuppressWarnings("unchecked")
+	@RequestMapping(value = "/backrestImmediateStart.do")
+	@ResponseBody
+	public void backrestImmediateStart(HttpServletRequest request) {
+		
+		String TC001801 = "TC001801"; // 대기
+		String TC001802 = "TC001802"; // 실행중
+		String TC001701 = "TC001701"; // 성공
+		String TC001702 = "TC001702"; // 실패
+		
+		String ip = request.getParameter("remote_ip");
+		int port = Integer.parseInt(request.getParameter("remote_port"));
+		String usr = request.getParameter("remote_usr");
+		String pw = request.getParameter("remote_pw");
+		
+		Map<String, Object> serverInfo = new HashMap<>();
+		
+		serverInfo.put("ip", ip);
+		serverInfo.put("port", port);
+		serverInfo.put("usr", usr);
+		serverInfo.put("pw", pw);
+		
+		CmmnUtil cu = new CmmnUtil();
+		String cmd = "";
+		try {
+			JSONObject cmdInfo = new JSONObject();
+			
+			SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMddHHmmss");
+			String now = dateFormat.format(new Date());
+			
+			cmdInfo.put("bck_filenm", request.getParameter("bck_filenm").toString());
+			cmdInfo.put("bck_opt_cd_nm", request.getParameter("bck_opt_cd_nm").toString());
+			cmdInfo.put("log_file_pth", request.getParameter("log_file_pth").toString());
+			cmdInfo.put("wrk_nm", request.getParameter("wrk_nm").toString());
+			cmdInfo.put("now", now);
+			cmdInfo.put("usr", usr);
+			cmdInfo.put("type", "backup");
+			
+			cmd = cu.createBackrestCmd(cmdInfo);
+			
+			WorkVO wrkVO = new WorkVO();
+			wrkVO.setDb_svr_ipadr(request.getParameter("db_svr_ipadr"));
+			
+			List<DbServerVO> dbServer = backupService.selectBckServer(wrkVO);
+			int db_svr_ipadr_id = dbServer.get(0).getDb_svr_ipadr_id();
+			
+			int exe_sn = backupService.selectQ_WRKEXE_G_01_SEQ();
+			int scd_id = backupService.selectScd_id();
+			int exe_grp_sn = backupService.selectQ_WRKEXE_G_02_SEQ();
+			int wrk_id = Integer.parseInt(request.getParameter("wrk_id").toString());
+			String bck_opt_cd = request.getParameter("bck_opt_cd");
+			int db_id = Integer.parseInt(request.getParameter("db_id").toString());
+			String bck_pth = request.getParameter("bck_pth"); 
+			String bck_filenm = cmdInfo.get("log_file_pth").toString() + "/" + cmdInfo.get("wrk_nm").toString() + "_" + now + ".log";
+			String frst_regr_id = request.getParameter("frst_regr_id");
+			String lst_mdfr_id = request.getParameter("lst_mdfr_id");
+			
+			WrkExeVO vo = new WrkExeVO(); 
+			
+			vo.setExe_sn(exe_sn);
+			vo.setScd_id(scd_id);
+			vo.setWrk_id(wrk_id);
+			vo.setBck_opt_cd(bck_opt_cd);
+			vo.setDb_id(db_id);
+			vo.setBck_file_pth(bck_pth);
+			vo.setBck_file_nm(bck_filenm);
+			vo.setFrst_regr_id(frst_regr_id);
+			vo.setLst_mdfr_id(lst_mdfr_id);
+			vo.setExe_grp_sn(exe_grp_sn);
+			vo.setExe_rslt_cd(TC001802);
+			vo.setWrk_nm(cmdInfo.get("wrk_nm").toString());
+			vo.setDb_svr_ipadr_id(db_svr_ipadr_id);
+			
+			backupService.insertPgbackrestBackup(vo);
+			
+			JSONObject result = cu.executeBackrest(serverInfo, cmd, "backrest", null);
+			int resultCode = Integer.parseInt(result.get("RESULT_CODE").toString());
+			
+			if(resultCode == 0) {
+				cmdInfo.put("type", "info");
+				cmd = cu.createBackrestCmd(cmdInfo);
+				JSONObject info = cu.executeBackrest(serverInfo, cmd, "backrest", null);
+				
+				String successObj = info.get("RESULT_DATA").toString();
+				org.codehaus.jackson.map.ObjectMapper mapper = new org.codehaus.jackson.map.ObjectMapper();
+				JsonNode jsonNode = mapper.readTree(successObj);
+				
+				int jsonSize = jsonNode.findValue("backup").size();
+				long repoSizeInt = jsonNode.findValue("backup").path(jsonSize-1).path("info").path("repository").path("delta").asLong();
+				long dbSizeInt = jsonNode.findValue("backup").path(jsonSize-1).path("info").path("delta").asLong();
+				int startTimeInt = jsonNode.findValue("backup").path(jsonSize-1).path("timestamp").path("start").asInt();
+				int stopTimeInt = jsonNode.findValue("backup").path(jsonSize-1).path("timestamp").path("stop").asInt();
+				
+				String startDateStr = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date(startTimeInt * 1000L));
+				String stopDateStr = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date(stopTimeInt * 1000L));
+				
+				WrkExeVO endVO = new WrkExeVO();
+				endVO.setExe_sn(exe_sn);
+				endVO.setWrk_strt_dtm(startDateStr);
+				endVO.setWrk_end_dtm(stopDateStr);
+				endVO.setExe_rslt_cd(TC001701);
+				endVO.setFile_sz(repoSizeInt);
+				endVO.setDB_SZ(dbSizeInt);
+				endVO.setRslt_msg("success");
+				
+				backupService.updateBackrestWrk(endVO);
+			}else {
+				
+			}
+				
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}		
+	}
 	
 	
 	

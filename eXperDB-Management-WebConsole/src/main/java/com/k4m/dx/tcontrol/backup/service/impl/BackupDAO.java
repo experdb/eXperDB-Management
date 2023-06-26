@@ -15,6 +15,7 @@ import com.k4m.dx.tcontrol.backup.service.WorkObjVO;
 import com.k4m.dx.tcontrol.backup.service.WorkOptDetailVO;
 import com.k4m.dx.tcontrol.backup.service.WorkOptVO;
 import com.k4m.dx.tcontrol.backup.service.WorkVO;
+import com.k4m.dx.tcontrol.functions.schedule.service.WrkExeVO;
 
 import egovframework.rte.psl.dataaccess.EgovAbstractMapper;
 
@@ -192,4 +193,28 @@ public class BackupDAO extends EgovAbstractMapper{
 		return sl;
 	}
 	
+	public int selectQ_WRKEXE_G_01_SEQ() {
+		return (int) selectOne("backupSQL.selectQ_WRKEXE_G_01_SEQ");
+	}
+	
+	public int selectScd_id() {
+		return (int) selectOne("backupSQL.selectScd_id");
+		
+	}
+	
+	public int selectQ_WRKEXE_G_02_SEQ() {
+		return (int) selectOne("backupSQL.selectQ_WRKEXE_G_02_SEQ");
+	}
+	
+	public void insertPgbackrestBackup(WrkExeVO wrkExeVO) {
+		insert("backupSQL.insertPgbackrestBackup", wrkExeVO);
+	}
+	
+	public void updateBackrestWrk(WrkExeVO wrkExeVO) {
+		update("backupSQL.updateBackrestWrk", wrkExeVO);
+	}
+	
+	public WorkLogVO selectSshInfo(int wrkId) {
+		return (WorkLogVO)getSqlSession().selectOne("backupSQL.selectSshInfo", wrkId);
+	}
 }

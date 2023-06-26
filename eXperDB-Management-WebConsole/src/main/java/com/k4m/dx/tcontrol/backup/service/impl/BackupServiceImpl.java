@@ -17,6 +17,7 @@ import com.k4m.dx.tcontrol.backup.service.WorkObjVO;
 import com.k4m.dx.tcontrol.backup.service.WorkOptDetailVO;
 import com.k4m.dx.tcontrol.backup.service.WorkOptVO;
 import com.k4m.dx.tcontrol.backup.service.WorkVO;
+import com.k4m.dx.tcontrol.functions.schedule.service.WrkExeVO;
 
 import egovframework.rte.fdl.cmmn.EgovAbstractServiceImpl;
 
@@ -176,5 +177,35 @@ public class BackupServiceImpl extends EgovAbstractServiceImpl implements Backup
 	@Override
 	public List<DbServerVO> selectMasterServer(DbServerVO dbServerVO) throws Exception {
 		return backupDAO.selectMasterServer(dbServerVO);
+	}
+	
+	@Override
+	public int selectQ_WRKEXE_G_01_SEQ() throws Exception  {
+		return backupDAO.selectQ_WRKEXE_G_01_SEQ();
+	}
+	
+	@Override
+	public int selectScd_id() throws Exception {
+		return backupDAO.selectScd_id();
+	}
+	
+	@Override
+	public int selectQ_WRKEXE_G_02_SEQ() throws Exception  {
+		return backupDAO.selectQ_WRKEXE_G_02_SEQ();
+	}
+
+	@Override
+	public void insertPgbackrestBackup(WrkExeVO wrkExeVO) {
+		backupDAO.insertPgbackrestBackup(wrkExeVO);
+	}
+
+	@Override
+	public void updateBackrestWrk(WrkExeVO wrkExeVO) {
+		backupDAO.updateBackrestWrk(wrkExeVO);
+	}
+
+	@Override
+	public WorkLogVO selectSshInfo(int wrkId) {
+		return backupDAO.selectSshInfo(wrkId);
 	}
 }

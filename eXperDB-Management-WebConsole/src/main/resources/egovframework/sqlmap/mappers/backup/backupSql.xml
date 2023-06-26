@@ -47,7 +47,11 @@
 			A.ACV_FILE_MTNCNT,
 			A.LOG_FILE_PTH,
 			A.BACKREST_GBN,
-			A.DB_SVR_IPADR
+			A.DB_SVR_IPADR,
+			A.REMOTE_IP,
+			A.REMOTE_PORT,
+			A.REMOTE_USR,
+			A.REMOTE_PW
 	  FROM(	
       SELECT 
       		BCK_WRK_ID,
@@ -85,7 +89,11 @@
 			ACV_FILE_MTNCNT,
 			LOG_FILE_PTH,
 			BACKREST_GBN,
-			(SELECT IPADR FROM T_DBSVRIPADR_I WHERE A.DB_SVR_IPADR_ID = DB_SVR_IPADR_ID ) AS DB_SVR_IPADR
+			(SELECT IPADR FROM T_DBSVRIPADR_I WHERE A.DB_SVR_IPADR_ID = DB_SVR_IPADR_ID ) AS DB_SVR_IPADR,
+			REMOTE_IP,
+			REMOTE_PORT,
+			REMOTE_USR,
+			REMOTE_PW
       FROM T_BCK_WRKCNG_I A, T_WRKCNG_I B
       WHERE 1=1	
       	AND A.WRK_ID=B.WRK_ID
@@ -238,6 +246,12 @@
 			bck_filenm,
 			db_svr_ipadr_id,
 			backrest_gbn
+		<if test="remote_use != null and remote_use != ''">
+			,remote_ip,
+			remote_port,
+			remote_usr,
+			remote_pw
+		</if>
 			)
 		VALUES
 			(
@@ -258,6 +272,12 @@
 			#{bck_filenm},
 			#{db_svr_ipadr_id},
 			#{backrest_gbn}
+		<if test="remote_use != null and remote_use != ''">
+			,#{remote_ip},
+			#{remote_port},
+			#{remote_usr},
+			#{remote_pw}
+		</if>
 			)
 	</insert>
 	
@@ -606,7 +626,11 @@
 	 		AA.LST_MDFR_ID,
 	 		AA.LST_MDF_DTM,
 	 		AA.BACKREST_GBN,
-	 		AA.DB_SZ
+	 		AA.DB_SZ,
+	 		AA.REMOTE_IP,
+	 		AA.REMOTE_PORT,
+	 		AA.REMOTE_USR,
+	 		AA.REMOTE_PW
         FROM
         (SELECT
         	B.DB_SVR_ID,
@@ -638,7 +662,11 @@
 	 		TWG.FIX_RSLT_MSG,
 	 		to_char(TWG.FRST_REG_DTM,'YYYY-MM-DD HH24:MI') AS FRST_REG_DTM,
 	 		TWG.LST_MDFR_ID AS LST_MDFR_ID,
-	 		to_char(TWG.LST_MDF_DTM,'YYYY-MM-DD HH24:MI') AS LST_MDF_DTM	 		
+	 		to_char(TWG.LST_MDF_DTM,'YYYY-MM-DD HH24:MI') AS LST_MDF_DTM,
+	 		TWI.REMOTE_IP,
+	 		TWI.REMOTE_PORT,
+	 		TWI.REMOTE_USR,
+	 		TWI.REMOTE_PW	
 	 	FROM T_WRKEXE_G TWG, T_BCK_WRKCNG_I TWI, T_DBSVRIPADR_I B, T_WRKCNG_I C
 <!-- 	 	LEFT OUTER JOIN T_BCK_WRKCNG_I TWI
          ON TWG.WRK_ID = TWI.WRK_ID
@@ -1018,4 +1046,128 @@
            A.DB_SVR_ID = B.DB_SVR_ID
            AND B.MASTER_GBN = 'M'
     </select>
+    
+<insert id="insertPgbackrestBackup" parameterType="WrkExeVO">
+    	INSERT INTO T_WRKEXE_G
+	 	(
+			EXE_SN
+			, SCD_ID
+			, WRK_ID
+			, WRK_STRT_DTM
+			, WRK_END_DTM
+			, BCK_OPT_CD
+			, TLI
+			, FILE_SZ
+			, DB_SZ
+			, DB_ID
+			, BCK_FILE_PTH
+			, BCK_FILENM
+			, FRST_REGR_ID
+			, LST_MDFR_ID
+			, EXE_GRP_SN
+			, EXE_RSLT_CD
+			, WRK_NM
+			, DB_SVR_IPADR_ID
+			, SCD_NM
+	 	)
+	 	VALUES
+	 	(
+			#{exe_sn}
+			<choose>
+				<when test="BACKREST_SCD_ID !=null and BACKREST_SCD_ID != ''" >
+				, (SELECT SCD_ID FROM T_SCD_M WHERE SCD_ID = #{BACKREST_SCD_ID})::numeric
+				</when>
+				<otherwise>
+				, #{scd_id}
+				</otherwise>
+			</choose>
+			
+			, #{wrk_id}
+			, now()
+			, now()
+			, #{bck_opt_cd}
+			, 0
+			, 0
+			, 0
+			, #{db_id}
+			, #{bck_file_pth}
+			, #{bck_file_nm}			
+			, #{frst_regr_id}
+			, #{lst_mdfr_id}
+			, #{exe_grp_sn}
+			, #{exe_rslt_cd}
+			, #{wrk_nm}
+			, #{db_svr_ipadr_id}
+			<choose>
+				<when test="BACKREST_SCD_ID !=null and BACKREST_SCD_ID != ''" >
+				, (SELECT SCD_NM FROM T_SCD_M WHERE SCD_ID = #{BACKREST_SCD_ID})
+				</when>
+				<otherwise>
+				, null
+				</otherwise>
+			</choose>
+	 	)	 	
+    </insert>
+    
+	<select id="selectQ_WRKEXE_G_01_SEQ" resultType="int">
+   		/**
+	 	* Query ID : selectQ_WRKEXE_G_01_SEQ
+	 	* Description : 작업실행로그 seq 조회
+	 	* Author : 박태혁
+	 	**/
+    	SELECT NEXTVAL('q_wrkexe_g_01')
+    </select>
+	
+	<select id="selectScd_id" resultType="int">
+   		/**
+	 	* Query ID : selectScm_id
+	 	* Description : 스케줄 ID 조회
+	 	* Author : 변승우
+	 	**/
+    	SELECT NEXTVAL('q_scd_m_01')
+    </select>
+	
+	<select id="selectQ_WRKEXE_G_02_SEQ" resultType="int">
+   		/**
+	 	* Query ID : selectQ_WRKEXE_G_02_SEQ
+	 	* Description : 작업실행로그 실행그룹 seq 조회
+	 	* Author : 박태혁
+	 	**/
+    	SELECT NEXTVAL('Q_WRKEXE_G_02')
+    </select>
+    
+    <update id="updateBackrestWrk"  parameterType="WrkExeVO">
+   		/**
+	 	* Query ID : updateBackrestWrk
+	 	* Description : backrest 작업실행로그 update
+	 	* Author : 이지석
+	 	**/
+		UPDATE T_WRKEXE_G
+		SET
+			WRK_END_DTM = TO_TIMESTAMP(#{wrk_end_dtm}, 'YYYY-MM-DD HH24:MI:SS')
+			, WRK_STRT_DTM = TO_TIMESTAMP(#{wrk_strt_dtm}, 'YYYY-MM-DD HH24:MI:SS')
+			, EXE_RSLT_CD = #{exe_rslt_cd}
+			, FILE_SZ = #{file_sz}
+			, DB_SZ = #{DB_SZ}
+			, RSLT_MSG = #{rslt_msg}
+			, BCK_FILENM = #{bck_filenm}
+		<if test="BACKREST_SCD_ID !=null and BACKREST_SCD_ID != ''" >
+			, SCD_ID = (SELECT SCD_ID FROM T_SCD_M WHERE SCD_ID = #{BACKREST_SCD_ID})::numeric
+		</if>
+		WHERE
+			EXE_SN = #{exe_sn}
+    </update>
+    
+    <select id="selectSshInfo" parameterType="int" resultType="workLogVO">
+    	SELECT
+    		REMOTE_IP,
+    		REMOTE_PORT,
+    		REMOTE_USR,
+    		REMOTE_PW,
+    		BCK_FILENM
+   		FROM T_BCK_WRKCNG_I
+   		WHERE 
+  			WRK_ID = #{num}
+    </select>
+    
 </mapper>

@@ -64,6 +64,7 @@ public class DxT019 extends SocketCtl{
 								, "echo $PGDBAK"
 								, "echo $PGRLOG"
 								, "echo $PGDLOG"
+								, "echo $HOSTUSER"
 			};
 			
 			CommonUtil util = new CommonUtil();
@@ -74,6 +75,7 @@ public class DxT019 extends SocketCtl{
 			String PGDBAK = util.getPidExec(arrCmd[3]);
 			String PGRLOG = util.getPidExec(arrCmd[4]);
 			String PGDLOG = util.getPidExec(arrCmd[5]);
+			String HOSTUSER = util.getPidExec(arrCmd[6]);
 			
 			util = null;
 			
@@ -84,6 +86,7 @@ public class DxT019 extends SocketCtl{
 			hp.put(ProtocolID.PGDBAK, PGDBAK);
 			hp.put(ProtocolID.PGRLOG, PGRLOG);
 			hp.put(ProtocolID.PGDLOG, PGDLOG);
+			hp.put(ProtocolID.USER_NAME, HOSTUSER);
 				
 			outputObj.put(ProtocolID.DX_EX_CODE, strDxExCode);
 			outputObj.put(ProtocolID.RESULT_CODE, strSuccessCode);

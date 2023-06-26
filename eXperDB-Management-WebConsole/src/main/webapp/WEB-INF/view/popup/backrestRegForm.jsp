@@ -18,6 +18,7 @@
 	var selectedAgentServer = null;
 	var backrestServerTable = null;
 	var db_info_arr = [];
+	var remoteConn = "Fail";
 	
 	$(window.document).ready(function() {
 		
@@ -98,45 +99,55 @@
 			selectedAgentServer = backrestServerTable.rows(this).data()[0];
 			var words = this.className.split(' ');
 
-			if(words.length == 2){
-				if(selectedAgentServer.master_gbn == "S"){
-					$("#bckr_standby_alert", "#workRegFormBckr").html("Primary DB를 Stnadby서버에 백업합니다.");
-					$("#bckr_standby_alert", "#workRegFormBckr").show();
+			if($("#remote_radio").is(':checked')){
+				$("#ins_bckr_pth", "#workRegFormBckr").val("");
+				$("#ins_bckr_log_pth", "#workRegFormBckr").val("");
+			}else{
+				if(words.length == 2){
+					if(selectedAgentServer.master_gbn == "S"){
+						$("#bckr_standby_alert", "#workRegFormBckr").html("Primary DB를 Stnadby서버에 백업합니다.");
+						$("#bckr_standby_alert", "#workRegFormBckr").show();
+					}else{
+						$("#bckr_standby_alert", "#workRegFormBckr").html("");
+						$("#bckr_standby_alert", "#workRegFormBckr").hide();
+					}
+
+					$.ajax({
+						url : "/backup/backrestPath.do",
+						data : {
+							db_svr_id : $("#db_svr_id", "#findList").val(),
+							ipadr : selectedAgentServer.ipadr
+						},
+						dataType : "json",
+						type : "post",
+						beforeSend: function(xhr) {
+							xhr.setRequestHeader("AJAX", true);
+						},
+						error : function(xhr, status, error) {
+							if(xhr.status == 401) {
+								showSwalIconRst(message_msg02, closeBtn, '', 'error', 'top');
+							} else if(xhr.status == 403) {
+								showSwalIconRst(message_msg03, closeBtn, '', 'error', 'top');
+							} else {
+								showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), closeBtn, '', 'error');
+							}
+						},
+						success : function(data) {	
+							if($("#remote_radio").is(':checked')){
+								$("#ins_bckr_pth", "#workRegFormBckr").val("");
+								$("#ins_bckr_log_pth", "#workRegFormBckr").val("");
+							}else{
+								$("#ins_bckr_pth", "#workRegFormBckr").val(data.RESULT_DATA.PGBBAK);
+								$("#ins_bckr_log_pth", "#workRegFormBckr").val(data.RESULT_DATA.PGBLOG);	
+							}	
+						}
+					});
 				}else{
+					$("#ins_bckr_pth", "#workRegFormBckr").val("");
+					$("#ins_bckr_log_pth", "#workRegFormBckr").val("");
 					$("#bckr_standby_alert", "#workRegFormBckr").html("");
 					$("#bckr_standby_alert", "#workRegFormBckr").hide();
 				}
-
-				$.ajax({
-					url : "/backup/backrestPath.do",
-					data : {
-						db_svr_id : $("#db_svr_id", "#findList").val(),
-						ipadr : selectedAgentServer.ipadr
-					},
-					dataType : "json",
-					type : "post",
-					beforeSend: function(xhr) {
-						xhr.setRequestHeader("AJAX", true);
-					},
-					error : function(xhr, status, error) {
-						if(xhr.status == 401) {
-							showSwalIconRst(message_msg02, closeBtn, '', 'error', 'top');
-						} else if(xhr.status == 403) {
-							showSwalIconRst(message_msg03, closeBtn, '', 'error', 'top');
-						} else {
-							showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), closeBtn, '', 'error');
-						}
-					},
-					success : function(data) {
-						$("#ins_bckr_pth", "#workRegFormBckr").val(data.RESULT_DATA.PGBBAK);
-						$("#ins_bckr_log_pth", "#workRegFormBckr").val(data.RESULT_DATA.PGBLOG);
-					}
-				});
-			}else{
-				$("#ins_bckr_pth", "#workRegFormBckr").val("");
-				$("#ins_bckr_log_pth", "#workRegFormBckr").val("");
-				$("#bckr_standby_alert", "#workRegFormBckr").html("");
-				$("#bckr_standby_alert", "#workRegFormBckr").hide();
 			}
 		});
 	})
@@ -162,6 +173,7 @@
 			ins_bak_path_label.style.display = ""
 			ins_bckr_pth.style.display = ""
 
+			$('#ins_bckr_pth').prop("readonly", true);
 			$("#local_radio").prop("checked", true);
 
 			$("#remote_opt").hide();
@@ -172,7 +184,8 @@
 			bckSrvCloud.style.backgroundColor = "#e7e7e7"
 			ins_bak_path_label.style.display = ""
 			ins_bckr_pth.style.display = ""
-
+			
+			$('#ins_bckr_pth').prop("readonly", false);
 			$("#remote_radio").prop("checked", true);
 
 			$("#remote_opt").show();
@@ -185,7 +198,8 @@
 			ins_bckr_pth.style.display = "none"
 
 			$("#cloud_radio").prop("checked", true);
-
+			$('#ins_bckr_pth').prop("readonly", true);
+			
 			$("#remote_opt").hide();
 			$("#cloud_opt").show();
 		}
@@ -297,7 +311,9 @@
 		$("#ins_remt_str_usr_alert", "#workRegFormBckr").html("");
 		$("#ins_remt_str_usr_alert", "#workRegFormBckr").hide();
 		$("#ins_remt_str_pw_alert", "#workRegFormBckr").html("");
-		$("#ins_remt_str_pw_alert", "#workRegFormBckr").hide();				
+		$("#ins_remt_str_pw_alert", "#workRegFormBckr").hide();
+		$("#ssh_con_alert", "#workRegFormBckr").html("");
+		$("#ssh_con_alert", "#workRegFormBckr").hide();
 
 		//Cloud 옵션 초기화
 		$("#ins_cloud_bckr_s3_buk_alert", "#workRegFormBckr").html("");
@@ -448,6 +464,11 @@
 				
 				iChkCnt = iChkCnt + 1;
 			}
+			if(remoteConn != "Success"){
+				$("#ssh_con_alert", "#workRegFormBckr").html('연결 테스트를 해주세요.');
+				$("#ssh_con_alert", "#workRegFormBckr").show();
+				iChkCnt = iChkCnt + 1;
+			}
 		}
 
 		//Cloud 옵션 alert
@@ -498,7 +519,7 @@
 		if (iChkCnt > 0) {
 			return false;
 		}
-
+		
 		return true;
 	}
 
@@ -518,6 +539,7 @@
 	}
 
 	function fn_select_agent_info(){
+		
 		$.ajax({
 			url : "/backup/backrestAgentList.do",
 			data : {
@@ -576,7 +598,10 @@
 
 		var cloud_map = new Map();
 		var cloud_data = null;
-
+		
+		var remote_map = new Map();
+		var remote_data = null;
+		
 		if(svrBckCheck == "cloud"){
 			cloud_map.set("s3_bucket", nvlPrmSet($('#ins_cloud_bckr_s3_buk', '#workRegFormBckr').val(), "").trim());
 			cloud_map.set("s3_region", nvlPrmSet($('#ins_cloud_bckr_s3_rgn', '#workRegFormBckr').val(), "").trim());
@@ -587,6 +612,13 @@
 			cloud_map.set("cloud_type", $("#ins_bckr_cld_opt_cd", '#workRegFormBckr').val());
 
 			cloud_data = JSON.stringify(Object.fromEntries(cloud_map))
+		}else if (svrBckCheck == 'remote'){
+			remote_map.set("remote_ip", nvlPrmSet($('#ins_remt_str_ip', '#workRegFormBckr').val(), "").trim());
+			remote_map.set("remote_port", nvlPrmSet($('#ins_remt_str_ssh', '#workRegFormBckr').val(), "").trim());
+			remote_map.set("remote_usr", nvlPrmSet($('#ins_remt_str_usr', '#workRegFormBckr').val(), "").trim());
+			remote_map.set("remote_pw", nvlPrmSet($('#ins_remt_str_pw', '#workRegFormBckr').val(), "").trim());
+			
+			remote_data = JSON.stringify(Object.fromEntries(remote_map));
 		}
 
 		var selectedAgent = $('#backrest_svr_info').DataTable().rows('.selected').data()[0];
@@ -617,7 +649,8 @@
 				db_svr_ipadr_id: selectedAgent.db_svr_ipadr_id,
 				backrest_gbn: svrBckCheck,
 				custom_map: custom_data,
-				cloud_map: cloud_data
+				cloud_map: cloud_data,
+				remote_map: remote_data
 			},
 			type : "post",
 			beforeSend: function(xhr) {
@@ -644,13 +677,14 @@
 					showSwalIcon('<spring:message code="message.msg106" />', '<spring:message code="common.close" />', '', 'success');
 					$('#pop_layer_reg_backrest').modal('hide');
 					fn_get_backrest_list();
+					remoteConn = "Fail";
 				}else{
 					showSwalIcon('<spring:message code="migration.msg06" />', '<spring:message code="common.close" />', '', 'error');
 					$('#pop_layer_reg_backrest').modal('show');
 					return;
 				}
 			}
-		});
+		});  
 	}
 
 	function fn_backrest_ip_select_check(){
@@ -659,6 +693,50 @@
 		if(selectedIp == undefined){
 			showSwalIcon('IP를 선택해주세요.', '<spring:message code="common.close" />', '', 'warning');
 		}
+	}
+	
+	function fn_ssh_connection(){
+		
+		var remote_ip = nvlPrmSet($('#ins_remt_str_ip', '#workRegFormBckr').val(), "").trim();
+		var remote_port = nvlPrmSet($('#ins_remt_str_ssh', '#workRegFormBckr').val(), "").trim();
+		var remote_usr = nvlPrmSet($('#ins_remt_str_usr', '#workRegFormBckr').val(), "").trim();
+		var remote_pw = nvlPrmSet($('#ins_remt_str_pw', '#workRegFormBckr').val(), "").trim();
+		
+		$.ajax({
+			url : "/backup/RemoteConn.do",
+			data : {
+				remote_ip : remote_ip,
+				remote_port : remote_port,
+				remote_usr : remote_usr,
+				remote_pw : remote_pw
+			},
+			dataType : "json",
+			type : "post",
+			beforeSend: function(xhr) {
+				xhr.setRequestHeader("AJAX", true);
+			},
+			error : function(xhr, status, error) {
+				if(xhr.status == 401) {
+					showSwalIconRst(message_msg02, closeBtn, '', 'error', 'top');
+				} else if(xhr.status == 403) {
+					showSwalIconRst(message_msg03, closeBtn, '', 'error', 'top');
+				} else {
+					showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), closeBtn, '', 'error');
+				}
+			},
+			success : function(data) {
+				if(data == 'success'){
+					showSwalIcon('<spring:message code="message.msg93" />', '<spring:message code="common.close" />', '', 'success');
+					remoteConn = "Success";
+					$("#ssh_con_alert", "#workRegFormBckr").html("");
+					$("#ssh_con_alert", "#workRegFormBckr").hide();
+				}else {
+					showSwalIcon('<spring:message code="message.msg92" />', '<spring:message code="common.close" />', '', 'error');
+					remoteConn = "Fail";
+				}
+				
+			}
+		})
 	}
 
 </script>
@@ -835,8 +913,11 @@
 														<input type="password" class="form-control form-control-xsm" maxlength="50" id="ins_remt_str_pw" name="ins_remt_str_pw" style="width: 250px;" placeholder="패스워드를 입력해주세요" onchange="fn_backrest_chg_alert(this)"/>
 													</div>
 
-													<div class="col-sm-2" style="height: 20px; margin-top: 3px;">
-														<button type="button" class="btn btn-outline-primary" style="width: 60px;padding: 5px;">연결</button>
+													<div class="col-sm-1" style="height: 20px; margin-top: 3px;">
+														<button id="ssh_conn" type="button" class="btn btn-outline-primary" style="width: 60px;padding: 5px;" onclick="fn_ssh_connection()">연결</button>
+													</div>
+													<div class="col-sm-2_3">
+														<div class="alert alert-danger" style="display:none; width: 250px; margin-left: -25px;" id="ssh_con_alert"></div>
 													</div>
 												</div>
 
