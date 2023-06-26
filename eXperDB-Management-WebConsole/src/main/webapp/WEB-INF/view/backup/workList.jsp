@@ -431,7 +431,6 @@
 	 * 삭제 로직 처리
 	 ******************************************************** */
 	function fn_deleteWork(gbn) {
-		console.log(gbn);
 		$.ajax({
 			url : "/popup/workDelete.do",
 		  	data : {
@@ -815,7 +814,6 @@
 	 * Backrest remote Immediate Start
 	 ******************************************************** */
 	 function fn_Backrest_remote_Immediate(){
-		 console.log(immediate_data[0]);
 		 $.ajax({
 				url : "/backrestImmediateStart.do",
 				data : {

@@ -910,7 +910,6 @@
 							}
 						},
 						success : function(result) {
-							console.log(result);
 							$('#backRestAcitveLog').text(result.RESULT_DATA);
 							$('#backRestAcitveLog').scrollTop($('#backRestAcitveLog')[0].scrollHeight);
 						}
