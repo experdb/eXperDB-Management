@@ -3,11 +3,7 @@ package com.k4m.dx.tcontrol.server;
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.File;
 import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.RandomAccessFile;
 import java.net.Socket;
 
 import org.json.simple.JSONObject;
@@ -16,10 +12,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
-import com.k4m.dx.tcontrol.DaemonStart;
 import com.k4m.dx.tcontrol.db.repository.service.SystemServiceImpl;
 import com.k4m.dx.tcontrol.db.repository.vo.RmanRestoreVO;
-import com.k4m.dx.tcontrol.db.repository.vo.WrkExeVO;
 import com.k4m.dx.tcontrol.socket.ProtocolID;
 import com.k4m.dx.tcontrol.socket.SocketCtl;
 import com.k4m.dx.tcontrol.socket.TranCodeType;
@@ -85,7 +79,7 @@ public class DxT053 extends SocketCtl {
 			String retVal = r.call();
 			String strResultMessage = r.getMessage();
 			if (retVal.equals("success")) {
-				// LOG에서 restore size & 30862ms 읽어올 것
+				// LOG에서 restore size & 수행시간
 
 				String configPath = pgBlogPath + "/" + exelog + ".log";
 				BufferedReader br = new BufferedReader(new FileReader(configPath));
@@ -114,6 +108,15 @@ public class DxT053 extends SocketCtl {
 				br.close();
 				
 				vo.setRESTORE_CNDT("0");
+				
+//				if(restore_type.equals("pitr")) {
+//					String pgRecoveryCmd = "rm -rf $PGDATA/recovery.signal";
+//					util.getPidExec(pgRecoveryCmd);
+//				}
+//				
+//				String pgStartCmd = "pg_ctl start";
+//				util.getPidExec(pgStartCmd);
+				
 			} else {
 				errLogger.error("[ERROR] DxT053 {} ", retVal + " " + strResultMessage);
 				strSuccessCode = "2";

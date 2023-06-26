@@ -950,7 +950,7 @@
 			, #{DB_SVR_IPADR_ID}
 			<choose>
 				<when test="BACKREST_SCD_ID !=null and BACKREST_SCD_ID != ''" >
-				, (SELECT SCD_ID FROM T_SCD_M WHERE SCD_ID = #{BACKREST_SCD_ID})::numeric
+				, (SELECT SCD_NM FROM T_SCD_M WHERE SCD_ID = #{BACKREST_SCD_ID})
 				</when>
 				<otherwise>
 				, null
