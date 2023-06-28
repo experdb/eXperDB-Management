@@ -149,7 +149,7 @@ public class CmmnUtil {
 			InputStream err = channelExec.getErrStream();
 			// 명령어를 실행한다.
 			if(command != null) {
-				channelExec.connect(15000);	
+				channelExec.connect(1500000);	
 			}
 			byte[] buf = new byte[1024];
 			int length;
@@ -237,6 +237,7 @@ public class CmmnUtil {
 			cmd = "rm /home/" + cmdInfo.get("usr") + "/pgbackrest/config/" + cmdInfo.get("bck_filenm") + ".conf";
 		}
 		
+		System.out.println(cmd);
 		
 		return cmd;
 	}

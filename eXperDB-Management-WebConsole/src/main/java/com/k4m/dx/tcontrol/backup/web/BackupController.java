@@ -707,7 +707,7 @@ public class BackupController {
 					serverInfo.put("port", remoteMap.get("remote_port"));
 					serverInfo.put("usr", remoteMap.get("remote_usr"));
 					serverInfo.put("pw", remoteMap.get("remote_pw"));
-					serverInfo.put("pth", "/home/remote/pgbackrest/config/" + request.getParameter("wrk_nm") + ".conf");
+	                serverInfo.put("pth", "/home/" + serverInfo.get("usr") + "/pgbackrest/config/" + request.getParameter("wrk_nm") + ".conf");
 
 					CmmnUtil cu = new CmmnUtil();
 					
@@ -742,7 +742,7 @@ public class BackupController {
 						serverInfo.put("port", remoteMap.get("remote_port"));
 						serverInfo.put("usr", remoteMap.get("remote_usr"));
 						serverInfo.put("pw", remoteMap.get("remote_pw"));
-						serverInfo.put("pth", "/home/remote/pgbackrest/config/" + request.getParameter("wrk_nm") + ".conf");
+						serverInfo.put("pth", "/home/" + serverInfo.get("usr") + "/pgbackrest/config/" + request.getParameter("wrk_nm") + ".conf");
 						
 						CmmnUtil cu = new CmmnUtil();
 						
@@ -2360,7 +2360,7 @@ public class BackupController {
 		jObj.put(ClientProtocolID.CMD_BACKUP_PATH, pullPath);
 		
 		JSONObject result = new JSONObject(); 
-
+		
 		if(backrest_gbn.equals("remote")) {
 			String remote_ip = request.getParameter("remote_ip");
 			String remote_port = request.getParameter("remote_port");
@@ -2509,11 +2509,22 @@ public class BackupController {
 			conf = conf.replaceAll("#pg1-port=", "pg1-port=" + String.valueOf(dbServerVO.getPortno()));
 			conf = conf.replaceAll("#pg1-user=", "pg1-user=" + String.valueOf(dbServerVO.getSvr_spr_usr_id()));
 			conf = conf.replaceAll("#repo1-gbn=", "#repo1-gbn=" + workVO.getBackrest_gbn());
-			// backup 경로 수정 필요
-			conf = conf.replaceAll("#repo1-path=", "repo1-path=/home/remote/pgbackrest/backup");
+
+			String bck_pth = request.getParameter("bck_pth");
+            String chk = bck_pth.substring(bck_pth.length()-1, bck_pth.length());
+            if(chk.equals("/")) {
+               bck_pth = bck_pth.substring(0, bck_pth.length()-1);
+            }
+			
+			conf = conf.replaceAll("#repo1-path=", "repo1-path="+bck_pth);
 			conf = conf.replaceAll("#repo1-retention-full=", "repo1-retention-full=" + String.valueOf(workVO.getBck_mtn_ecnt()));
-			// log경로 수정 필요
-			conf = conf.replaceAll("#log-path=", "log-path=" + "/home/remote/pgbackrest/logs");
+			
+			String log_file_pth = request.getParameter("log_file_pth");
+            String chk2 = log_file_pth.substring(log_file_pth.length()-1, log_file_pth.length());
+            if(chk2.equals("/")) {
+               log_file_pth = log_file_pth.substring(0, log_file_pth.length()-1);
+            }
+			conf = conf.replaceAll("#log-path=", "log-path=" + log_file_pth);
 			conf = conf.replaceAll("#log-level-console=detail", "log-level-console=detail");
 			conf = conf.replaceAll("#log-level-file=detail", "log-level-file=detail");
 			
@@ -2779,6 +2790,9 @@ public class BackupController {
 			String bck_filenm = cmdInfo.get("log_file_pth").toString() + "/" + cmdInfo.get("wrk_nm").toString() + "_" + now + ".log";
 			String frst_regr_id = request.getParameter("frst_regr_id");
 			String lst_mdfr_id = request.getParameter("lst_mdfr_id");
+			System.out.println("0"+request.getParameter("log_file_pth"));
+			System.out.println("1"+cmdInfo.get("log_file_pth").toString());
+			System.out.println("2"+bck_filenm);
 			
 			WrkExeVO vo = new WrkExeVO(); 
 			
@@ -2800,6 +2814,8 @@ public class BackupController {
 			
 			JSONObject result = cu.executeBackrest(serverInfo, cmd, "backrest", null);
 			int resultCode = Integer.parseInt(result.get("RESULT_CODE").toString());
+			
+			System.out.println(result);
 			
 			if(resultCode == 0) {
 				cmdInfo.put("type", "info");
@@ -2826,6 +2842,7 @@ public class BackupController {
 				endVO.setExe_rslt_cd(TC001701);
 				endVO.setFile_sz(repoSizeInt);
 				endVO.setDB_SZ(dbSizeInt);
+				endVO.setBck_filenm(bck_filenm);
 				endVO.setRslt_msg("success");
 				
 				backupService.updateBackrestWrk(endVO);
