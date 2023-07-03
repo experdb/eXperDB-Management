@@ -83,6 +83,10 @@ public class BackupDAO extends EgovAbstractMapper{
 	public void deleteWork(int wrk_id) throws Exception{
 		delete("backupSQL.deleteWork",wrk_id);
 	}
+	
+	public void deleteWorkExe(int wrk_id) throws Exception{
+		delete("backupSQL.deleteWorkExe",wrk_id);
+	}
 
 	@SuppressWarnings({ "unchecked", "deprecation" })
 	public List<DbVO> selectDbList(WorkVO workVO) throws Exception{

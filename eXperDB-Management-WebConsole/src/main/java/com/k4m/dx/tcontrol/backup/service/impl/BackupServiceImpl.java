@@ -80,6 +80,10 @@ public class BackupServiceImpl extends EgovAbstractServiceImpl implements Backup
 		backupDAO.deleteWork(wrk_id);
 	}
 	
+	public void deleteWorkExe(int wrk_id) throws Exception{
+		backupDAO.deleteWorkExe(wrk_id);
+	}
+	
 	public List<DbVO> selectDbList(WorkVO workVO) throws Exception{
 		return backupDAO.selectDbList(workVO);
 	}

@@ -479,6 +479,17 @@
 			wrk_id = #{wrk_id}
 	</delete>
 	
+	<delete id="deleteWorkExe" parameterType="int">
+		/**
+	 	* Query ID : deleteWorkExe
+	 	* Description : 백업 exe delete
+	 	* Author : 박유라
+	 	**/	
+		DELETE FROM T_WRKEXE_G
+		WHERE
+			wrk_id = #{wrk_id}
+	</delete>
+	
 	<delete id="deleteBckWork" parameterType="int">
 		/**
 	 	* Query ID : deleteBckWork
@@ -749,7 +760,7 @@
 			obj_sn,
 			bck_wrk_id,
 			db_id,
-			scm_nm,selectWorkLogList
+			scm_nm,
 			obj_nm,
 			frst_regr_id,
 			frst_reg_dtm,

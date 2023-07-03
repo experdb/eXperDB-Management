@@ -41,6 +41,11 @@
 	var immediate_data = null;
 	var workJsonData = null;
 	var scheduleTable = null;
+	backrest_gbn = null; 
+	remote_ip = null;
+	remote_port = null;
+	remote_usr = null; 
+	remote_pw = null;
 	
 	
 	
@@ -344,6 +349,10 @@
 		wrk_id_List = [];
 		wrk_bck_server_list = [];
 		bck_filenm_list = [];
+		wrk_bck_server_port_list = [];
+		wrk_bck_server_usr_list = [];
+		wrk_bck_server_pw_list = [];
+		wrk_bck_gbn_list = [];
 
 		if (datas.length <= 0) {
 			showSwalIcon('<spring:message code="message.msg16"/>', '<spring:message code="common.close" />', '', 'error');
@@ -431,6 +440,11 @@
 	 * 삭제 로직 처리
 	 ******************************************************** */
 	function fn_deleteWork(gbn) {
+		wrk_bck_gbn_list = nvlPrmSet(wrk_bck_gbn_list, "");
+		wrk_bck_server_port_list = nvlPrmSet(wrk_bck_server_port_list, "");
+		wrk_bck_server_usr_list = nvlPrmSet(wrk_bck_server_usr_list, "");
+		wrk_bck_server_pw_list = nvlPrmSet(wrk_bck_server_pw_list, "");
+
 		$.ajax({
 			url : "/popup/workDelete.do",
 		  	data : {
@@ -659,6 +673,11 @@
 		} else if(selectChkTab == "backrest"){
 			bck_wrk_id = tableBackrest.row('.selected').data().bck_wrk_id;
 			wrk_id = tableBackrest.row('.selected').data().wrk_id;
+			backrest_gbn = tableBackrest.row('.selected').data().backrest_gbn,
+			remote_ip = tableBackrest.row('.selected').data().remote_ip,
+			remote_port = tableBackrest.row('.selected').data().remote_port,
+			remote_usr = tableBackrest.row('.selected').data().remote_usr,
+			remote_pw = tableBackrest.row('.selected').data().remote_pw
 		} else {
 			bck_wrk_id = tableDump.row('.selected').data().bck_wrk_id;
 			wrk_id = tableDump.row('.selected').data().wrk_id;
@@ -670,11 +689,11 @@
 				db_svr_id : $("#db_svr_id", "#findList").val(),
 				bck_wrk_id : bck_wrk_id,
 				wrk_id : wrk_id,
-				backrest_gbn: tableBackrest.row('.selected').data().backrest_gbn,
-				remote_ip: tableBackrest.row('.selected').data().remote_ip,
-				remote_port: tableBackrest.row('.selected').data().remote_port,
-				remote_usr: tableBackrest.row('.selected').data().remote_usr,
-				remote_pw: tableBackrest.row('.selected').data().remote_pw
+				backrest_gbn: backrest_gbn,
+				remote_ip: remote_ip,
+				remote_port: remote_port,
+				remote_usr: remote_usr,
+				remote_pw: remote_pw
 			},
 			dataType : "json",
 			type : "post",

@@ -492,6 +492,10 @@
 								<button type="button" class="btn btn-outline-primary btn-icon-text float-right" id="btnScheduleRun" onClick="fn_restore_start();">
 									<i class="ti-pencil btn-icon-prepend "></i><spring:message code="schedule.run" />
 								</button>
+
+								<div class="col-sm-2_5 float-right">
+									<div class="alert alert-info " style="width: 310px; margin-top: 18px;">복원대상 DB를 종료한 후에 복원바랍니다.</div>
+								</div>
 							</div>
 						</div>
 					</div>

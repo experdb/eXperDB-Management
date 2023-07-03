@@ -107,6 +107,13 @@ public interface BackupService {
 	public void deleteWork(int wrk_id) throws Exception;
 	
 	/**
+	 * Work delete
+	 * @param WorkVO
+	 * @throws Exception
+	 */
+	public void deleteWorkExe(int wrk_id) throws Exception;
+	
+	/**
 	 * DB 목록 조회
 	 * @param WorkVO
 	 * @return List<DbVO>

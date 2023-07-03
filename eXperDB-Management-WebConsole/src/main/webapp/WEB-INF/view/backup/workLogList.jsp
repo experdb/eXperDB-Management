@@ -974,6 +974,7 @@
 						url : "/selectBackrestLog.do",
 						data : {
 							log_path : tableBackrest.row('.selected').data().bck_filenm,
+							backrest_gbn : backrest_gbn,
 							ipadr : tableBackrest.row('.selected').data().ipadr
 						},
 						dataType : "json",
@@ -1006,6 +1007,7 @@
 								url : "/selectBackrestLog.do",
 								data : {
 									log_path : tableBackrest.row('.selected').data().bck_filenm,
+									backrest_gbn : backrest_gbn,
 									ipadr : tableBackrest.row('.selected').data().ipadr
 								},
 								dataType : "json",
