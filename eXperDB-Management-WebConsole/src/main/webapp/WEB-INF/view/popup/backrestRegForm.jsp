@@ -733,7 +733,7 @@
 					fn_get_backrest_list();
 					remoteConn = "Fail";
 				}else if (data == "N"){
-					showSwalIcon('message.msg229', '<spring:message code="common.close" />', '', 'error');
+					showSwalIcon('<spring:message code="message.msg229" />', '<spring:message code="common.close" />', '', 'error');
 					$('#pop_layer_reg_backrest').modal('show');
 					return;
 				}else{
