@@ -182,13 +182,10 @@ public class DxT047 extends SocketCtl{
 				String now2 = dateFormat2.format(new Date());
 				
 				WrkExeVO endVO = new WrkExeVO();
-				endVO.setEXE_RSLT_CD(TC001702);
-				endVO.setWRK_STRT_DTM(now);
+				
 				endVO.setWRK_END_DTM(now2);
+				endVO.setEXE_RSLT_CD(TC001702);
 				endVO.setEXE_SN(exe_sn);
-				endVO.setFILE_SZ(0);
-				endVO.setDB_SZ(0);
-				endVO.setBCK_FILENM(logFullPath);
 				endVO.setRSLT_MSG(retVal + " " + strResultMessage);
 				if(jObj.get(ClientProtocolID.WRK_TYPE).equals("schedule")) {
 					endVO.setSCD_CNDT(TC001801);
@@ -196,7 +193,7 @@ public class DxT047 extends SocketCtl{
 					service.updateSCD_CNDT(endVO);
 				}
 				// 백업 이력 update
-				service.updateBackrestWrk(endVO);
+				service.updateBackrestErr(endVO);
 			}
 			outputObj.put(ProtocolID.DX_EX_CODE, strDxExCode);
 			outputObj.put(ProtocolID.RESULT_CODE, strSuccessCode);

@@ -1180,7 +1180,7 @@
 	 	**/
 		UPDATE T_WRKEXE_G
 		SET
-			, EXE_RSLT_CD = #{exe_rslt_cd}
+			EXE_RSLT_CD = #{exe_rslt_cd}
 			, RSLT_MSG = #{rslt_msg}
 		<if test="BACKREST_SCD_ID !=null and BACKREST_SCD_ID != ''" >
 			, SCD_ID = (SELECT SCD_ID FROM T_SCD_M WHERE SCD_ID = #{BACKREST_SCD_ID})::numeric

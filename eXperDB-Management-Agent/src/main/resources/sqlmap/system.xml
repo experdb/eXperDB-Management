@@ -1008,7 +1008,7 @@
 	 	
    		UPDATE T_WRKEXE_G
    		SET
-			, EXE_RSLT_CD = #{EXE_RSLT_CD}
+			EXE_RSLT_CD = #{EXE_RSLT_CD}
 			, FILE_SZ = 0
 			, DB_SZ = 0
 			, RSLT_MSG = #{RSLT_MSG}
