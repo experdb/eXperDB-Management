@@ -121,7 +121,7 @@
 		    		{data: "ipadr", className: "dt-center", defaultContent: ""}, 
 		    		{data: "wrk_strt_dtm", className: "dt-center", defaultContent: ""}, 
 		    		{data: "wrk_end_dtm", className: "dt-center", defaultContent: ""}, 
-		    		{data: "wrk_end_dtm", className: "dt-center", defaultContent: ""}, 
+		    		{data: "wrk_dtm", className: "dt-center", defaultContent: ""}, 
 		    		{
 	 					data : "exe_rslt_cd_nm",
 	 					render : function(data, type, full, meta) {	 						

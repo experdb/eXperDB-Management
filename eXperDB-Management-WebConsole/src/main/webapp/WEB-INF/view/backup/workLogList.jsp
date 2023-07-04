@@ -552,7 +552,17 @@
 						},
 						className: "dt-center", defaultContent: ""},
 					{data: "wrk_nm", className: "dt-center", defaultContent: ""},
-					{data: "ipadr", className: "dt-center", defaultContent: ""},
+					{data: "ipadr",
+						render : function(data, type, full, meta){
+							html = '';
+							if(full.backrest_gbn == 'remote'){
+								html += full.remote_ip;
+							}else {
+								html = full.ipadr;
+							}
+							return html;
+						},
+						className: "dt-center", defaultContent: ""},
 					{data: "storage", 
 						render : function(data, type, full, meta) {
 							var html = '';
