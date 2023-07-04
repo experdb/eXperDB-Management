@@ -927,31 +927,22 @@
 	 	**/
 		<![CDATA[
 			SELECT 
-            	scd_id
-                , scd_nm
-                , scd_exp
-                , scd_cndt
-                , exe_perd_cd
-                , exe_month
-                , exe_day
-                , substring(exe_hms from 5 for 2) || ':' || substring(exe_hms from 3 for 2) AS exe_hms
-                , exe_dt
-                , TO_CHAR(frst_reg_dtm::TIMESTAMP,'yyyyMMdd')as frst_reg_dtm
+            	A.scd_id
+                , A.scd_nm
+                , A.scd_exp
+                , A.scd_cndt
+                , A.exe_perd_cd
+                , A.exe_month
+                , A.exe_day
+                , substring(A.exe_hms from 5 for 2) || ':' || substring(A.exe_hms from 3 for 2) AS exe_hms
+                , A.exe_dt
+                , TO_CHAR(A.frst_reg_dtm::TIMESTAMP,'yyyyMMdd')as frst_reg_dtm
+                , B.BCK_BSN_DSCD
             FROM
-            	T_SCD_M
-            WHERE SCD_ID IN (
-                SELECT 
-                	SCD_ID 
-                FROM T_SCD_D
-                WHERE wrk_id in (
-		                SELECT 
-		                	wrk_id 
-		                FROM T_BCK_WRKCNG_I
-		                WHERE db_svr_id = ${db_svr_id}
-		                GROUP BY wrk_id
-                    )
-              )
-
+            	T_SCD_M A, T_BCK_WRKCNG_I B, T_SCD_D C
+           	WHERE A.SCD_ID = C.SCD_ID
+          		AND B.WRK_ID = C.WRK_ID
+          		AND B.DB_SVR_ID = ${db_svr_id}
 		]]>
     </select>
   
@@ -1181,4 +1172,30 @@
   			WRK_ID = #{num}
     </select>
     
+    <update id="updateBackrestErr"  parameterType="WrkExeVO">
+   		/**
+	 	* Query ID : updateBackrestErr
+	 	* Description : backrest 작업실행로그 Err
+	 	* Author : 이지석
+	 	**/
+		UPDATE T_WRKEXE_G
+		SET
+			, EXE_RSLT_CD = #{exe_rslt_cd}
+			, RSLT_MSG = #{rslt_msg}
+		<if test="BACKREST_SCD_ID !=null and BACKREST_SCD_ID != ''" >
+			, SCD_ID = (SELECT SCD_ID FROM T_SCD_M WHERE SCD_ID = #{BACKREST_SCD_ID})::numeric
+		</if>
+		WHERE
+			EXE_SN = #{exe_sn}
+    </update>
+    
+    <select id="selectSchedule" parameterType="int" resultType="hashMap">
+    	SELECT 
+    		A.SCD_ID,
+    		B.BCK_BSN_DSCD
+   		FROM T_SCD_D A, T_BCK_WRKCNG_I B
+   		WHERE
+   			SCD_ID = #{num}
+   			AND A.WRK_ID = B.WRK_ID
+    </select>
 </mapper>

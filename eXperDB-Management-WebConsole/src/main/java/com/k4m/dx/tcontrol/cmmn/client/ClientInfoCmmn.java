@@ -337,21 +337,14 @@ public class ClientInfoCmmn implements Runnable{
 								
 								backupService.updateBackrestWrk(endVO);
 							}else {
-								SimpleDateFormat dateFormat2 = new SimpleDateFormat("yyyyMMddHHmmss");
-								String now2 = dateFormat.format(new Date());
-								
+																
 								WrkExeVO endVO = new WrkExeVO();
 								
-								endVO.setWrk_strt_dtm(now);
-								endVO.setWrk_end_dtm(now2);
-								endVO.setExe_rslt_cd("TC001702");
-								endVO.setFile_sz(0);
-								endVO.setDB_SZ(0);
-								endVO.setBck_filenm(fullPath);
-								endVO.setRslt_msg("fail");
 								endVO.setExe_sn(exe_sn);
+								endVO.setExe_rslt_cd("TC001702");
+								endVO.setRslt_msg("Fail");
 								endVO.setBACKREST_SCD_ID(Integer.parseInt(resultWork.get(i).get("scd_id").toString()));
-								backupService.updateBackrestWrk(endVO);
+								backupService.updateBackrestErr(endVO);
 							}
 						}else {
 							reqJObj.put(ClientProtocolID.DX_EX_CODE, ClientTranCodeType.DxT047);

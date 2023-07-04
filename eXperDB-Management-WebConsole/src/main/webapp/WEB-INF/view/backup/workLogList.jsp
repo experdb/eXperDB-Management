@@ -1333,7 +1333,7 @@
 												<th width="40"><spring:message code="common.no" /></th>
 												<th width="40"><spring:message code="etc.etc25" /></th>
 												<th width="40"><spring:message code="common.work_name" /></th>
-												<th width="60">백업 서버</th>
+												<th width="60">백업 스토리지</th>
 												<th width="40">스토리지</th>
 												<th width="40">백업 구분</th>
 												<th width="100"><spring:message code="properties.backup_path" /></th>
@@ -1363,7 +1363,7 @@
 												<th class="float-right"><button id="log_starter" type="button" class="btn btn-danger" onclick="stopInterval()">Log Stop</button></th>
 											</tr>
 										</table>
-										<textarea id="backRestAcitveLog" rows=10 style="width:100%;" disabled onfocus="this.value = this.value;"></textarea>
+										<textarea id="backRestAcitveLog" rows=20 style="width:100%;" disabled onfocus="this.value = this.value;"></textarea>
 									</div> 
 								</div>
 							</div>

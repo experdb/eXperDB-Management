@@ -46,7 +46,8 @@
 	remote_port = null;
 	remote_usr = null; 
 	remote_pw = null;
-	
+	var bck_pth_chk = false;
+	var log_pth_chk = false;
 	
 	
 	$(window).ready(function(){
@@ -876,6 +877,136 @@
 				}
 			}); 
 	 }
+	
+	 function fn_chk_pth(pth){
+			var bck_pth = "";
+			var log_pth = "";
+			
+			if(pth.id == 'mod_log_pth_chk'){
+				if(mod_remoteConn == 'Fail'){
+					showSwalIcon('스토리지 연결을 해주세요', '<spring:message code="common.close" />', '', 'warning');
+				}else if(mod_remoteConn == 'Success'){
+					log_pth = $("#mod_bckr_log_pth").val();
+				}
+				
+				var remote_ip = nvlPrmSet($('#mod_remt_str_ip', '#workRegReFormBckr').val(), "").trim();
+				var remote_port = nvlPrmSet($('#mod_remt_str_ssh', '#workRegReFormBckr').val(), "").trim();
+				var remote_usr = nvlPrmSet($('#mod_remt_str_usr', '#workRegReFormBckr').val(), "").trim();
+				var remote_pw = nvlPrmSet($('#mod_remt_str_pw', '#workRegReFormBckr').val(), "").trim();
+				
+				$.ajax({
+					url : "/backup/RemoteConnPth.do",
+					data : {
+						remote_ip: remote_ip,
+						remote_port: remote_port,
+						remote_usr: remote_usr,
+						remote_pw: remote_pw,
+						bck_pth: bck_pth,
+						log_pth: log_pth,
+					},
+					type : "post",
+					async: true,
+					beforeSend: function(xhr) {
+						xhr.setRequestHeader("AJAX", true);
+					},
+					error : function(xhr, status, error) {
+						if(xhr.status == 401) {
+							showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
+						} else if(xhr.status == 403) {
+							showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
+						} else {
+							if (xhr.responseText != null) {
+								showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
+							} else {
+								showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : ", '<spring:message code="common.close" />', '', 'error');
+							}
+						}
+					},
+					success : function(result) {
+						if(result != ""){
+							if(result == 'log_pth_S'){
+								mod_log_pth_chk = true;
+								$("#mod_bckr_log_pth_alert", "#workRegReFormBckr").html("");
+								$("#mod_bckr_log_pth_alert", "#workRegReFormBckr").hide();
+								showSwalIcon('로그 경로 체크 성공', '<spring:message code="common.close" />', '', 'success');
+							}else if(result == 'log_pth_F'){
+								mod_log_pth_chk = false;
+								showSwalIcon('로그 경로를 확인해 주세요', '<spring:message code="common.close" />', '', 'warning');
+							}
+						}
+					}
+				});
+				
+			}else {
+				if(pth.id == 'bck_pth_chk'){
+					bck_pth = $("#ins_bckr_pth").val(); 
+				}else {
+					log_pth = $("#ins_bckr_log_pth").val();
+				}
+				if(remoteConn == 'Fail'){
+					showSwalIcon('스토리지 정보를 입력해 주세요', '<spring:message code="common.close" />', '', 'warning');
+				}else if(remoteConn == "Success"){
+					
+					var remote_ip = nvlPrmSet($('#ins_remt_str_ip', '#workRegFormBckr').val(), "").trim();
+					var remote_port = nvlPrmSet($('#ins_remt_str_ssh', '#workRegFormBckr').val(), "").trim();
+					var remote_usr = nvlPrmSet($('#ins_remt_str_usr', '#workRegFormBckr').val(), "").trim();
+					var remote_pw = nvlPrmSet($('#ins_remt_str_pw', '#workRegFormBckr').val(), "").trim();
+					
+					$.ajax({
+						url : "/backup/RemoteConnPth.do",
+						data : {
+							remote_ip: remote_ip,
+							remote_port: remote_port,
+							remote_usr: remote_usr,
+							remote_pw: remote_pw,
+							bck_pth: bck_pth,
+							log_pth: log_pth,
+						},
+						type : "post",
+						async: true,
+						beforeSend: function(xhr) {
+							xhr.setRequestHeader("AJAX", true);
+						},
+						error : function(xhr, status, error) {
+							if(xhr.status == 401) {
+								showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
+							} else if(xhr.status == 403) {
+								showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
+							} else {
+								if (xhr.responseText != null) {
+									showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
+								} else {
+									showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : ", '<spring:message code="common.close" />', '', 'error');
+								}
+							}
+						},
+						success : function(result) {
+							if(result != ""){
+								if(result == 'bck_pth_S'){
+									bck_pth_chk = true;
+									$("#ins_bckr_pth_alert", "#workRegFormBckr").html("");
+									$("#ins_bckr_pth_alert", "#workRegFormBckr").hide();
+									showSwalIcon('백업 경로 체크 성공', '<spring:message code="common.close" />', '', 'success');
+								}else if(result == 'bck_pth_F'){
+									bck_pth_chk = false;
+									showSwalIcon('백업 경로를 확인해 주세요', '<spring:message code="common.close" />', '', 'warning');
+								}else if(result == 'log_pth_S'){
+									log_pth_chk = true;
+									$("#ins_bckr_log_pth_alert", "#workRegFormBckr").html("");
+									$("#ins_bckr_log_pth_alert", "#workRegFormBckr").hide();
+									showSwalIcon('로그 경로 체크 성공', '<spring:message code="common.close" />', '', 'success');
+								}else if(result == 'log_pth_F'){
+									log_pth_chk = false;
+									showSwalIcon('로그 경로를 확인해 주세요', '<spring:message code="common.close" />', '', 'warning');
+								}
+							}else{
+								showSwalIcon('경로를 확인해 주세요', '<spring:message code="common.close" />', '', 'warning');
+							}
+						}
+					});
+				}
+			}
+		}
 </script>
 
 <%@include file="../cmmn/workRmanInfo.jsp"%>

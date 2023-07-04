@@ -711,7 +711,7 @@ public class BackupController {
 
 					CmmnUtil cu = new CmmnUtil();
 					
-					cu.createBackrestConf(serverInfo, file);
+					result = cu.createBackrestConf(serverInfo, file);
 					
 					workVO.setRemote_ip(serverInfo.get("ip").toString());
 					workVO.setRemote_port(serverInfo.get("port").toString());
@@ -746,7 +746,7 @@ public class BackupController {
 						
 						CmmnUtil cu = new CmmnUtil();
 						
-						cu.createBackrestConf(serverInfo, file);
+						result = cu.createBackrestConf(serverInfo, file);
 						
 						workVO.setRemote_ip(serverInfo.get("ip").toString());
 						workVO.setRemote_port(serverInfo.get("port").toString());
@@ -1394,11 +1394,11 @@ public class BackupController {
 				serverInfo.put("port", remoteMap.get("remote_port"));
 				serverInfo.put("usr", remoteMap.get("remote_usr"));
 				serverInfo.put("pw", remoteMap.get("remote_pw"));
-				serverInfo.put("pth", "/home/remote/pgbackrest/config/" + request.getParameter("wrk_nm") + ".conf");
+				serverInfo.put("pth", "/home/" + serverInfo.get("usr") + "/pgbackrest/config/" + request.getParameter("wrk_nm") + ".conf");
 
 				CmmnUtil cu = new CmmnUtil();
 				
-				cu.createBackrestConf(serverInfo, file);
+				result = cu.createBackrestConf(serverInfo, file);
 				
 				workVO.setRemote_ip(serverInfo.get("ip").toString());
 				workVO.setRemote_port(serverInfo.get("port").toString());
@@ -1429,11 +1429,11 @@ public class BackupController {
 					serverInfo.put("port", remoteMap.get("remote_port"));
 					serverInfo.put("usr", remoteMap.get("remote_usr"));
 					serverInfo.put("pw", remoteMap.get("remote_pw"));
-					serverInfo.put("pth", "/home/remote/pgbackrest/config/" + request.getParameter("wrk_nm") + ".conf");
+					serverInfo.put("pth", "/home/" + serverInfo.get("usr") + "/pgbackrest/config/" + request.getParameter("wrk_nm") + ".conf");
 					
 					CmmnUtil cu = new CmmnUtil();
 					
-					cu.createBackrestConf(serverInfo, file);
+					result = cu.createBackrestConf(serverInfo, file);
 					
 					workVO.setRemote_ip(serverInfo.get("ip").toString());
 					workVO.setRemote_port(serverInfo.get("port").toString());
@@ -1956,6 +1956,8 @@ public class BackupController {
 			String scd_id = request.getParameter("scd_id");
 			// mv.setViewName("popup/bakupScheduleDtl");
 			mv.addObject("scd_id", scd_id);
+			Map<String, Object> scd = backupService.selectSchedule(Integer.parseInt(scd_id));
+			mv.addObject("scd", scd);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -2743,6 +2745,68 @@ public class BackupController {
 	}
 	
 	/**
+	 * Backrest remote 경로 조회
+	 * 
+	 * @param request
+	 * @return String
+	 * @throws Exception
+	 */
+	@SuppressWarnings("unchecked")
+	@RequestMapping(value = "/backup/RemoteConnPth.do")
+	@ResponseBody
+	public String RemoteConnectionPth(HttpServletRequest request) {
+		
+		String ip = request.getParameter("remote_ip");
+		int port = Integer.parseInt(request.getParameter("remote_port"));
+		String usr = request.getParameter("remote_usr");
+		String pw = request.getParameter("remote_pw");
+		String bckPth = request.getParameter("bck_pth");
+		String logPth = request.getParameter("log_pth");
+		String resultCode = "";
+		
+		Map<String, Object> serverInfo = new HashMap<>();
+		
+		serverInfo.put("ip", ip);
+		serverInfo.put("port", port);
+		serverInfo.put("usr", usr);
+		serverInfo.put("pw", pw);
+		
+		CmmnUtil cu = new CmmnUtil();
+		String cmd = "";
+		if(logPth.equals("")) {
+			if(!bckPth.equals("")) {
+				cmd = "du -sh " + bckPth + " | awk '{print $1}'";
+				try {
+					String result = cu.executeBackrest(serverInfo, cmd, "backrest", null).get("RESULT_DATA").toString();
+					if(result.equals("")) {
+						resultCode = "bck_pth_F";
+					}else {
+						resultCode = "bck_pth_S";
+					}
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		}else if(bckPth.equals("")) {
+			if(!logPth.equals("")) {
+				cmd = "du -sh " + logPth + " | awk '{print $1}'";
+				try {
+					String result = cu.executeBackrest(serverInfo, cmd, "backrest", null).get("RESULT_DATA").toString();
+					if(result.equals("")) {
+						resultCode = "log_pth_F";
+					}else {
+						resultCode = "log_pth_S";
+					}
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+				
+		return resultCode;
+	}
+	
+	/**
 	 * Backrest remote 백업 실행
 	 * 
 	 * @param request
@@ -2805,9 +2869,6 @@ public class BackupController {
 			String bck_filenm = cmdInfo.get("log_file_pth").toString() + "/" + cmdInfo.get("wrk_nm").toString() + "_" + now + ".log";
 			String frst_regr_id = request.getParameter("frst_regr_id");
 			String lst_mdfr_id = request.getParameter("lst_mdfr_id");
-			System.out.println("0"+request.getParameter("log_file_pth"));
-			System.out.println("1"+cmdInfo.get("log_file_pth").toString());
-			System.out.println("2"+bck_filenm);
 			
 			WrkExeVO vo = new WrkExeVO(); 
 			
@@ -2830,7 +2891,6 @@ public class BackupController {
 			JSONObject result = cu.executeBackrest(serverInfo, cmd, "backrest", null);
 			int resultCode = Integer.parseInt(result.get("RESULT_CODE").toString());
 			
-			System.out.println(result);
 			
 			if(resultCode == 0) {
 				cmdInfo.put("type", "info");
@@ -2857,15 +2917,18 @@ public class BackupController {
 				endVO.setExe_rslt_cd(TC001701);
 				endVO.setFile_sz(repoSizeInt);
 				endVO.setDB_SZ(dbSizeInt);
-				endVO.setBck_filenm(bck_filenm);
 				endVO.setRslt_msg("success");
 				
 				backupService.updateBackrestWrk(endVO);
 			}else {
+				WrkExeVO errVo = new WrkExeVO();
 				
+				errVo.setExe_sn(exe_sn);
+				errVo.setExe_rslt_cd(TC001702);
+				errVo.setRslt_msg("Fail");
+				
+				backupService.updateBackrestErr(errVo);
 			}
-				
-
 		} catch (Exception e) {
 			e.printStackTrace();
 		}		

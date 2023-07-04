@@ -68,11 +68,12 @@ public class DxT047 extends SocketCtl{
 		String strResultCode = TC001701;
 		int scd_id = 0;
 		JSONObject outputObj = new JSONObject();
+		
+		int exe_sn = service.selectQ_WRKEXE_G_01_SEQ();
+		scd_id = service.selectScd_id();
+		int exe_grp_sn = service.selectQ_WRKEXE_G_02_SEQ();
 		try {
 			
-			int exe_sn = service.selectQ_WRKEXE_G_01_SEQ();
-			scd_id = service.selectScd_id();
-			int exe_grp_sn = service.selectQ_WRKEXE_G_02_SEQ();
 			String ipadr = (String) jObj.get(ClientProtocolID.SERVER_IP);
 			int ipadrId = service.selectDbSvrIpAdrId(ipadr);
 			String configPath = "$PGHOME/etc/pgbackrest/config/";
@@ -207,6 +208,15 @@ public class DxT047 extends SocketCtl{
 			
 		} catch(Exception e){
 			errLogger.error("DxT047 {} ", e.toString());
+			
+			WrkExeVO errVO = new WrkExeVO();
+			errVO.setEXE_RSLT_CD(TC001702);
+			errVO.setEXE_SN(exe_sn);
+			errVO.setFILE_SZ(0);
+			errVO.setDB_SZ(0);
+			errVO.setRSLT_MSG("Fail");
+			
+			service.updateBackrestErr(errVO);
 			
 			outputObj.put(ProtocolID.DX_EX_CODE, TranCodeType.DxT047);
 			outputObj.put(ProtocolID.RESULT_CODE, "1");

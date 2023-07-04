@@ -212,4 +212,14 @@ public class BackupServiceImpl extends EgovAbstractServiceImpl implements Backup
 	public WorkLogVO selectSshInfo(int wrkId) {
 		return backupDAO.selectSshInfo(wrkId);
 	}
+	
+	@Override
+	public void updateBackrestErr(WrkExeVO vo) {
+		backupDAO.updateBackrestErr(vo);		
+	}
+
+	@Override
+	public Map<String, Object> selectSchedule(int scdId) {
+		return backupDAO.selectSchedule(scdId);
+	}
 }

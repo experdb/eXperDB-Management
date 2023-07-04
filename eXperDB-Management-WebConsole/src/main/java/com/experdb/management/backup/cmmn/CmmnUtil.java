@@ -179,7 +179,8 @@ public class CmmnUtil {
 		return result;
 	}
 	
-	public void createBackrestConf(Map<String,Object> serverInfo, String file) {
+	public String createBackrestConf(Map<String,Object> serverInfo, String file) {
+		String result = "";
 		JSch jsch = new JSch();
 		
 		String ip = serverInfo.get("ip").toString();
@@ -199,15 +200,17 @@ public class CmmnUtil {
             channelSftp.connect();
             
             channelSftp.put(new ByteArrayInputStream(file.getBytes()), pth);
+            result = "S";
 		} catch (JSchException e) {
-			// TODO Auto-generated catch block
+			result = "N";
 			e.printStackTrace();
 		} catch (SftpException e) {
-			// TODO Auto-generated catch block
+			result = "N";
 			e.printStackTrace();
 		}finally {
 			channelSftp.disconnect();
 		}
+		return result;
 	}
 	
 	public String createBackrestCmd(JSONObject cmdInfo) {

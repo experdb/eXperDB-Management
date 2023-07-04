@@ -1171,7 +1171,7 @@
 												<th class="float-right"><button id="log_starter" type="button" class="btn btn-danger" onclick="stopInterval()" style="display: none;">Log Stop</button></th>
 											</tr>
 										</table>
-										<textarea id="backRestRestoreAcitveLog" rows=10 style="width:100%" disabled onfocus="this.value = this.value;"></textarea>
+										<textarea id="backRestRestoreAcitveLog" rows=20 style="width:100%" disabled onfocus="this.value = this.value;"></textarea>
 									</div> 
 								</div>
 							</div>

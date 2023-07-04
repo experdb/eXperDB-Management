@@ -231,4 +231,9 @@ public interface BackupService {
 	public void updateBackrestWrk(WrkExeVO wrkExeVO);
 	
 	public WorkLogVO selectSshInfo(int wrkId);
+	
+	public void updateBackrestErr(WrkExeVO vo);
+
+	public Map<String, Object> selectSchedule(int scdId);
+
 }

@@ -17,6 +17,7 @@
 	var mod_restore_check = "";
 	var mod_cus_check = false;
 	var mod_remoteConn = "Fail";
+	var mod_log_pth_chk = false;
 
 	$(window.document).ready(function() {
 		$("#workRegReFormBckr").validate({
@@ -180,6 +181,12 @@
 			
 			iChkCnt = iChkCnt + 1;
 		}
+		
+		if(nvlPrmSet($("#mod_bckr_pth", "#workRegReFormBckr").val(), "") == ""){
+			$("#mod_bckr_pth_alert", "#workRegReFormBckr").html('백업 경로체크를 해주세요');
+			$("#mod_bckr_pth_alert", "#workRegReFormBckr").show();
+			iChkCnt = iChkCnt + 1;
+		}
 
 		if(nvlPrmSet($("#mod_bckr_log_pth", "#workRegReFormBckr").val(), "") == "") {
 			$("#mod_bckr_log_pth_alert", "#workRegReFormBckr").html('로그경로를 입력해주세요.');
@@ -212,7 +219,7 @@
 			}
 
 			if(nvlPrmSet($("#mod_remt_str_usr", "#workRegReFormBckr").val(), "") == "") {
-				$("#mod_remt_str_usr_alert", "#workRegReFormBckr").html('유저명을 입력해주세요.');
+				$("#mod_remt_str_usr_alert", "#workRegReFormBckr").html('OS 유저명을 입력해주세요.');
 				$("#mod_remt_str_usr_alert", "#workRegReFormBckr").show();
 				
 				iChkCnt = iChkCnt + 1;
@@ -230,6 +237,14 @@
 				$("#mod_ssh_con_alert", "#workRegReFormBckr").show();
 				iChkCnt = iChkCnt + 1;
 			}
+			
+			if(!mod_log_pth_chk) {
+				$("#mod_bckr_log_pth_alert", "#workRegReFormBckr").html('로그경로를 입력해주세요.');
+				$("#mod_bckr_log_pth_alert", "#workRegReFormBckr").show();
+				
+				iChkCnt = iChkCnt + 1;
+			}
+			
 		}
 
 		//Cloud 옵션 alert
@@ -438,6 +453,14 @@ function fn_re_ssh_connection(){
 					mod_remoteConn = "Success";
 					$("#mod_ssh_con_alert", "#workRegReFormBckr").html("");
 					$("#mod_ssh_con_alert", "#workRegReFormBckr").hide();
+					$("#mod_remt_str_ip_alert", "#workRegReFormBckr").html("");
+					$("#mod_remt_str_ip_alert", "#workRegReFormBckr").hide();
+					$("#mod_remt_str_ssh_alert", "#workRegReFormBckr").html("");
+					$("#mod_remt_str_ssh_alert", "#workRegReFormBckr").hide();
+					$("#mod_remt_str_usr_alert", "#workRegReFormBckr").html("");
+					$("#mod_remt_str_usr_alert", "#workRegReFormBckr").hide();
+					$("#mod_remt_str_pw_alert", "#workRegReFormBckr").html("");
+					$("#mod_remt_str_pw_alert", "#workRegReFormBckr").hide();
 				}else {
 					showSwalIcon('<spring:message code="message.msg92" />', '<spring:message code="common.close" />', '', 'error');
 					mod_remoteConn = "Fail";
@@ -590,7 +613,7 @@ function fn_re_ssh_connection(){
 													</div>
 
 													<div class="col-sm-2_3" style="margin-left: -30px;">
-														<input type="text" class="form-control form-control-xsm" maxlength="50" id="mod_remt_str_usr" name="mod_remt_str_usr" style="width: 250px;" placeholder="유저 명을 입력해주세요" readOnly />
+														<input type="text" class="form-control form-conftrol-xsm" maxlength="50" id="mod_remt_str_usr" name="mod_remt_str_usr" style="width: 250px;" placeholder="OS 유저명을 입력해주세요" readOnly />
 													</div>
 													
 													<div class="col-sm-2_3" style="margin-left: 6px;">
@@ -819,9 +842,9 @@ function fn_re_ssh_connection(){
 												<input type="text" class="form-control form-control-xsm" maxlength="100" id="mod_bckr_log_pth" name="mod_bckr_log_pth" style="width: 410px;" onchange="fn_backrest_chg_alert(this)"/>
 											</div>
 
-											<!-- <div class="col-sm-2" style="margin-top: -2px;">
-												<button type="button" class="btn btn-inverse-info btn-fw" style="width: 100px; padding: 10px;"><spring:message code="common.dir_check" /></button>
-											</div> -->
+											<div class="col-sm-1" style="margin-top: -2px;">
+												<button type="button" id="mod_log_pth_chk" class="btn btn-inverse-info btn-fw" style="width: 80px; padding: 10px; margin-left: 35px; display:none" onclick="fn_chk_pth(this)"><spring:message code="common.dir_check" /></button>
+											</div> 
 										</div>
 
 										<div class="d-flex" style="width: 500px; margin: 0px 0px 0 30px;">

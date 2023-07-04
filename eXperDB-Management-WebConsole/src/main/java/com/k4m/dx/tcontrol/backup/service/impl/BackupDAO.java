@@ -221,4 +221,14 @@ public class BackupDAO extends EgovAbstractMapper{
 	public WorkLogVO selectSshInfo(int wrkId) {
 		return (WorkLogVO)getSqlSession().selectOne("backupSQL.selectSshInfo", wrkId);
 	}
+	
+	public void updateBackrestErr(WrkExeVO vo) {
+		update("backupSQL.updateBackrestErr", vo);
+	}
+	
+	public Map<String, Object> selectSchedule(int scdId){
+		Map<String, Object> result = null;
+		result = getSqlSession().selectOne("backupSQL.selectSchedule", scdId);
+		return result;
+	}
 }

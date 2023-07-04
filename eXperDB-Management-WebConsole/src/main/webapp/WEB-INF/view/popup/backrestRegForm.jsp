@@ -97,11 +97,19 @@
 			$(this).toggleClass('selected');
 
 			selectedAgentServer = backrestServerTable.rows(this).data()[0];
+			
 			var words = this.className.split(' ');
 
 			if($("#remote_radio").is(':checked')){
 				$("#ins_bckr_pth", "#workRegFormBckr").val("");
 				$("#ins_bckr_log_pth", "#workRegFormBckr").val("");
+				if(selectedAgentServer.master_gbn == "S"){
+					$("#bckr_standby_alert", "#workRegFormBckr").html("Primary DB를 Stnadby서버에 백업합니다.");
+					$("#bckr_standby_alert", "#workRegFormBckr").show();
+				}else {
+					$("#bckr_standby_alert", "#workRegFormBckr").html("");
+					$("#bckr_standby_alert", "#workRegFormBckr").hide();
+				}
 			}else{
 				if(words.length == 2){
 					if(selectedAgentServer.master_gbn == "S"){
@@ -167,6 +175,11 @@
 		svrBckCheck = svrBckRadioCheck;
 
 		if(svrBckRadioCheck == "local"){
+			$("#ins_bckr_pth", "#workRegFormBckr").css("width", "410px");
+			$("#bck_pth_chk", "#workRegFormBckr").css("display", "none");
+			$("#ins_bckr_log_pth", "#workRegFormBckr").css("width", "410px");
+			$("#log_pth_chk", "#workRegFormBckr").css("display", "none");
+			
 			bckSrvLocal.style.backgroundColor = "white"
 			bckSrvRemote.style.backgroundColor = "#e7e7e7"
 			bckSrvCloud.style.backgroundColor = "#e7e7e7"
@@ -175,10 +188,20 @@
 
 			$('#ins_bckr_pth').prop("readonly", true);
 			$("#local_radio").prop("checked", true);
-
+			$("#bck_pth_chk").hide();
+			$("#log_pth_chk").hide();
+			
 			$("#remote_opt").hide();
 			$("#cloud_opt").hide();
+			
 		}else if(svrBckRadioCheck == "remote"){
+			$("#ins_bckr_pth", "#workRegFormBckr").val("");
+			$("#ins_bckr_log_pth", "#workRegFormBckr").val("");
+			$("#ins_bckr_pth", "#workRegFormBckr").css("width", "320px");
+			$("#bck_pth_chk", "#workRegFormBckr").css("display", "");
+			$("#ins_bckr_log_pth", "#workRegFormBckr").css("width", "320px");
+			$("#log_pth_chk", "#workRegFormBckr").css("display", "");
+			
 			bckSrvLocal.style.backgroundColor = "#e7e7e7"
 			bckSrvRemote.style.backgroundColor = "white"
 			bckSrvCloud.style.backgroundColor = "#e7e7e7"
@@ -187,10 +210,17 @@
 			
 			$('#ins_bckr_pth').prop("readonly", false);
 			$("#remote_radio").prop("checked", true);
+			$("#bck_pth_chk").show();
+			$("#log_pth_chk").show();
 
 			$("#remote_opt").show();
 			$("#cloud_opt").hide();
 		}else{
+			$("#ins_bckr_pth", "#workRegFormBckr").css("width", "410px");
+			$("#bck_pth_chk", "#workRegFormBckr").css("display", "none");
+			$("#ins_bckr_log_pth", "#workRegFormBckr").css("width", "410px");
+			$("#log_pth_chk", "#workRegFormBckr").css("display", "none");
+			
 			bckSrvLocal.style.backgroundColor = "#e7e7e7"
 			bckSrvRemote.style.backgroundColor = "#e7e7e7"
 			bckSrvCloud.style.backgroundColor = "white"
@@ -199,6 +229,8 @@
 
 			$("#cloud_radio").prop("checked", true);
 			$('#ins_bckr_pth').prop("readonly", true);
+			$("#bck_pth_chk").hide();
+			$("#log_pth_chk").hide();
 			
 			$("#remote_opt").hide();
 			$("#cloud_opt").show();
@@ -294,12 +326,12 @@
 		//기본옵션 alert창 초기화
 		$("#ins_bckr_opt_cd_alert", "#workRegFormBckr").html("");
 		$("#ins_bckr_opt_cd_alert", "#workRegFormBckr").hide();
-		// $("#ins_bckr_pth_alert", "#workRegFormBckr").html("");
-		// $("#ins_bckr_pth_alert", "#workRegFormBckr").hide();
+		$("#ins_bckr_pth_alert", "#workRegFormBckr").html("");
+		$("#ins_bckr_pth_alert", "#workRegFormBckr").hide();
 		$("#ins_bckr_cnt_alert", "#workRegFormBckr").html("");
 		$("#ins_bckr_cnt_alert", "#workRegFormBckr").hide();
 		$("#ins_bckr_log_pth_alert", "#workRegFormBckr").html("");
-		$("#ins_bckr_log_pth_alert", "#workRegFormBckr").hide();			
+		$("#ins_bckr_log_pth_alert", "#workRegFormBckr").hide();
 		$("#ins_cps_opt_prcs_alert", "#workRegFormBckr").html("");
 		$("#ins_cps_opt_prcs_alert", "#workRegFormBckr").hide();		
 
@@ -314,6 +346,8 @@
 		$("#ins_remt_str_pw_alert", "#workRegFormBckr").hide();
 		$("#ssh_con_alert", "#workRegFormBckr").html("");
 		$("#ssh_con_alert", "#workRegFormBckr").hide();
+		$("#ins_bckr_pth_alert", "#workRegFormBckr").html("");
+		$("#ins_bckr_pth_alert", "#workRegFormBckr").hide();
 
 		//Cloud 옵션 초기화
 		$("#ins_cloud_bckr_s3_buk_alert", "#workRegFormBckr").html("");
@@ -420,6 +454,12 @@
 			
 			iChkCnt = iChkCnt + 1;
 		}
+		
+		if(nvlPrmSet($("#ins_bckr_pth", "#workRegFormBckr").val(), "") == ""){
+			$("#ins_bckr_pth_alert", "#workRegFormBckr").html('백업 경로체크를 해주세요');
+			$("#ins_bckr_pth_alert", "#workRegFormBckr").show();
+			iChkCnt = iChkCnt + 1;
+		}
 
 		if(nvlPrmSet($("#ins_bckr_log_pth", "#workRegFormBckr").val(), "") == "") {
 			$("#ins_bckr_log_pth_alert", "#workRegFormBckr").html('로그경로를 입력해주세요.');
@@ -452,7 +492,7 @@
 			}
 
 			if(nvlPrmSet($("#ins_remt_str_usr", "#workRegFormBckr").val(), "") == "") {
-				$("#ins_remt_str_usr_alert", "#workRegFormBckr").html('유저명을 입력해주세요.');
+				$("#ins_remt_str_usr_alert", "#workRegFormBckr").html('OS 유저명을 입력해주세요.');
 				$("#ins_remt_str_usr_alert", "#workRegFormBckr").show();
 				
 				iChkCnt = iChkCnt + 1;
@@ -469,6 +509,20 @@
 				$("#ssh_con_alert", "#workRegFormBckr").show();
 				iChkCnt = iChkCnt + 1;
 			}
+			
+			if(!bck_pth_chk){
+				$("#ins_bckr_pth_alert", "#workRegFormBckr").html('백업 경로체크를 해주세요');
+				$("#ins_bckr_pth_alert", "#workRegFormBckr").show();
+				iChkCnt = iChkCnt + 1;
+			}
+			
+			if(!log_pth_chk) {
+				$("#ins_bckr_log_pth_alert", "#workRegFormBckr").html('로그경로를 입력해주세요.');
+				$("#ins_bckr_log_pth_alert", "#workRegFormBckr").show();
+				
+				iChkCnt = iChkCnt + 1;
+			}
+			
 		}
 
 		//Cloud 옵션 alert
@@ -678,13 +732,17 @@
 					$('#pop_layer_reg_backrest').modal('hide');
 					fn_get_backrest_list();
 					remoteConn = "Fail";
+				}else if (data == "N"){
+					showSwalIcon('message.msg229', '<spring:message code="common.close" />', '', 'error');
+					$('#pop_layer_reg_backrest').modal('show');
+					return;
 				}else{
 					showSwalIcon('<spring:message code="migration.msg06" />', '<spring:message code="common.close" />', '', 'error');
 					$('#pop_layer_reg_backrest').modal('show');
 					return;
 				}
 			}
-		});  
+		});
 	}
 
 	function fn_backrest_ip_select_check(){
@@ -730,6 +788,14 @@
 					remoteConn = "Success";
 					$("#ssh_con_alert", "#workRegFormBckr").html("");
 					$("#ssh_con_alert", "#workRegFormBckr").hide();
+					$("#ins_remt_str_ip_alert", "#workRegFormBckr").html("");
+					$("#ins_remt_str_ip_alert", "#workRegFormBckr").hide();
+					$("#ins_remt_str_ssh_alert", "#workRegFormBckr").html("");
+					$("#ins_remt_str_ssh_alert", "#workRegFormBckr").hide();
+					$("#ins_remt_str_usr_alert", "#workRegFormBckr").html("");
+					$("#ins_remt_str_usr_alert", "#workRegFormBckr").hide();
+					$("#ins_remt_str_pw_alert", "#workRegFormBckr").html("");
+					$("#ins_remt_str_pw_alert", "#workRegFormBckr").hide();
 				}else {
 					showSwalIcon('<spring:message code="message.msg92" />', '<spring:message code="common.close" />', '', 'error');
 					remoteConn = "Fail";
@@ -898,19 +964,19 @@
 
 												<div class="d-flex" style="margin-bottom: 10px;">
 													<div class="col-sm-2_3">
-														<input type="text" class="form-control form-control-xsm" maxlength="50" id="ins_remt_str_ip" name="ins_remt_str_ip" style="width: 250px;" placeholder="IP를 입력해주세요" onchange="fn_backrest_chg_alert(this)"/>
+														<input type="text" class="form-control form-control-xsm" maxlength="50" id="ins_remt_str_ip" name="ins_remt_str_ip" style="width: 250px;" placeholder="IP를 입력해주세요" onchange="fn_backrest_chg_alert(this)" onclick="fn_backrest_ip_select_check()"/>
 													</div>
 
 													<div class="col-sm-2" style="margin-left: 6px;">
-														<input type="text" class="form-control form-control-xsm" maxlength="3" id="ins_remt_str_ssh" name="ins_remt_str_ssh" style="width: 180px;" placeholder="SSH 포트" onchange="fn_backrest_chg_alert(this)"/>
+														<input type="text" class="form-control form-control-xsm" maxlength="3" id="ins_remt_str_ssh" name="ins_remt_str_ssh" style="width: 180px;" placeholder="SSH 포트" onchange="fn_backrest_chg_alert(this)" onclick="fn_backrest_ip_select_check()"/>
 													</div>
 
 													<div class="col-sm-2_3" style="margin-left: -30px;">
-														<input type="text" class="form-control form-control-xsm" maxlength="50" id="ins_remt_str_usr" name="ins_remt_str_usr" style="width: 250px;" placeholder="유저 명을 입력해주세요" onchange="fn_backrest_chg_alert(this)"/>
+														<input type="text" class="form-control form-control-xsm" maxlength="50" id="ins_remt_str_usr" name="ins_remt_str_usr" style="width: 250px;" placeholder="OS 유저명을 입력해주세요" onchange="fn_backrest_chg_alert(this)" onclick="fn_backrest_ip_select_check()"/>
 													</div>
 													
 													<div class="col-sm-2_3" style="margin-left: 6px;">
-														<input type="password" class="form-control form-control-xsm" maxlength="50" id="ins_remt_str_pw" name="ins_remt_str_pw" style="width: 250px;" placeholder="패스워드를 입력해주세요" onchange="fn_backrest_chg_alert(this)"/>
+														<input type="password" class="form-control form-control-xsm" maxlength="50" id="ins_remt_str_pw" name="ins_remt_str_pw" style="width: 250px;" placeholder="패스워드를 입력해주세요" onchange="fn_backrest_chg_alert(this)" onclick="fn_backrest_ip_select_check()"/>
 													</div>
 
 													<div class="col-sm-1" style="height: 20px; margin-top: 3px;">
@@ -1079,13 +1145,13 @@
 												백업 경로
 											</label>
 
-											<div class="col-sm-5">
-												<input type="text" class="form-control form-control-xsm" maxlength="100" id="ins_bckr_pth" name="ins_bckr_pth" style="width: 410px;" readonly/>
+											<div class="col-sm-4">
+												<input type="text" class="form-control form-control-xsm" maxlength="100" id="ins_bckr_pth" name="ins_bckr_pth" style="width: 410px;" onclick="fn_backrest_ip_select_check()" readonly/>
 											</div>
 
-											<!-- <div class="col-sm-2" style="margin-top: -2px;">
-												<button type="button" class="btn btn-inverse-info btn-fw" style="width: 100px; padding: 10px;"><spring:message code="common.dir_check" /></button>
-											</div> -->
+											<div class="col-sm-1" style="margin-top: -2px;">
+												<button type="button" id="bck_pth_chk" class="btn btn-inverse-info btn-fw" style="width: 80px; padding: 10px; margin-left: 35px; display:none;" onclick="fn_chk_pth(this)" ><spring:message code="common.dir_check" /></button>
+											</div> 
 										</div>
 
 										<div class="d-flex" style="width: 500px; margin: 20px 0 0 30px;">
@@ -1141,9 +1207,9 @@
 												<input type="text" class="form-control form-control-xsm" maxlength="100" id="ins_bckr_log_pth" name="ins_bckr_log_pth" style="width: 410px;" onchange="fn_backrest_chg_alert(this)" onclick="fn_backrest_ip_select_check()"/>
 											</div>
 
-											<!-- <div class="col-sm-2" style="margin-top: -2px;">
-												<button type="button" class="btn btn-inverse-info btn-fw" style="width: 100px; padding: 10px;"><spring:message code="common.dir_check" /></button>
-											</div> -->
+											<div class="col-sm-1" style="margin-top: -2px;">
+												<button type="button" id="log_pth_chk" class="btn btn-inverse-info btn-fw" style="width: 80px; padding: 10px; margin-left: 35px; display:none;" onclick="fn_chk_pth(this)"><spring:message code="common.dir_check" /></button>
+											</div> 
 										</div>
 
 										<div class="d-flex" style="width: 500px; margin: 0px 0px 0 30px;">

@@ -557,6 +557,8 @@ function fn_update_chogihwa(gbn, result) {
 			mod_bckr_pth.style.display = "";
 
 			$("#mod_bckr_pth", "#workRegReFormBckr").val(nvlPrmSet(result.workInfo[0].bck_pth, ""));						//백업경로
+			$("#mod_bckr_log_pth", "#workRegReFormBckr").css("width", "410px");
+			$("#mod_log_pth_chk", "#workRegReFormBckr").css("display", "none");
 
 			$("#mod_remote_opt").hide();
 			$("#mod_cloud_opt").hide();
@@ -569,6 +571,9 @@ function fn_update_chogihwa(gbn, result) {
 			mod_bckr_pth.style.display = "";
 
 			$("#mod_bckr_pth", "#workRegReFormBckr").val(nvlPrmSet(result.workInfo[0].bck_pth, ""));						//백업경로
+			$("#mod_bckr_log_pth", "#workRegReFormBckr").css("width", "320px");
+			$("#mod_log_pth_chk", "#workRegReFormBckr").css("display", "");
+			
 			
 			// SSH 정보
 			$("#mod_remt_str_ip", "#workRegReFormBckr").val(nvlPrmSet(result.remote_map.ip, ""));

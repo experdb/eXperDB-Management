@@ -997,6 +997,27 @@
 
 		WHERE
 			 EXELOG = #{EXELOG}
+			 
     </update>
+        <update id="updateBackrestErr"  parameterType="WrkExeVO">
+   		/**
+	 	* Query ID : updateBackrestErr
+	 	* Description : backrest backup Err
+	 	* Author : 이지석
+	 	**/
+	 	
+   		UPDATE T_WRKEXE_G
+   		SET
+			, EXE_RSLT_CD = #{EXE_RSLT_CD}
+			, FILE_SZ = 0
+			, DB_SZ = 0
+			, RSLT_MSG = #{RSLT_MSG}
+		<if test="BACKREST_SCD_ID !=null and BACKREST_SCD_ID != ''" >
+			, SCD_ID = (SELECT SCD_ID FROM T_SCD_M WHERE SCD_ID = #{BACKREST_SCD_ID})::numeric
+		</if>
+		WHERE
+			EXE_SN = #{EXE_SN}
+    </update>
+    
     
 </mapper>

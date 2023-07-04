@@ -254,6 +254,10 @@ public class SystemDAO {
 	public void updateBackrestRestore(RmanRestoreVO vo) {
 		session.update("system.updateBackrestRestore", vo);
 	}
+	
+	public void updateBackrestErr(WrkExeVO vo) {
+		session.update("system.updateBackrestErr", vo);
+	}
 }
 
 
