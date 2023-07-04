@@ -773,7 +773,14 @@
 								return '<span onClick=javascript:fn_backrestConfigLayer("'+full.wrk_id + '","' + full.backrest_gbn +'"); class="bold" data-toggle="modal" title="'+full.wrk_nm+'">' + full.wrk_nm + '</span>';
 							}},
 						{data : "wrk_exp", defaultContent : ""},
-						{data : "db_svr_ipadr", className : "dt-center", defaultContent: "" },
+						{data : "db_svr_ipadr", className : "dt-center", defaultContent: "",
+							render : function(data, type, full, meta) {
+									if(full.backrest_gbn == "remote"){
+										return full.remote_ip;
+									}else{
+										return full.db_svr_ipadr;
+									}
+							}},
 						{data : "backrest_gbn", className : "dt-center", defaultContent : ""},
 						{data : "bck_opt_cd_nm", className : "dt-center", defaultContent : "",
 							render : function(data, type, full, meta) {
@@ -1220,7 +1227,7 @@
 												<th width="30"><spring:message code="common.no" /></th>
 												<th width="150"><spring:message code="common.work_name" /></th>
 												<th width="200"><spring:message code="common.work_description" /></th>
-												<th width="100" class="dt-center">백업서버</th>
+												<th width="100" class="dt-center">백업 스토리지</th>
 												<th width="100" class="dt-center">스토리지</th>
 												<th width="100" class="dt-center">백업구분</th>
 												<th width="200">백업경로</th> 

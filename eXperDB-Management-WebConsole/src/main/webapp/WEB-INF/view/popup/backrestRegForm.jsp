@@ -90,6 +90,7 @@
 		backrestServerTable.tables().header().to$().find('th:eq(6)').css('min-width', '0px');
 
 		$(window).trigger('resize'); 
+
 	}
 
 	$(function() {
@@ -193,7 +194,6 @@
 			
 			$("#remote_opt").hide();
 			$("#cloud_opt").hide();
-			
 		}else if(svrBckRadioCheck == "remote"){
 			$("#ins_bckr_pth", "#workRegFormBckr").val("");
 			$("#ins_bckr_log_pth", "#workRegFormBckr").val("");
@@ -235,6 +235,10 @@
 			$("#remote_opt").hide();
 			$("#cloud_opt").show();
 		}
+
+		backrestServerTable.rows({selected: true}).deselect();
+		$("#bckr_standby_alert", "#workRegFormBckr").html("");
+		$("#bckr_standby_alert", "#workRegFormBckr").hide();
 	}
 
 	/* ********************************************************
