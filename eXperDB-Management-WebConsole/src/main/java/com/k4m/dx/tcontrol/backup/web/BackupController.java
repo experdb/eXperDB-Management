@@ -1581,49 +1581,49 @@ public class BackupController {
 
 		String wrk_id_Rows = request.getParameter("wrk_id_List").toString().replaceAll("&quot;", "\"");
 		JSONArray wrk_ids = (JSONArray) new JSONParser().parse(wrk_id_Rows);
-		
+
 		String backupGbn = request.getParameter("backup_gbn").toString();
-		
+
 		String wrk_bck_server_Rows = "";
 		String bck_filenm_Rows = "";
 		String wrk_bck_gbn_list = "";
 		JSONArray wrk_bck_servers = null;
 		JSONArray bck_filenms = null;
 		JSONArray gbns = null;
-		
-		if(backupGbn.equals("del_backrest")) {
+
+		if (backupGbn.equals("del_backrest")) {
 			wrk_bck_server_Rows = request.getParameter("wrk_bck_server_list").toString().replaceAll("&quot;", "\"");
 			wrk_bck_servers = (JSONArray) new JSONParser().parse(wrk_bck_server_Rows);
-			
+
 			bck_filenm_Rows = request.getParameter("bck_filenm_list").toString().replaceAll("&quot;", "\"");
 			bck_filenms = (JSONArray) new JSONParser().parse(bck_filenm_Rows);
-			
+
 			wrk_bck_gbn_list = request.getParameter("wrk_bck_gbn_list").toString().replaceAll("&quot;", "\"");
 			gbns = (JSONArray) new JSONParser().parse(wrk_bck_gbn_list);
 		}
-		
-		
-		
+
 		JSONArray ports = null;
 		JSONArray usrs = null;
 		JSONArray pws = null;
-		
-		if(gbns!=null) {
+
+		if (gbns != null) {
 			for (int i = 0; i < bck_wrk_ids.size(); i++) {
-				if(gbns.get(i).equals("remote")) {
-					String wrk_bck_server_port_list = request.getParameter("wrk_bck_server_port_list").toString().replaceAll("&quot;", "\"");
+				if (gbns.get(i).equals("remote")) {
+					String wrk_bck_server_port_list = request.getParameter("wrk_bck_server_port_list").toString()
+							.replaceAll("&quot;", "\"");
 					ports = (JSONArray) new JSONParser().parse(wrk_bck_server_port_list);
 
-					String wrk_bck_server_usr_list = request.getParameter("wrk_bck_server_usr_list").toString().replaceAll("&quot;", "\"");
+					String wrk_bck_server_usr_list = request.getParameter("wrk_bck_server_usr_list").toString()
+							.replaceAll("&quot;", "\"");
 					usrs = (JSONArray) new JSONParser().parse(wrk_bck_server_usr_list);
-					
-					String wrk_bck_server_pw_list = request.getParameter("wrk_bck_server_pw_list").toString().replaceAll("&quot;", "\"");
-					pws = (JSONArray) new JSONParser().parse(wrk_bck_server_pw_list);	
+
+					String wrk_bck_server_pw_list = request.getParameter("wrk_bck_server_pw_list").toString()
+							.replaceAll("&quot;", "\"");
+					pws = (JSONArray) new JSONParser().parse(wrk_bck_server_pw_list);
 				}
 			}
 		}
-		
-		
+
 		// 화면접근이력 이력 남기기
 		try {
 			CmmnUtils.saveHistory(request, historyVO);
@@ -1634,73 +1634,87 @@ public class BackupController {
 		}
 
 		try {
+			boolean remoteCheck = true;
 			for (int i = 0; i < bck_wrk_ids.size(); i++) {
 				int bck_wrk_id = Integer.parseInt(bck_wrk_ids.get(i).toString());
 				int wrk_id = Integer.parseInt(wrk_ids.get(i).toString());
 
-				if(gbns!=null) {
-					if(gbns.get(i).toString().equals("remote")) {
-						String wrk_bck_server = wrk_bck_servers.get(i).toString();
-						String bck_filenm = bck_filenms.get(i).toString();
-						String usr = usrs.get(i).toString();
-						int port = Integer.parseInt(ports.get(i).toString());
-						String pw = pws.get(i).toString();
-											
-						CmmnUtil cu = new CmmnUtil();
-						JSONObject cmdObj = new JSONObject();
-						
-						cmdObj.put("type", "chk");
-						cmdObj.put("usr", usrs.get(i).toString());
-						cmdObj.put("bck_filenm", bck_filenm);
-						
-						String cmd = cu.createBackrestCmd(cmdObj);
-						
-						Map<String, Object> serverInfo = new HashMap<>();
-						serverInfo.put("ip", wrk_bck_server);
-						serverInfo.put("usr", usr);
-						serverInfo.put("pw", pw);
-						serverInfo.put("port", port);
-						serverInfo.put("type", "backrest");
-											
-						String resultStr = cu.executeBackrest(serverInfo, cmd, "backrest", null).get("RESULT_DATA").toString();
-						
-						cmdObj.put("type", "remove");	
-						System.out.println(cmdObj);
-						cmd = cu.createBackrestCmd(cmdObj);
-						
-						if(resultStr.equals("S")) {
-							cu.executeBackrest(serverInfo, cmd, "backrest", null);
-							result = true;
-						}else {
-							result = false;
-						}
-					}else {
-						if(backupGbn.equals("del_backrest")) {
-							ClientInfoCmmn cic = new ClientInfoCmmn();
-							JSONObject result2 = new JSONObject();
-							
-							String wrk_bck_server = wrk_bck_servers.get(i).toString();
-							String bck_filenm = bck_filenms.get(i).toString();
-							
-							try {
-									AgentInfoVO vo = new AgentInfoVO();
-									vo.setIPADR(wrk_bck_server);
-									AgentInfoVO agentInfo = (AgentInfoVO) cmmnServerInfoService.selectAgentInfo(vo);
+				if (gbns != null) {
+					if (remoteCheck) {
+						for (int j = 0; j < usrs.size(); j++) {
+							int remoteIdx = usrs.size() - 1;
 
-									int port = agentInfo.getSOCKET_PORT();
-									JSONObject jObj = new JSONObject();
-									
-									jObj.put(ClientProtocolID.BCK_FILENM, bck_filenm);
-									
-									result2 = cic.deleteBackrestConf(wrk_bck_server, port, jObj);
-								
-							} catch (Exception e) {
-								e.printStackTrace();
-							}	
+							if (gbns.get(j).toString().equals("remote")) {
+								String wrk_bck_server = wrk_bck_servers.get(j).toString();
+								String bck_filenm = bck_filenms.get(j).toString();
+								String usr = usrs.get(j).toString();
+								int port = Integer.parseInt(ports.get(j).toString());
+								String pw = pws.get(j).toString();
+
+								CmmnUtil cu = new CmmnUtil();
+								JSONObject cmdObj = new JSONObject();
+
+								cmdObj.put("type", "chk");
+								cmdObj.put("usr", usrs.get(j).toString());
+								cmdObj.put("bck_filenm", bck_filenm);
+
+								String cmd = cu.createBackrestCmd(cmdObj);
+
+								Map<String, Object> serverInfo = new HashMap<>();
+								serverInfo.put("ip", wrk_bck_server);
+								serverInfo.put("usr", usr);
+								serverInfo.put("pw", pw);
+								serverInfo.put("port", port);
+								serverInfo.put("type", "backrest");
+
+								String resultStr = cu.executeBackrest(serverInfo, cmd, "backrest", null)
+										.get("RESULT_DATA").toString();
+
+								cmdObj.put("type", "remove");
+								System.out.println(cmdObj);
+								cmd = cu.createBackrestCmd(cmdObj);
+
+								if (resultStr.equals("S")) {
+									cu.executeBackrest(serverInfo, cmd, "backrest", null);
+									result = true;
+								} else {
+									result = false;
+								}
+
+								if (remoteIdx == j) {
+									remoteCheck = false;
+									break;
+								}
+							}
 						}
 					}
+
+					if (!(gbns.get(i).toString().equals("remote"))) {
+						ClientInfoCmmn cic = new ClientInfoCmmn();
+						JSONObject result2 = new JSONObject();
+
+						String wrk_bck_server = wrk_bck_servers.get(i).toString();
+						String bck_filenm = bck_filenms.get(i).toString();
+
+						try {
+							AgentInfoVO vo = new AgentInfoVO();
+							vo.setIPADR(wrk_bck_server);
+							AgentInfoVO agentInfo = (AgentInfoVO) cmmnServerInfoService.selectAgentInfo(vo);
+
+							int port = agentInfo.getSOCKET_PORT();
+							JSONObject jObj = new JSONObject();
+
+							jObj.put(ClientProtocolID.BCK_FILENM, bck_filenm);
+
+							result2 = cic.deleteBackrestConf(wrk_bck_server, port, jObj);
+
+						} catch (Exception e) {
+							e.printStackTrace();
+						}
+
+					}
 				}
-				
+
 				// WORK 옵션 삭제
 				backupService.deleteWorkOpt(bck_wrk_id);
 				// WORK 오브젝트 삭제
@@ -1711,11 +1725,10 @@ public class BackupController {
 				backupService.deleteWork(wrk_id);
 				// 전체 이력 삭제
 				backupService.deleteWorkExe(wrk_id);
-				
+
 				result = true;
 			}
 
-			
 		} catch (Exception e) {
 			e.printStackTrace();
 			txManager.rollback(status);
