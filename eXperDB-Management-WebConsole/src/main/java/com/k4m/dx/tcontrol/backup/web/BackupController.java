@@ -1634,12 +1634,40 @@ public class BackupController {
 		}
 
 		try {
-			boolean remoteCheck = true;
+			boolean remoteCheck = false;
 			for (int i = 0; i < bck_wrk_ids.size(); i++) {
 				int bck_wrk_id = Integer.parseInt(bck_wrk_ids.get(i).toString());
 				int wrk_id = Integer.parseInt(wrk_ids.get(i).toString());
 
 				if (gbns != null) {
+					if (!(gbns.get(i).toString().equals("remote"))) {
+						ClientInfoCmmn cic = new ClientInfoCmmn();
+						JSONObject result2 = new JSONObject();
+
+						String wrk_bck_server = wrk_bck_servers.get(i).toString();
+						String bck_filenm = bck_filenms.get(i).toString();
+
+						try {
+							AgentInfoVO vo = new AgentInfoVO();
+							vo.setIPADR(wrk_bck_server);
+							AgentInfoVO agentInfo = (AgentInfoVO) cmmnServerInfoService.selectAgentInfo(vo);
+
+							int port = agentInfo.getSOCKET_PORT();
+							JSONObject jObj = new JSONObject();
+
+							jObj.put(ClientProtocolID.BCK_FILENM, bck_filenm);
+
+							result2 = cic.deleteBackrestConf(wrk_bck_server, port, jObj);
+							remoteCheck = false;
+
+						} catch (Exception e) {
+							e.printStackTrace();
+						}
+
+					}else {
+						remoteCheck = true;
+					}
+					
 					if (remoteCheck) {
 						for (int j = 0; j < usrs.size(); j++) {
 							int remoteIdx = usrs.size() - 1;
@@ -1689,30 +1717,7 @@ public class BackupController {
 						}
 					}
 
-					if (!(gbns.get(i).toString().equals("remote"))) {
-						ClientInfoCmmn cic = new ClientInfoCmmn();
-						JSONObject result2 = new JSONObject();
-
-						String wrk_bck_server = wrk_bck_servers.get(i).toString();
-						String bck_filenm = bck_filenms.get(i).toString();
-
-						try {
-							AgentInfoVO vo = new AgentInfoVO();
-							vo.setIPADR(wrk_bck_server);
-							AgentInfoVO agentInfo = (AgentInfoVO) cmmnServerInfoService.selectAgentInfo(vo);
-
-							int port = agentInfo.getSOCKET_PORT();
-							JSONObject jObj = new JSONObject();
-
-							jObj.put(ClientProtocolID.BCK_FILENM, bck_filenm);
-
-							result2 = cic.deleteBackrestConf(wrk_bck_server, port, jObj);
-
-						} catch (Exception e) {
-							e.printStackTrace();
-						}
-
-					}
+					
 				}
 
 				// WORK 옵션 삭제

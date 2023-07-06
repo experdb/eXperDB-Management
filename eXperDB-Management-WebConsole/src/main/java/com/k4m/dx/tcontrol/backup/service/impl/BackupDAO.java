@@ -7,6 +7,7 @@ import java.util.Map;
 
 import org.json.simple.JSONArray;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.k4m.dx.tcontrol.admin.dbserverManager.service.DbServerVO;
 import com.k4m.dx.tcontrol.backup.service.DbVO;
@@ -18,10 +19,11 @@ import com.k4m.dx.tcontrol.backup.service.WorkVO;
 import com.k4m.dx.tcontrol.functions.schedule.service.WrkExeVO;
 
 import egovframework.rte.psl.dataaccess.EgovAbstractMapper;
-
+@Transactional
 @Repository("BackupDAO")
 public class BackupDAO extends EgovAbstractMapper{
 
+	
 	@SuppressWarnings({ "unchecked", "deprecation" })
 	public List<WorkVO> selectWorkList(WorkVO workVO) throws SQLException {
 		List<WorkVO> sl = null;

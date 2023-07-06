@@ -764,6 +764,7 @@
 			processing : true,
 			searching : false,	
 			deferRender : true,
+			cache: false,
 			bSort: false,
 			columns : [
 						{data : "rownum", defaultContent : "", targets : 0, orderable : false, checkboxes : {'selectRow' : true}}, 

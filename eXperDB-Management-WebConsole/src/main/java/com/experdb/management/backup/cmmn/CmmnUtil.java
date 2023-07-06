@@ -175,6 +175,8 @@ public class CmmnUtil {
 			e.printStackTrace();
 		} catch (IOException e) {
 			e.printStackTrace();
+		} finally {
+			channelExec.disconnect(); 
 		}
 		return result;
 	}
