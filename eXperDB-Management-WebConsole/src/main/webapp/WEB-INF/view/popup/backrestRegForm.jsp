@@ -302,9 +302,9 @@
 		$("#ins_bckr_opt_cd", "#workRegFormBckr").val('').prop("selected", true);	//백업유형
 		$("#ins_bckr_opt_cd_alert", "#workRegFormBckr").html("");
 		$("#ins_bckr_opt_cd_alert", "#workRegFormBckr").hide();
-		// $("#ins_bckr_pth", "#workRegFormBckr").val("");	//백업경로
+		$("#ins_bckr_pth", "#workRegFormBckr").val("");	//백업경로
 		$("#ins_bckr_cnt", "#workRegFormBckr").val(2); //풀백업보관일
-		// $("#ins_bckr_log_pth", "#workRegFormBckr").val("");	//로그경로
+		$("#ins_bckr_log_pth", "#workRegFormBckr").val("");	//로그경로
 
 		//압축옵션 초기화
 		$("input:checkbox[id='ins_bckr_cps_yn_chk']").prop("checked", true); //압축여부
@@ -594,6 +594,11 @@
 	function fn_backrest_chg_alert(obj){
 		$("#"+obj.id+"_alert", "#workRegFormBckr").html("");
 		$("#"+obj.id+"_alert", "#workRegFormBckr").hide();
+		
+		if($("#remote_radio").is(':checked')){
+			if(obj.id == 'ins_bckr_pth') bck_pth_chk = false;
+			if(obj.id == 'ins_bckr_log_pth') log_pth_chk = false;
+		} 
 	}
 
 	function fn_select_agent_info(){
@@ -808,6 +813,10 @@
 			}
 		})
 	}
+	
+	function remote_chg_chk(txt){
+		remoteConn = "Fail";
+	}
 
 </script>
 
@@ -968,19 +977,19 @@
 
 												<div class="d-flex" style="margin-bottom: 10px;">
 													<div class="col-sm-2_3">
-														<input type="text" class="form-control form-control-xsm" maxlength="50" id="ins_remt_str_ip" name="ins_remt_str_ip" style="width: 250px;" placeholder="IP를 입력해주세요" onchange="fn_backrest_chg_alert(this)" onclick="fn_backrest_ip_select_check()"/>
+														<input type="text" class="form-control form-control-xsm" maxlength="50" id="ins_remt_str_ip" name="ins_remt_str_ip" style="width: 250px;" placeholder="IP를 입력해주세요" onchange="remote_chg_chk(this)" onclick="fn_backrest_ip_select_check()"/>
 													</div>
 
 													<div class="col-sm-2" style="margin-left: 6px;">
-														<input type="text" class="form-control form-control-xsm" maxlength="3" id="ins_remt_str_ssh" name="ins_remt_str_ssh" style="width: 180px;" placeholder="SSH 포트" onchange="fn_backrest_chg_alert(this)" onclick="fn_backrest_ip_select_check()"/>
+														<input type="text" class="form-control form-control-xsm" maxlength="3" id="ins_remt_str_ssh" name="ins_remt_str_ssh" style="width: 180px;" placeholder="SSH 포트" onchange="remote_chg_chk(this)" onclick="fn_backrest_ip_select_check()"/>
 													</div>
 
 													<div class="col-sm-2_3" style="margin-left: -30px;">
-														<input type="text" class="form-control form-control-xsm" maxlength="50" id="ins_remt_str_usr" name="ins_remt_str_usr" style="width: 250px;" placeholder="OS 유저명을 입력해주세요" onchange="fn_backrest_chg_alert(this)" onclick="fn_backrest_ip_select_check()"/>
+														<input type="text" class="form-control form-control-xsm" maxlength="50" id="ins_remt_str_usr" name="ins_remt_str_usr" style="width: 250px;" placeholder="OS 유저명을 입력해주세요" onchange="remote_chg_chk(this)" onclick="fn_backrest_ip_select_check()"/>
 													</div>
 													
 													<div class="col-sm-2_3" style="margin-left: 6px;">
-														<input type="password" class="form-control form-control-xsm" maxlength="50" id="ins_remt_str_pw" name="ins_remt_str_pw" style="width: 250px;" placeholder="패스워드를 입력해주세요" onchange="fn_backrest_chg_alert(this)" onclick="fn_backrest_ip_select_check()"/>
+														<input type="password" class="form-control form-control-xsm" maxlength="50" id="ins_remt_str_pw" name="ins_remt_str_pw" style="width: 250px;" placeholder="패스워드를 입력해주세요" onchange="remote_chg_chk(this)" onclick="fn_backrest_ip_select_check()"/>
 													</div>
 
 													<div class="col-sm-1" style="height: 20px; margin-top: 3px;">
@@ -1150,7 +1159,7 @@
 											</label>
 
 											<div class="col-sm-4">
-												<input type="text" class="form-control form-control-xsm" maxlength="100" id="ins_bckr_pth" name="ins_bckr_pth" style="width: 410px;" onclick="fn_backrest_ip_select_check()" readonly/>
+												<input type="text" class="form-control form-control-xsm" maxlength="100" id="ins_bckr_pth" name="ins_bckr_pth" style="width: 410px;" onclick="fn_backrest_ip_select_check()" onchange="fn_backrest_chg_alert(this)"; readonly/>
 											</div>
 
 											<div class="col-sm-1" style="margin-top: -2px;">

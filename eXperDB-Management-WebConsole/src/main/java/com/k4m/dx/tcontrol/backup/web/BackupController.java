@@ -758,6 +758,17 @@ public class BackupController {
 					}
 				}
 			}
+			
+			if(!paramMap.get("cloud_map").equals("")) {
+				try {
+					JSONParser parser = new JSONParser();
+					JSONObject cloudMap = (JSONObject) parser.parse(paramMap.get("cloud_map").toString());
+					String s3_path = cloudMap.get("s3_path").toString();
+					workVO.setBck_pth(s3_path);
+				} catch (ParseException e1) {
+					e1.printStackTrace();
+				}
+			}
 
 			if (result.equals("S")) {
 				if (resultSet != null) {
@@ -1695,11 +1706,10 @@ public class BackupController {
 								serverInfo.put("port", port);
 								serverInfo.put("type", "backrest");
 
-								String resultStr = cu.executeBackrest(serverInfo, cmd, "backrest", null)
-										.get("RESULT_DATA").toString();
+								String resultStr = cu.executeBackrest(serverInfo, cmd, "backrest", null).get("RESULT_DATA").toString();
 
 								cmdObj.put("type", "remove");
-								System.out.println(cmdObj);
+								
 								cmd = cu.createBackrestCmd(cmdObj);
 
 								if (resultStr.equals("S")) {
@@ -2410,7 +2420,6 @@ public class BackupController {
 			serverInfo.put("port", remote_port);
 			serverInfo.put("usr", remote_usr);
 			serverInfo.put("pw", remote_pw);
-			
 			result = cu.executeBackrest(serverInfo, cmd, "backrest", null);
 		}else {
 			ClientInfoCmmn cic = new ClientInfoCmmn();
@@ -2933,6 +2942,7 @@ public class BackupController {
 				endVO.setWrk_strt_dtm(startDateStr);
 				endVO.setWrk_end_dtm(stopDateStr);
 				endVO.setExe_rslt_cd(TC001701);
+				endVO.setBck_filenm(bck_filenm);
 				endVO.setFile_sz(repoSizeInt);
 				endVO.setDB_SZ(dbSizeInt);
 				endVO.setRslt_msg("success");

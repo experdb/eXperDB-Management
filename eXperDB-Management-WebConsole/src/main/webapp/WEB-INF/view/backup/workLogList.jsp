@@ -1081,7 +1081,7 @@
 				$('#log_starter').text('Log Stop');
 				$('#log_starter').removeClass('btn-success');
 				$('#log_starter').addClass('btn-danger');
-				interval = setInterval(realTimeLog, 5000);
+				realTimeLog();
 			}
 		} 
 	}

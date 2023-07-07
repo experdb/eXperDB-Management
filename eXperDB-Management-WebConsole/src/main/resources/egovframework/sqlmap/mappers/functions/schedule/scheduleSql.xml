@@ -1039,6 +1039,13 @@
                 ,(SELECT SYS_CD_NM FROM T_SYSDTL_C WHERE B.ENCD_MTH_NM = SYS_CD ) AS  ENCD_MTH_NM
                 , B.USR_ROLE_NM
                 , B.DB_SVR_ID
+                , B.BACKREST_GBN
+                , B.REMOTE_IP
+                , B.REMOTE_USR
+                , B.REMOTE_PORT
+                , B.REMOTE_PW
+                , (SELECT IPADR FROM T_DBSVRIPADR_I C WHERE C.DB_SVR_IPADR_ID = B.DB_SVR_IPADR_ID) AS IPADR
+                , B.BCK_FILENM
 		FROM T_WRKCNG_I A, T_BCK_WRKCNG_I B   
 		WHERE A.WRK_ID = B.WRK_ID
 		AND A.WRK_ID = #{wrk_id}  

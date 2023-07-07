@@ -168,7 +168,6 @@ public class CmmnUtil {
 			}else{
 				result.put("RESULT_CODE", 0);
 				result.put("RESULT_DATA", output.trim());
-				System.out.println("Result command : " + output.trim());
 			}
 			
 		} catch (JSchException e) {
@@ -241,8 +240,6 @@ public class CmmnUtil {
 		else if (cmdInfo.get("type").equals("remove")) {
 			cmd = "rm /home/" + cmdInfo.get("usr") + "/pgbackrest/config/" + cmdInfo.get("bck_filenm") + ".conf";
 		}
-		
-		System.out.println(cmd);
 		
 		return cmd;
 	}

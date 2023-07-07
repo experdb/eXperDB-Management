@@ -63,7 +63,7 @@
 				},
 				success : function(result) {
 					$("#calendarbody").empty();
-
+					
 					for(var irow=0;irow<5;irow++){
 						var tmparr = new Object();
 						tmparr[0] = [];
@@ -123,6 +123,8 @@
 				                var exe_dt = result[j].exe_dt;
 				                var frst_reg_dtm = result[j].frst_reg_dtm;
 				                var imgName = "";
+				                var bck_bsn_dscd = result[j].bck_bsn_dscd.toUpperCase();
+				                
 				                
 				                var resultYearCheckDt = exe_month + "" + exe_day;
 
@@ -136,7 +138,7 @@
 					                		} else {
 					                			appendnew += "<i class='fa fa-minus-circle mr-2 text-danger'></i>";
 					                		}
-					                		appendnew += "[<spring:message code="schedule.everyyear" />] [" + exe_hms +"] <a class='bold' href='#' onclick=javascript:fn_popup(" + scd_id + ");>"+scd_nm+"</a></div>";
+					                		appendnew += "[<spring:message code="schedule.everyyear" />] [" + exe_hms +"] <a class='bold' href='#' onclick=javascript:fn_popup('" + scd_id + "','" + bck_bsn_dscd +"');>"+scd_nm+"</a></div>";
 					                	} 
 				                	}
 				                //매월
@@ -149,7 +151,7 @@
 					                		} else {
 					                			appendnew += "<i class='fa fa-minus-circle mr-2 text-danger'></i>";
 					                		}
-					                		appendnew += "[<spring:message code="schedule.everymonth" />] [" + exe_hms +"] <a class='bold' href='#' onclick=javascript:fn_popup(" + scd_id + ");>"+scd_nm+"</a></div>";
+					                		appendnew += "[<spring:message code="schedule.everymonth" />] [" + exe_hms +"] <a class='bold' href='#' onclick=javascript:fn_popup('" + scd_id + "','" + bck_bsn_dscd +"');>"+scd_nm+"</a></div>";
 					                	} 
 				                	}
 				                // 매주
@@ -162,7 +164,7 @@
 					                		} else {
 					                			appendnew += "<i class='fa fa-minus-circle mr-2 text-danger'></i>";
 					                		}
-					                		appendnew += "[<spring:message code="schedule.everyweek" />] [" + exe_hms +"] <a class='bold' href='#' onclick=javascript:fn_popup(" + scd_id + ");>"+scd_nm+"</a></div>";
+					                		appendnew += "[<spring:message code="schedule.everyweek" />] [" + exe_hms +"] <a class='bold' href='#' onclick=javascript:fn_popup('" + scd_id + "','" + bck_bsn_dscd +"');>"+scd_nm+"</a></div>";
 					                	} 
 				           			}
 				                //매일
@@ -174,7 +176,7 @@
 				                		} else {
 				                			appendnew += "<i class='fa fa-minus-circle mr-2 text-danger'></i>";
 				                		}
-				                		appendnew += "[<spring:message code="schedule.everyday" />] [" + exe_hms +"] <a class='bold' href='#' onclick=javascript:fn_popup(" + scd_id + ");>"+scd_nm+"</a></div>";
+				                		appendnew += "[<spring:message code="schedule.everyday" />] [" + exe_hms +"] <a class='bold' href='#' onclick=javascript:fn_popup('" + scd_id + "','" + bck_bsn_dscd +"');>"+scd_nm+"</a></div>";
 				                	}
 								//1회실행
 				                } else if(exe_perd_cd == 'TC001605') {
@@ -186,7 +188,7 @@
 					                		appendnew += "<i class='fa fa-minus-circle mr-2 text-danger'></i>";
 					                	}
 /* 					                	appendnew += '<img src="../images/' + imgName + '" alt=""  style="margin-right:10px"  width="10px" height="10px" />'; */
-					                	appendnew += "[<spring:message code="schedule.one_time_run" />] [" + exe_hms +"] <a class='bold' href='#' onclick=javascript:fn_popup(" + scd_id + ");>"+scd_nm+"</a></div>";
+					                	appendnew += "[<spring:message code="schedule.one_time_run" />] [" + exe_hms +"] <a class='bold' href='#' onclick=javascript:fn_popup('" + scd_id + "','" + bck_bsn_dscd +"');>"+scd_nm+"</a></div>";
 					                }
 			                	}
 				                
@@ -283,7 +285,7 @@
 						var html = "";
 	
 						if(full.exe_dt.substring(0,1)=="1"){			
-							var bar = new Array(0, 0, 0, 0);
+							var bar = new Array(0, 0, 0, 0, 0);
 							for(var i=0; i<strArr.length; i++){							
 								if(strArr[i] == "TC000201"){
 									if(full.bck_opt_cd == "TC000301"){
@@ -293,7 +295,17 @@
 									}else{
 										bar[2] = bar[2]+1;
 									}
-								}else{
+								}else if(strArr[i] == "TC000205"){
+									if(full.bck_opt_cd == "TC000301"){
+										bar[0] = bar[0]+1;
+									}else if(full.bck_opt_cd == "TC000302"){
+										bar[1] = bar[1]+1;
+									}else if(full.bck_opt_cd == "TC000303"){
+										bar[2] = bar[2]+1;
+									}else {
+										bar[4] = bar[4]+1;
+									}
+								}else {
 									bar[3] = bar[3]+1;
 								}	
 							}
@@ -314,24 +326,44 @@
 							if(bar[2] > 0 ){
 								html += "	<i class='fa fa-comments-o text-warning'></i> Archive " + '<spring:message code="dashboard.backup" />';
 							}
-									
+							//DUMP 		
 							if(bar[3] > 0 ){
 								html += "	<i class='fa fa-file-code-o mr-2 text-danger' ></i> DUMP"  + '<spring:message code="dashboard.backup" />';
 							}
+							//Diff 차등 백업
+							if(bar[4] > 0 ){
+								html += "	<i class='fa fa-file-code-o mr-2 text-danger' ></i> Diff"  + '<spring:message code="dashboard.backup" />';
+							}
+							
+							
 							html += "</div>";
 							
 							html += '<br/>';
 
-							if(full.scd_cndt == "TC001801"){								
-								html += '<div class="badge badge-pill badge-light" style="background-color: transparent !important;font-size: 0.875rem;" onClick=javascript:fn_popup("'+full.scd_id+'");>';
-								html += "	<i class='fa fa-spin fa-refresh mr-2 text-success' style='font-weight:bold;'></i>";
-								html += "<span class='text-primary bold' style='font-weight:bold;'>" + full.exe_hms+' '+full.scd_nm + "</span>";
-								html += "</div>";
-							 }else{
-								html += '<div class="badge badge-pill badge-light" style="background-color: transparent !important;font-size: 0.875rem;" onClick=javascript:fn_popup("'+full.scd_id+'");>';;
-								html += "	<i class='fa fa-minus-circle mr-2 text-danger'></i>";
-								html += "<span class='text-primary bold' style='font-weight:bold;'>" + full.exe_hms+' '+full.scd_nm + "</span>";
-								html += "</div>";
+							if(full.bck_bsn_dscd == "TC000205"){
+								if(full.scd_cndt == "TC001801"){								
+									html += '<div class="badge badge-pill badge-light" style="background-color: transparent !important;font-size: 0.875rem;" onClick=javascript:fn_popup("'+full.scd_id+'","'+full.bck_bsn_dscd+'");>';
+									html += "	<i class='fa fa-spin fa-refresh mr-2 text-success' style='font-weight:bold;'></i>";
+									html += "<span class='text-primary bold' style='font-weight:bold;'>" + full.exe_hms+' '+full.scd_nm + "</span>";
+									html += "</div>";
+								 }else{
+									html += '<div class="badge badge-pill badge-light" style="background-color: transparent !important;font-size: 0.875rem;" onClick=javascript:fn_popup("'+full.scd_id+'","'+full.bck_bsn_dscd+'");>';;
+									html += "	<i class='fa fa-minus-circle mr-2 text-danger'></i>";
+									html += "<span class='text-primary bold' style='font-weight:bold;'>" + full.exe_hms+' '+full.scd_nm + "</span>";
+									html += "</div>";
+								}
+							}else{
+								if(full.scd_cndt == "TC001801"){								
+									html += '<div class="badge badge-pill badge-light" style="background-color: transparent !important;font-size: 0.875rem;" onClick=javascript:fn_popup("'+full.scd_id+'");>';
+									html += "	<i class='fa fa-spin fa-refresh mr-2 text-success' style='font-weight:bold;'></i>";
+									html += "<span class='text-primary bold' style='font-weight:bold;'>" + full.exe_hms+' '+full.scd_nm + "</span>";
+									html += "</div>";
+								 }else{
+									html += '<div class="badge badge-pill badge-light" style="background-color: transparent !important;font-size: 0.875rem;" onClick=javascript:fn_popup("'+full.scd_id+'");>';;
+									html += "	<i class='fa fa-minus-circle mr-2 text-danger'></i>";
+									html += "<span class='text-primary bold' style='font-weight:bold;'>" + full.exe_hms+' '+full.scd_nm + "</span>";
+									html += "</div>";
+								}
 							}
 		
 							return html;
@@ -345,15 +377,14 @@
 				},	
 
 				// 월요일
-				{
-					data : "scd_nm", 
+				{	
+					data : "scd_nm",
 					render: function (data, type, full){
 						var strArr = full.bck_bsn_dscd.split(',');		
 						var html = "";
-		
-						if(full.exe_dt.substring(1,2)=="1"){
-							var bar = new Array(0, 0, 0, 0);
-
+	
+						if(full.exe_dt.substring(0,1)=="1"){			
+							var bar = new Array(0, 0, 0, 0, 0);
 							for(var i=0; i<strArr.length; i++){							
 								if(strArr[i] == "TC000201"){
 									if(full.bck_opt_cd == "TC000301"){
@@ -363,11 +394,21 @@
 									}else{
 										bar[2] = bar[2]+1;
 									}
-								}else{
+								}else if(strArr[i] == "TC000205"){
+									if(full.bck_opt_cd == "TC000301"){
+										bar[0] = bar[0]+1;
+									}else if(full.bck_opt_cd == "TC000302"){
+										bar[1] = bar[1]+1;
+									}else if(full.bck_opt_cd == "TC000303"){
+										bar[2] = bar[2]+1;
+									}else {
+										bar[4] = bar[4]+1;
+									}
+								}else {
 									bar[3] = bar[3]+1;
 								}	
 							}
-
+									
 							html += "<div class='badge badge-pill badge-light' style='background-color: transparent !important;font-size: 0.875rem;'>";
 
 							//full backup
@@ -384,43 +425,65 @@
 							if(bar[2] > 0 ){
 								html += "	<i class='fa fa-comments-o text-warning'></i> Archive " + '<spring:message code="dashboard.backup" />';
 							}
-									
+							//DUMP 		
 							if(bar[3] > 0 ){
 								html += "	<i class='fa fa-file-code-o mr-2 text-danger' ></i> DUMP"  + '<spring:message code="dashboard.backup" />';
 							}
+							//Diff 차등 백업
+							if(bar[4] > 0 ){
+								html += "	<i class='fa fa-file-code-o mr-2 text-danger' ></i> Diff"  + '<spring:message code="dashboard.backup" />';
+							}
+							
+							
 							html += "</div>";
 							
 							html += '<br/>';
 
-							if(full.scd_cndt == "TC001801"){								
-								html += '<div class="badge badge-pill badge-light" style="background-color: transparent !important;font-size: 0.875rem;" onClick=javascript:fn_popup("'+full.scd_id+'");>';
-								html += "	<i class='fa fa-spin fa-refresh mr-2 text-success' style='font-weight:bold;'></i>";
-								html += "<span class='text-primary bold' style='font-weight:bold;'>" + full.exe_hms+' '+full.scd_nm + "</span>";
-								html += "</div>";
-							 }else{
-								html += '<div class="badge badge-pill badge-light" style="background-color: transparent !important;font-size: 0.875rem;" onClick=javascript:fn_popup("'+full.scd_id+'");>';;
-								html += "	<i class='fa fa-minus-circle mr-2 text-danger'></i>";
-								html += "<span class='text-primary bold' style='font-weight:bold;'>" + full.exe_hms+' '+full.scd_nm + "</span>";
-								html += "</div>";
+							if(full.bck_bsn_dscd == "TC000205"){
+								if(full.scd_cndt == "TC001801"){								
+									html += '<div class="badge badge-pill badge-light" style="background-color: transparent !important;font-size: 0.875rem;" onClick=javascript:fn_popup("'+full.scd_id+'","'+full.bck_bsn_dscd+'");>';
+									html += "	<i class='fa fa-spin fa-refresh mr-2 text-success' style='font-weight:bold;'></i>";
+									html += "<span class='text-primary bold' style='font-weight:bold;'>" + full.exe_hms+' '+full.scd_nm + "</span>";
+									html += "</div>";
+								 }else{
+									html += '<div class="badge badge-pill badge-light" style="background-color: transparent !important;font-size: 0.875rem;" onClick=javascript:fn_popup("'+full.scd_id+'","'+full.bck_bsn_dscd+'");>';;
+									html += "	<i class='fa fa-minus-circle mr-2 text-danger'></i>";
+									html += "<span class='text-primary bold' style='font-weight:bold;'>" + full.exe_hms+' '+full.scd_nm + "</span>";
+									html += "</div>";
+								}
+							}else{
+								if(full.scd_cndt == "TC001801"){								
+									html += '<div class="badge badge-pill badge-light" style="background-color: transparent !important;font-size: 0.875rem;" onClick=javascript:fn_popup("'+full.scd_id+'");>';
+									html += "	<i class='fa fa-spin fa-refresh mr-2 text-success' style='font-weight:bold;'></i>";
+									html += "<span class='text-primary bold' style='font-weight:bold;'>" + full.exe_hms+' '+full.scd_nm + "</span>";
+									html += "</div>";
+								 }else{
+									html += '<div class="badge badge-pill badge-light" style="background-color: transparent !important;font-size: 0.875rem;" onClick=javascript:fn_popup("'+full.scd_id+'");>';;
+									html += "	<i class='fa fa-minus-circle mr-2 text-danger'></i>";
+									html += "<span class='text-primary bold' style='font-weight:bold;'>" + full.exe_hms+' '+full.scd_nm + "</span>";
+									html += "</div>";
+								}
 							}
-
+		
 							return html;
 						}else{
 							return html;
-						}					
+						}
+
 						return html;				
-					},
-					defaultContent : "" 	
+					}, 
+					defaultContent : ""
 				},	
 			
 				// 화요일
-				{
-					data : "scd_nm", 
+				{	
+					data : "scd_nm",
 					render: function (data, type, full){
 						var strArr = full.bck_bsn_dscd.split(',');		
 						var html = "";
-						if(full.exe_dt.substring(2,3)=="1"){		
-							var bar = new Array(0, 0, 0, 0);
+	
+						if(full.exe_dt.substring(0,1)=="1"){			
+							var bar = new Array(0, 0, 0, 0, 0);
 							for(var i=0; i<strArr.length; i++){							
 								if(strArr[i] == "TC000201"){
 									if(full.bck_opt_cd == "TC000301"){
@@ -430,11 +493,21 @@
 									}else{
 										bar[2] = bar[2]+1;
 									}
-								}else{
+								}else if(strArr[i] == "TC000205"){
+									if(full.bck_opt_cd == "TC000301"){
+										bar[0] = bar[0]+1;
+									}else if(full.bck_opt_cd == "TC000302"){
+										bar[1] = bar[1]+1;
+									}else if(full.bck_opt_cd == "TC000303"){
+										bar[2] = bar[2]+1;
+									}else {
+										bar[4] = bar[4]+1;
+									}
+								}else {
 									bar[3] = bar[3]+1;
 								}	
 							}
-
+									
 							html += "<div class='badge badge-pill badge-light' style='background-color: transparent !important;font-size: 0.875rem;'>";
 
 							//full backup
@@ -451,44 +524,65 @@
 							if(bar[2] > 0 ){
 								html += "	<i class='fa fa-comments-o text-warning'></i> Archive " + '<spring:message code="dashboard.backup" />';
 							}
-									
+							//DUMP 		
 							if(bar[3] > 0 ){
 								html += "	<i class='fa fa-file-code-o mr-2 text-danger' ></i> DUMP"  + '<spring:message code="dashboard.backup" />';
 							}
+							//Diff 차등 백업
+							if(bar[4] > 0 ){
+								html += "	<i class='fa fa-file-code-o mr-2 text-danger' ></i> Diff"  + '<spring:message code="dashboard.backup" />';
+							}
+							
+							
 							html += "</div>";
 							
 							html += '<br/>';
 
-							if(full.scd_cndt == "TC001801"){								
-								html += '<div class="badge badge-pill badge-light" style="background-color: transparent !important;font-size: 0.875rem;" onClick=javascript:fn_popup("'+full.scd_id+'");>';
-								html += "	<i class='fa fa-spin fa-refresh mr-2 text-success' style='font-weight:bold;'></i>";
-								html += "<span class='text-primary bold' style='font-weight:bold;'>" + full.exe_hms+' '+full.scd_nm + "</span>";
-								html += "</div>";
-							 }else{
-								html += '<div class="badge badge-pill badge-light" style="background-color: transparent !important;font-size: 0.875rem;" onClick=javascript:fn_popup("'+full.scd_id+'");>';;
-								html += "	<i class='fa fa-minus-circle mr-2 text-danger'></i>";
-								html += "<span class='text-primary bold' style='font-weight:bold;'>" + full.exe_hms+' '+full.scd_nm + "</span>";
-								html += "</div>";
+							if(full.bck_bsn_dscd == "TC000205"){
+								if(full.scd_cndt == "TC001801"){								
+									html += '<div class="badge badge-pill badge-light" style="background-color: transparent !important;font-size: 0.875rem;" onClick=javascript:fn_popup("'+full.scd_id+'","'+full.bck_bsn_dscd+'");>';
+									html += "	<i class='fa fa-spin fa-refresh mr-2 text-success' style='font-weight:bold;'></i>";
+									html += "<span class='text-primary bold' style='font-weight:bold;'>" + full.exe_hms+' '+full.scd_nm + "</span>";
+									html += "</div>";
+								 }else{
+									html += '<div class="badge badge-pill badge-light" style="background-color: transparent !important;font-size: 0.875rem;" onClick=javascript:fn_popup("'+full.scd_id+'","'+full.bck_bsn_dscd+'");>';;
+									html += "	<i class='fa fa-minus-circle mr-2 text-danger'></i>";
+									html += "<span class='text-primary bold' style='font-weight:bold;'>" + full.exe_hms+' '+full.scd_nm + "</span>";
+									html += "</div>";
+								}
+							}else{
+								if(full.scd_cndt == "TC001801"){								
+									html += '<div class="badge badge-pill badge-light" style="background-color: transparent !important;font-size: 0.875rem;" onClick=javascript:fn_popup("'+full.scd_id+'");>';
+									html += "	<i class='fa fa-spin fa-refresh mr-2 text-success' style='font-weight:bold;'></i>";
+									html += "<span class='text-primary bold' style='font-weight:bold;'>" + full.exe_hms+' '+full.scd_nm + "</span>";
+									html += "</div>";
+								 }else{
+									html += '<div class="badge badge-pill badge-light" style="background-color: transparent !important;font-size: 0.875rem;" onClick=javascript:fn_popup("'+full.scd_id+'");>';;
+									html += "	<i class='fa fa-minus-circle mr-2 text-danger'></i>";
+									html += "<span class='text-primary bold' style='font-weight:bold;'>" + full.exe_hms+' '+full.scd_nm + "</span>";
+									html += "</div>";
+								}
 							}
-
+		
 							return html;
 						}else{
 							return html;
-						}					
+						}
+
 						return html;				
-					},
-					defaultContent : "" 	
+					}, 
+					defaultContent : ""
 				},	
 			
 				// 수요일
-				{
-					data : "scd_nm", 
+				{	
+					data : "scd_nm",
 					render: function (data, type, full){
 						var strArr = full.bck_bsn_dscd.split(',');		
 						var html = "";
-
-						if(full.exe_dt.substring(3,4)=="1"){	
-							var bar = new Array(0, 0, 0, 0);
+	
+						if(full.exe_dt.substring(0,1)=="1"){			
+							var bar = new Array(0, 0, 0, 0, 0);
 							for(var i=0; i<strArr.length; i++){							
 								if(strArr[i] == "TC000201"){
 									if(full.bck_opt_cd == "TC000301"){
@@ -498,11 +592,21 @@
 									}else{
 										bar[2] = bar[2]+1;
 									}
-								}else{
+								}else if(strArr[i] == "TC000205"){
+									if(full.bck_opt_cd == "TC000301"){
+										bar[0] = bar[0]+1;
+									}else if(full.bck_opt_cd == "TC000302"){
+										bar[1] = bar[1]+1;
+									}else if(full.bck_opt_cd == "TC000303"){
+										bar[2] = bar[2]+1;
+									}else {
+										bar[4] = bar[4]+1;
+									}
+								}else {
 									bar[3] = bar[3]+1;
 								}	
 							}
-
+									
 							html += "<div class='badge badge-pill badge-light' style='background-color: transparent !important;font-size: 0.875rem;'>";
 
 							//full backup
@@ -519,44 +623,65 @@
 							if(bar[2] > 0 ){
 								html += "	<i class='fa fa-comments-o text-warning'></i> Archive " + '<spring:message code="dashboard.backup" />';
 							}
-									
+							//DUMP 		
 							if(bar[3] > 0 ){
 								html += "	<i class='fa fa-file-code-o mr-2 text-danger' ></i> DUMP"  + '<spring:message code="dashboard.backup" />';
 							}
+							//Diff 차등 백업
+							if(bar[4] > 0 ){
+								html += "	<i class='fa fa-file-code-o mr-2 text-danger' ></i> Diff"  + '<spring:message code="dashboard.backup" />';
+							}
+							
+							
 							html += "</div>";
 							
 							html += '<br/>';
 
-							if(full.scd_cndt == "TC001801"){								
-								html += '<div class="badge badge-pill badge-light" style="background-color: transparent !important;font-size: 0.875rem;" onClick=javascript:fn_popup("'+full.scd_id+'");>';
-								html += "	<i class='fa fa-spin fa-refresh mr-2 text-success' style='font-weight:bold;'></i>";
-								html += "<span class='text-primary bold' style='font-weight:bold;'>" + full.exe_hms+' '+full.scd_nm + "</span>";
-								html += "</div>";
-							 }else{
-								html += '<div class="badge badge-pill badge-light" style="background-color: transparent !important;font-size: 0.875rem;" onClick=javascript:fn_popup("'+full.scd_id+'");>';;
-								html += "	<i class='fa fa-minus-circle mr-2 text-danger'></i>";
-								html += "<span class='text-primary bold' style='font-weight:bold;'>" + full.exe_hms+' '+full.scd_nm + "</span>";
-								html += "</div>";
+							if(full.bck_bsn_dscd == "TC000205"){
+								if(full.scd_cndt == "TC001801"){								
+									html += '<div class="badge badge-pill badge-light" style="background-color: transparent !important;font-size: 0.875rem;" onClick=javascript:fn_popup("'+full.scd_id+'","'+full.bck_bsn_dscd+'");>';
+									html += "	<i class='fa fa-spin fa-refresh mr-2 text-success' style='font-weight:bold;'></i>";
+									html += "<span class='text-primary bold' style='font-weight:bold;'>" + full.exe_hms+' '+full.scd_nm + "</span>";
+									html += "</div>";
+								 }else{
+									html += '<div class="badge badge-pill badge-light" style="background-color: transparent !important;font-size: 0.875rem;" onClick=javascript:fn_popup("'+full.scd_id+'","'+full.bck_bsn_dscd+'");>';;
+									html += "	<i class='fa fa-minus-circle mr-2 text-danger'></i>";
+									html += "<span class='text-primary bold' style='font-weight:bold;'>" + full.exe_hms+' '+full.scd_nm + "</span>";
+									html += "</div>";
+								}
+							}else{
+								if(full.scd_cndt == "TC001801"){								
+									html += '<div class="badge badge-pill badge-light" style="background-color: transparent !important;font-size: 0.875rem;" onClick=javascript:fn_popup("'+full.scd_id+'");>';
+									html += "	<i class='fa fa-spin fa-refresh mr-2 text-success' style='font-weight:bold;'></i>";
+									html += "<span class='text-primary bold' style='font-weight:bold;'>" + full.exe_hms+' '+full.scd_nm + "</span>";
+									html += "</div>";
+								 }else{
+									html += '<div class="badge badge-pill badge-light" style="background-color: transparent !important;font-size: 0.875rem;" onClick=javascript:fn_popup("'+full.scd_id+'");>';;
+									html += "	<i class='fa fa-minus-circle mr-2 text-danger'></i>";
+									html += "<span class='text-primary bold' style='font-weight:bold;'>" + full.exe_hms+' '+full.scd_nm + "</span>";
+									html += "</div>";
+								}
 							}
-
+		
 							return html;
 						}else{
 							return html;
-						}					
+						}
+
 						return html;				
-					},
-					defaultContent : "" 	
+					}, 
+					defaultContent : ""
 				},	
 			
 				// 목요일
-				{
-					data : "scd_nm", 
+				{	
+					data : "scd_nm",
 					render: function (data, type, full){
 						var strArr = full.bck_bsn_dscd.split(',');		
 						var html = "";
-
-						if(full.exe_dt.substring(4,5)=="1"){
-							var bar = new Array(0, 0, 0, 0);
+	
+						if(full.exe_dt.substring(0,1)=="1"){			
+							var bar = new Array(0, 0, 0, 0, 0);
 							for(var i=0; i<strArr.length; i++){							
 								if(strArr[i] == "TC000201"){
 									if(full.bck_opt_cd == "TC000301"){
@@ -566,11 +691,21 @@
 									}else{
 										bar[2] = bar[2]+1;
 									}
-								}else{
+								}else if(strArr[i] == "TC000205"){
+									if(full.bck_opt_cd == "TC000301"){
+										bar[0] = bar[0]+1;
+									}else if(full.bck_opt_cd == "TC000302"){
+										bar[1] = bar[1]+1;
+									}else if(full.bck_opt_cd == "TC000303"){
+										bar[2] = bar[2]+1;
+									}else {
+										bar[4] = bar[4]+1;
+									}
+								}else {
 									bar[3] = bar[3]+1;
-								}
+								}	
 							}
-
+									
 							html += "<div class='badge badge-pill badge-light' style='background-color: transparent !important;font-size: 0.875rem;'>";
 
 							//full backup
@@ -587,44 +722,65 @@
 							if(bar[2] > 0 ){
 								html += "	<i class='fa fa-comments-o text-warning'></i> Archive " + '<spring:message code="dashboard.backup" />';
 							}
-									
+							//DUMP 		
 							if(bar[3] > 0 ){
 								html += "	<i class='fa fa-file-code-o mr-2 text-danger' ></i> DUMP"  + '<spring:message code="dashboard.backup" />';
 							}
+							//Diff 차등 백업
+							if(bar[4] > 0 ){
+								html += "	<i class='fa fa-file-code-o mr-2 text-danger' ></i> Diff"  + '<spring:message code="dashboard.backup" />';
+							}
+							
+							
 							html += "</div>";
 							
 							html += '<br/>';
 
-							if(full.scd_cndt == "TC001801"){								
-								html += '<div class="badge badge-pill badge-light" style="background-color: transparent !important;font-size: 0.875rem;" onClick=javascript:fn_popup("'+full.scd_id+'");>';
-								html += "	<i class='fa fa-spin fa-refresh mr-2 text-success' style='font-weight:bold;'></i>";
-								html += "<span class='text-primary bold' style='font-weight:bold;'>" + full.exe_hms+' '+full.scd_nm + "</span>";
-								html += "</div>";
-							 }else{
-								html += '<div class="badge badge-pill badge-light" style="background-color: transparent !important;font-size: 0.875rem;" onClick=javascript:fn_popup("'+full.scd_id+'");>';;
-								html += "	<i class='fa fa-minus-circle mr-2 text-danger'></i>";
-								html += "<span class='text-primary bold' style='font-weight:bold;'>" + full.exe_hms+' '+full.scd_nm + "</span>";
-								html += "</div>";
+							if(full.bck_bsn_dscd == "TC000205"){
+								if(full.scd_cndt == "TC001801"){								
+									html += '<div class="badge badge-pill badge-light" style="background-color: transparent !important;font-size: 0.875rem;" onClick=javascript:fn_popup("'+full.scd_id+'","'+full.bck_bsn_dscd+'");>';
+									html += "	<i class='fa fa-spin fa-refresh mr-2 text-success' style='font-weight:bold;'></i>";
+									html += "<span class='text-primary bold' style='font-weight:bold;'>" + full.exe_hms+' '+full.scd_nm + "</span>";
+									html += "</div>";
+								 }else{
+									html += '<div class="badge badge-pill badge-light" style="background-color: transparent !important;font-size: 0.875rem;" onClick=javascript:fn_popup("'+full.scd_id+'","'+full.bck_bsn_dscd+'");>';;
+									html += "	<i class='fa fa-minus-circle mr-2 text-danger'></i>";
+									html += "<span class='text-primary bold' style='font-weight:bold;'>" + full.exe_hms+' '+full.scd_nm + "</span>";
+									html += "</div>";
+								}
+							}else{
+								if(full.scd_cndt == "TC001801"){								
+									html += '<div class="badge badge-pill badge-light" style="background-color: transparent !important;font-size: 0.875rem;" onClick=javascript:fn_popup("'+full.scd_id+'");>';
+									html += "	<i class='fa fa-spin fa-refresh mr-2 text-success' style='font-weight:bold;'></i>";
+									html += "<span class='text-primary bold' style='font-weight:bold;'>" + full.exe_hms+' '+full.scd_nm + "</span>";
+									html += "</div>";
+								 }else{
+									html += '<div class="badge badge-pill badge-light" style="background-color: transparent !important;font-size: 0.875rem;" onClick=javascript:fn_popup("'+full.scd_id+'");>';;
+									html += "	<i class='fa fa-minus-circle mr-2 text-danger'></i>";
+									html += "<span class='text-primary bold' style='font-weight:bold;'>" + full.exe_hms+' '+full.scd_nm + "</span>";
+									html += "</div>";
+								}
 							}
-
+		
 							return html;
 						}else{
 							return html;
-						}				
+						}
+
 						return html;				
-					},
-					defaultContent : "" 	
+					}, 
+					defaultContent : ""
 				},	
 			
 				// 금요일
-				{
-					data : "scd_nm", 
+				{	
+					data : "scd_nm",
 					render: function (data, type, full){
 						var strArr = full.bck_bsn_dscd.split(',');		
 						var html = "";
-
-						if(full.exe_dt.substring(5,6)=="1"){
-							var bar = new Array(0, 0, 0, 0);
+	
+						if(full.exe_dt.substring(0,1)=="1"){			
+							var bar = new Array(0, 0, 0, 0, 0);
 							for(var i=0; i<strArr.length; i++){							
 								if(strArr[i] == "TC000201"){
 									if(full.bck_opt_cd == "TC000301"){
@@ -634,11 +790,21 @@
 									}else{
 										bar[2] = bar[2]+1;
 									}
-								}else{
+								}else if(strArr[i] == "TC000205"){
+									if(full.bck_opt_cd == "TC000301"){
+										bar[0] = bar[0]+1;
+									}else if(full.bck_opt_cd == "TC000302"){
+										bar[1] = bar[1]+1;
+									}else if(full.bck_opt_cd == "TC000303"){
+										bar[2] = bar[2]+1;
+									}else {
+										bar[4] = bar[4]+1;
+									}
+								}else {
 									bar[3] = bar[3]+1;
 								}	
 							}
-
+									
 							html += "<div class='badge badge-pill badge-light' style='background-color: transparent !important;font-size: 0.875rem;'>";
 
 							//full backup
@@ -655,44 +821,66 @@
 							if(bar[2] > 0 ){
 								html += "	<i class='fa fa-comments-o text-warning'></i> Archive " + '<spring:message code="dashboard.backup" />';
 							}
-									
+							//DUMP 		
 							if(bar[3] > 0 ){
 								html += "	<i class='fa fa-file-code-o mr-2 text-danger' ></i> DUMP"  + '<spring:message code="dashboard.backup" />';
 							}
+							//Diff 차등 백업
+							if(bar[4] > 0 ){
+								html += "	<i class='fa fa-file-code-o mr-2 text-danger' ></i> Diff"  + '<spring:message code="dashboard.backup" />';
+							}
+							
+							
 							html += "</div>";
 							
 							html += '<br/>';
-
-							if(full.scd_cndt == "TC001801"){								
-								html += '<div class="badge badge-pill badge-light" style="background-color: transparent !important;font-size: 0.875rem;" onClick=javascript:fn_popup("'+full.scd_id+'");>';
-								html += "	<i class='fa fa-spin fa-refresh mr-2 text-success' style='font-weight:bold;'></i>";
-								html += "<span class='text-primary bold' style='font-weight:bold;'>" + full.exe_hms+' '+full.scd_nm + "</span>";
-								html += "</div>";
-							 }else{
-								html += '<div class="badge badge-pill badge-light" style="background-color: transparent !important;font-size: 0.875rem;" onClick=javascript:fn_popup("'+full.scd_id+'");>';;
-								html += "	<i class='fa fa-minus-circle mr-2 text-danger'></i>";
-								html += "<span class='text-primary bold' style='font-weight:bold;'>" + full.exe_hms+' '+full.scd_nm + "</span>";
-								html += "</div>";
+							
+							if(full.bck_bsn_dscd == "TC000205"){
+								if(full.scd_cndt == "TC001801"){								
+									html += '<div class="badge badge-pill badge-light" style="background-color: transparent !important;font-size: 0.875rem;" onClick=javascript:fn_popup("'+full.scd_id+'","'+full.bck_bsn_dscd+'");>';
+									html += "	<i class='fa fa-spin fa-refresh mr-2 text-success' style='font-weight:bold;'></i>";
+									html += "<span class='text-primary bold' style='font-weight:bold;'>" + full.exe_hms+' '+full.scd_nm + "</span>";
+									html += "</div>";
+								 }else{
+									html += '<div class="badge badge-pill badge-light" style="background-color: transparent !important;font-size: 0.875rem;" onClick=javascript:fn_popup("'+full.scd_id+'","'+full.bck_bsn_dscd+'");>';;
+									html += "	<i class='fa fa-minus-circle mr-2 text-danger'></i>";
+									html += "<span class='text-primary bold' style='font-weight:bold;'>" + full.exe_hms+' '+full.scd_nm + "</span>";
+									html += "</div>";
+								}
+							}else{
+								if(full.scd_cndt == "TC001801"){								
+									html += '<div class="badge badge-pill badge-light" style="background-color: transparent !important;font-size: 0.875rem;" onClick=javascript:fn_popup("'+full.scd_id+'");>';
+									html += "	<i class='fa fa-spin fa-refresh mr-2 text-success' style='font-weight:bold;'></i>";
+									html += "<span class='text-primary bold' style='font-weight:bold;'>" + full.exe_hms+' '+full.scd_nm + "</span>";
+									html += "</div>";
+								 }else{
+									html += '<div class="badge badge-pill badge-light" style="background-color: transparent !important;font-size: 0.875rem;" onClick=javascript:fn_popup("'+full.scd_id+'");>';;
+									html += "	<i class='fa fa-minus-circle mr-2 text-danger'></i>";
+									html += "<span class='text-primary bold' style='font-weight:bold;'>" + full.exe_hms+' '+full.scd_nm + "</span>";
+									html += "</div>";
+								}
 							}
-
+							
+		
 							return html;
 						}else{
 							return html;
-						}					
+						}
+
 						return html;				
-					},
-					defaultContent : "" 	
+					}, 
+					defaultContent : ""
 				},	
 			
 				// 토요일
-				{
-					data : "scd_nm", 
+				{	
+					data : "scd_nm",
 					render: function (data, type, full){
 						var strArr = full.bck_bsn_dscd.split(',');		
 						var html = "";
-
-						if(full.exe_dt.substring(6,7)=="1"){
-							var bar = new Array(0, 0, 0, 0);
+	
+						if(full.exe_dt.substring(0,1)=="1"){			
+							var bar = new Array(0, 0, 0, 0, 0);
 							for(var i=0; i<strArr.length; i++){							
 								if(strArr[i] == "TC000201"){
 									if(full.bck_opt_cd == "TC000301"){
@@ -702,11 +890,21 @@
 									}else{
 										bar[2] = bar[2]+1;
 									}
-								}else{
+								}else if(strArr[i] == "TC000205"){
+									if(full.bck_opt_cd == "TC000301"){
+										bar[0] = bar[0]+1;
+									}else if(full.bck_opt_cd == "TC000302"){
+										bar[1] = bar[1]+1;
+									}else if(full.bck_opt_cd == "TC000303"){
+										bar[2] = bar[2]+1;
+									}else {
+										bar[4] = bar[4]+1;
+									}
+								}else {
 									bar[3] = bar[3]+1;
 								}	
 							}
-
+									
 							html += "<div class='badge badge-pill badge-light' style='background-color: transparent !important;font-size: 0.875rem;'>";
 
 							//full backup
@@ -723,33 +921,54 @@
 							if(bar[2] > 0 ){
 								html += "	<i class='fa fa-comments-o text-warning'></i> Archive " + '<spring:message code="dashboard.backup" />';
 							}
-									
+							//DUMP 		
 							if(bar[3] > 0 ){
 								html += "	<i class='fa fa-file-code-o mr-2 text-danger' ></i> DUMP"  + '<spring:message code="dashboard.backup" />';
 							}
+							//Diff 차등 백업
+							if(bar[4] > 0 ){
+								html += "	<i class='fa fa-file-code-o mr-2 text-danger' ></i> Diff"  + '<spring:message code="dashboard.backup" />';
+							}
+							
+							
 							html += "</div>";
 							
 							html += '<br/>';
 
-							if(full.scd_cndt == "TC001801"){								
-								html += '<div class="badge badge-pill badge-light" style="background-color: transparent !important;font-size: 0.875rem;" onClick=javascript:fn_popup("'+full.scd_id+'");>';
-								html += "	<i class='fa fa-spin fa-refresh mr-2 text-success' style='font-weight:bold;'></i>";
-								html += "<span class='text-primary bold' style='font-weight:bold;'>" + full.exe_hms+' '+full.scd_nm + "</span>";
-								html += "</div>";
-							 }else{
-								html += '<div class="badge badge-pill badge-light" style="background-color: transparent !important;font-size: 0.875rem;" onClick=javascript:fn_popup("'+full.scd_id+'");>';;
-								html += "	<i class='fa fa-minus-circle mr-2 text-danger'></i>";
-								html += "<span class='text-primary bold' style='font-weight:bold;'>" + full.exe_hms+' '+full.scd_nm + "</span>";
-								html += "</div>";
+							if(full.bck_bsn_dscd == "TC000205"){
+								if(full.scd_cndt == "TC001801"){								
+									html += '<div class="badge badge-pill badge-light" style="background-color: transparent !important;font-size: 0.875rem;" onClick=javascript:fn_popup("'+full.scd_id+'","'+full.bck_bsn_dscd+'");>';
+									html += "	<i class='fa fa-spin fa-refresh mr-2 text-success' style='font-weight:bold;'></i>";
+									html += "<span class='text-primary bold' style='font-weight:bold;'>" + full.exe_hms+' '+full.scd_nm + "</span>";
+									html += "</div>";
+								 }else{
+									html += '<div class="badge badge-pill badge-light" style="background-color: transparent !important;font-size: 0.875rem;" onClick=javascript:fn_popup("'+full.scd_id+'","'+full.bck_bsn_dscd+'");>';;
+									html += "	<i class='fa fa-minus-circle mr-2 text-danger'></i>";
+									html += "<span class='text-primary bold' style='font-weight:bold;'>" + full.exe_hms+' '+full.scd_nm + "</span>";
+									html += "</div>";
+								}
+							}else{
+								if(full.scd_cndt == "TC001801"){								
+									html += '<div class="badge badge-pill badge-light" style="background-color: transparent !important;font-size: 0.875rem;" onClick=javascript:fn_popup("'+full.scd_id+'");>';
+									html += "	<i class='fa fa-spin fa-refresh mr-2 text-success' style='font-weight:bold;'></i>";
+									html += "<span class='text-primary bold' style='font-weight:bold;'>" + full.exe_hms+' '+full.scd_nm + "</span>";
+									html += "</div>";
+								 }else{
+									html += '<div class="badge badge-pill badge-light" style="background-color: transparent !important;font-size: 0.875rem;" onClick=javascript:fn_popup("'+full.scd_id+'");>';;
+									html += "	<i class='fa fa-minus-circle mr-2 text-danger'></i>";
+									html += "<span class='text-primary bold' style='font-weight:bold;'>" + full.exe_hms+' '+full.scd_nm + "</span>";
+									html += "</div>";
+								}
 							}
-
+		
 							return html;
 						}else{
 							return html;
-						}					
+						}
+
 						return html;				
-					},
-				 	defaultContent : "" 	
+					}, 
+					defaultContent : ""
 				},	
 			]
 		});
@@ -790,7 +1009,7 @@
 			},
 			success : function(result) {
 				table.clear().draw();
-
+				
 				if (nvlPrmSet(result, "") != '') {
 					table.rows.add(result).draw();
 				}
@@ -818,7 +1037,7 @@
 		}
 	}
 	
-	function fn_popup(scd_id){
+	function fn_popup(scd_id, bck_bsdn){
 		var popUrl = "/bckScheduleDtlVeiw.do?scd_id="+scd_id; // 서버 url 팝업경로
 		var width = 1320;
 		var height = 735;
@@ -828,15 +1047,17 @@
 				
 		window.open(popUrl,"",popOption);
 	}
-	
+
 	/* ********************************************************
 	 * 팝업호출
 	 ******************************************************** */
-	 function fn_popup(scd_id){
+	 function fn_popup(scd_id, bck_bsn_dscd){
+		bck_bsn_dscd = nvlPrmSet(bck_bsn_dscd, "");
 		$.ajax({
 			url : "/bckScheduleDtlVeiw.do",
 			data : {
-				scd_id : scd_id
+				scd_id : scd_id,
+				bck_bsn_dscd: bck_bsn_dscd
 			},
 			dataType : "json",
 			type : "post",
@@ -853,13 +1074,15 @@
 				}
 			},
 			success : function(result) {
-				$("#scdInfo_scd_id", "#backupScdInfoForm").val(result.scd_id);
-				$("#scdInfo_db_svr_id", "#backupScdInfoForm").val($("#db_svr_id", "#findList").val());
-
-				//POP START
-				fn_sdtDtlPopStart();
 				
-				$("#pop_layer_backup_scd_dtl").modal("show");
+					$("#scdInfo_scd_id", "#backupScdInfoForm").val(result.scd_id);
+					$("#scdInfo_db_svr_id", "#backupScdInfoForm").val($("#db_svr_id", "#findList").val());
+
+					//POP START
+					fn_sdtDtlPopStart();
+					
+					$("#pop_layer_backup_scd_dtl").modal("show");
+				 
 			}
 		});
 	}

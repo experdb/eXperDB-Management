@@ -322,6 +322,7 @@ function fn_reg_popup(){
 				//PG Backrest Agent Info Table Setting
 				fn_select_agent_info();
 				$('#pop_layer_reg_backrest').modal("show");
+				$('#local_radio').click();
 			}else {
 				$('#pop_layer_reg_dump').modal("show");
 			}
@@ -580,6 +581,7 @@ function fn_update_chogihwa(gbn, result) {
 			$("#mod_remt_str_ssh", "#workRegReFormBckr").val(nvlPrmSet(result.remote_map.port, ""));
 			$("#mod_remt_str_usr", "#workRegReFormBckr").val(nvlPrmSet(result.remote_map.usr, ""));
 			$("#mod_remt_str_pw", "#workRegReFormBckr").val(nvlPrmSet(result.remote_map.pw, ""));
+			mod_remote_pw = result.remote_map.pw;
 			
 			$("#mod_remote_opt").show();
 			$("#mod_cloud_opt").hide();

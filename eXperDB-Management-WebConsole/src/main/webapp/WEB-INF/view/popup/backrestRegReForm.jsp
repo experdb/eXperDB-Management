@@ -18,6 +18,7 @@
 	var mod_cus_check = false;
 	var mod_remoteConn = "Fail";
 	var mod_log_pth_chk = false;
+	var mod_remote_pw = "";
 
 	$(window.document).ready(function() {
 		$("#workRegReFormBckr").validate({
@@ -309,11 +310,15 @@
 	}
 
 	//alert창 onchange
-	function fn_backrest_chg_alert(obj){
+ 	function fn_backrest_chg_alert(obj){
 		$("#"+obj.id+"_alert", "#workRegReFormBckr").html("");
 		$("#"+obj.id+"_alert", "#workRegReFormBckr").hide();
-	}
-
+		
+		if($("#mod_remote_radio").is(':checked')){
+			if(obj.id == 'mod_bckr_log_pth') mod_log_pth_chk = false;
+		}
+	} 
+ 
 	//PG Backrest Work 수정 Update
 	function fn_backrest_update_work(){
 		if (!mod_backrest_valCheck()) return false;
@@ -470,6 +475,19 @@ function fn_re_ssh_connection(){
 		})
 	}
 	
+	function pw_chk(obj){
+		var pw_chk_id = obj.id;
+		var pw_chk_val = $('#'+pw_chk_id).val();
+		
+		if(pw_chk_id == 'mod_remt_str_pw'){
+			if(mod_remote_pw != pw_chk_val){
+				mod_remoteConn = "Fail";
+			}else {
+				mod_remoteConn = "Success";
+			}
+		}
+	}
+	
 
 </script>
 
@@ -605,19 +623,19 @@ function fn_re_ssh_connection(){
 
 												<div class="d-flex" style="margin-bottom: 10px;">
 													<div class="col-sm-2_3">
-														<input type="text" class="form-control form-control-xsm" maxlength="50" id="mod_remt_str_ip" name="mod_remt_str_ip" style="width: 250px;" placeholder="IP를 입력해주세요" readOnly />
+														<input type="text" class="form-control form-control-xsm" maxlength="50" id="mod_remt_str_ip" name="mod_remt_str_ip" style="width: 250px; height:30px;" placeholder="IP를 입력해주세요" readOnly />
 													</div>
 
 													<div class="col-sm-2" style="margin-left: 6px;">
-														<input type="text" class="form-control form-control-xsm" maxlength="3" id="mod_remt_str_ssh" name="mod_remt_str_ssh" style="width: 180px;" placeholder="SSH 포트" readOnly />
+														<input type="text" class="form-control form-control-xsm" maxlength="3" id="mod_remt_str_ssh" name="mod_remt_str_ssh" style="width: 180px; height:30px;" placeholder="SSH 포트" readOnly />
 													</div>
 
 													<div class="col-sm-2_3" style="margin-left: -30px;">
-														<input type="text" class="form-control form-conftrol-xsm" maxlength="50" id="mod_remt_str_usr" name="mod_remt_str_usr" style="width: 250px;" placeholder="OS 유저명을 입력해주세요" readOnly />
+														<input type="text" class="form-control form-conftrol-xsm" maxlength="50" id="mod_remt_str_usr" name="mod_remt_str_usr" style="width: 250px; height:30px;" placeholder="OS 유저명을 입력해주세요" readOnly />
 													</div>
 													
 													<div class="col-sm-2_3" style="margin-left: 6px;">
-														<input type="password" class="form-control form-control-xsm" maxlength="50" id="mod_remt_str_pw" name="mod_remt_str_pw" style="width: 250px;" placeholder="패스워드를 입력해주세요" readOnly />
+														<input type="password" class="form-control form-control-xsm" maxlength="50" id="mod_remt_str_pw" name="mod_remt_str_pw" style="width: 250px; height:30px;" placeholder="패스워드를 입력해주세요" onchange="pw_chk(this)"/>
 													</div>
 
 													<div class="col-sm-1" style="height: 20px; margin-top: 3px;">

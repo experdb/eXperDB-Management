@@ -706,6 +706,7 @@ function fn_confirmCancelRst(gbn){
 <%@include file="../../popup/scheduleWrkList.jsp"%>
 <%@include file="../../cmmn/workRmanInfo.jsp"%>
 <%@include file="../../cmmn/workDumpInfo.jsp"%>
+<%@include file="../../cmmn/workBackrestInfo.jsp"%>
 
 <form name="modifyForm" method="post">
 </form>
