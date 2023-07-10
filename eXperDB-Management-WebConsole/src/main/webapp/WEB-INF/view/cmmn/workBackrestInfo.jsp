@@ -43,7 +43,7 @@
 											</tr>
 											<tr>
 												<td class="py-1" style="width: 17%; word-break:break-all;">
-													<spring:message code="backup_management.gbn"/>
+													<spring:message code="backup_management.type"/>
 												</td>
 												<td style="width: 33%; word-break:break-all;" id="b_bck_bgn"></td>
 												<td class="py-1" style="width: 17%; word-break:break-all;">
@@ -93,7 +93,7 @@
 											</tr>
 											<tr>
 												<td class="py-1" style="width: 17%; word-break:break-all;">
-													<spring:message code="data_transfer.port"/>
+													<spring:message code="backup_management.remote.port"/>
 												</td>
 												<td colspan="3" style="width: 75%; word-break:break-all;" id="b_port"></td>
 											</tr>

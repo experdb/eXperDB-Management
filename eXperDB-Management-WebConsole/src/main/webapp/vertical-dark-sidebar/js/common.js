@@ -496,12 +496,11 @@ function fn_workLayer(wrk_id){
 					
 					// BACKREST
 					}else if (result[0].bck_bsn_dscd == "TC000205"){
-						
-						$('#b_bck_bsdn_storage').html(nvlPrmSet(result[0].bck_bsn_dscd_nm + ' / ' + result[0].bck_opt_cd_nm.toUpperCase(), ""))
-						$('#b_bck_svr').html(nvlPrmSet(result[0].bck_bsn_dscd_nm, ""))
+						$('#b_bck_bsdn_storage').html(nvlPrmSet(result[0].bck_bsn_dscd_nm + ' / ' + result[0].backrest_gbn.toUpperCase(), ""))
+						$('#b_bck_svr').html(nvlPrmSet(result[0].ipadr, ""))
 						$('#b_wrk_nm').html(nvlPrmSet(result[0].wrk_nm, ""))
 						$('#b_wrk_exp').html(nvlPrmSet(result[0].wrk_exp, ""))
-						$('#b_bck_bgn').html(nvlPrmSet(result[0].backrest_gbn.toUpperCase(), ""))
+						$('#b_bck_bgn').html(nvlPrmSet(result[0].bck_opt_cd_nm.toUpperCase(), ""))
 						$('#b_bck_pth').html(nvlPrmSet(result[0].bck_pth, ""))
 						$('#b_bck_cnt').html(nvlPrmSet(result[0].bck_mtn_ecnt, ""))
 						$('#b_bck_log_pth').html(nvlPrmSet(result[0].log_file_pth, ""))

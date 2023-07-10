@@ -634,7 +634,6 @@ function fn_schedule_cnt_set(result) {
 				} else if (item.bck_bsn_dscd == 'TC000202') {
 					backHtml += "	<i class='fa fa-file-code-o mr-2 text-danger' ></i>";
 				} else if (item.bck_bsn_dscd == 'TC000205') {
-					console.log(item);
 					if (item.bck_opt_cd == 'TC000301') { //전체백업
 						backHtml += "	<i class='fa fa-paste mr-2 text-success'></i>";
 					} else if(item.bck_opt_cd == 'TC000302'){ //증분백업
