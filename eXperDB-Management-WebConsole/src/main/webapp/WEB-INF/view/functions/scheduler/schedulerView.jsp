@@ -156,7 +156,7 @@
 				                	}
 				                // 매주
 				                } else if(exe_perd_cd == 'TC001602') {
-				           			if(frst_reg_dtm<=checkYear){
+				                	if(frst_reg_dtm<=checkYear){
 					                	if(exe_dt.substr(i,1) == '1') {
 					                		appendnew += "<div class='col-md-12 badge badge-pill badge-light' style='text-align: left; background-color: transparent !important;font-weight:bold;'>";
 					                		if(scd_cndt == 'TC001801') {
@@ -283,9 +283,8 @@
 					render: function (data, type, full){
 						var strArr = full.bck_bsn_dscd.split(',');		
 						var html = "";
-	
 						if(full.exe_dt.substring(0,1)=="1"){			
-							var bar = new Array(0, 0, 0, 0, 0);
+							var bar = new Array(0, 0, 0, 0, 0); 
 							for(var i=0; i<strArr.length; i++){							
 								if(strArr[i] == "TC000201"){
 									if(full.bck_opt_cd == "TC000301"){
@@ -300,9 +299,7 @@
 										bar[0] = bar[0]+1;
 									}else if(full.bck_opt_cd == "TC000302"){
 										bar[1] = bar[1]+1;
-									}else if(full.bck_opt_cd == "TC000303"){
-										bar[2] = bar[2]+1;
-									}else {
+									}else if(full.bck_opt_cd == "TC000304"){
 										bar[4] = bar[4]+1;
 									}
 								}else {
@@ -319,7 +316,7 @@
 									
 							//Incremental 백업
 							if(bar[1] > 0 ){
-								html += "	<i class='fa fa-comments-o text-warning'></i> Incremental " + '<spring:message code="dashboard.backup" />';
+								html += "	<i class='fa fa-paste mr-2 text-warning'></i> Incremental " + '<spring:message code="dashboard.backup" />';
 							}
 	
 							//Archive 백업
@@ -332,7 +329,7 @@
 							}
 							//Diff 차등 백업
 							if(bar[4] > 0 ){
-								html += "	<i class='fa fa-file-code-o mr-2 text-danger' ></i> Diff"  + '<spring:message code="dashboard.backup" />';
+								html += "	<i class='fa fa-exchange mr-2 text-info' ></i> Diff"  + '<spring:message code="dashboard.backup" />';
 							}
 							
 							
@@ -383,7 +380,7 @@
 						var strArr = full.bck_bsn_dscd.split(',');		
 						var html = "";
 	
-						if(full.exe_dt.substring(0,1)=="1"){			
+						if(full.exe_dt.substring(1,2)=="1"){			
 							var bar = new Array(0, 0, 0, 0, 0);
 							for(var i=0; i<strArr.length; i++){							
 								if(strArr[i] == "TC000201"){
@@ -399,9 +396,7 @@
 										bar[0] = bar[0]+1;
 									}else if(full.bck_opt_cd == "TC000302"){
 										bar[1] = bar[1]+1;
-									}else if(full.bck_opt_cd == "TC000303"){
-										bar[2] = bar[2]+1;
-									}else {
+									}else if(full.bck_opt_cd == "TC000304"){
 										bar[4] = bar[4]+1;
 									}
 								}else {
@@ -418,7 +413,7 @@
 									
 							//Incremental 백업
 							if(bar[1] > 0 ){
-								html += "	<i class='fa fa-comments-o text-warning'></i> Incremental " + '<spring:message code="dashboard.backup" />';
+								html += "	<i class='fa fa-paste mr-2 text-warning'></i> Incremental " + '<spring:message code="dashboard.backup" />';
 							}
 	
 							//Archive 백업
@@ -431,7 +426,7 @@
 							}
 							//Diff 차등 백업
 							if(bar[4] > 0 ){
-								html += "	<i class='fa fa-file-code-o mr-2 text-danger' ></i> Diff"  + '<spring:message code="dashboard.backup" />';
+								html += "	<i class='fa fa-exchange mr-2 text-info' ></i> Diff"  + '<spring:message code="dashboard.backup" />';
 							}
 							
 							
@@ -471,9 +466,9 @@
 						}
 
 						return html;				
-					}, 
+					},
 					defaultContent : ""
-				},	
+				},
 			
 				// 화요일
 				{	
@@ -482,7 +477,7 @@
 						var strArr = full.bck_bsn_dscd.split(',');		
 						var html = "";
 	
-						if(full.exe_dt.substring(0,1)=="1"){			
+						if(full.exe_dt.substring(2,3)=="1"){			
 							var bar = new Array(0, 0, 0, 0, 0);
 							for(var i=0; i<strArr.length; i++){							
 								if(strArr[i] == "TC000201"){
@@ -498,9 +493,7 @@
 										bar[0] = bar[0]+1;
 									}else if(full.bck_opt_cd == "TC000302"){
 										bar[1] = bar[1]+1;
-									}else if(full.bck_opt_cd == "TC000303"){
-										bar[2] = bar[2]+1;
-									}else {
+									}else if(full.bck_opt_cd == "TC000304"){
 										bar[4] = bar[4]+1;
 									}
 								}else {
@@ -517,7 +510,7 @@
 									
 							//Incremental 백업
 							if(bar[1] > 0 ){
-								html += "	<i class='fa fa-comments-o text-warning'></i> Incremental " + '<spring:message code="dashboard.backup" />';
+								html += "	<i class='fa fa-paste mr-2 text-warning'></i> Incremental " + '<spring:message code="dashboard.backup" />';
 							}
 	
 							//Archive 백업
@@ -530,7 +523,7 @@
 							}
 							//Diff 차등 백업
 							if(bar[4] > 0 ){
-								html += "	<i class='fa fa-file-code-o mr-2 text-danger' ></i> Diff"  + '<spring:message code="dashboard.backup" />';
+								html += "	<i class='fa fa-exchange mr-2 text-info' ></i> Diff"  + '<spring:message code="dashboard.backup" />';
 							}
 							
 							
@@ -570,7 +563,7 @@
 						}
 
 						return html;				
-					}, 
+					},
 					defaultContent : ""
 				},	
 			
@@ -581,7 +574,7 @@
 						var strArr = full.bck_bsn_dscd.split(',');		
 						var html = "";
 	
-						if(full.exe_dt.substring(0,1)=="1"){			
+						if(full.exe_dt.substring(3,4)=="1"){			
 							var bar = new Array(0, 0, 0, 0, 0);
 							for(var i=0; i<strArr.length; i++){							
 								if(strArr[i] == "TC000201"){
@@ -597,9 +590,7 @@
 										bar[0] = bar[0]+1;
 									}else if(full.bck_opt_cd == "TC000302"){
 										bar[1] = bar[1]+1;
-									}else if(full.bck_opt_cd == "TC000303"){
-										bar[2] = bar[2]+1;
-									}else {
+									}else if(full.bck_opt_cd == "TC000304"){
 										bar[4] = bar[4]+1;
 									}
 								}else {
@@ -616,7 +607,7 @@
 									
 							//Incremental 백업
 							if(bar[1] > 0 ){
-								html += "	<i class='fa fa-comments-o text-warning'></i> Incremental " + '<spring:message code="dashboard.backup" />';
+								html += "	<i class='fa fa-paste mr-2 text-warning'></i> Incremental " + '<spring:message code="dashboard.backup" />';
 							}
 	
 							//Archive 백업
@@ -629,7 +620,7 @@
 							}
 							//Diff 차등 백업
 							if(bar[4] > 0 ){
-								html += "	<i class='fa fa-file-code-o mr-2 text-danger' ></i> Diff"  + '<spring:message code="dashboard.backup" />';
+								html += "	<i class='fa fa-exchange mr-2 text-info' ></i> Diff"  + '<spring:message code="dashboard.backup" />';
 							}
 							
 							
@@ -669,9 +660,9 @@
 						}
 
 						return html;				
-					}, 
+					},
 					defaultContent : ""
-				},	
+				},
 			
 				// 목요일
 				{	
@@ -680,7 +671,7 @@
 						var strArr = full.bck_bsn_dscd.split(',');		
 						var html = "";
 	
-						if(full.exe_dt.substring(0,1)=="1"){			
+						if(full.exe_dt.substring(4,5)=="1"){			
 							var bar = new Array(0, 0, 0, 0, 0);
 							for(var i=0; i<strArr.length; i++){							
 								if(strArr[i] == "TC000201"){
@@ -696,9 +687,7 @@
 										bar[0] = bar[0]+1;
 									}else if(full.bck_opt_cd == "TC000302"){
 										bar[1] = bar[1]+1;
-									}else if(full.bck_opt_cd == "TC000303"){
-										bar[2] = bar[2]+1;
-									}else {
+									}else if(full.bck_opt_cd == "TC000304"){
 										bar[4] = bar[4]+1;
 									}
 								}else {
@@ -715,7 +704,7 @@
 									
 							//Incremental 백업
 							if(bar[1] > 0 ){
-								html += "	<i class='fa fa-comments-o text-warning'></i> Incremental " + '<spring:message code="dashboard.backup" />';
+								html += "	<i class='fa fa-paste mr-2 text-warning'></i> Incremental " + '<spring:message code="dashboard.backup" />';
 							}
 	
 							//Archive 백업
@@ -728,7 +717,7 @@
 							}
 							//Diff 차등 백업
 							if(bar[4] > 0 ){
-								html += "	<i class='fa fa-file-code-o mr-2 text-danger' ></i> Diff"  + '<spring:message code="dashboard.backup" />';
+								html += "	<i class='fa fa-exchange mr-2 text-info' ></i> Diff"  + '<spring:message code="dashboard.backup" />';
 							}
 							
 							
@@ -768,7 +757,7 @@
 						}
 
 						return html;				
-					}, 
+					},
 					defaultContent : ""
 				},	
 			
@@ -779,7 +768,7 @@
 						var strArr = full.bck_bsn_dscd.split(',');		
 						var html = "";
 	
-						if(full.exe_dt.substring(0,1)=="1"){			
+						if(full.exe_dt.substring(5,6)=="1"){			
 							var bar = new Array(0, 0, 0, 0, 0);
 							for(var i=0; i<strArr.length; i++){							
 								if(strArr[i] == "TC000201"){
@@ -795,9 +784,7 @@
 										bar[0] = bar[0]+1;
 									}else if(full.bck_opt_cd == "TC000302"){
 										bar[1] = bar[1]+1;
-									}else if(full.bck_opt_cd == "TC000303"){
-										bar[2] = bar[2]+1;
-									}else {
+									}else if(full.bck_opt_cd == "TC000304"){
 										bar[4] = bar[4]+1;
 									}
 								}else {
@@ -814,7 +801,7 @@
 									
 							//Incremental 백업
 							if(bar[1] > 0 ){
-								html += "	<i class='fa fa-comments-o text-warning'></i> Incremental " + '<spring:message code="dashboard.backup" />';
+								html += "	<i class='fa fa-paste mr-2 text-warning'></i> Incremental " + '<spring:message code="dashboard.backup" />';
 							}
 	
 							//Archive 백업
@@ -827,14 +814,14 @@
 							}
 							//Diff 차등 백업
 							if(bar[4] > 0 ){
-								html += "	<i class='fa fa-file-code-o mr-2 text-danger' ></i> Diff"  + '<spring:message code="dashboard.backup" />';
+								html += "	<i class='fa fa-exchange mr-2 text-info' ></i> Diff"  + '<spring:message code="dashboard.backup" />';
 							}
 							
 							
 							html += "</div>";
 							
 							html += '<br/>';
-							
+
 							if(full.bck_bsn_dscd == "TC000205"){
 								if(full.scd_cndt == "TC001801"){								
 									html += '<div class="badge badge-pill badge-light" style="background-color: transparent !important;font-size: 0.875rem;" onClick=javascript:fn_popup("'+full.scd_id+'","'+full.bck_bsn_dscd+'");>';
@@ -860,7 +847,6 @@
 									html += "</div>";
 								}
 							}
-							
 		
 							return html;
 						}else{
@@ -868,7 +854,7 @@
 						}
 
 						return html;				
-					}, 
+					},
 					defaultContent : ""
 				},	
 			
@@ -879,7 +865,7 @@
 						var strArr = full.bck_bsn_dscd.split(',');		
 						var html = "";
 	
-						if(full.exe_dt.substring(0,1)=="1"){			
+						if(full.exe_dt.substring(6,7)=="1"){			
 							var bar = new Array(0, 0, 0, 0, 0);
 							for(var i=0; i<strArr.length; i++){							
 								if(strArr[i] == "TC000201"){
@@ -895,9 +881,7 @@
 										bar[0] = bar[0]+1;
 									}else if(full.bck_opt_cd == "TC000302"){
 										bar[1] = bar[1]+1;
-									}else if(full.bck_opt_cd == "TC000303"){
-										bar[2] = bar[2]+1;
-									}else {
+									}else if(full.bck_opt_cd == "TC000304"){
 										bar[4] = bar[4]+1;
 									}
 								}else {
@@ -914,7 +898,7 @@
 									
 							//Incremental 백업
 							if(bar[1] > 0 ){
-								html += "	<i class='fa fa-comments-o text-warning'></i> Incremental " + '<spring:message code="dashboard.backup" />';
+								html += "	<i class='fa fa-paste mr-2 text-warning'></i> Incremental " + '<spring:message code="dashboard.backup" />';
 							}
 	
 							//Archive 백업
@@ -927,7 +911,7 @@
 							}
 							//Diff 차등 백업
 							if(bar[4] > 0 ){
-								html += "	<i class='fa fa-file-code-o mr-2 text-danger' ></i> Diff"  + '<spring:message code="dashboard.backup" />';
+								html += "	<i class='fa fa-exchange mr-2 text-info' ></i> Diff"  + '<spring:message code="dashboard.backup" />';
 							}
 							
 							
@@ -967,7 +951,7 @@
 						}
 
 						return html;				
-					}, 
+					},
 					defaultContent : ""
 				},	
 			]
