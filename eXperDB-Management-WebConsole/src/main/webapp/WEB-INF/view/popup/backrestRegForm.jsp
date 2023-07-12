@@ -62,6 +62,7 @@
 			paging : false,
 			deferRender : true,
 			destroy: true,
+			info: false,
 			columns : [
 						{data : "rownum", defaultContent : "", className : "dt-center"}, 
 						{data : "master_gbn", className : "dt-center", defaultContent : "",
@@ -173,6 +174,8 @@
 			fn_bckr_opt_reset();
 		}
 
+		fn_select_agent_info();
+
 		svrBckCheck = svrBckRadioCheck;
 
 		if(svrBckRadioCheck == "local"){
@@ -194,6 +197,8 @@
 			
 			$("#remote_opt").hide();
 			$("#cloud_opt").hide();
+
+			$('#backrest_svr_info_div').css('height', "");
 		}else if(svrBckRadioCheck == "remote"){
 			$("#ins_bckr_pth", "#workRegFormBckr").val("");
 			$("#ins_bckr_log_pth", "#workRegFormBckr").val("");
@@ -215,6 +220,8 @@
 
 			$("#remote_opt").show();
 			$("#cloud_opt").hide();
+
+			$('#backrest_svr_info_div').css('height', "90px");
 		}else{
 			$("#ins_bckr_pth", "#workRegFormBckr").css("width", "410px");
 			$("#bck_pth_chk", "#workRegFormBckr").css("display", "none");
@@ -234,6 +241,8 @@
 			
 			$("#remote_opt").hide();
 			$("#cloud_opt").show();
+
+			$('#backrest_svr_info_div').css('height', "90px");
 		}
 
 		backrestServerTable.rows({selected: true}).deselect();
@@ -602,7 +611,8 @@
 	}
 
 	function fn_select_agent_info(){
-		
+		db_info_arr = [];
+
 		$.ajax({
 			url : "/backup/backrestAgentList.do",
 			data : {
@@ -625,19 +635,23 @@
 			},
 			success : function(data) {
 				backrestServerTable.rows({selected: true}).deselect();
-				backrestServerTable.clear().draw();
 
 				var db_server_data = data['agent_list'];
+				backrestServerTable.clear().draw();
 
 				for(var i=0; i < db_server_data.length; i++){
 					if(db_server_data[i].master_gbn == "M"){
 						db_info_arr.push(db_server_data[i]);
 						for(var j=0; j < db_server_data.length; j++){
-							if(db_server_data[j].master_gbn == "S"){
-								if(db_server_data[i].db_svr_id == db_server_data[j].db_svr_id){
-									db_info_arr.push(db_server_data[j]);
+							if(svrBckCheck == "local"){
+								if(db_server_data[j].master_gbn == "S"){
+									if(db_server_data[i].db_svr_id == db_server_data[j].db_svr_id){
+										db_info_arr.push(db_server_data[j]);
+									}
 								}
-							}
+							}else{
+								break;
+							}		
 						}
 					}
 				}
@@ -834,7 +848,7 @@
 					PG Backrest 백업등록
 				</h4>
 				
-				<div class="card system-tlb-scroll" style="margin-top:10px;border:0px;height:910px;overflow-y:auto;">
+				<div class="card system-tlb-scroll" style="margin-top:10px;border:0px;height:885px;overflow-y:auto;">
 					<form class="cmxform" id="workRegFormBckr">
 						<input type="hidden" name="ins_check_path3" id="ins_check_path3" value="N"/>
 						<input type="hidden" name="ins_wrk_nmChk_bckr" id="ins_wrk_nmChk_bckr" value="fail" />
@@ -906,7 +920,7 @@
 										   		</div>
 									   		</div>
 								   		</div>
-										   
+										
 								   		<table id="backrest_svr_info" class="table table-hover table-striped system-tlb-scroll" style="width:100%;">
 											<thead>
 												<tr class="bg-info text-white">

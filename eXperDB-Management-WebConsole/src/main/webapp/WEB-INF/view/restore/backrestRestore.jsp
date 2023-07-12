@@ -494,7 +494,7 @@
 								</button>
 
 								<div class="col-sm-2_5 float-right">
-									<div class="alert alert-info " style="width: 310px; margin-top: 18px;">복원대상 DB를 종료한 후에 복원바랍니다.</div>
+									<div class="alert alert-info " style="width: 100%; margin-top: 18px;">복원대상 DB를 종료한 후에 복원바랍니다.</div>
 								</div>
 							</div>
 						</div>
@@ -549,7 +549,7 @@
 							</div>
 
 							<div class="row" style="margin-top:10px;">
-								<div class="col-md-6 system-tlb-scroll" style="border:0px;max-height: 300px; overflow-x: hidden; ">
+								<div class="col-md-6 system-tlb-scroll" style="border:0px; max-height: 300px; overflow-x: hidden; ">
 									<div class="card-body" style="border: 1px solid #adb5bd;">
                                         <div style="margin-left: -15px;">
                                             <label for="restore_nm" class="col-sm-5 col-form-label pop-label-index" style="padding-top:7px;">
@@ -608,9 +608,12 @@
 												</div>
                                             </div>
 
-											<div class="col-sm-4">
-												<div class="alert alert-info " style="display:none; width: 500px; margin-bottom: 10px; margin-left: -3px;" id="bckr_restore_type_alert" ></div>
+											<div class="form-group row div-form-margin-z">
+												
+												<div class="alert alert-info " style="display:none; width: 100%; margin:20px" id="bckr_restore_type_alert" ></div>
+												
 											</div>
+											
 
                                             <div class="form-group row div-form-margin-z" style="padding: 10px; margin-left: 1px;" id="pitr_div">
 												<div id="rst_pitr_div" class="input-group align-items-center date datepicker totDatepicker col-sm-4">

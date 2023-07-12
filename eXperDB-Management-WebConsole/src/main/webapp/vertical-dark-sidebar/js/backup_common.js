@@ -320,7 +320,7 @@ function fn_reg_popup(){
 			} else if(selectChkTab == "backrest"){
 				fn_init_backrest_reg_form();
 				//PG Backrest Agent Info Table Setting
-				fn_select_agent_info();
+				// fn_select_agent_info();
 				$('#pop_layer_reg_backrest').modal("show");
 				$('#local_radio').click();
 			}else {
