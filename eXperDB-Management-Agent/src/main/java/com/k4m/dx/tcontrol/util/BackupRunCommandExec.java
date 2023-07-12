@@ -175,6 +175,7 @@ public class BackupRunCommandExec extends Thread {
 				while ( out.ready() ) {
 					strResultErrInfo += out.readLine();
 				}
+				socketLogger.info("err.ready() --> " + strResultErrInfo);
 				out.close();
 				
 				BufferedReader err = new BufferedReader ( new InputStreamReader ( proc.getErrorStream() ) );
@@ -183,6 +184,7 @@ public class BackupRunCommandExec extends Thread {
 				}
 				
 				strResult += strResultErrInfo;
+				socketLogger.info("err.ready() --> " + strResult);
 				errLogger.info("err.ready() --> " + strResult);
 				err.close();
 				strReturnVal = "failed";
@@ -202,11 +204,13 @@ public class BackupRunCommandExec extends Thread {
 			this.returnMessage = strResult;
 			this.retVal = strReturnVal;
 		}catch(IOException e){
+			socketLogger.info("IOException " + e);
 			errLogger.info("IOException " + e );
 			System.out.println(e);
 			this.retVal = "IOException" + e.toString();
 			this.returnMessage = "IOException" + e.toString();
 		}catch(Exception e){
+			socketLogger.info("Exception " + e);
 			errLogger.info("Exception " + e );
 			System.out.println(e);
 			this.retVal = "Exception" + e.toString();
