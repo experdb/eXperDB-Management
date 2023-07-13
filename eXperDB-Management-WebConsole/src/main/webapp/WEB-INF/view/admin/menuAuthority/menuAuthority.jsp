@@ -151,9 +151,6 @@ $(window.document).ready(function() {
 		$('.encrypt').hide();
 	}
 	
-	if('${bnr_useyn}'=='N'){
-		$('.bnr').hide();
-	}
 
 	if(nvlPrmSet('${proxy_menu_useyn}','N') == 'N'){
 		$('.proxy_yn').hide();
@@ -548,7 +545,7 @@ $(function() {
 		
 		/* 백업메뉴 권한체크 추가 2021-04-13 변승우 */		
 		//BnR 선택 전체 체크박스 
-		$("#bnr").click(function() { 
+		/* $("#bnr").click(function() { 
 			var array = new Array("MN0001901","MN0001902","MN0001903","MN0002001","MN0002002","MN0002101","MN0002102");
 			var datas = userTable.row('.selected').length;
 			 if(datas != 1){
@@ -572,11 +569,11 @@ $(function() {
 				document.getElementById("backup").checked = false;
 				document.getElementById("recovery").checked = false;
 			}
-		});	
+		}); */	
 		
 		
 		//BnR 설정 선택 전체 체크박스
-		$("#bnrSetting").click(function() { 
+		/* $("#bnrSetting").click(function() { 
 			var array = new Array("MN0001901","MN0001902","MN0001903");
 			var datas = userTable.row('.selected').length;
 			 if(datas != 1){
@@ -594,7 +591,7 @@ $(function() {
 					document.getElementById("w_"+array[i]).checked = false;
 				}
 			}
-		});
+		}); */
 		
 		//Backup 선택 전체 체크박스
 		$("#backup").click(function() { 
@@ -1189,7 +1186,7 @@ function fn_search(){
 								
 																		
 								<!-- Backup 권한 추가 2021-04-13 변승우 -->
-								<tr class="bnr">
+								<%-- <tr class="bnr">
 									<th scope="row" rowspan="8">
 										<div class="inp_chk">
 											<input type="checkbox" id="bnr" name="bnr"/>
@@ -1320,7 +1317,7 @@ function fn_search(){
 											<label for="w_MN0002102"></label>
 										</div>
 									</td>											
-								</tr>	
+								</tr> --%>	
 													
 								<!-- Backup 권한 추가 끝 -->
 													

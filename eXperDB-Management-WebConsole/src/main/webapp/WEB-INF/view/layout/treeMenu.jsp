@@ -6,7 +6,7 @@
 	var before = null;
 	var scale_yn_chk = "";
 	var transfer_ora_chk = "";
-	var bnr_yn_chk = "";
+	//var bnr_yn_chk = "";
 	var pgbackrest_yn_chk = "";
 
 	$(window.document).ready(function() {
@@ -58,7 +58,7 @@
 				scale_yn_chk = result.scale_yn_chk;
 				transfer_ora_chk = result.transfer_ora_chk;
 				transfer_mon_menu = result.transfer_mon_menu;
-				bnr_yn_chk =result.bnr_yn_chk;
+				//bnr_yn_chk =result.bnr_yn_chk;
 				pgbackrest_yn_chk = result.pgbackrest_yn_chk;
 			}
 		});
@@ -158,7 +158,7 @@
 											}
 
 											
-											if(bnr_yn_chk == "Y"){
+											/* if(bnr_yn_chk == "Y"){
 											//덤프관리 //////////////////////////////////////////////////////////////////
 											menuJson +=	',{' +
 															 '"text": "<spring:message code="eXperDB_backup.msg85"/>",' +
@@ -225,7 +225,7 @@
 
 											menuJson += '}';
 											////////////////////////////////////////////////////////////////////////////
-											}else{
+											}else{ */
 																			
 											//백업관리 //////////////////////////////////////////////////////////////////
 											menuJson +=	',{' +
@@ -345,7 +345,7 @@
 											menuJson += '}';
 									
 											////////////////////////////////////////////////////////////////////////////
-										}
+										//}
 											
 											
 											//데이터전송 //////////////////////////////////////////////////////////////////

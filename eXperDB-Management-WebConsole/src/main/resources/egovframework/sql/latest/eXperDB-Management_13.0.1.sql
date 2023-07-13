@@ -1,16 +1,4 @@
 --BnR 복원 메뉴 추가
-INSERT INTO t_mnu_i
-(mnu_id, mnu_cd, mnu_nm, hgr_mnu_id, frst_regr_id, frst_reg_dtm, lst_mdfr_id, lst_mdf_dtm)
-VALUES(nextval('q_mnu_i_01'), 'MN00021', 'Recovery', '', 'experdb', clock_timestamp(), 'experdb', clock_timestamp());
-
-INSERT INTO t_mnu_i
-(mnu_id, mnu_cd, mnu_nm, hgr_mnu_id, frst_regr_id, frst_reg_dtm, lst_mdfr_id, lst_mdf_dtm)
-VALUES(nextval('q_mnu_i_01'), 'MN0002101', '완전복구', 'MN00021', 'experdb', clock_timestamp(), 'experdb', clock_timestamp());
-
-INSERT INTO t_mnu_i
-(mnu_id, mnu_cd, mnu_nm, hgr_mnu_id, frst_regr_id, frst_reg_dtm, lst_mdfr_id, lst_mdf_dtm)
-VALUES(nextval('q_mnu_i_01'), 'MN0002102', '시점복구', 'MN00021', 'experdb', clock_timestamp(), 'experdb', clock_timestamp());
-
 
 INSERT INTO t_usrmnuaut_i
 (usr_mnu_aut_id, usr_id, mnu_id, read_aut_yn, wrt_aut_yn, frst_regr_id, frst_reg_dtm, lst_mdfr_id, lst_mdf_dtm)

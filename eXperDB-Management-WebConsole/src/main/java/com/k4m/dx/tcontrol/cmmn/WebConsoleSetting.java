@@ -27,8 +27,6 @@ public class WebConsoleSetting {
 		String strActivitylogDatabaseUrl = "";
 		String strJobhistoryDatabaseUrl = "";
 
-		String strBnrLicense  = "";
-
 		String strTransferYN ="";
 
 		//2020.09.23 trans 컨슈머 전송 추가

@@ -1,7 +1,3 @@
---BnR 설정 메뉴 추가
-INSERT INTO t_mnu_i
-(mnu_id, mnu_cd, mnu_nm, hgr_mnu_id, frst_regr_id, frst_reg_dtm, lst_mdfr_id, lst_mdf_dtm)
-VALUES(nextval('q_mnu_i_01'), 'MN00019', 'BnR 설정', '', 'experdb', clock_timestamp(), 'experdb', clock_timestamp());
 
 INSERT INTO t_mnu_i
 (mnu_id, mnu_cd, mnu_nm, hgr_mnu_id, frst_regr_id, frst_reg_dtm, lst_mdfr_id, lst_mdf_dtm)
@@ -31,12 +27,7 @@ VALUES(nextval('q_mnu_i_01'), 'MN0002002', '정책설정', 'MN00020', 'experdb',
 
 
 
--- admin유저 BnR 설정 메뉴 권한 추가 
-INSERT INTO t_usrmnuaut_i
-(usr_mnu_aut_id, usr_id, mnu_id, read_aut_yn, wrt_aut_yn, frst_regr_id, frst_reg_dtm, lst_mdfr_id, lst_mdf_dtm)
-select nextval('q_usrmnuaut_i_01'), 'admin',
-       (SELECT mnu_id FROM t_mnu_i WHERE mnu_cd = 'MN00019' AND mnu_nm = 'BnR 설정'),
-       'Y', 'Y', 'experdb', clock_timestamp(), 'experdb', clock_timestamp();
+;
 
 INSERT INTO t_usrmnuaut_i
 (usr_mnu_aut_id, usr_id, mnu_id, read_aut_yn, wrt_aut_yn, frst_regr_id, frst_reg_dtm, lst_mdfr_id, lst_mdf_dtm)
