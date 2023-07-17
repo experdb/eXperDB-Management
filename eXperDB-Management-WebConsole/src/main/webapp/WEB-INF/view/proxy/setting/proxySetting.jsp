@@ -211,7 +211,7 @@
 			scrollY : "180px",
 			scrollX: true,	
 			bDestroy: true,
-			//paging : true,
+			paging : true,
 			paging : false,
 			processing : true,
 			searching : false,	
@@ -299,8 +299,8 @@
 					{data : "exe_status", className : "dt-center",defaultContent : "", visible: false },//서버 상태
 					{data : "kal_exe_status", className : "dt-center", defaultContent : "", visible: false },//keepalived 상태
 					{data : "kal_install_yn", className : "dt-center", defaultContent : "", visible: false }, //keepalived 설치 여부
-					{data : "kal_install_switch", className : "dt-center", defaultContent : "",visible: false,
-						render: function (data, type, full){
+					{data : "kal_install_switch", className : "dt-center", defaultContent : "", visible: false,
+						/* render: function (data, type, full){
 							var html = "";
 							html +='<div class="onoffswitch-scale">';
 							html +='<input type="checkbox" id="pry_svr_kal_use_yn'+ full.pry_svr_id +'" class="onoffswitch-scale-checkbox" onclick ="onclick_kalUseYn_Btn('+ full.rownum +')" ';
@@ -315,7 +315,7 @@
 							html +=		'</label>';
 							html += "</div>";
 							return html;
-						}
+						} */
 					},
 					{data : "state_chk", defaultContent : "", visible: false},//활성화 old
 					{data : "aws_yn",  defaultContent : "", visible: false }
@@ -1027,7 +1027,7 @@
 					$('#interface').val(data.if_nm); 
 				}
 				
-				if(data.peer_server_ip == null || data.peer_server_ip == "") {
+				if(data.peer_server_ip == null || data.peer_server_ip == "" || data.peer_server_ip == "}") {
 					/* var tempDatas = proxyServerTable.rows().data();
 					var selTempData = proxyServerTable.row('.selected').data(); 
 					
@@ -1042,8 +1042,11 @@
 						$("#glb_peer_server_ip", "#globalInfoForm").val("");
 					} */
 					$('#peer_ip').val('');
+					$('#peer_ip').css('display', 'none');
+					$('#peer_ip_tr').css('display', 'none');
 				}else{
 					/* $("#glb_peer_server_ip", "#globalInfoForm").val(data.peer_server_ip); */
+					
 					$('#peer_ip').val(data.peer_server_ip);
 				}
 			} else { //vip 사용 안함
@@ -3051,7 +3054,7 @@
 											<input type="hidden" id="glb_pry_glb_id"
 												name="glb_pry_glb_id" />
 											<fieldset>
-												<table class="table table-striped">
+												<table class="table">
 													<tbody>
 														<tr>
 															<th class="py-1"
@@ -3079,8 +3082,8 @@
 																placeholder='<spring:message code='eXperDB_proxy.interface'/>'
 																onblur="this.value=this.value.trim()" tabindex=1 /></td>
 														</tr>
-														<tr>
-															<th class="py-1"><spring:message
+														<tr id="peer_ip_tr">
+															<th class="py-1" ><spring:message
 																	code="eXperDB_proxy.peer_ip" /> 
 															</th>
 															<td><input type="text"
