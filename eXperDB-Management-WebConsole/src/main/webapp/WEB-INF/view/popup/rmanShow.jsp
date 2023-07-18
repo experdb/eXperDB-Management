@@ -65,7 +65,7 @@
 								html += "	<i class='fa fa-paste mr-2 text-success'></i>";
 								html += '<spring:message code="backup_management.full_backup" />';
 								html += "</div>";									
-							} else if(full.MODE == 'ARCH'){
+							} else if(full.MODE == 'INCR'){
 								html += "<div class='badge badge-light' style='background-color: transparent !important;font-size: 0.875rem;'>";
 								html += "	<i class='fa fa-comments-o text-warning'></i>";
 								html += '&nbsp;<spring:message code="backup_management.incremental_backup" />';

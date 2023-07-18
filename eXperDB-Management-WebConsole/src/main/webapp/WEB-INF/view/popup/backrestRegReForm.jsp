@@ -183,11 +183,11 @@
 			iChkCnt = iChkCnt + 1;
 		}
 		
-		if(nvlPrmSet($("#mod_bckr_pth", "#workRegReFormBckr").val(), "") == ""){
-			$("#mod_bckr_pth_alert", "#workRegReFormBckr").html('백업 경로체크를 해주세요');
-			$("#mod_bckr_pth_alert", "#workRegReFormBckr").show();
-			iChkCnt = iChkCnt + 1;
-		}
+		// if(nvlPrmSet($("#mod_bckr_pth", "#workRegReFormBckr").val(), "") == ""){
+		// 	$("#mod_bckr_pth_alert", "#workRegReFormBckr").html('백업 경로체크를 해주세요');
+		// 	$("#mod_bckr_pth_alert", "#workRegReFormBckr").show();
+		// 	iChkCnt = iChkCnt + 1;
+		// }
 
 		if(nvlPrmSet($("#mod_bckr_log_pth", "#workRegReFormBckr").val(), "") == "") {
 			$("#mod_bckr_log_pth_alert", "#workRegReFormBckr").html('로그경로를 입력해주세요.');
@@ -833,9 +833,9 @@ function fn_re_ssh_connection(){
 										<div class="col-sm-4">
 											<div class="alert alert-danger" style="display:none;" id="mod_bckr_opt_cd_alert"></div>
 										</div>
-										<div class="col-sm-7" style="margin-left: 40px;">
+										<!-- <div class="col-sm-7" style="margin-left: 40px;">
 											<div class="alert alert-danger" style="display:none;" id="mod_bckr_pth_alert"></div>
-										</div>
+										</div> -->
 									</div>
 
 

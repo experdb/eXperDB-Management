@@ -193,9 +193,12 @@ public class BackupController {
 			CmmnUtils.saveHistory(request, historyVO);
 			if (workVO.getBck_bsn_dscd().equals("TC000201")) {
 				historyVO.setExe_dtl_cd("DX-T0021_01");
+			} else if(workVO.getBck_bsn_dscd().equals("TC000205")){
+				historyVO.setExe_dtl_cd("DX-T0182");
 			} else {
 				historyVO.setExe_dtl_cd("DX-T0021_03");
 			}
+			
 			accessHistoryService.insertHistory(historyVO);
 		} catch (Exception e2) {
 			// TODO Auto-generated catch block
@@ -296,7 +299,7 @@ public class BackupController {
 			if (workLogVO.getBck_bsn_dscd().equals("TC000201")) {
 				historyVO.setExe_dtl_cd("DX-T0026_01");
 			}else if(workLogVO.getBck_bsn_dscd().equals("TC000205")) {
-				historyVO.setExe_dtl_cd("DX-T0021_05");
+				historyVO.setExe_dtl_cd("DX-T0184");
 			}else {
 				historyVO.setExe_dtl_cd("DX-T0026_02");
 			}
@@ -354,6 +357,7 @@ public class BackupController {
 		// 화면접근이력 이력 남기기
 		try {
 			CmmnUtils.saveHistory(request, historyVO);
+			historyVO.setExe_dtl_cd("DX-T0180");
 			accessHistoryService.insertHistory(historyVO);
 		} catch (Exception e2) {
 			// TODO Auto-generated catch block
@@ -376,15 +380,6 @@ public class BackupController {
 	public ModelAndView backrestAgentList(@ModelAttribute("workVo") WorkVO workVO, HttpServletRequest request,
 			@ModelAttribute("dbServerVO") DbServerVO dbServerVO, @ModelAttribute("historyVO") HistoryVO historyVO) {
 		ModelAndView mv = new ModelAndView("jsonView");
-
-		// 화면접근이력 이력 남기기
-		try {
-			CmmnUtils.saveHistory(request, historyVO);
-			accessHistoryService.insertHistory(historyVO);
-		} catch (Exception e2) {
-			// TODO Auto-generated catch block
-			e2.printStackTrace();
-		}
 
 		try {
 			mv.addObject("agent_list", backupService.selectAgentInfo(dbServerVO));
@@ -410,16 +405,6 @@ public class BackupController {
 			@ModelAttribute("dbServerVO") DbServerVO dbServerVO, HttpServletRequest request,
 			@ModelAttribute("historyVO") HistoryVO historyVO) {
 		ModelAndView mv = new ModelAndView("jsonView");
-
-		// 화면접근이력 이력 남기기
-		try {
-			CmmnUtils.saveHistory(request, historyVO);
-//			historyVO.setExe_dtl_cd("DX-T0022");
-			accessHistoryService.insertHistory(historyVO);
-		} catch (Exception e2) {
-			// TODO Auto-generated catch block
-			e2.printStackTrace();
-		}
 
 		try {
 			mv.addObject("backrest_cus_opt", backupService.selectBackrestCstOpt(dbServerVO));
@@ -632,7 +617,7 @@ public class BackupController {
 			try {
 				// 화면접근이력 이력 남기기
 				CmmnUtils.saveHistory(request, historyVO);
-//				historyVO.setExe_dtl_cd("DX-T0022_01");
+				historyVO.setExe_dtl_cd("DX-T0180_01");
 				accessHistoryService.insertHistory(historyVO);
 
 				HttpSession session = request.getSession();
@@ -964,7 +949,7 @@ public class BackupController {
 		// 화면접근이력 이력 남기기
 		try {
 			CmmnUtils.saveHistory(request, historyVO);
-//			historyVO.setExe_dtl_cd("DX-T0023");
+			historyVO.setExe_dtl_cd("DX-T0181");
 			accessHistoryService.insertHistory(historyVO);
 		} catch (Exception e2) {
 			// TODO Auto-generated catch block
@@ -1332,7 +1317,7 @@ public class BackupController {
 		try {
 			// 화면접근이력 이력 남기기
 			CmmnUtils.saveHistory(request, historyVO);
-//			historyVO.setExe_dtl_cd("DX-T0023_01");
+			historyVO.setExe_dtl_cd("DX-T0181_01");
 			accessHistoryService.insertHistory(historyVO);
 		} catch (Exception e) {
 			e.printStackTrace();

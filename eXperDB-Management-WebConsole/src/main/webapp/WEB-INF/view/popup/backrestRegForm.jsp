@@ -163,6 +163,8 @@
 	})
 
 	function fn_bck_srv_check(svrBckRadioCheck) {
+		fn_select_agent_info();
+		
 		var bckSrvLocal = document.getElementById("bck_srv_local_check"); 
 		var bckSrvRemote = document.getElementById("bck_srv_remote_check"); 
 		var bckSrvCloud = document.getElementById("bck_srv_cloud_check");
@@ -173,8 +175,6 @@
 		if(svrBckCheck !== svrBckRadioCheck){
 			fn_bckr_opt_reset();
 		}
-
-		fn_select_agent_info();
 
 		svrBckCheck = svrBckRadioCheck;
 

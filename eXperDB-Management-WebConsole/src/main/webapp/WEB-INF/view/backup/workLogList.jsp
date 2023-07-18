@@ -53,8 +53,6 @@
  			}else {
  				$('#server-tab-2').click();
  			}
-		}else{
-			$('#server-tab-1').click();
 		}
 		
 		//pgbackrest 사용 여부에 따른 숨김 처리

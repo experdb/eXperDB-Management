@@ -369,7 +369,12 @@
 				if (data != null) {
 					if (data.snResult == "S") {
 						exelog = data.exelog;
-						showSwalIconRst('<spring:message code="restore.msg220" />', '<spring:message code="common.close" />', '', 'warning', 'backrest_restore');
+						if(restore_type == 0){
+							showSwalIconRst('완전 복구를 시작합니다.', '<spring:message code="common.close" />', '', 'warning', 'backrest_restore');
+						}else{
+							showSwalIconRst('<spring:message code="restore.msg223" />', '<spring:message code="common.close" />', '', 'warning', 'backrest_restore');
+						}
+						
 						fn_restore_execute();
 					} else {
 						showSwalIcon('<spring:message code="message.msg32" />', '<spring:message code="common.close" />', '', 'error');

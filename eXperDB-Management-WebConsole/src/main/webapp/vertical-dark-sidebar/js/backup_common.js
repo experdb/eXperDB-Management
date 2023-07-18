@@ -276,6 +276,8 @@ function fnc_confirmMultiRst(gbn){
 		fn_BackrestImmediateStart();
 	}else if (gbn == "backrest_remote_run_immediately"){
 		fn_Backrest_remote_Immediate();
+	}else if (gbn == "dump_run_immediately"){
+		fn_ImmediateStart();
 	}
 }
 

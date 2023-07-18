@@ -356,7 +356,7 @@ public class RestoreHistoryController {
 		// 화면접근이력 이력 남기기
 		try {
 			CmmnUtils.saveHistory(request, historyVO);
-			historyVO.setExe_dtl_cd("DX-T0133_02");
+			historyVO.setExe_dtl_cd("DX-T0187");
 			accessHistoryService.insertHistory(historyVO);
 			
 			resultSet = restoreService.backrestRestoreHistory(restoreBackrestVO);

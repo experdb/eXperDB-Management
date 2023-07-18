@@ -87,7 +87,7 @@
 						</div>
 
 						<div class="top-modal-footer" style="text-align: center !important; margin: -20px 0 0 -20px;" >
-							<button type="button" class="btn btn-info btn-icon-text" onClick="fn_addView();"><spring:message code="auth_management.viewMore"/></button>
+							<!-- <button type="button" class="btn btn-info btn-icon-text" onClick="fn_addView();"><spring:message code="auth_management.viewMore"/></button> -->
 							<button type="button" class="btn btn-light" data-dismiss="modal"><spring:message code="common.close"/></button>
 						</div>
 					</div>

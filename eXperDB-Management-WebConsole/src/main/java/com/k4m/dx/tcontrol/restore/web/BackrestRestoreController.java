@@ -61,8 +61,8 @@ public class BackrestRestoreController {
 		// 화면접근이력 이력 남기기
 		try {
 			CmmnUtils.saveHistory(request, historyVO);
+			historyVO.setExe_dtl_cd("DX-T0185");
 			accessHistoryService.insertHistory(historyVO);
-
 			mv.setViewName("restore/backrestRestore");
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
@@ -101,6 +101,7 @@ public class BackrestRestoreController {
 
 		try {
 			CmmnUtils.saveHistory(request, historyVO);
+			historyVO.setExe_dtl_cd("DX-T0186");
 			accessHistoryService.insertHistory(historyVO);
 
 			HttpSession session = request.getSession();
