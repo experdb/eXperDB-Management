@@ -1204,11 +1204,10 @@
 										
 								<div class="input-group mb-2 mr-sm-2 search_pgbackrest col-sm-1_5">
 									<select class="form-control" style="margin-right: -0.7rem;" name="backrest_opt" id="backrest_opt">
-										<option value="">스토리지 옵션</option>
+										<option value=""><spring:message code="backup_management.storage.optoin" /></option>
 										<option value="local">local</option>
 										<option value="remote">remote</option>
 										<option value="cloud">cloud</option>
-										<option value="custom">custom</option>
 									</select>
 								</div>		
 										
@@ -1341,16 +1340,16 @@
 												<th width="40"><spring:message code="common.no" /></th>
 												<th width="40"><spring:message code="etc.etc25" /></th>
 												<th width="40"><spring:message code="common.work_name" /></th>
-												<th width="60">백업 스토리지</th>
-												<th width="40">스토리지</th>
-												<th width="40">백업 구분</th>
+												<th width="60"><spring:message code="backup_management.backup.storage" /></th>
+												<th width="40"><spring:message code="backup_management.storage" /></th>
+												<th width="40"><spring:message code="backup_management.bck_div" /></th>
 												<th width="100"><spring:message code="properties.backup_path" /></th>
 												<th width="50">DB SIZE</th>
-												<th width="50">백업 SIZE</th>
-												<th width="50">압축률</th>
-												<th width="50">백업 시작 시간</th>
-												<th width="50">백업 종료 시간</th>
-												<th width="50">백업 수행 시간</th>
+												<th width="50"><spring:message code="dashboard.backup" /> SIZE</th>
+												<th width="50"><spring:message code="backup_management.compressibility" /></th>
+												<th width="50"><spring:message code="dashboard.backup" /> <spring:message code="eXperDB_scale.start_time" /></th>
+												<th width="50"><spring:message code="dashboard.backup" /> <spring:message code="backup_management.endtime" /></th>
+												<th width="50"><spring:message code="dashboard.backup" /> <spring:message code="eXperDB_proxy.work_time" /></th>
 											</tr>
 										</thead>
 									</table>	

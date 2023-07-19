@@ -99,7 +99,7 @@
 			selectChkTab = "backrest";
 			check = "backrest";
 
-			$("#server-tab-1").text("PG Backret 백업");
+			$("#server-tab-1").text("<spring:message code='backup_management.backrestBck' />");
 		}else{
 			selectChkTab = "rman";
 			check = "rman";
@@ -800,7 +800,7 @@
 									} else {
 										html += "<div class='badge badge-light' style='background-color: transparent !important;font-size: 0.875rem;'>";
 										html += "	<i class='fa fa-exchange mr-2 text-info' ></i>";
-										html += '차등백업';
+										html += '&nbsp;<spring:message code="backup_management.diff_backup" />';
 										html += "</div>";
 									}
 
@@ -1228,10 +1228,10 @@
 												<th width="30"><spring:message code="common.no" /></th>
 												<th width="150"><spring:message code="common.work_name" /></th>
 												<th width="200"><spring:message code="common.work_description" /></th>
-												<th width="100" class="dt-center">백업 스토리지</th>
-												<th width="100" class="dt-center">스토리지</th>
-												<th width="100" class="dt-center">백업구분</th>
-												<th width="200">백업경로</th> 
+												<th width="100" class="dt-center"><spring:message code="backup_management.backup.storage" /></th>
+												<th width="100" class="dt-center"><spring:message code="backup_management.storage" /></th>
+												<th width="100" class="dt-center"><spring:message code="backup_management.bck_div" /></th>
+												<th width="200"><spring:message code="backup_management.backup_dir" /></th> 
 												<th width="100"><spring:message code="common.register" /></th>
 												<th width="110"><spring:message code="common.regist_datetime" /></th>
 												<th width="100"><spring:message code="common.modifier" /></th>

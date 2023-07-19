@@ -153,12 +153,12 @@
 
 		if(selected_type == "pitr"){
 			document.getElementById("bckr_restore_type_alert").style.width = "340px"
-			$("#bckr_restore_type_alert", "#restoreBackrestRegForm").html("특정 시점의 데이터베이스 상태로 복구 됩니다.");
+			$("#bckr_restore_type_alert", "#restoreBackrestRegForm").html("<spring:message code="restore.type.time.exp" />");
 			$("#bckr_restore_type_alert", "#restoreBackrestRegForm").show();
 			$("#pitr_div").show();
 		}else if(selected_type == "full"){
 			document.getElementById("bckr_restore_type_alert").style.width = "665px"
-			$("#bckr_restore_type_alert", "#restoreBackrestRegForm").html("백업 이후 시점부터 현재까지의 아카이브를 적용하여  데이터베이스 손상 직전의 상태로 복구됩니다.");
+			$("#bckr_restore_type_alert", "#restoreBackrestRegForm").html("<spring:message code="restore.type.full.exp" />");
 			$("#bckr_restore_type_alert", "#restoreBackrestRegForm").show();
 			$("#pitr_div").hide();
 		}else{
@@ -370,9 +370,9 @@
 					if (data.snResult == "S") {
 						exelog = data.exelog;
 						if(restore_type == 0){
-							showSwalIconRst('완전 복구를 시작합니다.', '<spring:message code="common.close" />', '', 'warning', 'backrest_restore');
+							showSwalIconRst('<spring:message code="restore.msg225" />', '<spring:message code="common.close" />', '', 'warning', 'backrest_restore');
 						}else{
-							showSwalIconRst('<spring:message code="restore.msg223" />', '<spring:message code="common.close" />', '', 'warning', 'backrest_restore');
+							showSwalIconRst('<spring:message code="restore.msg226" />', '<spring:message code="common.close" />', '', 'warning', 'backrest_restore');
 						}
 						
 						fn_restore_execute();
@@ -455,7 +455,7 @@
 										<h6 class="mb-0">
 											<a data-toggle="collapse" href="#page_header_sub" aria-expanded="false" aria-controls="page_header_sub">
 												<i class="fa fa-cog"></i>
-												<span class="menu-title">복원설정</span>
+												<span class="menu-title"><spring:message code="restore.msg00" /></span>
 												<i class="menu-arrow_user" id="titleText" ></i>
 											</a>
 										</h6>
@@ -466,7 +466,7 @@
 												<a class="nav-link_title" href="/property.do?db_svr_id=${db_svr_id}" style="padding-right: 0rem;">${db_svr_nm}</a>
 											</li>
 					 						<li class="breadcrumb-item_main" style="font-size: 0.875rem;" aria-current="page"><spring:message code="restore.Recovery_Management" /></li>
-											<li class="breadcrumb-item_main active" style="font-size: 0.875rem;" aria-current="page">복원설정</li>
+											<li class="breadcrumb-item_main active" style="font-size: 0.875rem;" aria-current="page"><spring:message code="restore.msg00" /></li>
 										</ol>
 									</div>
 								</div>
@@ -476,7 +476,7 @@
 								<div class="card-body">
 									<div class="row">
 										<div class="col-12">
-											<p class="mb-0">PG Backrest백업을 통하여 수핼한 전체백업 및 증분, 차등백업을 이용하여 유효한 데이터로 복원합니다</p>
+											<p class="mb-0"><spring:message code="restore.msg001" /></p>
 										</div>
 									</div>
 								</div>
@@ -499,7 +499,7 @@
 								</button>
 
 								<div class="col-sm-2_5 float-right">
-									<div class="alert alert-info " style="width: 100%; margin-top: 18px;">복원대상 DB를 종료한 후에 복원바랍니다.</div>
+									<div class="alert alert-info " style="width: 100%; margin-top: 18px;"><spring:message code="restore.msg002" /></div>
 								</div>
 							</div>
 						</div>
@@ -559,7 +559,7 @@
                                         <div style="margin-left: -15px;">
                                             <label for="restore_nm" class="col-sm-5 col-form-label pop-label-index" style="padding-top:7px;">
                                                 <i class="ti-desktop menu-icon"></i>
-                                                <span>대상 서버 리스트</span>
+                                                <span><spring:message code="restore.target.list" /></span>
                                             </label>
                                         </div>
 
@@ -578,9 +578,9 @@
                                             <table id="db_svr_info" class="table table-hover table-striped system-tlb-scroll" style="width:100%;">
                                                 <thead>
                                                     <tr class="bg-info text-white">
-                                                        <th width="170" class="dt-center">서버유형</th>
-                                                        <th width="190" class="dt-center">호스트명</th>
-                                                        <th width="190" class="dt-center">아이피</th>
+                                                        <th width="170" class="dt-center"><spring:message code="eXperDB_backup.msg16" /></th>
+                                                        <th width="190" class="dt-center"><spring:message code="properties.host" /></th>
+                                                        <th width="190" class="dt-center"><spring:message code="properties.ip" /></th>
                                                         <th width="0"></th>
                                                     </tr>
                                                 </thead>
@@ -597,14 +597,14 @@
                                             <div class="form-group row div-form-margin-z" style="margin-top:10px; padding: 10px;">
                                                 <label for="restore_type" class="col-sm-4 col-form-label pop-label-index" >
                                                     <i class="item-icon fa fa-dot-circle-o"></i>
-                                                    복구유형
+                                                    <spring:message code="restore.type" />
                                                 </label>
 
                                                 <div class="col-sm-4">
                                                     <select class="form-control form-control-sm" style="width:200px; color: black; margin-top: 5px; margin-left: 10px;" name="ins_rst_opt_cd" id="ins_rst_opt_cd" tabindex=2 onchange="fn_restore_type_chk(this)">
 													    <option value=""><spring:message code="common.choice" /></option>
-	    												<option value="full">완전복구</option>
-		    											<option value="pitr">시점복구</option>
+	    												<option value="full"><spring:message code="restore.type.full" /></option>
+		    											<option value="pitr"><spring:message code="restore.type.time" /></option>
 				    								</select>
                                                 </div>
 

@@ -453,6 +453,7 @@ function fn_viewer() {
 <%@include file="../popup/scheduleWrkList.jsp"%>
 <%@include file="../cmmn/workRmanInfo.jsp"%>
 <%@include file="../cmmn/workDumpInfo.jsp"%>
+<%@include file="../cmmn/workBackrestInfo.jsp"%>
 
 <form name="findList" id="findList" method="post">
 	<input type="hidden" name="db_svr_id" id="db_svr_id" value="${db_svr_id}"/>

@@ -290,7 +290,7 @@
 													if(aut.length != 0 && aut[index].backrest_restore_aut_yn == "Y"){
 														menuJson +=	'{' +
 																		'"icon": "fa fa-cog",' +
-																		'"text": "복원설정",' +
+																		'"text": "<spring:message code="restore.msg00" />",' +
 																		'"url": "/backrestRestore.do?db_svr_id='+item.db_svr_id+'",' +
 																		'"id": "backresetRestore'+item.db_svr_id+'"' +
 																	'},';

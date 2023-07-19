@@ -48,7 +48,7 @@
 
         html += '</select></div>';
         html += '<div class="col-sm-3">';
-        html += '<input type="text" id="ins_bckr_cst_val_" class="form-control form-control-sm" maxlength="100" style="width: 150px;" placeholder="값을 입력해주세요" onchange="fn_change_custom_opt_val(this)"/></div>';
+        html += '<input type="text" id="ins_bckr_cst_val_" class="form-control form-control-sm" maxlength="100" style="width: 150px;" placeholder="<spring:message code='eXperDB_backup.msg43' />" onchange="fn_change_custom_opt_val(this)"/></div>';
 
         $('#bckr_cus_div').append(html);
 
@@ -250,7 +250,7 @@
 		<div class="modal-content" style="width:600px; ">		 	 
 			<div class="modal-body" style="margin-bottom:-30px;">
 				<h4 class="modal-title mdi mdi-alert-circle text-info" id="ModalLabel" style="padding-left:5px;">
-					사용자정의 옵션
+					<spring:message code="etc.etc00" />
 				</h4>
 
                 <div class="card system-tlb-scroll" style="margin-top:10px;border:0px;height:598px;">
@@ -258,7 +258,7 @@
                         <div class="card-body card-inverse-primary" style="padding:10px 0 10px 0px; margin-left: 10px;">
                             <div class="d-flex" style="padding: 3px 3px 3px 10px;">
                                 <i class="item-icon fa fa-dot-circle-o" style="margin: 7px;"></i>
-                                <p class="card-text col-sm-8" style="margin-top: 7px; padding-left: 0;">백업 옵션</p>
+                                <p class="card-text col-sm-8" style="margin-top: 7px; padding-left: 0;"><spring:message code="backup_management.backup_option" /></p>
                                 <button type="button" class="btn btn-primary btn-fw" style="width: 50px; padding: 10px;" onclick="fn_backrest_custom_rmv()"><i class="ti-minus btn-icon-prepend "></i></button>
                                 <button type="button" class="btn btn-primary btn-fw" style="width: 50px; padding: 10px; margin-left: 22px;" onclick="fn_backrest_custom_add(null)"><i class="ti-plus btn-icon-prepend "></i></button>
                             </div>
@@ -271,8 +271,8 @@
                         
                         <div class="card-body">
                             <div class="top-modal-footer" style="text-align: center !important; margin: -20px 0 -30px; -20px;" >
-                                <input class="btn btn-primary" width="200px;" style="vertical-align:middle;" type="submit" value='저장' onclick="fn_save_custom()" />
-                                <button type="button" class="btn btn-primary" width="200px;" onclick="fn_backrest_custom_all_rmv()">초기화</button>
+                                <input class="btn btn-primary" width="200px;" style="vertical-align:middle;" type="submit" value='<spring:message code="common.save" />' onclick="fn_save_custom()" />
+                                <button type="button" class="btn btn-primary" width="200px;" onclick="fn_backrest_custom_all_rmv()"><spring:message code="restore.reset"/></button>
                                 <button type="button" class="btn btn-light" data-dismiss="modal" onclick="fn_custom_cancel()"><spring:message code="common.cancel"/></button>
                             </div>
                         </div>

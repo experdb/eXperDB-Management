@@ -191,7 +191,7 @@
 			selectChkTab = "backrest";
 			check = "backrest";
 
-			$("#server-tab-1").text("복구이력");
+			$("#server-tab-1").text("<spring:message code="eXperDB_backup.msg33" />");
 		}else{
 			selectChkTab = "rman";
 			check = "rman";
@@ -430,9 +430,9 @@
 							render : function(data, type, full, meta) {
 								var html = '';
 								if (full.restore_flag == '0') {
-									html += "완전복구";
+									html += "<spring:message code="restore.type.full" />";
 								} else if (full.restore_flag == '1'){
-									html += "시점복구";
+									html += "<spring:message code="eXperDB_backup.msg100" />";
 								} 				
 								return html;
 							},
@@ -1108,13 +1108,13 @@
 										<thead>
 											<tr class="bg-info text-white">
 												<th width="30"><spring:message code="common.no" /></th>
-												<th width="100" class="dt-center">상태</th>
+												<th width="100" class="dt-center"><spring:message code="migration.status" /></th>
 												<th width="100"><spring:message code="restore.Recovery_name" /></th>
 												<th width="150"><spring:message code="restore.Recovery_Description" /></th>
-												<th width="100" class="dt-center">복구서버</th>
-												<th width="100" class="dt-center">복구유형</th>
-												<th width="100" class="dt-center">복구 사이즈</th>
-												<th width="100" class="dt-center">복구 수행시간</th>
+												<th width="100" class="dt-center"><spring:message code="restore.msg227" /></th>
+												<th width="100" class="dt-center"><spring:message code="restore.type" /></th>
+												<th width="100" class="dt-center"><spring:message code="restore.msg228" /></th>
+												<th width="100" class="dt-center"><spring:message code="restore.msg229" /></th>
 											</tr>
 										</thead>
 									</table>

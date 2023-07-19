@@ -106,7 +106,7 @@
 				$("#ins_bckr_pth", "#workRegFormBckr").val("");
 				$("#ins_bckr_log_pth", "#workRegFormBckr").val("");
 				if(selectedAgentServer.master_gbn == "S"){
-					$("#bckr_standby_alert", "#workRegFormBckr").html("Primary DB를 Stnadby서버에 백업합니다.");
+					$("#bckr_standby_alert", "#workRegFormBckr").html("<spring:message code='backup_management.msg04' />");
 					$("#bckr_standby_alert", "#workRegFormBckr").show();
 				}else {
 					$("#bckr_standby_alert", "#workRegFormBckr").html("");
@@ -115,7 +115,7 @@
 			}else{
 				if(words.length == 2){
 					if(selectedAgentServer.master_gbn == "S"){
-						$("#bckr_standby_alert", "#workRegFormBckr").html("Primary DB를 Stnadby서버에 백업합니다.");
+						$("#bckr_standby_alert", "#workRegFormBckr").html("<spring:message code='backup_management.msg04' />");
 						$("#bckr_standby_alert", "#workRegFormBckr").show();
 					}else{
 						$("#bckr_standby_alert", "#workRegFormBckr").html("");
@@ -441,7 +441,7 @@
 		var iChkCnt = 0;
 
 		if($('#backrest_svr_info').DataTable().rows('.selected').data()[0] == undefined){
-			showSwalIcon('IP를 선택해주세요.', '<spring:message code="common.close" />', '', 'warning');
+			showSwalIcon('<spring:message code="message.msg.1" />', '<spring:message code="common.close" />', '', 'warning');
 
 			iChkCnt = iChkCnt + 1;
 		}
@@ -455,34 +455,34 @@
 
 		//기본 옵션 alert
 		if(nvlPrmSet($("#ins_bckr_opt_cd", "#workRegFormBckr").val(), "") == "") {
-			$("#ins_bckr_opt_cd_alert", "#workRegFormBckr").html('백업유형를 입력해주세요.');
+			$("#ins_bckr_opt_cd_alert", "#workRegFormBckr").html('<spring:message code="eXperDB_backup.msg29_1" />');
 			$("#ins_bckr_opt_cd_alert", "#workRegFormBckr").show();
 			
 			iChkCnt = iChkCnt + 1;
 		}
 		
 		if(nvlPrmSet($("#ins_bckr_cnt", "#workRegFormBckr").val(), "") == "") {
-			$("#ins_bckr_cnt_alert", "#workRegFormBckr").html('풀 백업 보관일을 입력해주세요.');
+			$("#ins_bckr_cnt_alert", "#workRegFormBckr").html('<spring:message code="backup_management.full_backup_file_maintenance_count" />');
 			$("#ins_bckr_cnt_alert", "#workRegFormBckr").show();
 			
 			iChkCnt = iChkCnt + 1;
 		}
 		
 		if(nvlPrmSet($("#ins_bckr_pth", "#workRegFormBckr").val(), "") == ""){
-			$("#ins_bckr_pth_alert", "#workRegFormBckr").html('백업 경로체크를 해주세요');
+			$("#ins_bckr_pth_alert", "#workRegFormBckr").html('<spring:message code="properties.backup_path.chk" />');
 			$("#ins_bckr_pth_alert", "#workRegFormBckr").show();
 			iChkCnt = iChkCnt + 1;
 		}
 
 		if(nvlPrmSet($("#ins_bckr_log_pth", "#workRegFormBckr").val(), "") == "") {
-			$("#ins_bckr_log_pth_alert", "#workRegFormBckr").html('로그경로를 입력해주세요.');
+			$("#ins_bckr_log_pth_alert", "#workRegFormBckr").html('<spring:message code="properties.log_path_chk" />');
 			$("#ins_bckr_log_pth_alert", "#workRegFormBckr").show();
 			
 			iChkCnt = iChkCnt + 1;
 		}
 
 		if(nvlPrmSet($("#ins_cps_opt_prcs", "#workRegFormBckr").val(), "") == "") {
-			$("#ins_cps_opt_prcs_alert", "#workRegFormBckr").html('병렬도를 입력해주세요.');
+			$("#ins_cps_opt_prcs_alert", "#workRegFormBckr").html('<spring:message code="backup_management.paralles_chk" />');
 			$("#ins_cps_opt_prcs_alert", "#workRegFormBckr").show();
 			
 			iChkCnt = iChkCnt + 1;
@@ -491,46 +491,46 @@
 		//Remote 옵션 alert
 		if(svrBckCheck == "remote"){
 			if(nvlPrmSet($("#ins_remt_str_ip", "#workRegFormBckr").val(), "") == "") {
-				$("#ins_remt_str_ip_alert", "#workRegFormBckr").html('아이피를 입력해주세요.');
+				$("#ins_remt_str_ip_alert", "#workRegFormBckr").html('<spring:message code="message.msg62" />');
 				$("#ins_remt_str_ip_alert", "#workRegFormBckr").show();
 				
 				iChkCnt = iChkCnt + 1;
 			}
 
 			if(nvlPrmSet($("#ins_remt_str_ssh", "#workRegFormBckr").val(), "") == "") {
-				$("#ins_remt_str_ssh_alert", "#workRegFormBckr").html('포트를 입력해주세요.');
+				$("#ins_remt_str_ssh_alert", "#workRegFormBckr").html('<spring:message code="message.msg83" />');
 				$("#ins_remt_str_ssh_alert", "#workRegFormBckr").show();
 				
 				iChkCnt = iChkCnt + 1;
 			}
 
 			if(nvlPrmSet($("#ins_remt_str_usr", "#workRegFormBckr").val(), "") == "") {
-				$("#ins_remt_str_usr_alert", "#workRegFormBckr").html('OS 유저명을 입력해주세요.');
+				$("#ins_remt_str_usr_alert", "#workRegFormBckr").html('<spring:message code="properties.os_user.chk" />');
 				$("#ins_remt_str_usr_alert", "#workRegFormBckr").show();
 				
 				iChkCnt = iChkCnt + 1;
 			}
 
 			if(nvlPrmSet($("#ins_remt_str_pw", "#workRegFormBckr").val(), "") == "") {
-				$("#ins_remt_str_pw_alert", "#workRegFormBckr").html('패스워드를 입력해주세요.');
+				$("#ins_remt_str_pw_alert", "#workRegFormBckr").html('<spring:message code="user_management.password.chk" />');
 				$("#ins_remt_str_pw_alert", "#workRegFormBckr").show();
 				
 				iChkCnt = iChkCnt + 1;
 			}
 			if(remoteConn != "Success"){
-				$("#ssh_con_alert", "#workRegFormBckr").html('연결 테스트를 해주세요.');
+				$("#ssh_con_alert", "#workRegFormBckr").html('<spring:message code="eXperDB_CDC.test_connection.chk" />');
 				$("#ssh_con_alert", "#workRegFormBckr").show();
 				iChkCnt = iChkCnt + 1;
 			}
 			
 			if(!bck_pth_chk){
-				$("#ins_bckr_pth_alert", "#workRegFormBckr").html('백업 경로체크를 해주세요');
+				$("#ins_bckr_pth_alert", "#workRegFormBckr").html('<spring:message code="properties.backup_path.chk" />');
 				$("#ins_bckr_pth_alert", "#workRegFormBckr").show();
 				iChkCnt = iChkCnt + 1;
 			}
 			
 			if(!log_pth_chk) {
-				$("#ins_bckr_log_pth_alert", "#workRegFormBckr").html('로그경로를 입력해주세요.');
+				$("#ins_bckr_log_pth_alert", "#workRegFormBckr").html('<spring:message code="properties.log_path_chk" />');
 				$("#ins_bckr_log_pth_alert", "#workRegFormBckr").show();
 				
 				iChkCnt = iChkCnt + 1;
@@ -541,42 +541,42 @@
 		//Cloud 옵션 alert
 		if(svrBckCheck == "cloud"){
 			if(nvlPrmSet($("#ins_cloud_bckr_s3_buk", "#workRegFormBckr").val(), "") == "") {
-				$("#ins_cloud_bckr_s3_buk_alert", "#workRegFormBckr").html('s3 bucket을 입력해주세요.');
+				$("#ins_cloud_bckr_s3_buk_alert", "#workRegFormBckr").html('<spring:message code="backup_management.s3.bucket" />');
 				$("#ins_cloud_bckr_s3_buk_alert", "#workRegFormBckr").show();
 				
 				iChkCnt = iChkCnt + 1;
 			}
 			
 			if(nvlPrmSet($("#ins_cloud_bckr_s3_rgn", "#workRegFormBckr").val(), "") == "") {
-				$("#ins_cloud_bckr_s3_rgn_alert", "#workRegFormBckr").html('s3 region을 입력해주세요.');
+				$("#ins_cloud_bckr_s3_rgn_alert", "#workRegFormBckr").html('<spring:message code="backup_management.s3.region" />');
 				$("#ins_cloud_bckr_s3_rgn_alert", "#workRegFormBckr").show();
 				
 				iChkCnt = iChkCnt + 1;
 			}
 			
 			if(nvlPrmSet($("#ins_cloud_bckr_s3_key", "#workRegFormBckr").val(), "") == "") {
-				$("#ins_cloud_bckr_s3_key_alert", "#workRegFormBckr").html('s3 key를 입력해주세요.');
+				$("#ins_cloud_bckr_s3_key_alert", "#workRegFormBckr").html('<spring:message code="backup_management.s3.key" />');
 				$("#ins_cloud_bckr_s3_key_alert", "#workRegFormBckr").show();
 				
 				iChkCnt = iChkCnt + 1;
 			}
 			
 			if(nvlPrmSet($("#ins_cloud_bckr_s3_npt", "#workRegFormBckr").val(), "") == "") {
-				$("#ins_cloud_bckr_s3_npt_alert", "#workRegFormBckr").html('s3 endpoint을 입력해주세요.');
+				$("#ins_cloud_bckr_s3_npt_alert", "#workRegFormBckr").html('<spring:message code="backup_management.s3.endpoint" />');
 				$("#ins_cloud_bckr_s3_npt_alert", "#workRegFormBckr").show();
 				
 				iChkCnt = iChkCnt + 1;
 			}
 
 			if(nvlPrmSet($("#ins_cloud_bckr_s3_pth", "#workRegFormBckr").val(), "") == "") {
-				$("#ins_cloud_bckr_s3_pth_alert", "#workRegFormBckr").html('s3 경로를 입력해주세요.');
+				$("#ins_cloud_bckr_s3_pth_alert", "#workRegFormBckr").html('<spring:message code="backup_management.s3.path" />');
 				$("#ins_cloud_bckr_s3_pth_alert", "#workRegFormBckr").show();
 				
 				iChkCnt = iChkCnt + 1;
 			}
 
 			if(nvlPrmSet($("#ins_cloud_bckr_s3_scrk", "#workRegFormBckr").val(), "") == "") {
-				$("#ins_cloud_bckr_s3_scrk_alert", "#workRegFormBckr").html('s3 secrey key를 입력해주세요.');
+				$("#ins_cloud_bckr_s3_scrk_alert", "#workRegFormBckr").html('<spring:message code="backup_management.s3.secretkey" />');
 				$("#ins_cloud_bckr_s3_scrk_alert", "#workRegFormBckr").show();
 				
 				iChkCnt = iChkCnt + 1;
@@ -772,7 +772,7 @@
 		var selectedIp = $('#backrest_svr_info').DataTable().rows('.selected').data()[0]
 
 		if(selectedIp == undefined){
-			showSwalIcon('IP를 선택해주세요.', '<spring:message code="common.close" />', '', 'warning');
+			showSwalIcon('<spring:message code="message.msg.1" />', '<spring:message code="common.close" />', '', 'warning');
 		}
 	}
 	
@@ -845,7 +845,7 @@
 		<div class="modal-content" style="width:1500px; ">		 	 
 			<div class="modal-body" style="margin-bottom:-30px;">
 				<h4 class="modal-title mdi mdi-alert-circle text-info" id="ModalLabel" style="padding-left:5px;">
-					PG Backrest 백업등록
+					<spring:message code="dashboard.backrest_backup" />
 				</h4>
 				
 				<div class="card system-tlb-scroll" style="margin-top:10px;border:0px;height:885px;overflow-y:auto;">
@@ -898,7 +898,7 @@
 								<div class="form-group row div-form-margin-z">
 									<div class="input-group mb-2 mr-sm-2 col-sm-2">
 										<input hidden="hidden" />
-										<input type="text" class="form-control" style="margin-right: -0.7rem;" maxlength="25" id="ipadr" name="ipadr" onblur="this.value=this.value.trim()" placeholder='아이피를 입력해주세요' />
+										<input type="text" class="form-control" style="margin-right: -0.7rem;" maxlength="25" id="ipadr" name="ipadr" onblur="this.value=this.value.trim()" placeholder='<spring:message code="message.msg62" />' />
 									</div>
 
 									<button type="button" class="btn btn-inverse-primary btn-icon-text mb-2 btn-search-disable" onclick="fn_select_agent_info()">
@@ -925,7 +925,7 @@
 											<thead>
 												<tr class="bg-info text-white">
 													<th width="30" class="dt-center"><spring:message code="common.no" /></th>
-													<th width="150" class="dt-center">유형</th>
+													<th width="150" class="dt-center"><spring:message code="data_transfer.type" /></th>
 													<th width="200">IP</th>
 													<th width="160">PORT</th>
 													<th width="170">USER</th>
@@ -986,28 +986,28 @@
 											<div style="padding-top:7px;">
 												<label for="ins_remt_opt_cd" class="col-sm-2_2 col-form-label pop-label-index" >
 													<i class="item-icon fa fa-dot-circle-o"></i>
-													스토리지 정보
+													<spring:message code="backup_management.storage.option" />
 												</label>
 
 												<div class="d-flex" style="margin-bottom: 10px;">
 													<div class="col-sm-2_3">
-														<input type="text" class="form-control form-control-xsm" maxlength="50" id="ins_remt_str_ip" name="ins_remt_str_ip" style="width: 250px;" placeholder="IP를 입력해주세요" onchange="remote_chg_chk(this)" onclick="fn_backrest_ip_select_check()"/>
+														<input type="text" class="form-control form-control-xsm" maxlength="50" id="ins_remt_str_ip" name="ins_remt_str_ip" style="width: 250px;" placeholder="<spring:message code="message.msg62" />" onchange="remote_chg_chk(this)" onclick="fn_backrest_ip_select_check()"/>
 													</div>
 
 													<div class="col-sm-2" style="margin-left: 6px;">
-														<input type="text" class="form-control form-control-xsm" maxlength="3" id="ins_remt_str_ssh" name="ins_remt_str_ssh" style="width: 180px;" placeholder="SSH 포트" onchange="remote_chg_chk(this)" onclick="fn_backrest_ip_select_check()"/>
+														<input type="text" class="form-control form-control-xsm" maxlength="3" id="ins_remt_str_ssh" name="ins_remt_str_ssh" style="width: 180px;" placeholder="<spring:message code="backup_management.remote.port" />" onchange="remote_chg_chk(this)" onclick="fn_backrest_ip_select_check()"/>
 													</div>
 
 													<div class="col-sm-2_3" style="margin-left: -30px;">
-														<input type="text" class="form-control form-control-xsm" maxlength="50" id="ins_remt_str_usr" name="ins_remt_str_usr" style="width: 250px;" placeholder="OS 유저명을 입력해주세요" onchange="remote_chg_chk(this)" onclick="fn_backrest_ip_select_check()"/>
+														<input type="text" class="form-control form-control-xsm" maxlength="50" id="ins_remt_str_usr" name="ins_remt_str_usr" style="width: 250px;" placeholder="<spring:message code="encrypt_policy_management.OS_User" />" onchange="remote_chg_chk(this)" onclick="fn_backrest_ip_select_check()"/>
 													</div>
 													
 													<div class="col-sm-2_3" style="margin-left: 6px;">
-														<input type="password" class="form-control form-control-xsm" maxlength="50" id="ins_remt_str_pw" name="ins_remt_str_pw" style="width: 250px;" placeholder="패스워드를 입력해주세요" onchange="remote_chg_chk(this)" onclick="fn_backrest_ip_select_check()"/>
+														<input type="password" class="form-control form-control-xsm" maxlength="50" id="ins_remt_str_pw" name="ins_remt_str_pw" style="width: 250px;" placeholder="<spring:message code="migration.msg20" />" onchange="remote_chg_chk(this)" onclick="fn_backrest_ip_select_check()"/>
 													</div>
 
 													<div class="col-sm-1" style="height: 20px; margin-top: 3px;">
-														<button id="ssh_conn" type="button" class="btn btn-outline-primary" style="width: 60px;padding: 5px;" onclick="fn_ssh_connection()">연결</button>
+														<button id="ssh_conn" type="button" class="btn btn-outline-primary" style="width: 60px;padding: 5px;" onclick="fn_ssh_connection()"><spring:message code="eXperDB_CDC.test_connection" /></button>
 													</div>
 													<div class="col-sm-2_3">
 														<div class="alert alert-danger" style="display:none; width: 250px; margin-left: -25px;" id="ssh_con_alert"></div>
@@ -1038,7 +1038,7 @@
 											<div class="d-flex" style="padding-top:7px; ">
 												<label for="ins_cld_opt_cd" class="col-sm-1_5 col-form-label pop-label-index" >
 													<i class="item-icon fa fa-dot-circle-o"></i>
-													클라우드 유형
+													<spring:message code="backup_management.cloud.type" /> 
 												</label>
 
 												<div class="col-sm-2_2" style="margin-top: 5px;">
@@ -1057,7 +1057,7 @@
 												</label>
 
 												<div class="col-sm-3">
-													<input type="text" class="form-control form-control-xsm" maxlength="120" id="ins_cloud_bckr_s3_buk" name="ins_cloud_bckr_s3_buk" style="width: 270px;" placeholder="S3 Bucket을 입력해주세요" onchange="fn_backrest_chg_alert(this)"/>
+													<input type="text" class="form-control form-control-xsm" maxlength="120" id="ins_cloud_bckr_s3_buk" name="ins_cloud_bckr_s3_buk" style="width: 270px;" placeholder="<spring:message code="backup_management.s3.bucket" />" onchange="fn_backrest_chg_alert(this)"/>
 												</div>
 
 												<label for="ins_cloud_opt_s3_rgn" class="col-sm-1 col-form-label pop-label-index" style="padding-top:7px;">
@@ -1066,7 +1066,7 @@
 												</label>
 
 												<div class="col-sm-2_8">
-													<input type="text" class="form-control form-control-xsm" maxlength="100" id="ins_cloud_bckr_s3_rgn" name="ins_cloud_bckr_s3_rgn" style="width: 240px;" placeholder="S3 Region을 입력해주세요" onchange="fn_backrest_chg_alert(this)"/>
+													<input type="text" class="form-control form-control-xsm" maxlength="100" id="ins_cloud_bckr_s3_rgn" name="ins_cloud_bckr_s3_rgn" style="width: 240px;" placeholder="<spring:message code="backup_management.s3.region" />" onchange="fn_backrest_chg_alert(this)"/>
 												</div>
 
 												<label for="ins_cloud_opt_s3_key" class="col-sm-1_5 col-form-label pop-label-index" style="padding-top:7px; ">
@@ -1075,7 +1075,7 @@
 												</label>
 
 												<div class="col-sm-2">
-													<input type="password" class="form-control form-control-xsm" maxlength="50" id="ins_cloud_bckr_s3_key" name="ins_cloud_bckr_s3_key" style="width: 220px;" placeholder="S3 key를 입력해주세요" onchange="fn_backrest_chg_alert(this)"/>
+													<input type="password" class="form-control form-control-xsm" maxlength="50" id="ins_cloud_bckr_s3_key" name="ins_cloud_bckr_s3_key" style="width: 220px;" placeholder="<spring:message code="backup_management.s3.key" />" onchange="fn_backrest_chg_alert(this)"/>
 												</div>
 											</div>
 
@@ -1101,7 +1101,7 @@
 												</label>
 
 												<div class="col-sm-3">
-													<input type="text" class="form-control form-control-xsm" maxlength="120" id="ins_cloud_bckr_s3_npt" name="ins_cloud_bckr_s3_npt" style="width: 270px;" placeholder="S3 Endpoint를 입력해주세요" onchange="fn_backrest_chg_alert(this)"/>
+													<input type="text" class="form-control form-control-xsm" maxlength="120" id="ins_cloud_bckr_s3_npt" name="ins_cloud_bckr_s3_npt" style="width: 270px;" placeholder="<spring:message code="backup_management.s3.endpoint" />" onchange="fn_backrest_chg_alert(this)"/>
 												</div>
 
 												<label for="ins_cloud_opt_s3_pth" class="col-sm-1 col-form-label pop-label-index" style="padding-top:7px;">
@@ -1110,7 +1110,7 @@
 												</label>
 
 												<div class="col-sm-2_8">
-													<input type="text" class="form-control form-control-xsm" maxlength="100" id="ins_cloud_bckr_s3_pth" name="ins_cloud_bckr_s3_pth" style="width: 240px;" placeholder="S3 path를 입력해주세요" onchange="fn_backrest_chg_alert(this)"/>
+													<input type="text" class="form-control form-control-xsm" maxlength="100" id="ins_cloud_bckr_s3_pth" name="ins_cloud_bckr_s3_pth" style="width: 240px;" placeholder="<spring:message code="backup_management.s3.path" />" onchange="fn_backrest_chg_alert(this)"/>
 												</div>
 
 												<label for="ins_cloud_opt_s3_scrk" class="col-sm-1_5 col-form-label pop-label-index" style="padding-top:7px;">
@@ -1119,7 +1119,7 @@
 												</label>
 
 												<div class="col-sm-2">
-													<input type="password" class="form-control form-control-xsm" maxlength="100" id="ins_cloud_bckr_s3_scrk" name="ins_cloud_bckr_s3_scrk" style="width: 220px;" placeholder="S3 secret Key를 입력해주세요" onchange="fn_backrest_chg_alert(this)"/>
+													<input type="password" class="form-control form-control-xsm" maxlength="100" id="ins_cloud_bckr_s3_scrk" name="ins_cloud_bckr_s3_scrk" style="width: 220px;" placeholder="<spring:message code="backup_management.s3.secretkey" /> onchange="fn_backrest_chg_alert(this)"/>
 												</div>
 											</div>
 
@@ -1142,11 +1142,11 @@
 
 									<div class="d-flex">
 										<div class="card-body card-inverse-primary" style="padding:10px 0 10px 0px; width: 900px; margin-left: 10px;">
-											<p class="card-text text-xl-center">백업옵션</p>
+											<p class="card-text text-xl-center"><spring:message code="backup_management.backup_option" /></p>
 										</div>
 
 										<div class="card-body card-inverse-primary" style="padding:10px 0 10px 0px; width: 500px; margin: 0 10px 0 60px;">
-											<p class="card-text text-xl-center">압축옵션</p>
+											<p class="card-text text-xl-center"><spring:message code="etc.etc26" /></p>
 										</div>
 									</div>
 
@@ -1155,7 +1155,7 @@
 											<!-- 왼쪽 메뉴 -->
 											<label for="ins_bckr_opt_cd" class="col-sm-2_3 col-form-label pop-label-index" style="padding-top:7px;">
 												<i class="item-icon fa fa-dot-circle-o"></i>
-												백업 유형
+												<spring:message code="backup_management.bck_type" />
 											</label>
 
 											<div class="col-sm-2_2">
@@ -1169,7 +1169,7 @@
 
 											<label id="ins_bak_path_label" for="ins_bckr_opt_path" class="col-sm-1_8 col-form-label pop-label-index" style="padding-top:7px; margin-left: 30px;">
 												<i class="item-icon fa fa-dot-circle-o"></i>
-												백업 경로
+												<spring:message code="properties.backup_path" />
 											</label>
 
 											<div class="col-sm-4">
@@ -1185,7 +1185,7 @@
 											<!-- 오른쪽 메뉴 -->
 											<label for="ins_bckr_cps_yn" class="col-sm-3 col-form-label pop-label-index" style="padding-top:7px;">
 												<i class="item-icon fa fa-dot-circle-o"></i>
-												압축 여부
+												<spring:message code="etc.etc22" />
 											</label>
 
 											<div class="col-sm-1_5">
@@ -1216,7 +1216,7 @@
 											<!-- 왼쪽 메뉴 -->
 											<label for="ins_bckr_opt_cnt" class="col-sm-2_3 col-form-label pop-label-index" style="padding-top:7px;">
 												<i class="item-icon fa fa-dot-circle-o"></i>
-												풀 백업 유지개수
+												<spring:message code="backup_management.full_backup_file_maintenance_count" />
 											</label>
 
 											<div class="col-sm-2_2">
@@ -1226,7 +1226,7 @@
 											<div id="ins_log_path_label">
 												<label for="ins_bckr_opt_log_path" class="col-sm-1_8 col-form-label pop-label-index" style="padding-top:7px; margin-left: 30px;">
 													<i class="item-icon fa fa-dot-circle-o"></i>
-													로그 경로
+													<spring:message code="properties.log_path" />
 												</label>
 											</div>
 
@@ -1243,7 +1243,7 @@
 											<!-- 오른쪽 메뉴 -->
 											<label for="ins_bckr_cps_type" class="col-sm-3 col-form-label pop-label-index" style="padding-top:7px;">
 												<i class="item-icon fa fa-dot-circle-o"></i>
-												압축 타입
+												<spring:message code="eXperDB_CDC.compression_type" />
 											</label>
 
 											<div class="col-sm-3">
@@ -1255,7 +1255,7 @@
 
 											<label for="ins_bckr_prcs" class="col-sm-1_8 col-form-label pop-label-index" style="padding-top:7px; margin-left: 22px;">
 												<i class="item-icon fa fa-dot-circle-o"></i>
-												병렬도
+												<spring:message code="backup_management.paralles" />
 											</label>
 
 											<div class="col-sm-2">
