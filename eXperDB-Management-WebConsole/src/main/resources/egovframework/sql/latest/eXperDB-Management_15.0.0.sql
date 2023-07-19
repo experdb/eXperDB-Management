@@ -6,7 +6,7 @@ ALTER TABLE t_bck_wrkcng_i add column remote_port varchar(20);
 ALTER TABLE t_bck_wrkcng_i add column remote_usr varchar(20);
 ALTER TABLE t_bck_wrkcng_i add column remote_pw varchar(20);
 
-INSERT INTO T_SYSDTL_C(GRP_CD, SYS_CD, SYS_CD_NM, USE_YN, FRST_REGR_ID, FRST_REG_DTM, LST_MDFR_ID, LST_MDF_DTM ) VALUES('TC0002', 'TC000205', 'Backrest백업', 'Y', 'ADMIN', clock_timestamp(), 'ADMIN', clock_timestamp());
+INSERT INTO T_SYSDTL_C(GRP_CD, SYS_CD, SYS_CD_NM, USE_YN, FRST_REGR_ID, FRST_REG_DTM, LST_MDFR_ID, LST_MDF_DTM, SYS_CD_NM_EN ) VALUES('TC0002', 'TC000205', 'Backrest백업', 'Y', 'ADMIN', clock_timestamp(), 'ADMIN', clock_timestamp(), 'Backrest Backup');
 INSERT INTO T_SYSDTL_C(GRP_CD, SYS_CD, SYS_CD_NM, USE_YN, FRST_REGR_ID, FRST_REG_DTM, LST_MDFR_ID, LST_MDF_DTM ) VALUES('TC0003', 'TC000304', 'diff', 'Y', 'ADMIN', clock_timestamp(), 'ADMIN', clock_timestamp());
 INSERT INTO T_SYSDTL_C(GRP_CD, SYS_CD, SYS_CD_NM, USE_YN, FRST_REGR_ID, FRST_REG_DTM, LST_MDFR_ID, LST_MDF_DTM, SYS_CD_NM_EN ) VALUES('TC0001', 'DX-T0180', 'Backrest 백업 등록 팝업', 'Y', 'ADMIN', clock_timestamp(), 'ADMIN', clock_timestamp(), 'Backrest Backup Registered Popup');
 INSERT INTO T_SYSDTL_C(GRP_CD, SYS_CD, SYS_CD_NM, USE_YN, FRST_REGR_ID, FRST_REG_DTM, LST_MDFR_ID, LST_MDF_DTM, SYS_CD_NM_EN ) VALUES('TC0001', 'DX-T0180_01', 'Backrest 백업 등록', 'Y', 'ADMIN', clock_timestamp(), 'ADMIN', clock_timestamp(), 'Backrest Backup Registration');

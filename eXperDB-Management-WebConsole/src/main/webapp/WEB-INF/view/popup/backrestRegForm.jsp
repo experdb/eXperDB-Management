@@ -462,7 +462,7 @@
 		}
 		
 		if(nvlPrmSet($("#ins_bckr_cnt", "#workRegFormBckr").val(), "") == "") {
-			$("#ins_bckr_cnt_alert", "#workRegFormBckr").html('<spring:message code="backup_management.full_backup_file_maintenance_count" />');
+			$("#ins_bckr_cnt_alert", "#workRegFormBckr").html('<spring:message code="backup_management.full_backup_file_maintenance_counts" />');
 			$("#ins_bckr_cnt_alert", "#workRegFormBckr").show();
 			
 			iChkCnt = iChkCnt + 1;
@@ -1146,7 +1146,7 @@
 										</div>
 
 										<div class="card-body card-inverse-primary" style="padding:10px 0 10px 0px; width: 500px; margin: 0 10px 0 60px;">
-											<p class="card-text text-xl-center"><spring:message code="etc.etc26" /></p>
+											<p class="card-text text-xl-center"><spring:message code="etc.etc38" /></p>
 										</div>
 									</div>
 
@@ -1216,7 +1216,7 @@
 											<!-- 왼쪽 메뉴 -->
 											<label for="ins_bckr_opt_cnt" class="col-sm-2_3 col-form-label pop-label-index" style="padding-top:7px;">
 												<i class="item-icon fa fa-dot-circle-o"></i>
-												<spring:message code="backup_management.full_backup_file_maintenance_count" />
+												<spring:message code="backup_management.full_backup_file_maintenance_counts" />
 											</label>
 
 											<div class="col-sm-2_2">

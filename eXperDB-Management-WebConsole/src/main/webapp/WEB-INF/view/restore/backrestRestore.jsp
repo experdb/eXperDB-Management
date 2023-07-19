@@ -153,12 +153,12 @@
 
 		if(selected_type == "pitr"){
 			document.getElementById("bckr_restore_type_alert").style.width = "340px"
-			$("#bckr_restore_type_alert", "#restoreBackrestRegForm").html("<spring:message code="restore.type.time.exp" />");
+			$("#bckr_restore_type_alert", "#restoreBackrestRegForm").html('<spring:message code="restore.type.time.exp" />');
 			$("#bckr_restore_type_alert", "#restoreBackrestRegForm").show();
 			$("#pitr_div").show();
 		}else if(selected_type == "full"){
 			document.getElementById("bckr_restore_type_alert").style.width = "665px"
-			$("#bckr_restore_type_alert", "#restoreBackrestRegForm").html("<spring:message code="restore.type.full.exp" />");
+			$("#bckr_restore_type_alert", "#restoreBackrestRegForm").html('<spring:message code="restore.type.full.exp" />');
 			$("#bckr_restore_type_alert", "#restoreBackrestRegForm").show();
 			$("#pitr_div").hide();
 		}else{
