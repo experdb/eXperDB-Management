@@ -732,7 +732,7 @@ VALUES('TC0042', 'TC004202', 'pgReadOnly', 'Y', 'ADMIN', clock_timestamp(), 'ADM
 -- 백업 모니터링 화면 접근이력코드 삭제
 
 -- 즉시수행 접근이력코드 등록 삭제
-I
+
 
 
 
