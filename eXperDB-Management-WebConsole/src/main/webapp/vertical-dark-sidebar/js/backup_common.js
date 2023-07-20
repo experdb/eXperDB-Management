@@ -636,6 +636,45 @@ function fn_update_chogihwa(gbn, result) {
 			$("#mod_cps_opt_type", "#workRegReFormBckr").attr("disabled",true);
 		}
 
+		//기본옵션
+		$("#mod_bckr_opt_cd_alert", "#workRegReFormBckr").html("");
+		$("#mod_bckr_opt_cd_alert", "#workRegReFormBckr").hide();
+		$("#mod_bckr_cnt_alert", "#workRegReFormBckr").html("");
+		$("#mod_bckr_cnt_alert", "#workRegReFormBckr").hide();
+		$("#mod_bckr_log_pth_alert", "#workRegReFormBckr").html("");
+		$("#mod_bckr_log_pth_alert", "#workRegReFormBckr").hide();
+		$("#mod_cps_opt_prcs_alert", "#workRegReFormBckr").html("");
+		$("#mod_cps_opt_prcs_alert", "#workRegReFormBckr").hide();
+
+		//remote
+		$("#mod_remt_str_ip_alert", "#workRegReFormBckr").html("");
+		$("#mod_remt_str_ip_alert", "#workRegReFormBckr").hide();			
+		$("#mod_remt_str_ssh_alert", "#workRegReFormBckr").html("");
+		$("#mod_remt_str_ssh_alert", "#workRegReFormBckr").hide();			
+		$("#mod_remt_str_usr_alert", "#workRegReFormBckr").html("");
+		$("#mod_remt_str_usr_alert", "#workRegReFormBckr").hide();	
+		$("#mod_remt_str_pw_alert", "#workRegReFormBckr").html("");
+		$("#mod_remt_str_pw_alert", "#workRegReFormBckr").hide();
+		$("#mod_ssh_con_alert", "#workRegReFormBckr").html("");
+		$("#mod_ssh_con_alert", "#workRegReFormBckr").hide();
+		$("#mod_bckr_log_pth_alert", "#workRegReFormBckr").html("");
+		$("#mod_bckr_log_pth_alert", "#workRegReFormBckr").hide();
+
+		//cloud
+		$("#mod_cloud_bckr_s3_buk_alert", "#workRegReFormBckr").html("");
+		$("#mod_cloud_bckr_s3_buk_alert", "#workRegReFormBckr").hide();
+		$("#mod_cloud_bckr_s3_rgn_alert", "#workRegReFormBckr").html("");
+		$("#mod_cloud_bckr_s3_rgn_alert", "#workRegReFormBckr").hide();
+		$("#mod_cloud_bckr_s3_key_alert", "#workRegReFormBckr").html("");
+		$("#mod_cloud_bckr_s3_key_alert", "#workRegReFormBckr").hide();
+		$("#mod_cloud_bckr_s3_npt_alert", "#workRegReFormBckr").html("");
+		$("#mod_cloud_bckr_s3_npt_alert", "#workRegReFormBckr").hide();
+		$("#mod_cloud_bckr_s3_pth_alert", "#workRegReFormBckr").html("");
+		$("#mod_cloud_bckr_s3_pth_alert", "#workRegReFormBckr").hide();
+		$("#mod_cloud_bckr_s3_scrk_alert", "#workRegReFormBckr").html("");
+		$("#mod_cloud_bckr_s3_scrk_alert", "#workRegReFormBckr").hide();
+
+
 		fn_deleteCustom();
 		custom_map.clear();
         custom_map_before.clear();

@@ -1011,7 +1011,7 @@ function fn_ssh_connection(){
 													</div>
 
 													<div class="col-sm-1" style="height: 20px; margin-top: 3px;">
-														<button id="ssh_conn" type="button" class="btn btn-outline-primary" style="width: 60px;padding: 5px;" onclick="fn_ssh_connection()"><spring:message code="eXperDB_CDC.test_connection" /></button>
+														<button id="ssh_conn" type="button" class="btn btn-outline-primary" style="width: 60px;padding: 5px;" onclick="fn_ssh_connection()">연결</button>
 													</div>
 													<div class="col-sm-2_3">
 														<div class="alert alert-danger" style="display:none; width: 250px; margin-left: -25px;" id="ssh_con_alert"></div>
