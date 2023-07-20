@@ -776,56 +776,60 @@
 		}
 	}
 	
-	function fn_ssh_connection(){
+function fn_ssh_connection(){
 		
 		var remote_ip = nvlPrmSet($('#ins_remt_str_ip', '#workRegFormBckr').val(), "").trim();
 		var remote_port = nvlPrmSet($('#ins_remt_str_ssh', '#workRegFormBckr').val(), "").trim();
 		var remote_usr = nvlPrmSet($('#ins_remt_str_usr', '#workRegFormBckr').val(), "").trim();
 		var remote_pw = nvlPrmSet($('#ins_remt_str_pw', '#workRegFormBckr').val(), "").trim();
 		
-		$.ajax({
-			url : "/backup/RemoteConn.do",
-			data : {
-				remote_ip : remote_ip,
-				remote_port : remote_port,
-				remote_usr : remote_usr,
-				remote_pw : remote_pw
-			},
-			dataType : "json",
-			type : "post",
-			beforeSend: function(xhr) {
-				xhr.setRequestHeader("AJAX", true);
-			},
-			error : function(xhr, status, error) {
-				if(xhr.status == 401) {
-					showSwalIconRst(message_msg02, closeBtn, '', 'error', 'top');
-				} else if(xhr.status == 403) {
-					showSwalIconRst(message_msg03, closeBtn, '', 'error', 'top');
-				} else {
-					showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), closeBtn, '', 'error');
+		if(remote_ip == "" || remote_port=="" || remote_usr=="" || remote_pw ==""){
+			showSwalIcon('<spring:message code="backup_management.storage.chk" />', '<spring:message code="common.close" />', '', 'warning');
+			remoteConn = "Fail";
+		}else{
+			$.ajax({
+				url : "/backup/RemoteConn.do",
+				data : {
+					remote_ip : remote_ip,
+					remote_port : remote_port,
+					remote_usr : remote_usr,
+					remote_pw : remote_pw
+				},
+				dataType : "json",
+				type : "post",
+				beforeSend: function(xhr) {
+					xhr.setRequestHeader("AJAX", true);
+				},
+				error : function(xhr, status, error) {
+					if(xhr.status == 401) {
+						showSwalIconRst(message_msg02, closeBtn, '', 'error', 'top');
+					} else if(xhr.status == 403) {
+						showSwalIconRst(message_msg03, closeBtn, '', 'error', 'top');
+					} else {
+						showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), closeBtn, '', 'error');
+					}
+				},
+				success : function(data) {
+					if(data == 'success'){
+						showSwalIcon('<spring:message code="message.msg93" />', '<spring:message code="common.close" />', '', 'success');
+						remoteConn = "Success";
+						$("#ssh_con_alert", "#workRegFormBckr").html("");
+						$("#ssh_con_alert", "#workRegFormBckr").hide();
+						$("#ins_remt_str_ip_alert", "#workRegFormBckr").html("");
+						$("#ins_remt_str_ip_alert", "#workRegFormBckr").hide();
+						$("#ins_remt_str_ssh_alert", "#workRegFormBckr").html("");
+						$("#ins_remt_str_ssh_alert", "#workRegFormBckr").hide();
+						$("#ins_remt_str_usr_alert", "#workRegFormBckr").html("");
+						$("#ins_remt_str_usr_alert", "#workRegFormBckr").hide();
+						$("#ins_remt_str_pw_alert", "#workRegFormBckr").html("");
+						$("#ins_remt_str_pw_alert", "#workRegFormBckr").hide();
+					}else {
+						showSwalIcon('<spring:message code="message.msg92" />', '<spring:message code="common.close" />', '', 'error');
+						remoteConn = "Fail";
+					}
 				}
-			},
-			success : function(data) {
-				if(data == 'success'){
-					showSwalIcon('<spring:message code="message.msg93" />', '<spring:message code="common.close" />', '', 'success');
-					remoteConn = "Success";
-					$("#ssh_con_alert", "#workRegFormBckr").html("");
-					$("#ssh_con_alert", "#workRegFormBckr").hide();
-					$("#ins_remt_str_ip_alert", "#workRegFormBckr").html("");
-					$("#ins_remt_str_ip_alert", "#workRegFormBckr").hide();
-					$("#ins_remt_str_ssh_alert", "#workRegFormBckr").html("");
-					$("#ins_remt_str_ssh_alert", "#workRegFormBckr").hide();
-					$("#ins_remt_str_usr_alert", "#workRegFormBckr").html("");
-					$("#ins_remt_str_usr_alert", "#workRegFormBckr").hide();
-					$("#ins_remt_str_pw_alert", "#workRegFormBckr").html("");
-					$("#ins_remt_str_pw_alert", "#workRegFormBckr").hide();
-				}else {
-					showSwalIcon('<spring:message code="message.msg92" />', '<spring:message code="common.close" />', '', 'error');
-					remoteConn = "Fail";
-				}
-				
-			}
-		})
+			})
+		}		
 	}
 	
 	function remote_chg_chk(txt){

@@ -1204,7 +1204,7 @@
 										
 								<div class="input-group mb-2 mr-sm-2 search_pgbackrest col-sm-1_5">
 									<select class="form-control" style="margin-right: -0.7rem;" name="backrest_opt" id="backrest_opt">
-										<option value=""><spring:message code="backup_management.storage.optoin" /></option>
+										<option value=""><spring:message code="backup_management.storage.option" /></option>
 										<option value="local">local</option>
 										<option value="remote">remote</option>
 										<option value="cloud">cloud</option>
