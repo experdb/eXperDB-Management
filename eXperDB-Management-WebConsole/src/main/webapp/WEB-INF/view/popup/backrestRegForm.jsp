@@ -1150,7 +1150,7 @@ function fn_ssh_connection(){
 										</div>
 
 										<div class="card-body card-inverse-primary" style="padding:10px 0 10px 0px; width: 500px; margin: 0 10px 0 60px;">
-											<p class="card-text text-xl-center"><spring:message code="etc.etc38" /></p>
+											<p class="card-text text-xl-center"><spring:message code="etc.etc45" /></p>
 										</div>
 									</div>
 
