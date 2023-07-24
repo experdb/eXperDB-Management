@@ -178,4 +178,41 @@ public interface SystemService {
 	 * @throws Exception
 	 */
 	public void updateDUMP_RESTORE_EXELOG(DumpRestoreVO vo) throws Exception;
+
+	
+	/**
+	 * IP로 ipadr_id 조회
+	 * @param ipadr 
+	 * @throws Exception
+	 */
+	public int selectDbSvrIpAdrId(String ipadr) throws Exception;
+	
+	
+	/**
+	 * pgbackrest 백업 
+	 * @param WrkExeVO 
+	 * @throws Exception
+	 */
+	public void insertPgbackrestBackup(WrkExeVO vo) throws Exception;
+	
+	/**
+	 * pgbackrest 백업 완료시 업데이트
+	 * @param WrkExeVO 
+	 * @throws Exception
+	 */
+	public void updateBackrestWrk(WrkExeVO vo) throws Exception;
+	
+	/**
+	 * pgbackrest 복원 완료시 업데이트
+	 * @param RmanRestoreVO 
+	 * @throws Exception
+	 */
+	public void updateBackrestRestore(RmanRestoreVO vo) throws Exception;
+
+	/**
+	 * pgbackrest 백업 에러시 업데이트
+	 * @param RmanRestoreVO 
+	 * @throws Exception
+	 */
+	public void updateBackrestErr(WrkExeVO vo) throws Exception;
 }

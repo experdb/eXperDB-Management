@@ -25,30 +25,43 @@
 <script type="text/javascript">
 	var tableRman = null;
 	var tableDump = null;
-	var selectChkTab = "rman";
+	var selectChkTab = "";
+	var check = "";
 	var searchInit = "";
 	var tabGbn = "${tabGbn}";
 	var bck_wrk_id_List = [];
 	var wrk_id_List = [];
+	var wrk_bck_server_list = [];
+	var wrk_bck_server_port_list = [];
+	var wrk_bck_server_usr_list = [];
+	var wrk_bck_server_pw_list = [];
+	var wrk_bck_gbn_list = [];
+	var bck_filenm_list = [];
 	var confile_title = "";
 	var immediate_data = null;
 	var workJsonData = null;
 	var scheduleTable = null;
-	
+	backrest_gbn = null; 
+	remote_ip = null;
+	remote_port = null;
+	remote_usr = null; 
+	remote_pw = null;
+	var bck_pth_chk = false;
+	var log_pth_chk = false;
 	
 	
 	$(window).ready(function(){
+		fn_pgbackrestAut();
 		//검색조건 초기화
 		selectInitTab(selectChkTab);
 		//스케줄 테이즐 setting
 		fn_init_schedule();
 
-		
 		//조회 (backup_common.js)
 		if(tabGbn != ""){
 			selectTab(tabGbn);
 		}else{
-			selectTab("rman");
+			selectTab(searchInit);
 		}
 			
 		$('#rmanDataTable tbody').on('click','tr',function() {
@@ -67,8 +80,6 @@
 	
 	
 	function fn_buttonAut(){
-		var usr_id = document.getElementById("usr_id"); 
-		
 		if("${usr_id}" == "viewer"){
 			btnDelete.style.display = 'none';
 			btnModify.style.display = 'none';
@@ -81,6 +92,20 @@
 			btnImmediately.style.display = '';
 		}
 
+	}
+	
+	function fn_pgbackrestAut(){
+		if("${pgbackrest_useyn}" == "Y"){
+			selectChkTab = "backrest";
+			check = "backrest";
+
+			$("#server-tab-1").text("<spring:message code='backup_management.backrestBck' />");
+		}else{
+			selectChkTab = "rman";
+			check = "rman";
+
+			$("#server-tab-1").text("Online 백업");
+		}
 	}
 	
 	
@@ -315,12 +340,20 @@
 
 		if(selectChkTab == "rman"){
 			datas = tableRman.rows('.selected').data();
-		} else {
+		} else if(selectChkTab == "backrest"){
+			datas = tableBackrest.rows('.selected').data();
+		} else{
 			datas = tableDump.rows('.selected').data();
 		}
 
 		bck_wrk_id_List = [];
 		wrk_id_List = [];
+		wrk_bck_server_list = [];
+		bck_filenm_list = [];
+		wrk_bck_server_port_list = [];
+		wrk_bck_server_usr_list = [];
+		wrk_bck_server_pw_list = [];
+		wrk_bck_gbn_list = [];
 
 		if (datas.length <= 0) {
 			showSwalIcon('<spring:message code="message.msg16"/>', '<spring:message code="common.close" />', '', 'error');
@@ -331,6 +364,21 @@
 			for (var i = 0; i < datas.length; i++) {
 				bck_wrk_id_List.push( tableRman.rows('.selected').data()[i].bck_wrk_id);   
 				wrk_id_List.push( tableRman.rows('.selected').data()[i].wrk_id);   
+			}
+		} else if(selectChkTab == "backrest"){
+			for (var i = 0; i < datas.length; i++) {				
+				bck_wrk_id_List.push( tableBackrest.rows('.selected').data()[i].bck_wrk_id);   
+				wrk_id_List.push( tableBackrest.rows('.selected').data()[i].wrk_id);
+				if(tableBackrest.rows('.selected').data()[i].backrest_gbn == "remote"){
+					wrk_bck_server_list.push( tableBackrest.rows('.selected').data()[i].remote_ip );
+					wrk_bck_server_port_list.push( tableBackrest.rows('.selected').data()[i].remote_port );
+					wrk_bck_server_usr_list.push( tableBackrest.rows('.selected').data()[i].remote_usr );
+					wrk_bck_server_pw_list.push( tableBackrest.rows('.selected').data()[i].remote_pw );
+				}else{
+					wrk_bck_server_list.push( tableBackrest.rows('.selected').data()[i].db_svr_ipadr);	
+				}				
+				bck_filenm_list.push( tableBackrest.rows('.selected').data()[i].wrk_nm);
+				wrk_bck_gbn_list.push( tableBackrest.rows('.selected').data()[i].backrest_gbn );
 			}
 		} else {
 			for (var i = 0; i < datas.length; i++) {
@@ -369,8 +417,13 @@
 				confile_title = '<spring:message code="backup_management.dumpBck"/>' + " " + '<spring:message code="button.delete" />' + " " + '<spring:message code="common.request" />';
 
 				if(selectChkTab == "rman"){
+					confile_title = 'Online백업 삭제 요청' + " " + '<spring:message code="button.delete" />' + " " + '<spring:message code="common.request" />';
 					$('#con_multi_gbn', '#findConfirmMulti').val("del_rman");
-				} else {
+				} else if(selectChkTab == "backrest"){
+					confile_title = 'Backrest백업 삭제 요청' + " " + '<spring:message code="button.delete" />' + " " + '<spring:message code="common.request" />';
+					$('#con_multi_gbn', '#findConfirmMulti').val("del_backrest");
+				}else {
+					confile_title = '<spring:message code="backup_management.dumpBck"/>' + " " + '<spring:message code="button.delete" />' + " " + '<spring:message code="common.request" />';
 					$('#con_multi_gbn', '#findConfirmMulti').val("del_dump");
 				}
 
@@ -388,11 +441,23 @@
 	 * 삭제 로직 처리
 	 ******************************************************** */
 	function fn_deleteWork(gbn) {
+		wrk_bck_gbn_list = nvlPrmSet(wrk_bck_gbn_list, "");
+		wrk_bck_server_port_list = nvlPrmSet(wrk_bck_server_port_list, "");
+		wrk_bck_server_usr_list = nvlPrmSet(wrk_bck_server_usr_list, "");
+		wrk_bck_server_pw_list = nvlPrmSet(wrk_bck_server_pw_list, "");
+
 		$.ajax({
 			url : "/popup/workDelete.do",
 		  	data : {
 		  		bck_wrk_id_List : JSON.stringify(bck_wrk_id_List),
-		  		wrk_id_List : JSON.stringify(wrk_id_List)
+		  		wrk_id_List : JSON.stringify(wrk_id_List),
+				backup_gbn : gbn,
+				wrk_bck_server_list : JSON.stringify(wrk_bck_server_list),
+				bck_filenm_list : JSON.stringify(bck_filenm_list),
+				wrk_bck_server_port_list : JSON.stringify(wrk_bck_server_port_list),
+				wrk_bck_server_usr_list : JSON.stringify(wrk_bck_server_usr_list),
+				wrk_bck_server_pw_list : JSON.stringify(wrk_bck_server_pw_list),
+				wrk_bck_gbn_list : JSON.stringify(wrk_bck_gbn_list),
 		  	},
 			dataType : "json",
 			type : "post",
@@ -414,7 +479,9 @@
 					
 					if (gbn == "del_rman") {
 						fn_get_rman_list();
-					} else {
+					} else if(gbn == "del_backrest"){
+						fn_get_backrest_list();
+					}else{
 						fn_get_dump_list();
 					}
 				}else{
@@ -435,15 +502,29 @@
 	function fn_ImmediateStartConfirm(){
 		var datas = null;
 		var rowCnt = null;
-		
+
 		immediate_data = null;
 
 		if(selectChkTab == 'rman'){
 			datas = tableRman.rows('.selected').data();
 			rowCnt = tableRman.rows('.selected').data().length;
+			$('#con_multi_gbn', '#findConfirmMulti').val("rman_run_immediately");
+		}else if(selectChkTab == 'backrest'){
+			datas = tableBackrest.rows('.selected').data();
+			rowCnt = tableBackrest.rows('.selected').data().length;
+			if(datas[0].backrest_gbn == 'remote'){
+				$('#con_multi_gbn', '#findConfirmMulti').val("backrest_remote_run_immediately");
+				confile_title = '<spring:message code="backup_management.backrestBck"/>' + " " + '<spring:message code="migration.run_immediately" />' + " " + '<spring:message code="common.request" />';
+			}else{
+				$('#con_multi_gbn', '#findConfirmMulti').val("backrest_run_immediately");
+				confile_title = '<spring:message code="backup_management.backrestBck"/>' + " " + '<spring:message code="migration.run_immediately" />' + " " + '<spring:message code="common.request" />';
+			}
+			
 		}else{
 			datas = tableDump.rows('.selected').data();
 			rowCnt = tableDump.rows('.selected').data().length;
+			$('#con_multi_gbn', '#findConfirmMulti').val("dump_run_immediately");
+			confile_title = '<spring:message code="backup_management.dumpBck"/>' + " " + '<spring:message code="migration.run_immediately" />' + " " + '<spring:message code="common.request" />';
 		}
 
 		if(rowCnt <= 0){
@@ -456,9 +537,6 @@
 		
 		immediate_data = datas;
 
-		confile_title = '<spring:message code="backup_management.dumpBck"/>' + " " + '<spring:message code="migration.run_immediately" />' + " " + '<spring:message code="common.request" />';
-
-		$('#con_multi_gbn', '#findConfirmMulti').val("run_immediately");
 		$('#confirm_multi_tlt').html(confile_title);
 		$('#confirm_multi_msg').html('<spring:message code="backup_management.msg01" />');
 		$('#pop_confirm_multi_md').modal("show");
@@ -502,7 +580,49 @@
 			}
 		});
 	}
-
+	
+	/* ********************************************************
+	 * PG backrest 즉시 실행
+	 ******************************************************** */
+	function fn_BackrestImmediateStart(){
+		$.ajax({
+			url : "/backrestStart.do",
+			data : {
+				db_id : immediate_data[0].db_id,
+				bck_file_pth : immediate_data[0].bck_pth,
+				bck_filenm : immediate_data[0].bck_filenm,
+				wrk_nm : immediate_data[0].wrk_nm,
+				db_svr_ipadr : immediate_data[0].db_svr_ipadr,
+				db_svr_id : immediate_data[0].db_svr_id,
+				wrk_id : immediate_data[0].wrk_id,
+				log_file_pth : immediate_data[0].log_file_pth,
+				bck_opt_cd : immediate_data[0].bck_opt_cd,
+				bck_opt_cd_nm : immediate_data[0].bck_opt_cd_nm
+			},
+			type : "post",
+			async: true,
+			beforeSend: function(xhr) {
+				xhr.setRequestHeader("AJAX", true);
+				showSwalIconRst('<spring:message code="backup_management.msg02" />' + '\n' + '<spring:message code="backup_management.msg03" />', '<spring:message code="common.close" />', '', 'success', 'backup');
+			},
+			error : function(xhr, status, error) {
+				if(xhr.status == 401) {
+					showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
+				} else if(xhr.status == 403) {
+					showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
+				} else {
+					if (xhr.responseText != null) {
+						showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
+					} else {
+						showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : ", '<spring:message code="common.close" />', '', 'error');
+					}
+				}
+			},
+			success : function(result) {
+				
+			}
+		});
+	}
 	
 	
 	/* ********************************************************
@@ -530,6 +650,10 @@
 			datas = tableRman.rows('.selected').data();
 			
 			reregUrl = "/popup/rmanRegReForm.do";
+		} else if(selectChkTab == "backrest"){
+			datas = tableBackrest.rows('.selected').data();
+			
+			reregUrl = "/popup/backrestRegReForm.do";
 		} else {
 			datas = tableDump.rows('.selected').data();
 			
@@ -547,17 +671,30 @@
 		if (selectChkTab == "rman") {
 			bck_wrk_id = tableRman.row('.selected').data().bck_wrk_id;
 			wrk_id = tableRman.row('.selected').data().wrk_id;
+		} else if(selectChkTab == "backrest"){
+			bck_wrk_id = tableBackrest.row('.selected').data().bck_wrk_id;
+			wrk_id = tableBackrest.row('.selected').data().wrk_id;
+			backrest_gbn = tableBackrest.row('.selected').data().backrest_gbn,
+			remote_ip = tableBackrest.row('.selected').data().remote_ip,
+			remote_port = tableBackrest.row('.selected').data().remote_port,
+			remote_usr = tableBackrest.row('.selected').data().remote_usr,
+			remote_pw = tableBackrest.row('.selected').data().remote_pw
 		} else {
 			bck_wrk_id = tableDump.row('.selected').data().bck_wrk_id;
 			wrk_id = tableDump.row('.selected').data().wrk_id;
 		}
-			
+
 		$.ajax({
 			url : reregUrl,
 			data : {
 				db_svr_id : $("#db_svr_id", "#findList").val(),
 				bck_wrk_id : bck_wrk_id,
-				wrk_id : wrk_id
+				wrk_id : wrk_id,
+				backrest_gbn: backrest_gbn,
+				remote_ip: remote_ip,
+				remote_port: remote_port,
+				remote_usr: remote_usr,
+				remote_pw: remote_pw
 			},
 			dataType : "json",
 			type : "post",
@@ -582,7 +719,27 @@
 						$('#rman_call_gbn', '#search_rmanReForm').val("");
 
 						$('#pop_layer_mod_rman').modal("show");
-					} else {
+					} else if(selectChkTab == "backrest"){
+						$('#backrest_call_gbn', '#search_backrestRegForm').val("");
+
+						fn_init_backrest_mod_form();
+						
+						backrestBckServerTable.rows({selected: true}).deselect();
+						backrestBckServerTable.clear().draw();
+
+						if (nvlPrmSet(result.bckSvrInfo, "") != '') {
+							backrestBckServerTable.rows.add(result.bckSvrInfo).draw();
+						}
+
+						if(result.custom_map != null || result.custom_map != undefined){
+							for(key of Object.keys(result.custom_map)){
+          			      		custom_map.set(key, result.custom_map[key]);
+           					}
+						}
+						
+
+						$('#pop_layer_mod_backrest').modal("show");
+					} else{
 						$('#dump_call_gbn', '#search_dumpReForm').val("");
 						
 						$('#pop_layer_mod_dump').modal("show");
@@ -594,6 +751,270 @@
 			}
 		});
 	}
+
+	/* ********************************************************
+	 * Backrest Data Table initialization
+	 ******************************************************** */
+	 function fn_backrest_init(){
+		tableBackrest = $('#backrestDataTable').DataTable({
+			scrollY: "300px",
+			scrollX: true,	
+			bDestroy: true,
+			paging : true,
+			processing : true,
+			searching : false,	
+			deferRender : true,
+			cache: false,
+			bSort: false,
+			columns : [
+						{data : "rownum", defaultContent : "", targets : 0, orderable : false, checkboxes : {'selectRow' : true}}, 
+						{data : "idx", className : "dt-center", defaultContent : ""},
+						{data : "wrk_nm", defaultContent : ""
+							,"render": function (data, type, full) {				
+								return '<span onClick=javascript:fn_backrestConfigLayer("'+full.wrk_id + '","' + full.backrest_gbn +'"); class="bold" data-toggle="modal" title="'+full.wrk_nm+'">' + full.wrk_nm + '</span>';
+							}},
+						{data : "wrk_exp", defaultContent : ""},
+						{data : "db_svr_ipadr", className : "dt-center", defaultContent: "",
+							render : function(data, type, full, meta) {
+									if(full.backrest_gbn == "remote"){
+										return full.remote_ip;
+									}else{
+										return full.db_svr_ipadr;
+									}
+							}},
+						{data : "backrest_gbn", className : "dt-center", defaultContent : ""},
+						{data : "bck_opt_cd_nm", className : "dt-center", defaultContent : "",
+							render : function(data, type, full, meta) {
+									var html = '';
+
+									if (full.bck_opt_cd == 'TC000301') {
+										html += "<div class='badge badge-light' style='background-color: transparent !important;font-size: 0.875rem;'>";
+										html += "	<i class='fa fa-paste mr-2 text-success'></i>";
+										html += '<spring:message code="backup_management.full_backup" />';
+										html += "</div>";									
+									} else if(full.bck_opt_cd == 'TC000302'){
+										html += "<div class='badge badge-light' style='background-color: transparent !important;font-size: 0.875rem;'>";
+										html += "	<i class='fa fa-paste mr-2 text-warning'></i>";
+										html += '&nbsp;<spring:message code="backup_management.incremental_backup" />';
+										html += "</button>";
+									} else {
+										html += "<div class='badge badge-light' style='background-color: transparent !important;font-size: 0.875rem;'>";
+										html += "	<i class='fa fa-exchange mr-2 text-info' ></i>";
+										html += '&nbsp;<spring:message code="backup_management.diff_backup" />';
+										html += "</div>";
+									}
+
+									return html;
+								},
+						},
+						{data : "bck_pth", defaultContent : ""},
+						{data : "frst_regr_id", className: "dt-center", defaultContent : ""},
+						{data : "frst_reg_dtm", className: "dt-center", defaultContent : ""},
+						{data: "lst_mdfr_id", className: "dt-center", defaultContent: ""}, 
+						{data: "lst_mdf_dtm", className: "dt-center", defaultContent: ""}, 
+						{data : "bck_wrk_id", defaultContent : "", visible: false },
+						{data : "remote_ip", className: "dt-center", defaultContent: "", visible: false},
+						{data : "remote_port", className: "dt-center", defaultContent: "", visible: false},
+						{data : "remote_usr", className: "dt-center", defaultContent: "", visible: false},
+						{data : "remote_pw", className: "dt-center", defaultContent: "", visible: false},
+			],'select': {'style': 'multi'}
+		});
+
+		tableBackrest.tables().header().to$().find('th:eq(0)').css('min-width', '10px');
+		tableBackrest.tables().header().to$().find('th:eq(1)').css('min-width', '30px');
+		tableBackrest.tables().header().to$().find('th:eq(2)').css('min-width', '150px');
+		tableBackrest.tables().header().to$().find('th:eq(3)').css('min-width', '200px');
+		tableBackrest.tables().header().to$().find('th:eq(4)').css('min-width', '100px');
+		tableBackrest.tables().header().to$().find('th:eq(5)').css('min-width', '115px');
+		tableBackrest.tables().header().to$().find('th:eq(6)').css('min-width', '115px');
+		tableBackrest.tables().header().to$().find('th:eq(7)').css('min-width', '115px');
+		tableBackrest.tables().header().to$().find('th:eq(8)').css('min-width', '223x');
+		tableBackrest.tables().header().to$().find('th:eq(9)').css('min-width', '110px');  
+		tableBackrest.tables().header().to$().find('th:eq(10)').css('min-width', '100px');
+		tableBackrest.tables().header().to$().find('th:eq(11)').css('min-width', '100px');
+		tableBackrest.tables().header().to$().find('th:eq(12)').css('min-width', '0px');
+
+		$(window).trigger('resize'); 
+	}
+	
+	
+	/* ********************************************************
+	 * Backrest remote Immediate Start
+	 ******************************************************** */
+	 function fn_Backrest_remote_Immediate(){
+		 $.ajax({
+				url : "/backrestImmediateStart.do",
+				data : {
+					bck_filenm : immediate_data[0].bck_filenm,
+					bck_opt_cd : immediate_data[0].bck_opt_cd,
+					bck_opt_cd_nm : immediate_data[0].bck_opt_cd_nm,
+					bck_pth : immediate_data[0].bck_pth,
+					log_file_pth : immediate_data[0].log_file_pth,
+					remote_ip : immediate_data[0].remote_ip,
+					remote_port : immediate_data[0].remote_port,
+					remote_usr : immediate_data[0].remote_usr,
+					remote_pw : immediate_data[0].remote_pw,
+					wrk_nm : immediate_data[0].wrk_nm,
+					wrk_id : immediate_data[0].wrk_id,
+					db_id : immediate_data[0].db_id,
+					db_svr_ipadr : immediate_data[0].db_svr_ipadr,
+					frst_regr_id : immediate_data[0].frst_regr_id,
+					lst_mdfr_id : immediate_data[0].lst_mdfr_id
+				},
+				type : "post",
+				async: true,
+				beforeSend: function(xhr) {
+					xhr.setRequestHeader("AJAX", true);
+					showSwalIconRst('<spring:message code="backup_management.msg02" />' + '\n' + '<spring:message code="backup_management.msg03" />', '<spring:message code="common.close" />', '', 'success', 'backup');
+				},
+				error : function(xhr, status, error) {
+					if(xhr.status == 401) {
+						showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
+					} else if(xhr.status == 403) {
+						showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
+					} else {
+						if (xhr.responseText != null) {
+							showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
+						} else {
+							showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : ", '<spring:message code="common.close" />', '', 'error');
+						}
+					}
+				},
+				success : function(result) {
+					
+				}
+			}); 
+	 }
+	
+	 function fn_chk_pth(pth){
+			var bck_pth = "";
+			var log_pth = "";
+			
+			if(pth.id == 'mod_log_pth_chk'){
+				if(mod_remoteConn == 'Fail'){
+					showSwalIcon('스토리지 연결을 해주세요', '<spring:message code="common.close" />', '', 'warning');
+				}else if(mod_remoteConn == 'Success'){
+					log_pth = $("#mod_bckr_log_pth").val();
+				}
+				
+				var remote_ip = nvlPrmSet($('#mod_remt_str_ip', '#workRegReFormBckr').val(), "").trim();
+				var remote_port = nvlPrmSet($('#mod_remt_str_ssh', '#workRegReFormBckr').val(), "").trim();
+				var remote_usr = nvlPrmSet($('#mod_remt_str_usr', '#workRegReFormBckr').val(), "").trim();
+				var remote_pw = nvlPrmSet($('#mod_remt_str_pw', '#workRegReFormBckr').val(), "").trim();
+				
+				$.ajax({
+					url : "/backup/RemoteConnPth.do",
+					data : {
+						remote_ip: remote_ip,
+						remote_port: remote_port,
+						remote_usr: remote_usr,
+						remote_pw: remote_pw,
+						bck_pth: bck_pth,
+						log_pth: log_pth,
+					},
+					type : "post",
+					async: true,
+					beforeSend: function(xhr) {
+						xhr.setRequestHeader("AJAX", true);
+					},
+					error : function(xhr, status, error) {
+						if(xhr.status == 401) {
+							showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
+						} else if(xhr.status == 403) {
+							showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
+						} else {
+							if (xhr.responseText != null) {
+								showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
+							} else {
+								showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : ", '<spring:message code="common.close" />', '', 'error');
+							}
+						}
+					},
+					success : function(result) {
+						if(result != ""){
+							if(result == 'log_pth_S'){
+								mod_log_pth_chk = true;
+								$("#mod_bckr_log_pth_alert", "#workRegReFormBckr").html("");
+								$("#mod_bckr_log_pth_alert", "#workRegReFormBckr").hide();
+								showSwalIcon('로그 경로 체크 성공', '<spring:message code="common.close" />', '', 'success');
+							}else if(result == 'log_pth_F'){
+								mod_log_pth_chk = false;
+								showSwalIcon('로그 경로를 확인해 주세요', '<spring:message code="common.close" />', '', 'warning');
+							}
+						}
+					}
+				});
+				
+			}else {
+				if(pth.id == 'bck_pth_chk'){
+					bck_pth = $("#ins_bckr_pth").val(); 
+				}else {
+					log_pth = $("#ins_bckr_log_pth").val();
+				}
+				if(remoteConn == 'Fail'){
+					showSwalIcon('스토리지 정보를 입력해 주세요', '<spring:message code="common.close" />', '', 'warning');
+				}else if(remoteConn == "Success"){
+					
+					var remote_ip = nvlPrmSet($('#ins_remt_str_ip', '#workRegFormBckr').val(), "").trim();
+					var remote_port = nvlPrmSet($('#ins_remt_str_ssh', '#workRegFormBckr').val(), "").trim();
+					var remote_usr = nvlPrmSet($('#ins_remt_str_usr', '#workRegFormBckr').val(), "").trim();
+					var remote_pw = nvlPrmSet($('#ins_remt_str_pw', '#workRegFormBckr').val(), "").trim();
+					
+					$.ajax({
+						url : "/backup/RemoteConnPth.do",
+						data : {
+							remote_ip: remote_ip,
+							remote_port: remote_port,
+							remote_usr: remote_usr,
+							remote_pw: remote_pw,
+							bck_pth: bck_pth,
+							log_pth: log_pth,
+						},
+						type : "post",
+						async: true,
+						beforeSend: function(xhr) {
+							xhr.setRequestHeader("AJAX", true);
+						},
+						error : function(xhr, status, error) {
+							if(xhr.status == 401) {
+								showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
+							} else if(xhr.status == 403) {
+								showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
+							} else {
+								if (xhr.responseText != null) {
+									showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
+								} else {
+									showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : ", '<spring:message code="common.close" />', '', 'error');
+								}
+							}
+						},
+						success : function(result) {
+							if(result != ""){
+								if(result == 'bck_pth_S'){
+									bck_pth_chk = true;
+									$("#ins_bckr_pth_alert", "#workRegFormBckr").html("");
+									$("#ins_bckr_pth_alert", "#workRegFormBckr").hide();
+									showSwalIcon('백업 경로 체크 성공', '<spring:message code="common.close" />', '', 'success');
+								}else if(result == 'bck_pth_F'){
+									bck_pth_chk = false;
+									showSwalIcon('백업 경로를 확인해 주세요', '<spring:message code="common.close" />', '', 'warning');
+								}else if(result == 'log_pth_S'){
+									log_pth_chk = true;
+									$("#ins_bckr_log_pth_alert", "#workRegFormBckr").html("");
+									$("#ins_bckr_log_pth_alert", "#workRegFormBckr").hide();
+									showSwalIcon('로그 경로 체크 성공', '<spring:message code="common.close" />', '', 'success');
+								}else if(result == 'log_pth_F'){
+									log_pth_chk = false;
+									showSwalIcon('로그 경로를 확인해 주세요', '<spring:message code="common.close" />', '', 'warning');
+								}
+							}else{
+								showSwalIcon('경로를 확인해 주세요', '<spring:message code="common.close" />', '', 'warning');
+							}
+						}
+					});
+				}
+			}
+		}
 </script>
 
 <%@include file="../cmmn/workRmanInfo.jsp"%>
@@ -601,8 +1022,11 @@
 <%@include file="../popup/rmanShow.jsp"%>
 <%@include file="../popup/dumpShow.jsp"%>
 <%@include file="../popup/rmanRegForm.jsp"%>
+<%@include file="../popup/backrestRegForm.jsp"%>
+<%@include file="../popup/backrestConfigInfo.jsp"%>
 <%@include file="../popup/dumpRegForm.jsp"%>
 <%@include file="../popup/rmanRegReForm.jsp"%>
+<%@include file="../popup/backrestRegReForm.jsp"%>
 <%@include file="../popup/dumpRegReForm.jsp"%>
 <%@include file="./../popup/confirmMultiForm.jsp"%>
 <%@include file="./../popup/scheduleWrkList.jsp"%>
@@ -667,8 +1091,8 @@
 			<div class="card">
 				<div class="card-body">
 					<ul class="nav nav-pills nav-pills-setting nav-justified" id="server-tab" role="tablist" style="border:none;">
-						<li class="nav-item">
-							<a class="nav-link active" id="server-tab-1" data-toggle="pill" href="#subTab-1" role="tab" aria-controls="subTab-1" aria-selected="true" onclick="selectTab('rman');" >
+						<li class="nav-item active" id="nav_item_rman">
+							<a class="nav-link  active" id="server-tab-1" data-toggle="pill" href="#subTab-1" role="tab" aria-controls="subTab-1" aria-selected="true" onclick="selectTab(check);" >
 								<spring:message code="backup_management.rman_backup" />
 							</a>
 						</li>
@@ -695,6 +1119,15 @@
 											<option value="TC000301"><spring:message code="backup_management.full_backup" /></option>
 											<option value="TC000302"><spring:message code="backup_management.incremental_backup" /></option>
 											<option value="TC000303"><spring:message code="backup_management.change_log_backup" /></option>
+										</select>
+									</div>
+
+									<div class="input-group mb-2 mr-sm-2 col-sm-1_7 search_backrest">
+										<select class="form-control" name="bck_opt_cd_bckr" id="bck_opt_cd_bckr">
+											<option value=""><spring:message code="backup_management.backup_option" />&nbsp;<spring:message code="schedule.total" /></option>
+											<option value="TC000301"><spring:message code="backup_management.full_backup" /></option>
+											<option value="TC000302"><spring:message code="backup_management.incremental_backup" /></option>
+											<option value="TC000304">차등백업</option>
 										</select>
 									</div>
 		
@@ -732,7 +1165,7 @@
 								<button type="button" class="btn btn-outline-primary btn-icon-text float-right" id="btnInsert" data-toggle="modal">
 									<i class="ti-pencil btn-icon-prepend "></i><spring:message code="common.registory" />
 								</button>								
-								<button type="button" class="btn btn-outline-primary btn-icon-text float-right" id="btnImmediately">
+								<button type="button" class="btn btn-outline-primary btn-icon-text float-left" id="btnImmediately">
 									<i class="ti-control-forward btn-icon-prepend "></i><spring:message code="migration.run_immediately" />
 								</button>
 							</div>
@@ -755,7 +1188,7 @@
 										</div>
 									</div>
 
-	 								<table id="rmanDataTable" class="table table-hover table-striped system-tlb-scroll" style="width:100%;">
+									<table id="rmanDataTable" class="table table-hover table-striped system-tlb-scroll" style="width:100%;">
 										<thead>
 											<tr class="bg-info text-white">
 												<th width="10"></th>
@@ -775,6 +1208,39 @@
 										</thead>
 									</table>
 							 	</div>
+
+								 <div class="col-12" id="backrestDataTableDiv" style="diplay:none;">
+									<div class="table-responsive">
+									   <div id="order-listing_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
+										   <div class="row">
+											   <div class="col-sm-12 col-md-6">
+												   <div class="dataTables_length" id="order-listing_length">
+												   </div>
+											   </div>
+										   </div>
+									   </div>
+								   </div>
+
+								   <table id="backrestDataTable" class="table table-hover table-striped system-tlb-scroll" style="width:100%;">
+										<thead>
+											<tr class="bg-info text-white">
+												<th width="10"></th>
+												<th width="30"><spring:message code="common.no" /></th>
+												<th width="150"><spring:message code="common.work_name" /></th>
+												<th width="200"><spring:message code="common.work_description" /></th>
+												<th width="100" class="dt-center"><spring:message code="backup_management.backup.storage" /></th>
+												<th width="100" class="dt-center"><spring:message code="backup_management.storage" /></th>
+												<th width="100" class="dt-center"><spring:message code="backup_management.bck_div" /></th>
+												<th width="200"><spring:message code="backup_management.backup_dir" /></th> 
+												<th width="100"><spring:message code="common.register" /></th>
+												<th width="110"><spring:message code="common.regist_datetime" /></th>
+												<th width="100"><spring:message code="common.modifier" /></th>
+												<th width="100"><spring:message code="common.modify_datetime" /></th>
+												<th width="0"></th>
+											</tr>
+										</thead>
+									</table>
+								</div>
 							 	
 								<div class="col-12" id="dumpDataTableDiv" style="diplay:none;">
  									<div class="table-responsive">

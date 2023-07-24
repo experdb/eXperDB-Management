@@ -221,14 +221,14 @@ public class ExperdbBackupPolicyServiceImpl  extends EgovAbstractServiceImpl imp
 		// String path = "/opt/Arcserve/d2dserver/bin/jobs/";
 		
 		// 2. 입력된 서버에 대해 기존에 등록된 job이 있는지 확인
-		int fileExist = experdbBackupPolicyDAO.checkJobExist(ipadr);
+		//int fileExist = experdbBackupPolicyDAO.checkJobExist(ipadr);
 		
 		// 2-1) 등록되어 있다면 기존에 등록된 job 삭제 진행
 		// 새로운 xml 파일 import 되기 전에 수행되어야함
-		if(fileExist > 0){
-			Job job = new Job();
-			result=job.deleteJob(jobName_Old, ipadr);
-		}
+		/*
+		 * if(fileExist > 0){ Job job = new Job(); result=job.deleteJob(jobName_Old,
+		 * ipadr); }
+		 */
 		
 //		System.out.println("=============================");
 //		System.out.println("uuid : " + uuid);
@@ -256,7 +256,7 @@ public class ExperdbBackupPolicyServiceImpl  extends EgovAbstractServiceImpl imp
 		
 		// 3-2) storage 정보
 		// backupLocation Info Make
-		backupLocation=experdbBackupPolicyDAO.getScheduleLocationInfo(fstorage);
+		//backupLocation=experdbBackupPolicyDAO.getScheduleLocationInfo(fstorage);
 		backupLocation.setBackupDestLocation(fstorage);
 		
 		// 3-3) 백업 스크립트 (압축, jobName, repeat, scheduleType) 정보
@@ -287,7 +287,7 @@ public class ExperdbBackupPolicyServiceImpl  extends EgovAbstractServiceImpl imp
 		
 		// 3-5) 대상 서버 정보
 		// target Info Make
-		targetMachine = experdbBackupPolicyDAO.getScheduleNodeInfo(ipadr);
+		//targetMachine = experdbBackupPolicyDAO.getScheduleNodeInfo(ipadr);
 		targetMachine.setJobName(jobName_New);
 		
 		// volume 선택 시 exclude -> false

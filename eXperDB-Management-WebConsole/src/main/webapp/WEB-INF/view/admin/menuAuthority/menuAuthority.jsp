@@ -129,6 +129,7 @@ $(window.document).ready(function() {
   				for(var i = 0; i<result.length; i++){  
   					if(result[i].mnu_cd != "MN0001" && result[i].mnu_cd != "MN0002" && result[i].mnu_cd != "MN0003" && result[i].mnu_cd != "MN0005" && result[i].mnu_cd != "MN0006" && result[i].mnu_cd != "MN0007" && result[i].mnu_cd != "MN0009" && result[i].mnu_cd != "MN00010" && result[i].mnu_cd != "MN00011" && result[i].mnu_cd != "MN00012" && result[i].mnu_cd != "MN00013"  && result[i].mnu_cd != "MN00014" && result[i].mnu_cd != "MN00018" && result[i].mnu_cd != "MN0001804" && result[i].mnu_cd != "MN00019" && result[i].mnu_cd != "MN00020" && result[i].mnu_cd != "MN00021" && result[i].mnu_cd != "MN00022"){
   	     				//읽기권한
+
   						if(result[i].read_aut_yn == "Y"){	  									
   							document.getElementById("r_"+result[i].mnu_cd).checked = true;
   						}else{
@@ -151,9 +152,6 @@ $(window.document).ready(function() {
 		$('.encrypt').hide();
 	}
 	
-	if('${bnr_useyn}'=='N'){
-		$('.bnr').hide();
-	}
 
 	if(nvlPrmSet('${proxy_menu_useyn}','N') == 'N'){
 		$('.proxy_yn').hide();
@@ -200,12 +198,10 @@ $(function() {
 	    			}
 	    		},
 	    		success : function(result) {
-	    			
       				for(var i = 0; i<result.length; i++){  
-      					if(result[i].mnu_cd != "MN0001" && result[i].mnu_cd != "MN0002" && result[i].mnu_cd != "MN0003" && result[i].mnu_cd != "MN0005" && result[i].mnu_cd != "MN0006" && result[i].mnu_cd != "MN0007" && result[i].mnu_cd != "MN0009" && result[i].mnu_cd != "MN00010" && result[i].mnu_cd != "MN00011" && result[i].mnu_cd != "MN00012" && result[i].mnu_cd != "MN00013" && result[i].mnu_cd != "MN00014" && result[i].mnu_cd != "MN00018" && result[i].mnu_cd != "MN0001804" && result[i].mnu_cd != "MN00019" && result[i].mnu_cd != "MN00020" && result[i].mnu_cd != "MN00021" && result[i].mnu_cd != "MN00022"){
-      						//읽기권한      					
+      					if(result[i].mnu_cd != "MN0001" && result[i].mnu_cd != "MN0002" && result[i].mnu_cd != "MN0003" && result[i].mnu_cd != "MN0005" && result[i].mnu_cd != "MN0006" && result[i].mnu_cd != "MN0007" && result[i].mnu_cd != "MN0009" && result[i].mnu_cd != "MN00010" && result[i].mnu_cd != "MN00011" && result[i].mnu_cd != "MN00012" && result[i].mnu_cd != "MN00013" && result[i].mnu_cd != "MN00014" && result[i].mnu_cd != "MN00018" && result[i].mnu_cd != "MN0001804" && result[i].mnu_cd != "MN00019" && result[i].mnu_cd != "MN0001901" && result[i].mnu_cd != "MN0001902" && result[i].mnu_cd != "MN0001903" && result[i].mnu_cd != "MN00020" && result[i].mnu_cd != "MN0002001" && result[i].mnu_cd != "MN0002002" && result[i].mnu_cd != "MN00021" && result[i].mnu_cd != "MN0002101" && result[i].mnu_cd != "MN0002102" &&  result[i].mnu_cd != "MN00022" && result[i].mnu_cd != "MN0002201" && result[i].mnu_cd != "MN0002202"){
+							//읽기권한      					
 	  						if(result[i].read_aut_yn == "Y"){	
-	  							
 	  							document.getElementById("r_"+result[i].mnu_cd).checked = true;
 	  						}else{
 	  							document.getElementById("r_"+result[i].mnu_cd).checked = false;
@@ -548,7 +544,7 @@ $(function() {
 		
 		/* 백업메뉴 권한체크 추가 2021-04-13 변승우 */		
 		//BnR 선택 전체 체크박스 
-		$("#bnr").click(function() { 
+		/* $("#bnr").click(function() { 
 			var array = new Array("MN0001901","MN0001902","MN0001903","MN0002001","MN0002002","MN0002101","MN0002102");
 			var datas = userTable.row('.selected').length;
 			 if(datas != 1){
@@ -572,11 +568,11 @@ $(function() {
 				document.getElementById("backup").checked = false;
 				document.getElementById("recovery").checked = false;
 			}
-		});	
+		}); */	
 		
 		
 		//BnR 설정 선택 전체 체크박스
-		$("#bnrSetting").click(function() { 
+		/* $("#bnrSetting").click(function() { 
 			var array = new Array("MN0001901","MN0001902","MN0001903");
 			var datas = userTable.row('.selected').length;
 			 if(datas != 1){
@@ -594,7 +590,7 @@ $(function() {
 					document.getElementById("w_"+array[i]).checked = false;
 				}
 			}
-		});
+		}); */
 		
 		//Backup 선택 전체 체크박스
 		$("#backup").click(function() { 
@@ -1189,7 +1185,7 @@ function fn_search(){
 								
 																		
 								<!-- Backup 권한 추가 2021-04-13 변승우 -->
-								<tr class="bnr">
+								<!-- <tr class="bnr">
 									<th scope="row" rowspan="8">
 										<div class="inp_chk">
 											<input type="checkbox" id="bnr" name="bnr"/>
@@ -1320,7 +1316,7 @@ function fn_search(){
 											<label for="w_MN0002102"></label>
 										</div>
 									</td>											
-								</tr>	
+								</tr> -->
 													
 								<!-- Backup 권한 추가 끝 -->
 													

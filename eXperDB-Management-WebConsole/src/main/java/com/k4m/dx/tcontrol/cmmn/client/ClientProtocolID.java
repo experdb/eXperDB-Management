@@ -287,6 +287,23 @@ public class ClientProtocolID {
 
 	public static final String DBMS_IP = "DBMS_IP";
 	public static final String DBMS_PORT = "DBMS_PORT";
-
+	
+	public static final String STORAGE_OPT = "STORAGE_OPT";
+	public static final String LOG_PATH = "LOG_PATH";
+	public static final String WRK_NM = "WRK_NM";
+	public static final String WRK_ID = "WRK_ID";
+	public static final String BCK_TYPE = "BCK_TYPE";
+	public static final String CPS_YN = "CPS_YN";
+	public static final String PRCS_CNT = "PRCS_CNT";
+	public static final String CPS_TYPE = "CPS_TYPE";
+	public static final String CUSTOM_MAP = "CUSTOM_MAP";
+	public static final String CLOUD_MAP = "CLOUD_MAP";
+	public static final String REMOTE_MAP = "REMOTE_MAP";
+	public static final String MASTER_PGDATA = "MASTER_PGDATA";
+	public static final String MASTER_IP = "MASTER_IP";
+	public static final String MASTER_DBMS_PORT = "MASTER_DBMS_PORT";
+	public static final String MASTER_DBMS_USER = "MASTER_DBMS_USER";
+	public static final String TIME_RESTORE = "TIME_RESTORE";
+	public static final String EXELOG = "EXELOG";
 	
 }

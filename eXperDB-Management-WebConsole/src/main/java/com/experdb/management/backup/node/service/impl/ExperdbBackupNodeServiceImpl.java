@@ -125,7 +125,7 @@ public class ExperdbBackupNodeServiceImpl  extends EgovAbstractServiceImpl imple
 		TargetMachineVO nodeInfo = new TargetMachineVO();
 		JSONObject result = new JSONObject();
 		String path = request.getParameter("path");
-		nodeInfo = experdbBackupNodeDAO.getNodeInfo(path);
+		//nodeInfo = experdbBackupNodeDAO.getNodeInfo(path);
 		
 		String[] name= nodeInfo.getUser().split("\t");
 		

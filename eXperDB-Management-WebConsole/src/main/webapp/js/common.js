@@ -374,7 +374,8 @@ function fn_workLayer(wrk_id){
 	$.ajax({
 		url : "/selectWrkInfo.do",
 		data : {
-			wrk_id : wrk_id
+			wrk_id : wrk_id,
+			bck_bsn_dscd: bck_bsn_dscd
 		},
 		dataType : "json",
 		type : "post",
@@ -426,6 +427,11 @@ function fn_workLayer(wrk_id){
 						$("#r_log_file_mtn_ecnt").html(result[0].log_file_mtn_ecnt);
 						
 						toggleLayer($('#pop_layer_rman'), 'on');			
+					
+					//Backrest
+					}else if(result[0].bsn_dscd == "TC000205") {
+						alert("BACKREST");
+					
 					// DUMP
 					}else{
 						$("#d_bck_bsn_dscd_nm").html(result[0].bck_bsn_dscd_nm);

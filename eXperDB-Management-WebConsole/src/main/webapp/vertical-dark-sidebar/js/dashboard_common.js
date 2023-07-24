@@ -633,6 +633,14 @@ function fn_schedule_cnt_set(result) {
 					}
 				} else if (item.bck_bsn_dscd == 'TC000202') {
 					backHtml += "	<i class='fa fa-file-code-o mr-2 text-danger' ></i>";
+				} else if (item.bck_bsn_dscd == 'TC000205') {
+					if (item.bck_opt_cd == 'TC000301') { //전체백업
+						backHtml += "	<i class='fa fa-paste mr-2 text-success'></i>";
+					} else if(item.bck_opt_cd == 'TC000302'){ //증분백업
+						backHtml += "	<i class='fa fa-paste mr-2 text-warning'></i>";
+					} else if(item.bck_opt_cd == 'TC000304'){ // 차등 백업
+						backHtml += "	<i class='fa fa-exchange mr-2 text-info' ></i>";
+					}
 				}
 
 				backHtml += "<a class='nav-link_title' href='#' onclick='fn_scheduleListMove(\""+item.scd_nm+"\");'>";	

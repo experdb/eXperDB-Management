@@ -16,23 +16,25 @@ import egovframework.rte.psl.dataaccess.EgovAbstractMapper;
 @Repository("ExperdbBackupJobStatusDAO")
 public class ExperdbBackupJobStatusDAO extends EgovAbstractMapper {
 	
-	@Autowired 
-	@Resource(name="backupDB") 
-	private SqlSession backupDBsql;
-	
-	@Autowired 
-	@Resource(name="jobhistoryDB") 
-	private SqlSession jobhistoryDBsql;
-	
-	@Autowired 
-	@Resource(name="activitylogDB") 
-	private SqlSession activitylogDBsql;
+	/*
+	 * @Autowired
+	 * 
+	 * @Resource(name="backupDB") private SqlSession backupDBsql;
+	 * 
+	 * @Autowired
+	 * 
+	 * @Resource(name="jobhistoryDB") private SqlSession jobhistoryDBsql;
+	 * 
+	 * @Autowired
+	 * 
+	 * @Resource(name="activitylogDB") private SqlSession activitylogDBsql;
+	 */
 	
 
 	public List<JobStatusVO> selectJobStatusList() {
 	       List<JobStatusVO> result = null;
 	       
-	       result =backupDBsql.selectList("jobStatuSsql.selectJobStatusList");
+	      // result =backupDBsql.selectList("jobStatuSsql.selectJobStatusList");
 	       
 	       for(int i=0; i>result.size(); i++){
 	    	   if (result.get(i).getStatus() == 10) {
@@ -53,14 +55,14 @@ public class ExperdbBackupJobStatusDAO extends EgovAbstractMapper {
 	
 	public int selectJobEnd(int jobid) {
 		int TotCnt = 0;
-			TotCnt =jobhistoryDBsql.selectOne("jobStatuSsql.selectJobEndTotCnt",jobid);
+			//TotCnt =jobhistoryDBsql.selectOne("jobStatuSsql.selectJobEndTotCnt",jobid);
 		return TotCnt;
 	}
 
 	
 	public int selectJobid(HashMap<String, Object> paramvalue) {
 		int jobid = 0;
-			jobid =activitylogDBsql.selectOne("jobStatuSsql.selectJobid",paramvalue);
+			//jobid =activitylogDBsql.selectOne("jobStatuSsql.selectJobid",paramvalue);
 		return jobid;
 	}
 

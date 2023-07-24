@@ -10,7 +10,7 @@
 		<property name="dataSource" ref="dataSource"/>
 	</bean>
 	
-	<bean id="txManagerBackup" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+	<!-- <bean id="txManagerBackup" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
 		<property name="dataSource" ref="dataSourceBackup"/>
 	</bean>
 	
@@ -20,7 +20,7 @@
 	
 	<bean id="txManagerJobhistory" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
 		<property name="dataSource" ref="dataSourceJobhistory"/>
-	</bean>
+	</bean> -->
 
 
 	<tx:advice id="txAdvice" transaction-manager="txManager">
@@ -34,7 +34,7 @@
 		<aop:advisor advice-ref="txAdvice" pointcut-ref="requiredTx" />
 	</aop:config> 
 	
-	<tx:advice id="txAdviceBackup" transaction-manager="txManagerBackup">
+	<!-- <tx:advice id="txAdviceBackup" transaction-manager="txManagerBackup">
 		<tx:attributes>
 			<tx:method name="*" rollback-for="Exception"/>
 		</tx:attributes>
@@ -65,6 +65,6 @@
  	<aop:config>
 		<aop:pointcut id="requiredTxJobhistory" expression="execution(* com.experdb.management.backup..impl.*Impl.*(..))"/>
 		<aop:advisor advice-ref="txAdviceJobhistory" pointcut-ref="requiredTxJobhistory" />
-	</aop:config>
+	</aop:config> -->
 
 </beans>

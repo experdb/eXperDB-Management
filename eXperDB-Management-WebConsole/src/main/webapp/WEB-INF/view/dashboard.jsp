@@ -634,7 +634,7 @@
 															<div class="col-12">
 																<h6 class="mb-0">
 																	<i class="ti-calendar menu-icon"></i>
-																	<span class="menu-title"><spring:message code="dashboard.dump_schedule"/></span>
+																	<span class="menu-title"><spring:message code="dashboard.backup_schedule"/></span>
 																</h6>
 															</div>
 														</div>

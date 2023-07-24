@@ -20,18 +20,25 @@
 	*/
 %>
 <script type="text/javascript">
+
 	var selectChkTab = "rman";
 	var searchInit = "";
 	var tableRman = null;
 	var tableDump = null;
+	var tableBackrest = null;
 	var tabGbn = "${tabGbn}";
+	var pgbackrest = "${pgbackrest}"
+	var interval = null;
 
 	$(window.document).ready(function() {
 		//검색조건 초기화
 		if (tabGbn != null) {
 			selectChkTab = tabGbn;
-		}
-
+		}/* else if(pgbackrest == 'Y'){
+			selectChckTab = "pgbackrest";
+		} */
+		selectChkTab="pgbackrest"; 
+		
 		selectInitTab(selectChkTab);
 
 		//작업기간 calender setting
@@ -41,10 +48,22 @@
  		if(tabGbn != ""){
  			if (tabGbn == "rman") {
  	 			$('#server-tab-1').click();
- 			} else {
- 	 			$('#server-tab-2').click();
+ 			} else if(tabGbn == "pgbackrest") {
+ 	 			$('#server-tab-3').click();
+ 			}else {
+ 				$('#server-tab-2').click();
  			}
-		}else{
+		}
+		
+		//pgbackrest 사용 여부에 따른 숨김 처리
+		if(pgbackrest == "Y"){
+			$('#li-server-tab-1').hide();
+			$('#server-tab-3').click();
+			$('#fix_rsltcd').parent().hide();
+			$('#wrk_nm').parent().removeClass('col-sm-2');
+			$('#wrk_nm').parent().addClass('col-sm-4');
+		}else {
+			$('#li-server-tab-3').hide();
 			$('#server-tab-1').click();
 		}
 
@@ -55,13 +74,22 @@
 			if(!calenderValid()) {
 				return;
 			}
-
 			if(selectChkTab == "rman"){
 				fn_get_rman_list();
+			}else if (selectChkTab == "pgbackrest" ){
+				fn_get_backrest_list();	
 			}else{
 				fn_get_dump_list();
 			}
 		});
+		
+		
+		/* ********************************************************
+		 * Click Latest Log
+		 ******************************************************** */
+		 if(tableBackrest != null){
+			 tableBackrest.row(0).click;
+		 }
 	});
 	
 	/* ********************************************************
@@ -90,18 +118,42 @@
 	function selectInitTab(intab){
 		selectChkTab = intab;
 
-		if(intab == "rman"){			
+		if(intab == "rman"){	
 			$(".search_rman").show();
 			$(".search_dump").hide();
+			$(".search_pgbackrest").hide();
 			$("#logRmanListDiv").show();
 			$("#logDumpListDiv").hide();
-
+			$("#logBackrestListDiv").hide();
+			$("#backRestActiveLogDiv").hide();
+			
 			seachParamInit(intab);
+			
+		}else if(intab == "pgbackrest"){
+			$(".search_rman").hide();
+			$(".search_dump").hide();
+			$(".search_pgbackrest").show();
+			$("#logRmanListDiv").hide();
+			$("#logDumpListDiv").hide();
+			$("#logBackrestListDiv").show();
+			$("#backRestActiveLogDiv").show();
+			$('#fix_rsltcd').parent().hide();
+			$('#wrk_nm').parent().removeClass('col-sm-2');
+			$('#wrk_nm').parent().addClass('col-sm-4');
+			
+			seachParamInit(intab);
+			
 		}else{
 			$(".search_rman").hide();
 			$(".search_dump").show();
+			$(".search_pgbackrest").hide();
 			$("#logRmanListDiv").hide();
 			$("#logDumpListDiv").show();
+			$("#logBackrestListDiv").hide();
+			$("#backRestActiveLogDiv").hide();
+			$('#fix_rsltcd').parent().show();
+			$('#wrk_nm').parent().removeClass('col-sm-4');
+			$('#wrk_nm').parent().addClass('col-sm-2');
 
 			seachParamInit(intab);
 		}
@@ -109,6 +161,7 @@
 		//테이블 setting
 		fn_rman_init();
 		fn_dump_init();
+		fn_backrest_init();  
 	}
 	/* ********************************************************
 	 * 조회조건 초기화
@@ -124,7 +177,9 @@
 
 		if (tabGbn == "rman") {
 			$("#bck_opt_cd option:eq(0)").attr("selected","selected");
-		} else {
+		} else if(tabGbn == "pgbackrest"){
+			$("#backrest_opt option:eq(0)").attr("selected", "selected"); 
+		} else{
 			$("#db_id option:eq(0)").attr("selected","selected");
 		}
 
@@ -456,27 +511,209 @@
 
 	   	$(window).trigger('resize');
 	}
+	
+	/* ********************************************************
+	 * pgBackrest Data Table initialization
+	 ******************************************************** */
+	 function fn_backrest_init(){
+			tableBackrest = $('#logBackrestList').DataTable({
+				scrollY: "300px",	
+				scrollX: true,
+				bDestroy: true,
+				processing : true,
+				searching : false,
+				deferRender : true,
+				bSort: false,
+				columns : [
+					{data: "rownum", className: "dt-center", defaultContent: ""},
+					{data: "exe_rslt_cd", 
+						render : function(data, type, full, meta){
+							var html = '';
+							if (full.exe_rslt_cd == 'TC001701') {
+								html += "<div class='badge badge-light' style='background-color: transparent !important;font-size: 0.875rem;'>";
+								html += "	<i class='fa fa-check-circle text-primary' >";
+								html += '&nbsp;<spring:message code="common.success" /></i>';
+								html += "</div>";
+								
+							} else if(full.exe_rslt_cd == 'TC001702'){
+									html += '<button type="button" class="btn btn-inverse-danger btn-fw" onclick="fn_failLog('+full.exe_sn+')">';
+								html += '<i class="fa fa-times"></i>';
+								html += '<spring:message code="common.failed" />';
+								html += "</button>";
+							} else {
+								html += "<div class='badge badge-pill badge-info' style='color: #fff;'>";
+								html += "	<i class='fa fa-spin fa-spinner mr-2' ></i>";
+								html += '&nbsp;<spring:message code="etc.etc28" />';
+								html += "</div>";
+							}
+							return html;
+						},
+						className: "dt-center", defaultContent: ""},
+					{data: "wrk_nm", className: "dt-center", defaultContent: ""},
+					{data: "ipadr",
+						render : function(data, type, full, meta){
+							html = '';
+							if(full.backrest_gbn == 'remote'){
+								html += full.remote_ip;
+							}else {
+								html = full.ipadr;
+							}
+							return html;
+						},
+						className: "dt-center", defaultContent: ""},
+					{data: "storage", 
+						render : function(data, type, full, meta) {
+							var html = '';
+							if(full.backrest_gbn != null && full.backrest_gbn != ''){
+								html += full.backrest_gbn.toUpperCase();	
+								return html; 
+							}
+						},
+						className: "dt-center", defaultContent: ""},
+					{data: "bck_opt_cd_nm",
+							render : function(data, type, full, meta){
+								var html = '';
+								html += full.bck_opt_cd_nm.toUpperCase();
+								return html;
+							},
+							className: "dt-center", defaultContent: ""},
+					{data: "bck_file_pth", className: "dt-center", defaultContent: ""},
+					{data: "db_sz", 
+						render : function(data, type, full, meta){ 
+							var html = '';
+							
+							if(full.db_sz !=0){
+								var s = ['bytes', 'kB', 'MB', 'GB', 'TB', 'PB'];
+								var e = Math.floor(Math.log(full.db_sz) / Math.log(1024));
 
+								html += "<div class='badge badge-light' style='background-color: transparent !important;font-size: 0.875rem;'>";
+								html += "	<i class='ti-files text-primary' >";
+								html += '&nbsp;' + (full.db_sz / Math.pow(1024, e)).toFixed(2) + " " + s[e] + '</i>';
+								html += "</div>";
+							}
+							return html;
+						},
+						className: "dt-center", defaultContent: ""},
+					{data: "file_sz",
+						render : function(data, type, full, meta){
+							var html = ''; 
+							
+							if(full.file_sz != 0){
+								var s = ['bytes', 'kB', 'MB', 'GB', 'TB', 'PB'];
+								var e = Math.floor(Math.log(full.file_sz) / Math.log(1024));
+
+								html += "<div class='badge badge-light' style='background-color: transparent !important;font-size: 0.875rem;'>";
+								html += "	<i class='ti-files text-primary' >";
+								html += '&nbsp;' + (full.file_sz / Math.pow(1024, e)).toFixed(2) + " " + s[e] + '</i>';
+								html += "</div>";
+							}
+							return html;							
+						},
+						className: "dt-center", defaultContent: ""},
+					{data: "compress", 
+							render : function(data, type, full, meta){
+								var html = '';
+								
+								if(full.exe_rslt_cd == 'TC001701'){
+									var compress = full.db_sz / full.file_sz;
+									html += compress.toFixed(1) + "%";
+								}
+								return html;
+							},
+							className: "dt-center", defaultContent: ""},
+					{data: "wrk_strt_dtm", className: "dt-center", defaultContent: ""},
+					{data: "wrk_end_dtm",
+						render : function(data, type, full, meta){
+							var html = '';
+							
+							if(full.exe_rslt_cd == 'TC001701'){
+								html += full.wrk_end_dtm;
+							}
+							return html;
+						},
+						className: "dt-center", defaultContent: ""},
+					{data: "wrk_dtm",
+							render : function(data, type, full, meta){
+								html = '';
+								if(full.exe_rslt_cd == 'TC001701'){
+									var html = "<div class='badge badge-pill badge-primary'>";
+									html += "	<i class='mdi mdi-timer mr-2'></i>";
+									html += full.wrk_dtm;
+									html += "</div>";	
+								}
+								return html;
+							} , 
+							className: "dt-center", defaultContent: ""},
+					{data: "remote_ip", className: "dt-center", defaultContent: "", visible: false},
+					{data: "remote_port", className: "dt-center", defaultContent: "", visible: false},
+					{data: "remote_usr", className: "dt-center", defaultContent: "", visible: false},
+					{data: "remote_pw", className: "dt-center", defaultContent: "", visible: false},
+				] 
+			});
+
+			tableBackrest.tables().header().to$().find('th:eq(0)').css('min-width', '40px');
+			tableBackrest.tables().header().to$().find('th:eq(1)').css('min-width', '150px');
+			tableBackrest.tables().header().to$().find('th:eq(2)').css('min-width', '100px');
+			tableBackrest.tables().header().to$().find('th:eq(3)').css('min-width', '150px');
+			tableBackrest.tables().header().to$().find('th:eq(4)').css('min-width', '100px');
+			tableBackrest.tables().header().to$().find('th:eq(5)').css('min-width', '100px');
+			tableBackrest.tables().header().to$().find('th:eq(6)').css('min-width', '170px');
+			tableBackrest.tables().header().to$().find('th:eq(7)').css('min-width', '170px');
+			tableBackrest.tables().header().to$().find('th:eq(8)').css('min-width', '100px');
+			tableBackrest.tables().header().to$().find('th:eq(9)').css('min-width', '100px');
+			tableBackrest.tables().header().to$().find('th:eq(10)').css('min-width', '100px');
+			tableBackrest.tables().header().to$().find('th:eq(11)').css('min-width', '100px');
+			tableBackrest.tables().header().to$().find('th:eq(12)').css('min-width', '100px');
+
+		   	$(window).trigger('resize');
+		}
+		
+	
 	/* ********************************************************
 	 * Tab Click
 	 ******************************************************** */
 	function selectTab(intab){
 		selectChkTab = intab;
-		if(intab == "rman"){			
+		
+		if(intab == "rman"){				
 			$(".search_rman").show();
 			$(".search_dump").hide();
+			$(".search_pgbackrest").hide();
 			$("#logRmanListDiv").show();
 			$("#logDumpListDiv").hide();
+			$("#logBackrestListDiv").hide();
+			$("#backRestActiveLogDiv").hide();
 
 			seachParamInit(intab);
-
 			fn_get_rman_list();
+			
+		}else if(intab == "pgbackrest"){
+			$(".search_rman").hide();
+			$(".search_dump").hide();
+			$(".search_pgbackrest").show();
+			$("#logRmanListDiv").hide();
+			$("#logDumpListDiv").hide();
+			$("#logBackrestListDiv").show();
+			$("#backRestActiveLogDiv").show();
+			$('#fix_rsltcd').parent().hide();
+			$('#wrk_nm').parent().removeClass('col-sm-2');
+			$('#wrk_nm').parent().addClass('col-sm-4');
+			
+			seachParamInit(intab);
+			fn_get_backrest_list();
+			
 		}else{				
 			$(".search_rman").hide();
 			$(".search_dump").show();
+			$(".search_pgbackrest").hide();
 			$("#logRmanListDiv").hide();
 			$("#logDumpListDiv").show();
-
+			$("#logBackrestListDiv").hide();
+			$("#backRestActiveLogDiv").hide();
+			$('#fix_rsltcd').parent().show();
+			$('#wrk_nm').parent().removeClass('col-sm-4');
+			$('#wrk_nm').parent().addClass('col-sm-2');
+			
 			seachParamInit(intab);
 			fn_get_dump_list();
 		}
@@ -576,8 +813,280 @@
 			}
 		});
 	}
-</script>
+	
+	/* ********************************************************
+	 * Get Backrest Log List
+	 ******************************************************** */
+	function fn_get_backrest_list(){
+		if(!calenderValid()) {
+			return;
+		}
+		
+		$.ajax({
+			url : "/backup/selectWorkLogList.do",
+			data : {
+				hist_gbn : "backrest_hist",
+				db_svr_id : $("#db_svr_id", "#findList").val(),
+				bck_bsn_dscd : "TC000205",
+		  		wrk_strt_dtm : $("#wrk_strt_dtm").val(),
+		  		wrk_end_dtm : $("#wrk_end_dtm").val(),
+		  		exe_rslt_cd : $("#exe_rslt_cd").val(),
+				wrk_nm : nvlPrmSet($('#wrk_nm').val(), ""),
+				backrest_gbn : $('#backrest_opt').val()
+			},
+			dataType : "json",
+			type : "post",
+			beforeSend: function(xhr) {
+		        xhr.setRequestHeader("AJAX", true);
+		    },
+			error : function(xhr, status, error) {
+				if(xhr.status == 401) {
+					showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
+				} else if(xhr.status == 403) {
+					showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
+				} else {
+					showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
+				}
+			},
+			success : function(result) {
+ 				tableBackrest.rows({selected: true}).deselect();
+				tableBackrest.clear().draw();
+				
+				if (nvlPrmSet(result, "") != '') {
+					tableBackrest.rows.add(result).draw();
+				}  
+			}
+		});
+	}
+	
+	/* ********************************************************
+	 * Get backrest Log
+	 ******************************************************** */
+	$(function() {
+		$('#logBackrestList tbody').on('click', 'tr', function() {
+			if($(this).hasClass('selected')){
+				$('#backRestAcitveLog').text('');
+				clearInterval(interval);
+				realTimeLog();
+			}else {
+				tableBackrest.$('tr.selected').removeClass('selected');
+				$(this).addClass('selected');
+				$('#backRestAcitveLog').text('');
+				clearInterval(interval);
+				realTimeLog();
+			}
+		})
+	});
 
+	function realTimeLog(){
+		$('#log_starter').text('Log Stop');
+		$('#log_starter').removeClass('btn-success');
+		$('#log_starter').addClass('btn-danger');
+		$(function() {
+			var state;
+			if(tableBackrest.row('.selected').data() != null || tableBackrest.row('.selected').data() != undefined){
+				state = tableBackrest.row('.selected').data().exe_rslt_cd
+			}
+			var backrest_gbn = tableBackrest.row('.selected').data().backrest_gbn;
+			if(backrest_gbn == 'remote'){
+				if(state == 'TC001701'){
+					$.ajax({
+						url : "/selectBackrestLog.do",
+						data : {
+							log_path : tableBackrest.row('.selected').data().bck_filenm,
+							ipadr : tableBackrest.row('.selected').data().ipadr,
+							backrest_gbn : backrest_gbn,
+							remote_ip: tableBackrest.row('.selected').data().remote_ip,
+							remote_port: tableBackrest.row('.selected').data().remote_port,
+							remote_usr: tableBackrest.row('.selected').data().remote_usr,
+							remote_pw: tableBackrest.row('.selected').data().remote_pw
+						},
+						dataType : "json",
+						type : "post",
+						beforeSend: function(xhr) {
+							xhr.setRequestHeader("AJAX", true);
+						},
+						error : function(xhr, status, error) {
+							if(xhr.status == 401) {
+								showSwalIcon('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error');
+								top.location.href = "/";
+							} else if(xhr.status == 403) {
+								showSwalIcon('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error');
+								top.location.href = "/";
+							} else {
+								showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
+							}
+						},
+						success : function(result) {
+							$('#backRestAcitveLog').text(result.RESULT_DATA);
+							$('#backRestAcitveLog').scrollTop($('#backRestAcitveLog')[0].scrollHeight);
+						}
+					})
+				}else if(state == 'TC001802'){
+					var resultCode = -1;
+					
+					interval = setInterval(function() {
+						if(resultCode == -1){
+							$.ajax({
+								url : "/selectBackrestLog.do",
+								data : {
+									log_path : tableBackrest.row('.selected').data().bck_filenm,
+									ipadr : tableBackrest.row('.selected').data().ipadr,
+									backrest_gbn : backrest_gbn,
+									remote_ip: tableBackrest.row('.selected').data().remote_ip,
+									remote_port: tableBackrest.row('.selected').data().remote_port,
+									remote_usr: tableBackrest.row('.selected').data().remote_usr,
+									remote_pw: tableBackrest.row('.selected').data().remote_pw
+								},
+								dataType : "json",
+								type : "post",
+								beforeSend: function(xhr) {
+									xhr.setRequestHeader("AJAX", true);
+								},
+								error : function(xhr, status, error) {
+									if(xhr.status == 401) {
+										showSwalIcon('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error');
+										top.location.href = "/";
+									} else if(xhr.status == 403) {
+										showSwalIcon('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error');
+										top.location.href = "/";
+									} else {
+										showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
+									}
+								},
+								success : function(result) {
+									if($('#log_starter').text() == 'Log Stop'){
+										resultCode = result.RESULT_DATA.indexOf('successfully');
+										
+										$('#backRestAcitveLog').text(result.RESULT_DATA);
+										$('#backRestAcitveLog').scrollTop($('#backRestAcitveLog')[0].scrollHeight);	
+										
+									}else {
+										fn_get_backrest_list();
+									}
+								}
+							});
+							$('#loading').hide();
+						}else {
+							clearInterval(interval);
+							fn_get_backrest_list();
+							$('#loading').hide();
+						}
+					}, 5000);
+				} 
+
+			}else {
+//				상태가 실행 중이면 ajax 여러번 실행 / 상태가 성공이면 한번만 실행
+				if(state == 'TC001701'){
+					$.ajax({
+						url : "/selectBackrestLog.do",
+						data : {
+							log_path : tableBackrest.row('.selected').data().bck_filenm,
+							backrest_gbn : backrest_gbn,
+							ipadr : tableBackrest.row('.selected').data().ipadr
+						},
+						dataType : "json",
+						type : "post",
+						beforeSend: function(xhr) {
+							xhr.setRequestHeader("AJAX", true);
+						},
+						error : function(xhr, status, error) {
+							if(xhr.status == 401) {
+								showSwalIcon('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error');
+								top.location.href = "/";
+							} else if(xhr.status == 403) {
+								showSwalIcon('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error');
+								top.location.href = "/";
+							} else {
+								showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
+							}
+						},
+						success : function(result) {
+							$('#backRestAcitveLog').text(result.RESULT_DATA);
+							$('#backRestAcitveLog').scrollTop($('#backRestAcitveLog')[0].scrollHeight);
+						}
+					})
+				} else if(state == 'TC001802'){
+					var resultCode = -1;
+		
+					interval = setInterval(function() {
+						if(resultCode == -1){
+							$.ajax({
+								url : "/selectBackrestLog.do",
+								data : {
+									log_path : tableBackrest.row('.selected').data().bck_filenm,
+									backrest_gbn : backrest_gbn,
+									ipadr : tableBackrest.row('.selected').data().ipadr
+								},
+								dataType : "json",
+								type : "post",
+								beforeSend: function(xhr) {
+									xhr.setRequestHeader("AJAX", true);
+								},
+								error : function(xhr, status, error) {
+									if(xhr.status == 401) {
+										showSwalIcon('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error');
+										top.location.href = "/";
+									} else if(xhr.status == 403) {
+										showSwalIcon('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error');
+										top.location.href = "/";
+									} else {
+										showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
+									}
+								},
+								success : function(result) {
+									if($('#log_starter').text() == 'Log Stop'){
+										resultCode = result.RESULT_DATA.indexOf('successfully');
+										
+										$('#backRestAcitveLog').text(result.RESULT_DATA);
+										$('#backRestAcitveLog').scrollTop($('#backRestAcitveLog')[0].scrollHeight);	
+										
+									}else {
+										fn_get_backrest_list();
+									}
+								}
+							});
+							$('#loading').hide();
+						}else {
+							clearInterval(interval);
+							fn_get_backrest_list();
+							$('#loading').hide();
+						}
+					}, 5000);
+				}
+			}
+		});
+	} 
+	
+	  
+	function stopInterval(){
+
+		var selectedRow = tableBackrest.row('.selected').data();
+		var logText = $('#log_starter').text();
+		
+		if(selectedRow != undefined || selectedRow != null){
+			var logText = $('#log_starter').text();
+			
+			if(selectedRow.exe_rslt_cd != 'TC001701' && logText == 'Log Stop'){
+				showSwalIcon('실시간 로그 중지', '<spring:message code="common.close" />', '', 'success');
+				clearInterval(interval);
+				
+				$('#log_starter').text('Log Restart');
+				$('#log_starter').removeClass('btn-danger');
+				$('#log_starter').addClass('btn-success');
+			}else {
+				showSwalIcon('실시간 로그 재시작', '<spring:message code="common.close" />', '', 'success');
+				$('#log_starter').text('Log Stop');
+				$('#log_starter').removeClass('btn-success');
+				$('#log_starter').addClass('btn-danger');
+				realTimeLog();
+			}
+		} 
+	}
+	
+	
+</script>
+ 
 <%@include file="../cmmn/fixRsltMsgInfo.jsp"%>
 <%@include file="../cmmn/fixRsltMsg.jsp"%>
 <%@include file="../popup/rmanShow.jsp"%>
@@ -642,13 +1151,18 @@
 		<div class="col-12 div-form-margin-cts stretch-card">
 			<div class="card">
 				<div class="card-body">
-					<ul class="nav nav-pills nav-pills-setting nav-justified" id="server-tab" role="tablist" style="border:none;">
-						<li class="nav-item">
-							<a class="nav-link active" id="server-tab-1" data-toggle="pill" href="#subTab-1" role="tab" aria-controls="subTab-1" aria-selected="true" onclick="selectTab('rman');" >
+					<ul class="nav nav-pills nav-pills-setting nav-justified" id="server-tab" role="tablist" style="border:none; ">
+						<li class="nav-item" id="li-server-tab-3">
+							<a class="nav-link" id="server-tab-3" data-toggle="pill" href="#subTab-3" role="tab" aria-controls="subTab-3" aria-selected="false" onclick="selectTab('pgbackrest');" >
+								pgbackrest <spring:message code="menu.backup_history" />
+							</a>
+						</li>
+						<li class="nav-item" id="li-server-tab-1">
+							<a class="nav-link" id="server-tab-1" data-toggle="pill" href="#subTab-1" role="tab" aria-controls="subTab-1" aria-selected="true" onclick="selectTab('rman');" >
 								Online <spring:message code="menu.backup_history" />
 							</a>
 						</li>
-						<li class="nav-item">
+						<li class="nav-item" id="li-server-tab-2">
 							<a class="nav-link" id="server-tab-2" data-toggle="pill" href="#subTab-2" role="tab" aria-controls="subTab-2" aria-selected="false" onclick="selectTab('dump');">
 								Dump <spring:message code="menu.backup_history" />
 							</a>
@@ -687,6 +1201,15 @@
 										<option value="TC001702"><spring:message code="common.failed" /></option>
 									</select>
 								</div>
+										
+								<div class="input-group mb-2 mr-sm-2 search_pgbackrest col-sm-1_5">
+									<select class="form-control" style="margin-right: -0.7rem;" name="backrest_opt" id="backrest_opt">
+										<option value=""><spring:message code="backup_management.storage.option" /></option>
+										<option value="local">local</option>
+										<option value="remote">remote</option>
+										<option value="cloud">cloud</option>
+									</select>
+								</div>		
 										
 								<div class="input-group mb-2 mr-sm-2 search_rman col-sm-1_5">
 									<select class="form-control" style="margin-right: -0.7rem;" name="bck_opt_cd" id="bck_opt_cd">
@@ -799,8 +1322,59 @@
 										</thead>
 									</table>
 							 	</div>
+							 	
+							 	<div class="col-12" id="logBackrestListDiv">
+ 									<div class="table-responsive">
+										<div id="order-listing_wrapper"	class="dataTables_wrapper dt-bootstrap4 no-footer">
+											<div class="row">
+												<div class="col-sm-12 col-md-6">
+													<div class="dataTables_length" id="order-listing_length">
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+	 								<table id="logBackrestList" class="table table-hover table-striped system-tlb-scroll" style="width:100%;">
+										<thead>
+											<tr class="bg-info text-white">
+												<th width="40"><spring:message code="common.no" /></th>
+												<th width="40"><spring:message code="etc.etc25" /></th>
+												<th width="40"><spring:message code="common.work_name" /></th>
+												<th width="60"><spring:message code="backup_management.backup.storage" /></th>
+												<th width="40"><spring:message code="backup_management.storage" /></th>
+												<th width="40"><spring:message code="backup_management.bck_div" /></th>
+												<th width="100"><spring:message code="properties.backup_path" /></th>
+												<th width="50">DB SIZE</th>
+												<th width="50"><spring:message code="dashboard.backup" /> SIZE</th>
+												<th width="50"><spring:message code="backup_management.compressibility" /></th>
+												<th width="50"><spring:message code="dashboard.backup" /> <spring:message code="eXperDB_scale.start_time" /></th>
+												<th width="50"><spring:message code="dashboard.backup" /> <spring:message code="backup_management.endtime" /></th>
+												<th width="50"><spring:message code="dashboard.backup" /> <spring:message code="eXperDB_proxy.work_time" /></th>
+											</tr>
+										</thead>
+									</table>	
+							 	</div>
 						 	</div>
 						</div>
+					</div>
+					<br>
+					<div id="backRestActiveLogDiv" >	
+						<h4>※ Active Log</h4>
+						<div class="card my-sm-2" >	
+							<div class="col-12">
+								<div class="card-body">
+									<div class="row">
+										<table id="backresLog" class="table table-hover table-striped system-tlb-scroll" style="width:100%;">
+											<tr class="bg-info text-white">
+												<th>Log Message</th> 
+												<th class="float-right"><button id="log_starter" type="button" class="btn btn-danger" onclick="stopInterval()">Log Stop</button></th>
+											</tr>
+										</table>
+										<textarea id="backRestAcitveLog" rows=20 style="width:100%;" disabled onfocus="this.value = this.value;"></textarea>
+									</div> 
+								</div>
+							</div>
+						</div> 
 					</div>
 				</div>
 				<!-- content-wrapper ends -->

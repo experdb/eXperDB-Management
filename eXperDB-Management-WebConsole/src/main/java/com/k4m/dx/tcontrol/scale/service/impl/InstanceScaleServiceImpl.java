@@ -5,7 +5,9 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.ConnectException;
 import java.sql.SQLException;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.ZoneOffset;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -710,12 +712,20 @@ public class InstanceScaleServiceImpl extends EgovAbstractServiceImpl implements
 						/* start time */
 						String LaunchTimeStr = instancesObj.get("LaunchTime").toString();  //시작일자
 						
+						 boolean timeCheck = LaunchTimeStr.contains("+");
+										
 						String dateLocale = "KST";
 					    String lang = props.get("lang").toString();
 						if (!lang.equals("ko")) {dateLocale = "UTC";}
 
-						SimpleDateFormat old_format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"); // 받은 데이터 형식
-				        old_format.setTimeZone(TimeZone.getTimeZone(dateLocale));
+						SimpleDateFormat old_format = null;
+						if(timeCheck =  true) {
+							old_format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss"); // 받은 데이터 형식
+					        old_format.setTimeZone(TimeZone.getTimeZone(dateLocale));
+						}else {
+							old_format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"); // 받은 데이터 형식
+					        old_format.setTimeZone(TimeZone.getTimeZone(dateLocale));
+						}
 				        SimpleDateFormat new_format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"); // 바꿀 데이터 형식
 				        
 				        Date old_date = old_format.parse(LaunchTimeStr);
@@ -1602,4 +1612,5 @@ System.out.println("agentCmd 명령어 호출 :::::::::" + agentCmd);
 		
 		return result;
 	}
+	
 }

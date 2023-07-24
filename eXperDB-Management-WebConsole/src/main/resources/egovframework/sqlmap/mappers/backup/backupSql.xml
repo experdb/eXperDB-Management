@@ -45,7 +45,13 @@
 			A.BCK_PTH,
 			A.ACV_FILE_STGDT,
 			A.ACV_FILE_MTNCNT,
-			A.LOG_FILE_PTH
+			A.LOG_FILE_PTH,
+			A.BACKREST_GBN,
+			A.DB_SVR_IPADR,
+			A.REMOTE_IP,
+			A.REMOTE_PORT,
+			A.REMOTE_USR,
+			A.REMOTE_PW
 	  FROM(	
       SELECT 
       		BCK_WRK_ID,
@@ -73,15 +79,21 @@
 			A.ENCD_MTH_NM AS ENCD_MTH_CD,
 			USR_ROLE_NM,
 			A.FRST_REGR_ID,
-			TO_CHAR(A.FRST_REG_DTM,'YYYY-MM-DD HH24:MI') AS FRST_REG_DTM,
+			TO_CHAR(A.FRST_REG_DTM,'YYYY-MM-DD HH24:MI:SS') AS FRST_REG_DTM,
 			A.LST_MDFR_ID,
-			TO_CHAR(A.LST_MDF_DTM,'YYYY-MM-DD HH24:MI') AS LST_MDF_DTM,
+			TO_CHAR(A.LST_MDF_DTM,'YYYY-MM-DD HH24:MI:SS') AS LST_MDF_DTM,
 			BCK_FILENM,
 			DATA_PTH,
 			BCK_PTH,
 			ACV_FILE_STGDT,
 			ACV_FILE_MTNCNT,
-			LOG_FILE_PTH
+			LOG_FILE_PTH,
+			BACKREST_GBN,
+			(SELECT IPADR FROM T_DBSVRIPADR_I WHERE A.DB_SVR_IPADR_ID = DB_SVR_IPADR_ID ) AS DB_SVR_IPADR,
+			REMOTE_IP,
+			REMOTE_PORT,
+			REMOTE_USR,
+			REMOTE_PW
       FROM T_BCK_WRKCNG_I A, T_WRKCNG_I B
       WHERE 1=1	
       	AND A.WRK_ID=B.WRK_ID
@@ -210,6 +222,65 @@
 			)
 	</insert>
 	
+	<insert id="insertBackrestWork" parameterType="workVO">
+		/**
+	 	* Query ID : insertBackrestWork
+	 	* Description : Backrest백업 insert
+	 	**/
+		INSERT INTO T_BCK_WRKCNG_I
+			(
+			BCK_WRK_ID,
+			wrk_id,
+			db_svr_id,
+			bck_bsn_dscd,
+			bck_opt_cd,
+			bck_mtn_ecnt,
+			cps_yn,
+			file_stg_dcnt,
+			frst_regr_id,
+			frst_reg_dtm,
+			lst_mdfr_id,
+			lst_mdf_dtm,
+			bck_pth,
+			log_file_pth,
+			bck_filenm,
+			db_svr_ipadr_id,
+			backrest_gbn
+		<if test="remote_use != null and remote_use != ''">
+			,remote_ip,
+			remote_port,
+			remote_usr,
+			remote_pw
+		</if>
+			)
+		VALUES
+			(
+			nextval('q_bck_wrkcng_i'),
+			#{wrk_id},
+			#{db_svr_id},
+			'TC000205',
+			#{bck_opt_cd},
+			#{bck_mtn_ecnt},
+			#{cps_yn},
+			#{file_stg_dcnt},
+			#{frst_regr_id},
+			now(),
+			#{frst_regr_id},
+			now(),
+			#{bck_pth},
+			#{log_file_pth},
+			#{bck_filenm},
+			#{db_svr_ipadr_id},
+			#{backrest_gbn}
+		<if test="remote_use != null and remote_use != ''">
+			,#{remote_ip},
+			#{remote_port},
+			#{remote_usr},
+			#{remote_pw}
+		</if>
+			)
+	</insert>
+	
 	<insert id="insertDumpWork" parameterType="workVO">
 		/**
 	 	* Query ID : insertDumpWork
@@ -297,6 +368,25 @@
 		WHERE
 			bck_wrk_id = #{bck_wrk_id}
 	</update>
+	
+	
+	<update id="updateBackrestWork" parameterType="workVO">
+		/**
+	 	* Query ID : updateBackrestWork
+	 	* Description : Backrest백업 update
+	 	**/
+		UPDATE T_BCK_WRKCNG_I SET
+			bck_opt_cd = #{bck_opt_cd},
+			cps_yn = #{cps_yn},
+			bck_mtn_ecnt = #{bck_mtn_ecnt},
+			file_stg_dcnt = #{file_stg_dcnt},
+			lst_mdfr_id = #{lst_mdfr_id},
+			lst_mdf_dtm = now(),
+			log_file_pth = #{log_file_pth}
+		WHERE
+			bck_wrk_id = #{bck_wrk_id}
+	</update>
+	
 	
 	<update id="updateDumpWork" parameterType="workVO">
 		/**
@@ -389,6 +479,17 @@
 			wrk_id = #{wrk_id}
 	</delete>
 	
+	<delete id="deleteWorkExe" parameterType="int">
+		/**
+	 	* Query ID : deleteWorkExe
+	 	* Description : 백업 exe delete
+	 	* Author : 박유라
+	 	**/	
+		DELETE FROM T_WRKEXE_G
+		WHERE
+			wrk_id = #{wrk_id}
+	</delete>
+	
 	<delete id="deleteBckWork" parameterType="int">
 		/**
 	 	* Query ID : deleteBckWork
@@ -471,7 +572,35 @@
            AND A.DB_SVR_ID = #{db_svr_id}
     </select>
     
-    <select id="selectWorkLogList" parameterType="workLogVO" resultType="workLogVO">
+    <select id="selectAgentInfo" parameterType="dbServerVO" resultType="dbServerVO">
+    
+    	  SELECT	
+	        (ROW_NUMBER() OVER()) AS ROWNUM,
+			(ROW_NUMBER() OVER()) AS IDX,
+			AA.*
+          FROM (SELECT
+              	 A.pgdata_pth,
+              	 A.pghome_pth,
+            	 B.ipadr,
+           	   	 B.portno,
+              	 B.master_gbn,
+              	 A.svr_spr_usr_id,
+             	 B.db_svr_ipadr_id,
+               	 B.svr_host_nm,
+               	 B.db_svr_id
+          	FROM T_DBSVR_I A, T_DBSVRIPADR_I B
+         	WHERE
+           		B.DB_SVR_ID = #{db_svr_id}
+           		AND B.DB_SVR_ID = A.DB_SVR_ID
+           		<if test="ipadr != null and ipadr != '' ">
+      		   		AND B.ipadr LIKE CONCAT('%',#{ipadr},'%')
+      	   		</if>
+      	   		order by 3,5)AA;
+			
+    </select>
+    
+    
+<select id="selectWorkLogList" parameterType="workLogVO" resultType="workLogVO">
     	/**
 	 	* Query ID : selectWorkLogList
 	 	* Description : 백업로그 List 조회
@@ -506,20 +635,28 @@
 	 		AA.FIX_RSLT_MSG,
 	 		AA.FRST_REG_DTM,
 	 		AA.LST_MDFR_ID,
-	 		AA.LST_MDF_DTM
+	 		AA.LST_MDF_DTM,
+	 		AA.BACKREST_GBN,
+	 		AA.DB_SZ,
+	 		AA.REMOTE_IP,
+	 		AA.REMOTE_PORT,
+	 		AA.REMOTE_USR,
+	 		AA.REMOTE_PW
         FROM
         (SELECT
         	B.DB_SVR_ID,
 	 		B.IPADR,
+	 		TWI.BACKREST_GBN,
+	 		TWG.DB_SZ,
 	 		TWG.EXE_SN AS EXE_SN,
 	 		TWG.SCD_ID AS SCD_ID,
 	 		(SELECT SCD_NM FROM T_SCD_M WHERE TWG.SCD_ID = SCD_ID ) AS SCD_NM,
 	 		TWG.WRK_ID AS WRK_ID,
 	 		(SELECT WRK_NM FROM T_WRKCNG_I WHERE WRK_ID = TWI.WRK_ID) WRK_NM,
 	 		(SELECT WRK_EXP FROM T_WRKCNG_I WHERE WRK_ID = TWI.WRK_ID) WRK_EXP,
-	 		to_char(TWG.WRK_STRT_DTM,'YYYY-MM-DD HH24:MI') AS WRK_STRT_DTM,
-	 		to_char(TWG.WRK_END_DTM,'YYYY-MM-DD HH24:MI') AS WRK_END_DTM,
-	 		to_char(to_char(TWG.WRK_END_DTM,'YYYY-MM-DD HH24:MI')::timestamp - to_char(TWG.WRK_STRT_DTM,'YYYY-MM-DD HH24:MI')::timestamp, 'HH24:MI') AS WRK_DTM,
+	 		to_char(TWG.WRK_STRT_DTM,'YYYY-MM-DD HH24:MI:SS') AS WRK_STRT_DTM,
+	 		to_char(TWG.WRK_END_DTM,'YYYY-MM-DD HH24:MI:SS') AS WRK_END_DTM,
+	 		to_char(to_char(TWG.WRK_END_DTM,'YYYY-MM-DD HH24:MI:SS')::timestamp - to_char(TWG.WRK_STRT_DTM,'YYYY-MM-DD HH24:MI:SS')::timestamp, 'HH24:MI:SS') AS WRK_DTM,
 	 		TWG.EXE_RSLT_CD AS EXE_RSLT_CD,
 	 		(SELECT SYS_CD_NM FROM T_SYSDTL_C WHERE TWG.EXE_RSLT_CD = SYS_CD ) AS EXE_RSLT_CD_NM,
 	 		TWG.BCK_OPT_CD AS BCK_OPT_CD,
@@ -536,7 +673,11 @@
 	 		TWG.FIX_RSLT_MSG,
 	 		to_char(TWG.FRST_REG_DTM,'YYYY-MM-DD HH24:MI') AS FRST_REG_DTM,
 	 		TWG.LST_MDFR_ID AS LST_MDFR_ID,
-	 		to_char(TWG.LST_MDF_DTM,'YYYY-MM-DD HH24:MI') AS LST_MDF_DTM	 		
+	 		to_char(TWG.LST_MDF_DTM,'YYYY-MM-DD HH24:MI') AS LST_MDF_DTM,
+	 		TWI.REMOTE_IP,
+	 		TWI.REMOTE_PORT,
+	 		TWI.REMOTE_USR,
+	 		TWI.REMOTE_PW	
 	 	FROM T_WRKEXE_G TWG, T_BCK_WRKCNG_I TWI, T_DBSVRIPADR_I B, T_WRKCNG_I C
 <!-- 	 	LEFT OUTER JOIN T_BCK_WRKCNG_I TWI
          ON TWG.WRK_ID = TWI.WRK_ID
@@ -580,7 +721,7 @@
       				TO_DATE(to_char(TWG.WRK_STRT_DTM,'YYYY-MM-DD'),'YYYY-MM-DD') BETWEEN TO_DATE(#{wrk_strt_dtm},'YYYY-MM-DD') AND TO_DATE(#{wrk_end_dtm},'YYYY-MM-DD')
       				OR
       				TO_DATE(to_char(TWG.WRK_END_DTM,'YYYY-MM-DD'),'YYYY-MM-DD') BETWEEN TO_DATE(#{wrk_strt_dtm},'YYYY-MM-DD') AND TO_DATE(#{wrk_end_dtm},'YYYY-MM-DD')
-      				)
+      				) 
       		</if>
       	</if>
       	<if test="exe_rslt_cd != null and exe_rslt_cd != '' ">
@@ -601,10 +742,13 @@
 		<if test="fix_rsltcd == 'TC002002' ">
 			AND TWG.FIX_RSLTCD = 'TC002002'
 		</if>
+		<if test="backrest_gbn !=null and backrest_gbn != '' ">
+			AND TWI.BACKREST_GBN = #{backrest_gbn}
+		</if>
       		ORDER BY LST_MDF_DTM DESC
       	)AA
     </select>
-
+    
 	<insert id="insertWorkObj" parameterType="workObjVO">
 		/**
 	 	* Query ID : insertWorkObj
@@ -783,31 +927,22 @@
 	 	**/
 		<![CDATA[
 			SELECT 
-            	scd_id
-                , scd_nm
-                , scd_exp
-                , scd_cndt
-                , exe_perd_cd
-                , exe_month
-                , exe_day
-                , substring(exe_hms from 5 for 2) || ':' || substring(exe_hms from 3 for 2) AS exe_hms
-                , exe_dt
-                , TO_CHAR(frst_reg_dtm::TIMESTAMP,'yyyyMMdd')as frst_reg_dtm
+            	A.scd_id
+                , A.scd_nm
+                , A.scd_exp
+                , A.scd_cndt
+                , A.exe_perd_cd
+                , A.exe_month
+                , A.exe_day
+                , substring(A.exe_hms from 5 for 2) || ':' || substring(A.exe_hms from 3 for 2) AS exe_hms
+                , A.exe_dt
+                , TO_CHAR(A.frst_reg_dtm::TIMESTAMP,'yyyyMMdd')as frst_reg_dtm
+                , B.BCK_BSN_DSCD
             FROM
-            	T_SCD_M
-            WHERE SCD_ID IN (
-                SELECT 
-                	SCD_ID 
-                FROM T_SCD_D
-                WHERE wrk_id in (
-		                SELECT 
-		                	wrk_id 
-		                FROM T_BCK_WRKCNG_I
-		                WHERE db_svr_id = ${db_svr_id}
-		                GROUP BY wrk_id
-                    )
-              )
-
+            	T_SCD_M A, T_BCK_WRKCNG_I B, T_SCD_D C
+           	WHERE A.SCD_ID = C.SCD_ID
+          		AND B.WRK_ID = C.WRK_ID
+          		AND B.DB_SVR_ID = ${db_svr_id}
 		]]>
     </select>
   
@@ -869,8 +1004,198 @@
 					, A.EXE_CMD
 					, B.BSN_DSCD
 					, (SELECT DB_SVR_IPADR_ID FROM T_DBSVRIPADR_I WHERE A.DB_SVR_ID = DB_SVR_ID AND master_gbn = 'M') AS DB_SVR_IPADR_ID
+					, (SELECT IPADR FROM T_DBSVRIPADR_I WHERE A.DB_SVR_IPADR_ID = DB_SVR_IPADR_ID) AS DB_SVR_IPADR
 		FROM T_BCK_WRKCNG_I A, T_WRKCNG_I B
 		WHERE A.WRK_ID = B.WRK_ID
 	 	AND A.WRK_ID = #{wrk_id}
 	</select>
+	
+	<select id="selectBackrestCstOpt" parameterType="dbServerVO" resultType="hashMap">
+          SELECT
+               opt_id,
+               opt_gbn,
+               opt_nm,
+               opt_exp
+          FROM t_BACKREST_OPT_i			
+    </select>
+    
+    <select id="selectBckServer" parameterType="workVO" resultType="dbServerVO">
+          SELECT
+          	   (ROW_NUMBER() OVER()) AS ROWNUM,
+               A.pgdata_pth ,
+               B.ipadr,
+               B.portno,
+               B.master_gbn,
+               A.svr_spr_usr_id,
+               B.db_svr_ipadr_id
+          FROM T_DBSVR_I A, T_DBSVRIPADR_I B
+         WHERE
+           A.DB_SVR_ID = B.DB_SVR_ID
+           AND B.IPADR = #{db_svr_ipadr}	
+    </select>
+    
+    <select id="selectMasterServer" parameterType="dbServerVO" resultType="dbServerVO">
+          SELECT
+          	   (ROW_NUMBER() OVER()) AS ROWNUM,
+               A.pgdata_pth ,
+               B.ipadr,
+               B.portno,
+               B.master_gbn,
+               A.svr_spr_usr_id,
+               B.db_svr_ipadr_id
+          FROM T_DBSVR_I A, T_DBSVRIPADR_I B
+         WHERE
+           A.DB_SVR_ID = B.DB_SVR_ID
+           AND B.MASTER_GBN = 'M'
+    </select>
+    
+<insert id="insertPgbackrestBackup" parameterType="WrkExeVO">
+    	INSERT INTO T_WRKEXE_G
+	 	(
+			EXE_SN
+			, SCD_ID
+			, WRK_ID
+			, WRK_STRT_DTM
+			, WRK_END_DTM
+			, BCK_OPT_CD
+			, TLI
+			, FILE_SZ
+			, DB_SZ
+			, DB_ID
+			, BCK_FILE_PTH
+			, BCK_FILENM
+			, FRST_REGR_ID
+			, LST_MDFR_ID
+			, EXE_GRP_SN
+			, EXE_RSLT_CD
+			, WRK_NM
+			, DB_SVR_IPADR_ID
+			, SCD_NM
+	 	)
+	 	VALUES
+	 	(
+			#{exe_sn}
+			<choose>
+				<when test="BACKREST_SCD_ID !=null and BACKREST_SCD_ID != ''" >
+				, (SELECT SCD_ID FROM T_SCD_M WHERE SCD_ID = #{BACKREST_SCD_ID})::numeric
+				</when>
+				<otherwise>
+				, #{scd_id}
+				</otherwise>
+			</choose>
+			
+			, #{wrk_id}
+			, now()
+			, now()
+			, #{bck_opt_cd}
+			, 0
+			, 0
+			, 0
+			, #{db_id}
+			, #{bck_file_pth}
+			, #{bck_file_nm}			
+			, #{frst_regr_id}
+			, #{lst_mdfr_id}
+			, #{exe_grp_sn}
+			, #{exe_rslt_cd}
+			, #{wrk_nm}
+			, #{db_svr_ipadr_id}
+			<choose>
+				<when test="BACKREST_SCD_ID !=null and BACKREST_SCD_ID != ''" >
+				, (SELECT SCD_NM FROM T_SCD_M WHERE SCD_ID = #{BACKREST_SCD_ID})
+				</when>
+				<otherwise>
+				, null
+				</otherwise>
+			</choose>
+	 	)	 	
+    </insert>
+    
+	<select id="selectQ_WRKEXE_G_01_SEQ" resultType="int">
+   		/**
+	 	* Query ID : selectQ_WRKEXE_G_01_SEQ
+	 	* Description : 작업실행로그 seq 조회
+	 	* Author : 박태혁
+	 	**/
+    	SELECT NEXTVAL('q_wrkexe_g_01')
+    </select>
+	
+	<select id="selectScd_id" resultType="int">
+   		/**
+	 	* Query ID : selectScm_id
+	 	* Description : 스케줄 ID 조회
+	 	* Author : 변승우
+	 	**/
+    	SELECT NEXTVAL('q_scd_m_01')
+    </select>
+	
+	<select id="selectQ_WRKEXE_G_02_SEQ" resultType="int">
+   		/**
+	 	* Query ID : selectQ_WRKEXE_G_02_SEQ
+	 	* Description : 작업실행로그 실행그룹 seq 조회
+	 	* Author : 박태혁
+	 	**/
+    	SELECT NEXTVAL('Q_WRKEXE_G_02')
+    </select>
+    
+    <update id="updateBackrestWrk"  parameterType="WrkExeVO">
+   		/**
+	 	* Query ID : updateBackrestWrk
+	 	* Description : backrest 작업실행로그 update
+	 	* Author : 이지석
+	 	**/
+		UPDATE T_WRKEXE_G
+		SET
+			WRK_END_DTM = TO_TIMESTAMP(#{wrk_end_dtm}, 'YYYY-MM-DD HH24:MI:SS')
+			, WRK_STRT_DTM = TO_TIMESTAMP(#{wrk_strt_dtm}, 'YYYY-MM-DD HH24:MI:SS')
+			, EXE_RSLT_CD = #{exe_rslt_cd}
+			, FILE_SZ = #{file_sz}
+			, DB_SZ = #{DB_SZ}
+			, RSLT_MSG = #{rslt_msg}
+			, BCK_FILENM = #{bck_filenm}
+		<if test="BACKREST_SCD_ID !=null and BACKREST_SCD_ID != ''" >
+			, SCD_ID = (SELECT SCD_ID FROM T_SCD_M WHERE SCD_ID = #{BACKREST_SCD_ID})::numeric
+		</if>
+		WHERE
+			EXE_SN = #{exe_sn}
+    </update>
+    
+    <select id="selectSshInfo" parameterType="int" resultType="workLogVO">
+    	SELECT
+    		REMOTE_IP,
+    		REMOTE_PORT,
+    		REMOTE_USR,
+    		REMOTE_PW,
+    		BCK_FILENM
+   		FROM T_BCK_WRKCNG_I
+   		WHERE 
+  			WRK_ID = #{num}
+    </select>
+    
+    <update id="updateBackrestErr"  parameterType="WrkExeVO">
+   		/**
+	 	* Query ID : updateBackrestErr
+	 	* Description : backrest 작업실행로그 Err
+	 	* Author : 이지석
+	 	**/
+		UPDATE T_WRKEXE_G
+		SET
+			EXE_RSLT_CD = #{exe_rslt_cd}
+			, RSLT_MSG = #{rslt_msg}
+		<if test="BACKREST_SCD_ID !=null and BACKREST_SCD_ID != ''" >
+			, SCD_ID = (SELECT SCD_ID FROM T_SCD_M WHERE SCD_ID = #{BACKREST_SCD_ID})::numeric
+		</if>
+		WHERE
+			EXE_SN = #{exe_sn}
+    </update>
+    
+    <select id="selectSchedule" parameterType="int" resultType="hashMap">
+    	SELECT 
+    		A.SCD_ID,
+    		B.BCK_BSN_DSCD
+   		FROM T_SCD_D A, T_BCK_WRKCNG_I B
+   		WHERE
+   			SCD_ID = #{num}
+   			AND A.WRK_ID = B.WRK_ID
+    </select>
 </mapper>

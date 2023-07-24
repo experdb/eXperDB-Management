@@ -827,6 +827,7 @@ function fn_db2pgAdd(){
 <%@include file="./../../popup/confirmMultiForm.jsp"%>
 <%@include file="./../../popup/scheduleRegForm.jsp"%>
 <%@include file="./../../popup/db2pgWorkRegForm.jsp"%>
+<%@include file="../../cmmn/workBackrestInfo.jsp"%>
 
 <div class="content-wrapper main_scroll" style="min-height: calc(100vh);" id="contentsDiv">
 	<div class="row">

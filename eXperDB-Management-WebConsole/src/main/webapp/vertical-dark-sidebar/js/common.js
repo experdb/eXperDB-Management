@@ -136,7 +136,9 @@
 				location.href = "/securityKeySet.do";
 			} else if (rstGbn == "backup") {
 				fn_backupHistory_move();
-			} else if (rstGbn == "rman_restore") {
+			} else if(rstGbn == "backrest_restore"){
+				fn_bckr_restore_History_move();
+			}else if (rstGbn == "rman_restore") {
 				fn_restoreLogCall();
 			}else if(rstGbn =="insertScd"){
 				location.href = "/selectScheduleListView.do";
@@ -394,7 +396,6 @@ function fn_workLayer(wrk_id){
 	var rman_bck_opt_cd_nm = "", rman_cps_yn = "", rman_log_file_bck_yn = "", rman_log_file_mtn_ecn = "", rman_log_file_stg_dcnt = "";
 	var rman_acv_file_mtncnt = "", rman_bck_mtn_ecnt = "", rman_acv_file_stgdt = "", rman_file_stg_dcnt = "";
 	var dump_file_fmt_cd_nm = "", dump_cprt = "", dump_file_stg_dcnt ="", dump_bck_mtn_ecnt = "";
-
 	$.ajax({
 		url : "/selectWrkInfo.do",
 		data : {
@@ -492,6 +493,49 @@ function fn_workLayer(wrk_id){
 						$("#r_log_file_mtn_ecnt").html(nvlPrmSet(result[0].log_file_mtn_ecnt, "0"));
 
 						$("#pop_layer_rman").modal("show");
+					
+					// BACKREST
+					}else if (result[0].bck_bsn_dscd == "TC000205"){
+						$('#b_bck_bsdn_storage').html(nvlPrmSet(result[0].bck_bsn_dscd_nm + ' / ' + result[0].backrest_gbn.toUpperCase(), ""))
+						$('#b_bck_svr').html(nvlPrmSet(result[0].ipadr, ""))
+						$('#b_wrk_nm').html(nvlPrmSet(result[0].wrk_nm, ""))
+						$('#b_wrk_exp').html(nvlPrmSet(result[0].wrk_exp, ""))
+						$('#b_bck_bgn').html(nvlPrmSet(result[0].bck_opt_cd_nm.toUpperCase(), ""))
+						$('#b_bck_pth').html(nvlPrmSet(result[0].bck_pth, ""))
+						$('#b_bck_cnt').html(nvlPrmSet(result[0].bck_mtn_ecnt, ""))
+						$('#b_bck_log_pth').html(nvlPrmSet(result[0].log_file_pth, ""))
+						
+						var backrest_file_fmt = '';
+						if(result[0].cps_yn == 'Y'){
+							backrest_file_fmt += "<div class='badge badge-pill badge-info' style='color: #fff;'>";
+							backrest_file_fmt += "	<i class='fa fa-file-o mr-2' ></i>";
+							backrest_file_fmt += result[1].compress
+							backrest_file_fmt += "</div>";
+						
+							$('#b_compress_type').html(backrest_file_fmt)
+						}else {
+							backrest_file_fmt += "<div class='badge badge-pill badge-info' style='color: #fff;'>";
+							backrest_file_fmt += "	<i class='ti-angle-double-right mr-2' ></i>";
+							backrest_file_fmt += "미압축"
+							backrest_file_fmt += "</div>";
+						}
+						$('#b_compress_type').html(backrest_file_fmt);
+						$('#b_paralles').html(nvlPrmSet(result[1].paralles, ""))
+						$('#wrk_conf').html(nvlPrmSet(result[1].conf, "conf 파일이 없습니다."));
+												
+						if(result[0].backrest_gbn == "remote"){
+							$('#b_ip').html(nvlPrmSet(result[0].remote_ip, ""))
+							$('#b_port').html(nvlPrmSet(result[0].remote_port, ""))
+							$('#b_usr').html(nvlPrmSet(result[0].remote_usr, ""))
+							
+							$("#remote_info").show();
+						}else {
+							$("#remote_info").hide();
+						}
+						//$("#data_object").modal("hide");
+						$("#pop_layer_backrest").modal("show");
+						
+						
 					// DUMP
 					}else{
 						$("#d_bck_bsn_dscd_nm").html(nvlPrmSet(result[0].bck_bsn_dscd_nm, "-"));
@@ -538,6 +582,42 @@ function fn_workLayer(wrk_id){
 			}
 		}
 	});	
+}
+
+/* ********************************************************
+ * backrest config 결과 정보
+ ******************************************************** */
+function fn_backrestConfigLayer(wrk_id, backrest_gbn){
+	$.ajax({
+		url : "/selectBackrestConfigInfo.do",
+		data : {
+			wrk_id : wrk_id,
+			backrest_gbn: backrest_gbn
+		},
+		type : "post",
+		beforeSend: function(xhr) {
+			xhr.setRequestHeader("AJAX", true);
+		},
+		error : function(xhr, status, error) {
+			if(xhr.status == 401) {
+				showSwalIconRst(message_msg02, closeBtn, '', 'error', 'top');
+			} else if(xhr.status == 403) {
+				showSwalIconRst(message_msg03, closeBtn, '', 'error', 'top');
+			} else {
+				showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), closeBtn, '', 'error');
+			}
+		},
+		success : function(result) {
+			if(result==null || result==""){
+				showSwalIcon(migration_msg21, closeBtn, '', 'error');
+			}else{
+				$("#config").html(result);
+
+				$("#pop_layer_backrestConfig").modal("show");
+			}
+	
+		}
+	});
 }
 
 /* ********************************************************

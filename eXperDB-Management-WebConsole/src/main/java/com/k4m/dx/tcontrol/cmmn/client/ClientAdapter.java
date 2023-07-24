@@ -584,7 +584,6 @@ public class ClientAdapter {
 	/* trans log file */
 	public JSONObject dxT043(JSONObject jObj) throws Exception {
 		byte[] bt = jObj.toString().getBytes();
-		
 		cc.send(4, bt);
 		
 		JSONObject obj = (JSONObject) cc.recvObject();
@@ -603,6 +602,87 @@ public class ClientAdapter {
 	
 	/* trans confluent properties 파일 생성 */
 	public JSONObject dxT045(JSONObject jObj) throws Exception{
+		
+		byte[] bt = jObj.toString().getBytes();
+		cc.send(4, bt);
+		byte[] recvBuff = cc.recv(4, false);
+		
+		return parseToJsonObj(recvBuff);
+	}
+	
+	public JSONObject dxT046(JSONObject jObj) throws Exception{
+		
+		byte[] bt = jObj.toString().getBytes();
+		cc.send(4, bt);
+		byte[] recvBuff = cc.recv(4, false);
+		
+		return parseToJsonObj(recvBuff);
+	}
+	
+	public JSONObject dxT047(JSONObject jObj) throws Exception{
+		
+		byte[] bt = jObj.toString().getBytes();
+		cc.send(4, bt);
+		byte[] recvBuff = cc.recv(4, false);
+		
+		return parseToJsonObj(recvBuff);
+	}
+	
+	public JSONObject dxT048(JSONObject jObj) throws Exception{
+		
+		byte[] bt = jObj.toString().getBytes();
+		cc.send(4, bt);
+		byte[] recvBuff = cc.recv(4, false);
+		
+		return parseToJsonObj(recvBuff);
+	}
+	
+	public JSONObject dxT049(JSONObject jObj) throws Exception{
+		
+		byte[] bt = jObj.toString().getBytes();
+		cc.send(4, bt);
+		byte[] recvBuff = cc.recv(4, false);
+		
+		return parseToJsonObj(recvBuff);
+	}
+	
+	public JSONObject dxT050(JSONObject jObj) throws Exception{
+		
+		byte[] bt = jObj.toString().getBytes();
+		cc.send(4, bt);
+		byte[] recvBuff = cc.recv(4, false);
+		
+		return parseToJsonObj(recvBuff);
+	}
+	
+	public JSONObject dxT051(JSONObject jObj) throws Exception{
+		
+		byte[] bt = jObj.toString().getBytes();
+		cc.send(4, bt);
+		byte[] recvBuff = cc.recv(4, false);
+		
+		return parseToJsonObj(recvBuff);
+	}
+	
+	public JSONObject dxT052(JSONObject jObj) throws Exception{
+		
+		byte[] bt = jObj.toString().getBytes();
+		cc.send(4, bt);
+		byte[] recvBuff = cc.recv(4, false);
+		
+		return parseToJsonObj(recvBuff);
+	}
+	
+	public JSONObject dxT053(JSONObject jObj) throws Exception{
+		
+		byte[] bt = jObj.toString().getBytes();
+		cc.send(4, bt);
+		byte[] recvBuff = cc.recv(4, false);
+		
+		return parseToJsonObj(recvBuff);
+	}
+	
+	public JSONObject dxT054(JSONObject jObj) throws Exception{
 		
 		byte[] bt = jObj.toString().getBytes();
 		cc.send(4, bt);

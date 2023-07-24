@@ -899,6 +899,7 @@
 				, POLICY_CHANGE_HIS_AUT_YN
 				, SCRIPT_CNG_AUT_YN
 				, SCRIPT_HIS_AUT_YN
+				, BACKREST_RESTORE_AUT_YN
 				, EMERGENCY_RESTORE_AUT_YN
 				, POINT_RESTORE_AUT_YN
 				, DUMP_RESTORE_AUT_YN
@@ -920,6 +921,7 @@
 				NEXTVAL('Q_USRDBSVRAUT_I_01')
 				, 'admin'
 				, #{db_svr_id}::numeric
+				, 'Y'
 				, 'Y'
 				, 'Y'
 				, 'Y'

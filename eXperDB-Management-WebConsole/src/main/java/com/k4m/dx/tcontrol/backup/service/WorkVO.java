@@ -41,6 +41,14 @@ public class WorkVO {
 	private String bsn_dscd;
 	private String bsn_dscd_nm;
 	private String log_file_pth;
+	private int db_svr_ipadr_id;
+	private String backrest_gbn;
+	private String db_svr_ipadr;
+	private String remote_ip;
+	private String remote_port;
+	private String remote_usr;
+	private String remote_pw;
+	private String remote_use;
 	
 	public String getEncd_mth_cd() {
 		return encd_mth_cd;
@@ -362,4 +370,70 @@ public class WorkVO {
 		this.lst_mdf_dtm = lst_mdf_dtm;
 	}
 
+	public int getDb_svr_ipadr_id() {
+		return db_svr_ipadr_id;
+	}
+
+	public void setDb_svr_ipadr_id(int db_svr_ipadr_id) {
+		this.db_svr_ipadr_id = db_svr_ipadr_id;
+	}
+
+	public String getBackrest_gbn() {
+		return backrest_gbn;
+	}
+
+	public void setBackrest_gbn(String backrest_gbn) {
+		this.backrest_gbn = backrest_gbn;
+	}
+
+	public String getDb_svr_ipadr() {
+		return db_svr_ipadr;
+	}
+
+	public void setDb_svr_ipadr(String db_svr_ipadr) {
+		this.db_svr_ipadr = db_svr_ipadr;
+	}
+
+	public String getRemote_ip() {
+		return remote_ip;
+	}
+
+	public void setRemote_ip(String remote_ip) {
+		this.remote_ip = remote_ip;
+	}
+
+	public String getRemote_port() {
+		return remote_port;
+	}
+
+	public void setRemote_port(String remote_port) {
+		this.remote_port = remote_port;
+	}
+
+	public String getRemote_usr() {
+		return remote_usr;
+	}
+
+	public void setRemote_usr(String remote_usr) {
+		this.remote_usr = remote_usr;
+	}
+
+	public String getRemote_pw() {
+		return remote_pw;
+	}
+
+	public void setRemote_pw(String remote_pw) {
+		this.remote_pw = remote_pw;
+	}
+
+	public String getRemote_use() {
+		return remote_use;
+	}
+
+	public void setRemote_use(String remote_use) {
+		this.remote_use = remote_use;
+	}
+	
+	
+	
 }

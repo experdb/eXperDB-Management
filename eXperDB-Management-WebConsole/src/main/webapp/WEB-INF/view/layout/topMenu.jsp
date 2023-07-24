@@ -193,7 +193,7 @@
 					}
 
 					/*백업 추가 2021-04-14 변승우   */
- 					if("${sessionScope.session.backup_use_yn}" == "Y"){	
+ 					/* if("${sessionScope.session.backup_use_yn}" == "Y"){	
  						if(result[i].mnu_cd == "MN0001901" || result[i].mnu_cd == "MN0001902" || result[i].mnu_cd == "MN0001903") {
 							if((result[i].mnu_cd == "MN0001901" &&  result[i].read_aut_yn == "N") && (result[i].mnu_cd == "MN0001902" && result[i].read_aut_yn == "N") && (result[i].mnu_cd == "MN0001903" && result[i].read_aut_yn == "N")){
 								$('#MN00019').hide();
@@ -232,7 +232,7 @@
 								}
 							}
 						}
- 					}
+ 					} */
 
 					if("${sessionScope.session.encp_use_yn}" == "Y"){
 	 					if(result[i].mnu_cd == "MN0001101" || result[i].mnu_cd == "MN0001102" || result[i].mnu_cd == "MN0001201" || result[i].mnu_cd == "MN0001202" || result[i].mnu_cd == "MN0001203" || result[i].mnu_cd == "MN0001204"
@@ -383,7 +383,7 @@
 
 
 				//backup
-				if("${sessionScope.session.backup_use_yn}" != "Y"){	
+				/* if("${sessionScope.session.backup_use_yn}" != "Y"){	
 					$('#eXperDB_Backup_Y').hide();
 					$('#eXperDB_Backup_N').show();
 					
@@ -403,7 +403,7 @@
 						$('#eXperDB_Backup_Y').show();
 						$('#eXperDB_Backup_N').hide();
 					}
-				}
+				} */
 				
 				//ENCPT
 				if("${sessionScope.session.encp_use_yn}" != "Y"){	
@@ -924,7 +924,7 @@
 							</li>	
 							
 							<!-- BACKUP -->
-							<li class="nav-item width-div-a" id="eXperDB_Backup_Y">	
+							<%-- <li class="nav-item width-div-a" id="eXperDB_Backup_Y">	
 								<a href="#" class="nav-link">
 									<i class="ti-harddrive menu-icon"></i>
 									<span class="menu-title">BnR</span>
@@ -1023,7 +1023,7 @@
 										</li>
 									</ul>
 								</div>
-							</li>	
+							</li>	 --%>
 							
 							<!-- Virtual IP -->
 							<li class="nav-item width-div-a" id="proxy_menu_Y">

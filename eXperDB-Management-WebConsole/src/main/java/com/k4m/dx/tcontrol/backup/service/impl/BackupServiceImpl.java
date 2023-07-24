@@ -17,6 +17,7 @@ import com.k4m.dx.tcontrol.backup.service.WorkObjVO;
 import com.k4m.dx.tcontrol.backup.service.WorkOptDetailVO;
 import com.k4m.dx.tcontrol.backup.service.WorkOptVO;
 import com.k4m.dx.tcontrol.backup.service.WorkVO;
+import com.k4m.dx.tcontrol.functions.schedule.service.WrkExeVO;
 
 import egovframework.rte.fdl.cmmn.EgovAbstractServiceImpl;
 
@@ -39,12 +40,20 @@ public class BackupServiceImpl extends EgovAbstractServiceImpl implements Backup
 		 backupDAO.insertRmanWork(workVO);
 	}
 	
+	public void insertBackrestWork(WorkVO workVO) throws Exception {
+		backupDAO.insertBackrestWork(workVO);
+	}
+	
 	public void insertDumpWork(WorkVO workVO) throws Exception {
 		 backupDAO.insertDumpWork(workVO);
 	}
 	
 	public void updateRmanWork(WorkVO workVO) throws Exception{
 		backupDAO.updateRmanWork(workVO);
+	}
+	
+	public void updateBackrestWork(WorkVO workVO) throws Exception{
+		backupDAO.updateBackrestWork(workVO);
 	}
 	
 	public void updateDumpWork(WorkVO workVO) throws Exception{
@@ -69,6 +78,10 @@ public class BackupServiceImpl extends EgovAbstractServiceImpl implements Backup
 	
 	public void deleteWork(int wrk_id) throws Exception{
 		backupDAO.deleteWork(wrk_id);
+	}
+	
+	public void deleteWorkExe(int wrk_id) throws Exception{
+		backupDAO.deleteWorkExe(wrk_id);
 	}
 	
 	public List<DbVO> selectDbList(WorkVO workVO) throws Exception{
@@ -148,5 +161,65 @@ public class BackupServiceImpl extends EgovAbstractServiceImpl implements Backup
 	@Override
 	public List<Map<String, Object>> selectBckInfo(int wrk_id) throws Exception{
 		return backupDAO.selectBckInfo(wrk_id);
+	}
+	
+	@Override
+	public List<DbServerVO> selectAgentInfo(DbServerVO dbServerVO) throws Exception {
+		return backupDAO.selectAgentInfo(dbServerVO);	
+	}
+	
+	@Override
+	public List<Map<String, Object>> selectBackrestCstOpt(DbServerVO dbServerVO) throws Exception {
+		return backupDAO.selectBackrestCstOpt(dbServerVO);
+	}
+	
+	@Override
+	public List<DbServerVO> selectBckServer(WorkVO workVO) throws Exception {
+		return backupDAO.selectBckServer(workVO);
+	}
+	
+	@Override
+	public List<DbServerVO> selectMasterServer(DbServerVO dbServerVO) throws Exception {
+		return backupDAO.selectMasterServer(dbServerVO);
+	}
+	
+	@Override
+	public int selectQ_WRKEXE_G_01_SEQ() throws Exception  {
+		return backupDAO.selectQ_WRKEXE_G_01_SEQ();
+	}
+	
+	@Override
+	public int selectScd_id() throws Exception {
+		return backupDAO.selectScd_id();
+	}
+	
+	@Override
+	public int selectQ_WRKEXE_G_02_SEQ() throws Exception  {
+		return backupDAO.selectQ_WRKEXE_G_02_SEQ();
+	}
+
+	@Override
+	public void insertPgbackrestBackup(WrkExeVO wrkExeVO) {
+		backupDAO.insertPgbackrestBackup(wrkExeVO);
+	}
+
+	@Override
+	public void updateBackrestWrk(WrkExeVO wrkExeVO) {
+		backupDAO.updateBackrestWrk(wrkExeVO);
+	}
+
+	@Override
+	public WorkLogVO selectSshInfo(int wrkId) {
+		return backupDAO.selectSshInfo(wrkId);
+	}
+	
+	@Override
+	public void updateBackrestErr(WrkExeVO vo) {
+		backupDAO.updateBackrestErr(vo);		
+	}
+
+	@Override
+	public Map<String, Object> selectSchedule(int scdId) {
+		return backupDAO.selectSchedule(scdId);
 	}
 }

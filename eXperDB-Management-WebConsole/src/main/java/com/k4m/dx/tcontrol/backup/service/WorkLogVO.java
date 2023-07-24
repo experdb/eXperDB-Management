@@ -35,6 +35,13 @@ public class WorkLogVO {
 	private String file_fmt_cd;
 	private String usr_role_nm;
 	private String bck_wrk_id;
+	private String log_filenm;
+	private String backrest_gbn;
+	private long db_sz;
+	private String remote_ip;
+	private String remote_port;
+	private String remote_usr;
+	private String remote_pw;
 
 	public String getBck_wrk_id() {
 		return bck_wrk_id;
@@ -306,6 +313,62 @@ public class WorkLogVO {
 
 	public void setUsr_role_nm(String usr_role_nm) {
 		this.usr_role_nm = usr_role_nm;
+	}
+
+	public String getLog_filenm() {
+		return log_filenm;
+	}
+
+	public void setLog_filenm(String log_filenm) {
+		this.log_filenm = log_filenm;
+	}
+
+	public String getBackrest_gbn() {
+		return backrest_gbn;
+	}
+
+	public void setBackrest_gbn(String backrest_gbn) {
+		this.backrest_gbn = backrest_gbn;
+	}
+
+	public long getDb_sz() {
+		return db_sz;
+	}
+
+	public void setDb_sz(long db_sz) {
+		this.db_sz = db_sz;
+	}
+
+	public String getRemote_ip() {
+		return remote_ip;
+	}
+
+	public void setRemote_ip(String remote_ip) {
+		this.remote_ip = remote_ip;
+	}
+
+	public String getRemote_port() {
+		return remote_port;
+	}
+
+	public void setRemote_port(String remote_port) {
+		this.remote_port = remote_port;
+	}
+
+	public String getRemote_usr() {
+		return remote_usr;
+	}
+
+	public void setRemote_usr(String remote_usr) {
+		this.remote_usr = remote_usr;
+	}
+
+	public String getRemote_pw() {
+		return remote_pw;
+	}
+
+	public void setRemote_pw(String remote_pw) {
+		this.remote_pw = remote_pw;
 	}
 
 }

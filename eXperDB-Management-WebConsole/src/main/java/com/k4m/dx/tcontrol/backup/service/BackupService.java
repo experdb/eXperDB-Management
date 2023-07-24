@@ -7,6 +7,7 @@ import java.util.Map;
 import org.json.simple.JSONArray;
 
 import com.k4m.dx.tcontrol.admin.dbserverManager.service.DbServerVO;
+import com.k4m.dx.tcontrol.functions.schedule.service.WrkExeVO;
 
 public interface BackupService {
 
@@ -34,6 +35,13 @@ public interface BackupService {
 	public void insertRmanWork(WorkVO workVO) throws Exception;
 	
 	/**
+	 * Backrest백업내역 insert
+	 * @param WorkVO
+	 * @throws Exception
+	 */
+	public void insertBackrestWork(WorkVO workVO) throws Exception;
+	
+	/**
 	 * Dump백업내역 insert
 	 * @param WorkVO
 	 * @throws Exception
@@ -46,6 +54,13 @@ public interface BackupService {
 	 * @throws Exception
 	 */
 	public void updateRmanWork(WorkVO workVO) throws Exception;
+	
+	/**
+	 * Backrest백업수정 내역 update
+	 * @param WorkVO
+	 * @throws Exception
+	 */
+	public void updateBackrestWork(WorkVO workVO) throws Exception;
 	
 	/**
 	 * Dump백업수정 내역 update
@@ -90,6 +105,13 @@ public interface BackupService {
 	 * @throws Exception
 	 */
 	public void deleteWork(int wrk_id) throws Exception;
+	
+	/**
+	 * Work delete
+	 * @param WorkVO
+	 * @throws Exception
+	 */
+	public void deleteWorkExe(int wrk_id) throws Exception;
 	
 	/**
 	 * DB 목록 조회
@@ -185,4 +207,33 @@ public interface BackupService {
 
 	public List<Map<String, Object>> selectBckInfo(int wrk_id) throws Exception;
 	
+	public List<DbServerVO> selectAgentInfo(DbServerVO dbServerVO) throws Exception;
+	
+	/**
+	 * Backrest Custom Options Select 조회
+	 * @param BackrestCstOptVO
+	 * @throws Exception
+	 */
+	public List<Map<String, Object>> selectBackrestCstOpt(DbServerVO dbServerVO) throws Exception;
+	
+	public List<DbServerVO> selectBckServer(WorkVO workVO) throws Exception;
+	
+	public List<DbServerVO> selectMasterServer(DbServerVO dbServerVO) throws Exception;
+
+	public int selectQ_WRKEXE_G_01_SEQ() throws Exception;
+
+	public int selectScd_id() throws Exception;
+
+	public int selectQ_WRKEXE_G_02_SEQ() throws Exception;
+	
+	public void insertPgbackrestBackup(WrkExeVO wrkExeVO);
+	
+	public void updateBackrestWrk(WrkExeVO wrkExeVO);
+	
+	public WorkLogVO selectSshInfo(int wrkId);
+	
+	public void updateBackrestErr(WrkExeVO vo);
+
+	public Map<String, Object> selectSchedule(int scdId);
+
 }

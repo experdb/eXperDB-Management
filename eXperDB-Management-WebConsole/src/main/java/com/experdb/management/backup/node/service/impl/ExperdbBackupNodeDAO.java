@@ -21,19 +21,22 @@ public class ExperdbBackupNodeDAO extends EgovAbstractMapper{
 	@Resource(name="sqlSessionTemplate") 
 	private SqlSession sql; 
 	
-	@Autowired 
-	@Resource(name="backupDB") 
-	private SqlSession sql2;
+	/*
+	 * @Autowired
+	 * 
+	 * @Resource(name="backupDB") private SqlSession sql2;
+	 */
 	
 	public List<TargetMachineVO> getNodeList() {
 	       List<TargetMachineVO> result = null;
-	       result =sql2.selectList("backupNodeSql.getNodeList");
+	       //result =sql2.selectList("backupNodeSql.getNodeList");
 	      //  result = (List<TargetMachineVO>) list("experdbBackupSql.getNodeList",null);
 	        return result;
 	}
 
-	public TargetMachineVO getNodeInfo(String path) {
-		return sql2.selectOne("backupNodeSql.getNodeInfo", path);
-	}
+	/*
+	 * public TargetMachineVO getNodeInfo(String path) { return
+	 * sql2.selectOne("backupNodeSql.getNodeInfo", path); }
+	 */
 	
 }

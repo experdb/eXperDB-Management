@@ -545,6 +545,10 @@
 					, C.BSN_DSCD
 					, D.DB_SVR_IPADR_ID					
 					, A.LST_MDFR_ID
+					, B.REMOTE_IP
+					, B.REMOTE_PORT
+					, B.REMOTE_USR
+					, B.REMOTE_PW
 	    FROM T_SCD_D A
 	    LEFT OUTER JOIN T_WRKCNG_I C ON A.WRK_ID= C.WRK_ID
 	    LEFT OUTER JOIN T_BCK_WRKCNG_I B ON A.WRK_ID = B.WRK_ID 
@@ -1035,6 +1039,13 @@
                 ,(SELECT SYS_CD_NM FROM T_SYSDTL_C WHERE B.ENCD_MTH_NM = SYS_CD ) AS  ENCD_MTH_NM
                 , B.USR_ROLE_NM
                 , B.DB_SVR_ID
+                , B.BACKREST_GBN
+                , B.REMOTE_IP
+                , B.REMOTE_USR
+                , B.REMOTE_PORT
+                , B.REMOTE_PW
+                , (SELECT IPADR FROM T_DBSVRIPADR_I C WHERE C.DB_SVR_IPADR_ID = B.DB_SVR_IPADR_ID) AS IPADR
+                , B.BCK_FILENM
 		FROM T_WRKCNG_I A, T_BCK_WRKCNG_I B   
 		WHERE A.WRK_ID = B.WRK_ID
 		AND A.WRK_ID = #{wrk_id}  
@@ -1212,4 +1223,15 @@
 	 	FROM  T_SCD_M
 	 	WHERE SCD_ID=#{scd_id}::numeric
 	</delete>
+	
+	<select id="selectIpadr" resultType="String" parameterType="String">
+		SELECT D.IPADR
+		FROM T_SCD_D A
+	    	LEFT OUTER JOIN T_WRKCNG_I C ON A.WRK_ID= C.WRK_ID
+	    	LEFT OUTER JOIN T_BCK_WRKCNG_I B ON A.WRK_ID = B.WRK_ID 
+	    	LEFT OUTER JOIN T_DBSVRIPADR_I D ON D.DB_SVR_ID = B.DB_SVR_ID
+   		WHERE 1=1
+	    	AND A.SCD_ID = '${value}'::numeric AND B.DB_SVR_IPADR_ID = D.DB_SVR_IPADR_ID 
+	    ORDER BY A.EXE_ORD
+	</select>
 </mapper>

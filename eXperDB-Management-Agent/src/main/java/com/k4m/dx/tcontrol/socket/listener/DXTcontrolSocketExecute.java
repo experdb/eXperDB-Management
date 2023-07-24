@@ -67,6 +67,15 @@ import com.k4m.dx.tcontrol.server.DxT042;
 import com.k4m.dx.tcontrol.server.DxT043;
 import com.k4m.dx.tcontrol.server.DxT044;
 import com.k4m.dx.tcontrol.server.DxT045;
+import com.k4m.dx.tcontrol.server.DxT046;
+import com.k4m.dx.tcontrol.server.DxT047;
+import com.k4m.dx.tcontrol.server.DxT048;
+import com.k4m.dx.tcontrol.server.DxT049;
+import com.k4m.dx.tcontrol.server.DxT050;
+import com.k4m.dx.tcontrol.server.DxT051;
+import com.k4m.dx.tcontrol.server.DxT052;
+import com.k4m.dx.tcontrol.server.DxT053;
+import com.k4m.dx.tcontrol.server.DxT054;
 import com.k4m.dx.tcontrol.socket.ProtocolID;
 import com.k4m.dx.tcontrol.socket.SocketCtl;
 import com.k4m.dx.tcontrol.socket.TranCodeType;
@@ -357,6 +366,53 @@ public class DXTcontrolSocketExecute extends SocketCtl implements Runnable {
 								DxT045 dxT045 = new DxT045(client, is, os);
 								dxT045.execute(strDX_EX_CODE, jObj);
 								break;
+								
+							case TranCodeType.DxT046 :
+								DxT046 dxT046 = new DxT046(client, is, os);
+								dxT046.execute(strDX_EX_CODE, jObj);
+								break;
+								
+							case TranCodeType.DxT047 :
+								DxT047 dxT047 = new DxT047(client, is, os);
+								dxT047.execute(strDX_EX_CODE, jObj);
+								break;
+								
+							case TranCodeType.DxT048 :
+								DxT048 dxT048 = new DxT048(client, is, os);
+								dxT048.execute(strDX_EX_CODE, jObj);
+								break;		
+							
+							case TranCodeType.DxT049 :
+								DxT049 dxT049 = new DxT049(client, is, os);
+								dxT049.execute(strDX_EX_CODE, jObj);
+								break;
+							
+							case TranCodeType.DxT050 :
+								DxT050 dxT050 = new DxT050(client, is, os);
+								dxT050.execute(strDX_EX_CODE, jObj);
+								break;
+								
+							case TranCodeType.DxT051 :
+								DxT051 dxT051 = new DxT051(client, is, os);
+								dxT051.execute(strDX_EX_CODE, jObj);
+								break;
+								
+							case TranCodeType.DxT052 :
+								DxT052 dxT052 = new DxT052(client, is, os);
+								dxT052.execute(strDX_EX_CODE, jObj);
+								break;
+								
+							case TranCodeType.DxT053 :
+								DxT053 dxT053 = new DxT053(client, is, os);
+								dxT053.execute(strDX_EX_CODE, jObj);
+								break;
+								
+							case TranCodeType.DxT054 :
+								DxT054 dxT054 = new DxT054(client, is, os);
+								dxT054.execute(strDX_EX_CODE, jObj);
+								break;
+								
+								
 					}
 				}
 				

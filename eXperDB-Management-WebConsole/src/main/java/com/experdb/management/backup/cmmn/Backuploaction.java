@@ -160,14 +160,14 @@ public class Backuploaction {
 		BackupLocationInfoVO backuplocation = new BackupLocationInfoVO();
 		Backuploaction bl = new Backuploaction();
 
-		 backuplocation.setBackupDestLocation("//192.168.50.145/arcbackup");
+		 backuplocation.setBackupDestLocation("//192.168.10.203:/nfs");
 		//backuplocation.setBackupDestLocation("192.168.50.130:/nfstest");
-		backuplocation.setBackupDestUser("r1oot");
+		backuplocation.setBackupDestUser("root");
 		backuplocation.setBackupDestPasswd("root");
 
-		 validateCifs(backuplocation);
+		 //validateCifs(backuplocation);
 		
-		// validateNfs(backuplocation);
+		validateNfs(backuplocation);
 		 
 		// System.out.println(nfs);
 

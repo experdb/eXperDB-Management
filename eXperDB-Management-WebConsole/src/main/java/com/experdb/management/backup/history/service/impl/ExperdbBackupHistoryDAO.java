@@ -18,20 +18,22 @@ import egovframework.rte.psl.dataaccess.EgovAbstractMapper;
 @Repository("ExperdbBackupHistoryDAO")
 public class ExperdbBackupHistoryDAO extends EgovAbstractMapper {
 	
-	@Autowired 
-	@Resource(name="jobhistoryDB") 
-	private SqlSession jobhistoryDBsql;
-	
-	
-	@Autowired 
-	@Resource(name="activitylogDB") 
-	private SqlSession activitylogDBsql;
+	/*
+	 * @Autowired
+	 * 
+	 * @Resource(name="jobhistoryDB") private SqlSession jobhistoryDBsql;
+	 * 
+	 * 
+	 * @Autowired
+	 * 
+	 * @Resource(name="activitylogDB") private SqlSession activitylogDBsql;
+	 */
 	
 	public List<BackupJobHistoryVO> selectJobHistoryList(Map<String, Object> param) {
 	       List<BackupJobHistoryVO> result = null;
 	       List<BackupJobHistoryVO> resultRpoint = null;
-	       result =jobhistoryDBsql.selectList("experdbHistorySql.selectJobHistoryList", param);
-	       resultRpoint =activitylogDBsql.selectList("experdbHistorySql.selectRecoveryPointList");
+	      // result =jobhistoryDBsql.selectList("experdbHistorySql.selectJobHistoryList", param);
+	       //resultRpoint =activitylogDBsql.selectList("experdbHistorySql.selectRecoveryPointList");
 	       
 	       for(int j=0; j<result.size(); j++){
 	    	   for(int i=0; i<resultRpoint.size(); i++){
@@ -46,7 +48,7 @@ public class ExperdbBackupHistoryDAO extends EgovAbstractMapper {
 
 	public List<BackupActivityLogVO> selectBackupActivityLogList(int jobid) {
 			List<BackupActivityLogVO> result = null;
-	       result =activitylogDBsql.selectList("experdbHistorySql.selectBackupActivityLogList",jobid);
+	      // result =activitylogDBsql.selectList("experdbHistorySql.selectBackupActivityLogList",jobid);
 	        return result;
 	}
 	
@@ -54,8 +56,8 @@ public class ExperdbBackupHistoryDAO extends EgovAbstractMapper {
 	public List<BackupJobHistoryVO> selectRestoreJobHistoryList(Map<String, Object> param) {
 	       List<BackupJobHistoryVO> result = null;
 	       List<BackupJobHistoryVO> resultRpoint = null;
-	       result =jobhistoryDBsql.selectList("experdbHistorySql.selectRestoreJobHistoryList", param);
-	       resultRpoint =activitylogDBsql.selectList("experdbHistorySql.selectRecoveryPointList");
+	      // result =jobhistoryDBsql.selectList("experdbHistorySql.selectRestoreJobHistoryList", param);
+	      // resultRpoint =activitylogDBsql.selectList("experdbHistorySql.selectRecoveryPointList");
 	       
 	       for(int j=0; j<result.size(); j++){
 	    	   for(int i=0; i<resultRpoint.size(); i++){
@@ -71,8 +73,8 @@ public class ExperdbBackupHistoryDAO extends EgovAbstractMapper {
 	public List<BackupJobHistoryVO> selectRecoveryPoint(Map<String, Object> param) {
 	       List<BackupJobHistoryVO> result = null;
 	       List<BackupJobHistoryVO> resultRpoint = null;
-	       result =jobhistoryDBsql.selectList("experdbHistorySql.selectRecoveryPoint",param);
-	       resultRpoint =activitylogDBsql.selectList("experdbHistorySql.selectRecoveryPointList");
+	      // result =jobhistoryDBsql.selectList("experdbHistorySql.selectRecoveryPoint",param);
+	      // resultRpoint =activitylogDBsql.selectList("experdbHistorySql.selectRecoveryPointList");
 	       
 	       for(int j=0; j<result.size(); j++){
 	    	   for(int i=0; i<resultRpoint.size(); i++){

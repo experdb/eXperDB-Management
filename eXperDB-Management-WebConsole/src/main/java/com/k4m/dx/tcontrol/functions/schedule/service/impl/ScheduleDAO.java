@@ -272,5 +272,8 @@ public class ScheduleDAO extends EgovAbstractMapper{
 		delete("scheduleSql.deleteschedule_m",scd_id);
 	}
 
+	public String selectIpadr(String db_svr_ipadr_id) {
+		return getSqlSession().selectOne("scheduleSql.selectIpadr", db_svr_ipadr_id);
+	}
 
 }

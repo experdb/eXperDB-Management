@@ -477,7 +477,7 @@
 			},
 			success : function(result) {		
 				sdt_dtl_table.clear().draw();
-
+				
 				if (result != null) {
 					sdt_dtl_table.rows.add(result).draw();
 				}
@@ -677,6 +677,7 @@
 </script>
 
 <%@include file="../cmmn/workRmanInfo.jsp"%>
+<%@include file="../cmmn/workBackrestInfo.jsp"%>
 <%@include file="../cmmn/workDumpInfo.jsp"%>
 <%@include file="../popup/rmanRegReForm.jsp"%>
 <%@include file="../popup/dumpRegReForm.jsp"%>

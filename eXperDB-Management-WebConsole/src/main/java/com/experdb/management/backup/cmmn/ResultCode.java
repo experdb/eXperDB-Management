@@ -107,7 +107,6 @@ public class ResultCode {
 		}else{
 			result.put("RESULT_CODE", 0);
 			result.put("RESULT_DATA", output.trim());
-			System.out.println("Result command : " + output.trim());
 		}
 		
 		return result;

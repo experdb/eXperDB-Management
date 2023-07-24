@@ -889,4 +889,135 @@
 			ELSE 'M' END MASTER_GBN 
 		]]>
 	</select>
+	
+    <select id="selectDbSvrIpAdrId" parameterType="String" resultType="int">
+    	SELECT
+    		DB_SVR_IPADR_ID
+   		FROM T_DBSVRIPADR_I 
+   		WHERE '${value}' = IPADR
+    </select>
+    
+    <insert id="insertPgbackrestBackup" parameterType="WrkExeVO">
+    	INSERT INTO T_WRKEXE_G
+	 	(
+			EXE_SN
+			, SCD_ID
+			, WRK_ID
+			, WRK_STRT_DTM
+			, WRK_END_DTM
+			, BCK_OPT_CD
+			, TLI
+			, FILE_SZ
+			, DB_SZ
+			, DB_ID
+			, BCK_FILE_PTH
+			, BCK_FILENM
+			, FRST_REGR_ID
+			, LST_MDFR_ID
+			, EXE_GRP_SN
+			, EXE_RSLT_CD
+			, WRK_NM
+			, DB_SVR_IPADR_ID
+			, SCD_NM
+	 	)
+	 	VALUES
+	 	(
+			#{EXE_SN}
+			<choose>
+				<when test="BACKREST_SCD_ID !=null and BACKREST_SCD_ID != ''" >
+				, (SELECT SCD_ID FROM T_SCD_M WHERE SCD_ID = #{BACKREST_SCD_ID})::numeric
+				</when>
+				<otherwise>
+				, #{SCD_ID}
+				</otherwise>
+			</choose>
+			
+			, #{WRK_ID}
+			, now()
+			, now()
+			, #{BCK_OPT_CD}
+			, 0
+			, 0
+			, 0
+			, #{DB_ID}
+			, #{BCK_FILE_PTH}
+			, #{BCK_FILENM}			
+			, #{FRST_REGR_ID}
+			, #{LST_MDFR_ID}
+			, #{EXE_GRP_SN}
+			, #{EXE_RSLT_CD}
+			, #{WRK_NM}
+			, #{DB_SVR_IPADR_ID}
+			<choose>
+				<when test="BACKREST_SCD_ID !=null and BACKREST_SCD_ID != ''" >
+				, (SELECT SCD_NM FROM T_SCD_M WHERE SCD_ID = #{BACKREST_SCD_ID})
+				</when>
+				<otherwise>
+				, null
+				</otherwise>
+			</choose>
+	 	)	 	
+    </insert>
+    
+    <update id="updateBackrestWrk"  parameterType="WrkExeVO">
+   		/**
+	 	* Query ID : updateBackrestWrk
+	 	* Description : backrest 작업실행로그 update
+	 	* Author : 이지석
+	 	**/
+		UPDATE T_WRKEXE_G
+		SET
+			WRK_END_DTM = TO_TIMESTAMP(#{WRK_END_DTM}, 'YYYY-MM-DD HH24:MI:SS')
+			, WRK_STRT_DTM = TO_TIMESTAMP(#{WRK_STRT_DTM}, 'YYYY-MM-DD HH24:MI:SS')
+			, EXE_RSLT_CD = #{EXE_RSLT_CD}
+			, FILE_SZ = #{FILE_SZ}
+			, DB_SZ = #{DB_SZ}
+			, BCK_FILENM = #{BCK_FILENM}
+			, RSLT_MSG = #{RSLT_MSG}
+		<if test="BACKREST_SCD_ID !=null and BACKREST_SCD_ID != ''" >
+			, SCD_ID = (SELECT SCD_ID FROM T_SCD_M WHERE SCD_ID = #{BACKREST_SCD_ID})::numeric
+		</if>
+		WHERE
+			EXE_SN = #{EXE_SN}
+				
+    </update>
+    
+    <update id="updateBackrestRestore"  parameterType="RmanRestoreVO">
+   		/**
+	 	* Query ID : updateBackrestRestore
+	 	* Description : backrest restore update
+	 	* Author : 박유라
+	 	**/
+		UPDATE T_RMAN_RESTORE
+		SET
+			RESTORE_CNDT = #{RESTORE_CNDT}
+			, RESTORE_SIZE = #{RESTORE_SIZE}
+			, ELAPSED_TIME =  #{ELAPSED_TIME}
+			, RESTORE_ENDDTM = now()
+
+		WHERE
+			 EXELOG = #{EXELOG}
+			 
+    </update>
+        <update id="updateBackrestErr"  parameterType="WrkExeVO">
+   		/**
+	 	* Query ID : updateBackrestErr
+	 	* Description : backrest backup Err
+	 	* Author : 이지석
+	 	**/
+	 	
+   		UPDATE T_WRKEXE_G
+   		SET
+			EXE_RSLT_CD = #{EXE_RSLT_CD}
+			, FILE_SZ = 0
+			, DB_SZ = 0
+			, RSLT_MSG = #{RSLT_MSG}
+		<if test="BACKREST_SCD_ID !=null and BACKREST_SCD_ID != ''" >
+			, SCD_ID = (SELECT SCD_ID FROM T_SCD_M WHERE SCD_ID = #{BACKREST_SCD_ID})::numeric
+		</if>
+		WHERE
+			EXE_SN = #{EXE_SN}
+    </update>
+    
+    
 </mapper>

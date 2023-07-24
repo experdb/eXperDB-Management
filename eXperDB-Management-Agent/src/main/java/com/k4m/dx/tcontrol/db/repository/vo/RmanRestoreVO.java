@@ -18,6 +18,9 @@ public class RmanRestoreVO {
 	private String EXELOG;
 	private String REGR_ID;
 	private String REG_DTM;
+	private String RESTORE_SIZE;
+	private String ELAPSED_TIME;
+	
 	public int getRESTORE_SN() {
 		return RESTORE_SN;
 	}
@@ -114,6 +117,19 @@ public class RmanRestoreVO {
 	public void setREG_DTM(String rEG_DTM) {
 		REG_DTM = rEG_DTM;
 	}
-
+	public String getRESTORE_SIZE() {
+		return RESTORE_SIZE;
+	}
+	public void setRESTORE_SIZE(String rESTORE_SIZE) {
+		RESTORE_SIZE = rESTORE_SIZE;
+	}
+	public String getELAPSED_TIME() {
+		return ELAPSED_TIME;
+	}
+	public void setELAPSED_TIME(String eLAPSED_TIME) {
+		ELAPSED_TIME = eLAPSED_TIME;
+	}
+	
+	
 	
 }

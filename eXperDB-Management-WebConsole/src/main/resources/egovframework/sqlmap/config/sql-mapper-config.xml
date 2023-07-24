@@ -42,6 +42,7 @@
 		<typeAlias alias="wrkExeVO" type="com.k4m.dx.tcontrol.functions.schedule.service.WrkExeVO" /> 
 		<typeAlias alias="scriptVO" type="com.k4m.dx.tcontrol.script.service.ScriptVO" /> 
 		<typeAlias alias="restoreRmanVO" type="com.k4m.dx.tcontrol.restore.service.RestoreRmanVO" /> 
+		<typeAlias alias="restoreBackrestVO" type="com.k4m.dx.tcontrol.restore.service.RestoreBackrestVO" /> 
 		<typeAlias alias="restoreDumpVO" type="com.k4m.dx.tcontrol.restore.service.RestoreDumpVO" /> 
 		<typeAlias alias="codeVO" type="com.k4m.dx.tcontrol.db2pg.setting.service.CodeVO" /> 
 		<typeAlias alias="dataConfigVO" type="com.k4m.dx.tcontrol.db2pg.setting.service.DataConfigVO" /> 
@@ -128,6 +129,7 @@
 		<!-- restore -->
 		<mapper resource="egovframework/sqlmap/mappers/restore/restoreRmanSql.xml" />
 		<mapper resource="egovframework/sqlmap/mappers/restore/restoreDumpSql.xml" />
+		<mapper resource="egovframework/sqlmap/mappers/restore/restoreBackrestSql.xml" />
 		
 		<!-- db2pg -->
 		<mapper resource="egovframework/sqlmap/mappers/db2pg/dbms/dbmsSql.xml" />

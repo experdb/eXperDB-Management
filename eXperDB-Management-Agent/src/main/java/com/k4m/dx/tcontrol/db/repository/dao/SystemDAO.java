@@ -235,6 +235,29 @@ public class SystemDAO {
 	public int updatePryAgtUseYnLInfo(PryAgentInfoVO vo) throws Exception  {
 		return session.update("system.updatePryAgtUseYnLInfo", vo);
 	}
+	
+	
+	public int selectDbSvrIpAdrId(String ipadr) {
+		int result;
+		result = session.selectOne("system.selectDbSvrIpAdrId", ipadr);
+		return result;
+	}
+	
+	public void insertPgbackrestBackup(WrkExeVO vo) {
+		session.insert("system.insertPgbackrestBackup", vo);
+	}
+
+	public void updateBackrestWrk(WrkExeVO vo) {
+		session.update("system.updateBackrestWrk", vo);
+	}
+	
+	public void updateBackrestRestore(RmanRestoreVO vo) {
+		session.update("system.updateBackrestRestore", vo);
+	}
+	
+	public void updateBackrestErr(WrkExeVO vo) {
+		session.update("system.updateBackrestErr", vo);
+	}
 }
 
 

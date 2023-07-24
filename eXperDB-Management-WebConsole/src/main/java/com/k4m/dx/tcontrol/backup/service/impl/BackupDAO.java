@@ -7,6 +7,7 @@ import java.util.Map;
 
 import org.json.simple.JSONArray;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.k4m.dx.tcontrol.admin.dbserverManager.service.DbServerVO;
 import com.k4m.dx.tcontrol.backup.service.DbVO;
@@ -15,12 +16,14 @@ import com.k4m.dx.tcontrol.backup.service.WorkObjVO;
 import com.k4m.dx.tcontrol.backup.service.WorkOptDetailVO;
 import com.k4m.dx.tcontrol.backup.service.WorkOptVO;
 import com.k4m.dx.tcontrol.backup.service.WorkVO;
+import com.k4m.dx.tcontrol.functions.schedule.service.WrkExeVO;
 
 import egovframework.rte.psl.dataaccess.EgovAbstractMapper;
-
+@Transactional
 @Repository("BackupDAO")
 public class BackupDAO extends EgovAbstractMapper{
 
+	
 	@SuppressWarnings({ "unchecked", "deprecation" })
 	public List<WorkVO> selectWorkList(WorkVO workVO) throws SQLException {
 		List<WorkVO> sl = null;
@@ -37,6 +40,10 @@ public class BackupDAO extends EgovAbstractMapper{
 	
 	public void insertRmanWork(WorkVO workVO) throws Exception {
 		insert("backupSQL.insertRmanWork",workVO);
+	}
+	
+	public void insertBackrestWork(WorkVO workVO) throws Exception {
+		insert("backupSQL.insertBackrestWork",workVO);
 	}
 	
 	public void insertDumpWork(WorkVO workVO) throws Exception {
@@ -56,6 +63,11 @@ public class BackupDAO extends EgovAbstractMapper{
 		update("backupSQL.updateRmanWork",workVO);
 	}
 	
+	public void updateBackrestWork(WorkVO workVO) {
+		update("backupSQL.updateWork",workVO);
+		update("backupSQL.updateBackrestWork",workVO);
+	}
+	
 	public void updateDumpWork(WorkVO workVO) throws Exception{
 		update("backupSQL.updateWork",workVO);
 		update("backupSQL.updateDumpWork",workVO);
@@ -72,6 +84,10 @@ public class BackupDAO extends EgovAbstractMapper{
 	
 	public void deleteWork(int wrk_id) throws Exception{
 		delete("backupSQL.deleteWork",wrk_id);
+	}
+	
+	public void deleteWorkExe(int wrk_id) throws Exception{
+		delete("backupSQL.deleteWorkExe",wrk_id);
 	}
 
 	@SuppressWarnings({ "unchecked", "deprecation" })
@@ -157,5 +173,64 @@ public class BackupDAO extends EgovAbstractMapper{
 		List<Map<String, Object>> sl = null;
 		sl = (List<Map<String, Object>>) list("backupSQL.selectBckInfo", wrk_id);		
 		return sl;
+	}
+	
+	public List<DbServerVO> selectAgentInfo(DbServerVO dbServerVO) {
+		List<DbServerVO> sl = null;
+		sl = (List<DbServerVO>) list("backupSQL.selectAgentInfo", dbServerVO);
+		return sl;
+	}
+	
+	public List<Map<String, Object>> selectBackrestCstOpt(DbServerVO dbServerVO) {
+		List<Map<String, Object>> sl = null;
+		sl = (List<Map<String, Object>>) list("backupSQL.selectBackrestCstOpt", dbServerVO);
+		return sl;
+	}
+	
+	public List<DbServerVO> selectBckServer(WorkVO workVO) {
+		List<DbServerVO> sl = null;
+		sl = (List<DbServerVO>) list("backupSQL.selectBckServer", workVO);
+		return sl;
+	}
+	
+	public List<DbServerVO> selectMasterServer(DbServerVO dbServerVO) {
+		List<DbServerVO> sl = null;
+		sl = (List<DbServerVO>) list("backupSQL.selectMasterServer", dbServerVO);
+		return sl;
+	}
+	
+	public int selectQ_WRKEXE_G_01_SEQ() {
+		return (int) selectOne("backupSQL.selectQ_WRKEXE_G_01_SEQ");
+	}
+	
+	public int selectScd_id() {
+		return (int) selectOne("backupSQL.selectScd_id");
+		
+	}
+	
+	public int selectQ_WRKEXE_G_02_SEQ() {
+		return (int) selectOne("backupSQL.selectQ_WRKEXE_G_02_SEQ");
+	}
+	
+	public void insertPgbackrestBackup(WrkExeVO wrkExeVO) {
+		insert("backupSQL.insertPgbackrestBackup", wrkExeVO);
+	}
+	
+	public void updateBackrestWrk(WrkExeVO wrkExeVO) {
+		update("backupSQL.updateBackrestWrk", wrkExeVO);
+	}
+	
+	public WorkLogVO selectSshInfo(int wrkId) {
+		return (WorkLogVO)getSqlSession().selectOne("backupSQL.selectSshInfo", wrkId);
+	}
+	
+	public void updateBackrestErr(WrkExeVO vo) {
+		update("backupSQL.updateBackrestErr", vo);
+	}
+	
+	public Map<String, Object> selectSchedule(int scdId){
+		Map<String, Object> result = null;
+		result = getSqlSession().selectOne("backupSQL.selectSchedule", scdId);
+		return result;
 	}
 }

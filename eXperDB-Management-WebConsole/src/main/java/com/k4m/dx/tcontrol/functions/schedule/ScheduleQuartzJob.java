@@ -4,6 +4,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -36,7 +37,8 @@ public class ScheduleQuartzJob implements Job{
 	
 	private ConfigurableApplicationContext context;
 	
-	
+	public String backrest_scd_id;
+
 	
 	
 	/**
@@ -71,7 +73,6 @@ public class ScheduleQuartzJob implements Job{
 			
 			// 1. 스케줄ID를 가져옴
 			String scd_id= dataMap.getString("scd_id");
-			
 			System.out.println("스케줄작업명 : " +jobContext.getJobDetail().getKey().getName());
 			System.out.println("스케줄ID : " +scd_id);
 			
@@ -146,8 +147,16 @@ public class ScheduleQuartzJob implements Job{
 								strCmd = dumpBackupMakeCmd(resultDbconn, resultWork, addOption, addObject, i, bck_fileNm);	
 								BCK_NM.add(bck_fileNm);
 								CMD.add(strCmd);
-							// 백업 내용이 RMAN 백업일경우	
-							}else{
+								
+							// 백업 내용이 BACKREST 백업인 경우
+							}else if (resultWork.get(i).get("bck_bsn_dscd").equals("TC000205")) {
+								BCK_NM.add("backrest");
+								CMD.add("backrest");
+								backrest_scd_id = scd_id;
+							}
+							
+							// 백업 내용이 RMAN 백업일경우
+							else{
 								//실행중인 리스트와 해당스케줄정보 비교하여 현재 실행중이면서 RMAN 백업으로 디렉토리가 같으면, UPDATA(에러처리)
 								/*if(runSchedule.size() > 0){
 									 // ArrayList 생성
@@ -212,7 +221,7 @@ public class ScheduleQuartzJob implements Job{
 					}else if(resultWork.get(i).get("bsn_dscd").toString().equals("TC001902")){
 						resultDbconn= scheduleService.selectDbconn(Integer.parseInt(scd_id));
 						db_svr_ipadr_id = Integer.parseInt(resultDbconn.get(0).get("db_svr_ipadr_id").toString());
-						String strCmd =resultWork.get(i).get("exe_cmd").toString();						
+						String strCmd = resultWork.get(i).get("exe_cmd").toString();						
 						CMD.add(strCmd);
 						BCK_NM.add("SCRIPT");
 						
@@ -510,6 +519,7 @@ public class ScheduleQuartzJob implements Job{
 	
 	
 	public void agentCall(List<Map<String, Object>> resultWork, ArrayList<String> CMD, ArrayList<String> BCKNM, List<Map<String, Object>> resultDbconn, int db_svr_ipadr_id) {
+		ScheduleService scheduleService = (ScheduleService) context.getBean("scheduleService");
 		try {
 			String IP = "";
 			int PORT =0;
@@ -518,12 +528,18 @@ public class ScheduleQuartzJob implements Job{
 					 IP = (String) resultDbconn.get(0).get("ipadr");
 					
 					AgentInfoVO vo = new AgentInfoVO();
-					vo.setIPADR(IP);			
+					vo.setIPADR(IP);		
+					
 					AgentInfoVO agentInfo =  (AgentInfoVO) cmmnServerInfoService.selectAgentInfo(vo);	
 					 PORT = agentInfo.getSOCKET_PORT();
 				}else {
 				}
-			
+				for (int i = 0; i < BCKNM.size(); i++) {
+					if(BCKNM.get(i).equals("backrest")){
+						IP = scheduleService.selectIpadr(backrest_scd_id);
+						}
+					}
+				
 				/*
 				 * String IP = (String) resultDbconn.get(0).get("ipadr");
 				 * 
@@ -531,7 +547,6 @@ public class ScheduleQuartzJob implements Job{
 				 * (AgentInfoVO) cmmnServerInfoService.selectAgentInfo(vo); int PORT =
 				 * agentInfo.getSOCKET_PORT();
 				 */
-						
 				ClientInfoCmmn clc = new ClientInfoCmmn();
 			
 				

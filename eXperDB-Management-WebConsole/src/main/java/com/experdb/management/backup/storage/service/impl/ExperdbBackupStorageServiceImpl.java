@@ -117,7 +117,7 @@ public class ExperdbBackupStorageServiceImpl extends EgovAbstractServiceImpl imp
     	List<BackupLocationInfoVO> list = null;
     	List<Map<String, Object>> resultList = new ArrayList<Map<String, Object>>();
     	
-    	list = experdbBackupStorageDAO.backupStorageList();
+    	//list = experdbBackupStorageDAO.backupStorageList();
 
     	for(int i = 0; i<list.size(); i++){
     		Map<String, Object> result = new HashMap<>();
@@ -141,12 +141,12 @@ public class ExperdbBackupStorageServiceImpl extends EgovAbstractServiceImpl imp
     	return resultList;
     }
 
-	@Override
-	public BackupLocationInfoVO backupStorageInfo(HttpServletRequest request) {
-		BackupLocationInfoVO locationVO = new BackupLocationInfoVO();
-		locationVO.setBackupDestLocation(request.getParameter("path"));
-		return experdbBackupStorageDAO.backupStorageInfo(locationVO);
-	}
+	/*
+	 * @Override public BackupLocationInfoVO backupStorageInfo(HttpServletRequest
+	 * request) { BackupLocationInfoVO locationVO = new BackupLocationInfoVO();
+	 * locationVO.setBackupDestLocation(request.getParameter("path")); return
+	 * experdbBackupStorageDAO.backupStorageInfo(locationVO); }
+	 */
 
 	@Override
 	public void backupStorageUpdate(HttpServletRequest request) {
@@ -177,6 +177,12 @@ public class ExperdbBackupStorageServiceImpl extends EgovAbstractServiceImpl imp
 		BackupLocationInfoVO locationVO = new BackupLocationInfoVO();
 		locationVO.setBackupDestLocation(request.getParameter("path"));
 		experdbBackupStorageDAO.backupStorageDelete(locationVO);
+	}
+
+	@Override
+	public BackupLocationInfoVO backupStorageInfo(HttpServletRequest request) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 	
 	

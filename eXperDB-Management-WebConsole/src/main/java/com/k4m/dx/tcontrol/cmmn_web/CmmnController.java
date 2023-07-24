@@ -1,12 +1,15 @@
 package com.k4m.dx.tcontrol.cmmn_web;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.StringReader;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
@@ -28,6 +31,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.experdb.management.backup.cmmn.CmmnUtil;
 import com.k4m.dx.tcontrol.admin.accesshistory.service.AccessHistoryService;
 import com.k4m.dx.tcontrol.admin.dbserverManager.service.DbServerVO;
 import com.k4m.dx.tcontrol.backup.service.BackupService;
@@ -689,7 +693,67 @@ public class CmmnController {
 			int wrk_id = Integer.parseInt(request.getParameter("wrk_id"));
 			
 			result = scheduleService.selectWrkInfo(wrk_id);	
-	
+			
+			Map<String, Object> conf = new HashMap<String, Object>();
+			for (int i = 0; i < result.size(); i++) {
+				if(result.get(i).get("backrest_gbn") != null) {
+					if(result.get(i).get("backrest_gbn").equals("remote")) {
+						String ip = result.get(i).get("remote_ip").toString();
+						String port = result.get(i).get("remote_port").toString();
+						String usr = result.get(i).get("remote_usr").toString();
+						String pw = result.get(i).get("remote_pw").toString();
+						
+						Map<String, Object> serverInfo = new HashMap<>();
+						serverInfo.put("ip", ip);
+						serverInfo.put("port", port);
+						serverInfo.put("usr", usr);
+						serverInfo.put("pw", pw);
+						
+						CmmnUtil cu = new CmmnUtil();
+						JSONObject cmdInfo = new JSONObject();
+						cmdInfo.put("type", "conf");
+						cmdInfo.put("bck_filenm", result.get(i).get("bck_filenm"));
+						cmdInfo.put("usr", usr);
+					
+						String cmd = cu.createBackrestCmd(cmdInfo);
+						
+						String confContext = cu.executeBackrest(serverInfo, cmd, "backrest", null).get("RESULT_DATA").toString();
+						String[] lines = confContext.split("\r\n");
+						String compress = lines[21].substring(14, lines[21].length());
+						String paralles = lines[22].substring(12, lines[22].length());
+						
+						conf.put("conf", confContext);
+						conf.put("paralles", paralles);
+						conf.put("compress", compress);
+						
+						result.add(conf);
+					}else {
+						JSONObject jObj = new JSONObject();
+						
+						String ipadr = result.get(i).get("ipadr").toString();
+						AgentInfoVO vo = new AgentInfoVO();
+						vo.setIPADR(ipadr);
+						
+						AgentInfoVO agentInfo = cmmnServerInfoService.selectAgentInfo(vo);
+						int port = agentInfo.getSOCKET_PORT();
+						
+						jObj.put(ClientProtocolID.WRK_NM, result.get(i).get("wrk_nm"));
+						
+						ClientInfoCmmn cic = new ClientInfoCmmn();
+						String confContext = cic.selectBackrestConf(ipadr, port, jObj).get(ClientProtocolID.RESULT_DATA).toString();
+						
+						String[] lines = confContext.split("\r\n");
+						String compress = lines[21].substring(14, lines[21].length());
+						String paralles = lines[22].substring(12, lines[22].length());
+						
+						conf.put("conf", confContext);
+						conf.put("paralles", paralles);
+						conf.put("compress", compress);
+						
+						result.add(conf);
+					}	
+				}
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

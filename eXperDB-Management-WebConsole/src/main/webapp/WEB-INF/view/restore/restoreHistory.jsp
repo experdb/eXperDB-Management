@@ -26,20 +26,31 @@
 <script type="text/javascript">
 	var tableRman = null;
 	var tableDump = null;
-	var tabGbn = nvlPrmSet("${tabGbn}", "rman");
+	var tableBackrest = null;
+	var tabGbn = "";
 	var searchInit = "";
+	var interval = null;
 
 	/* ********************************************************
 	 * Data initialization
 	 ******************************************************** */
 	$(window.document).ready(function() {
 		
+		if("${pgbackrest_useyn}" == "Y") {
+			tabGbn = "backrest";
+		}else{
+			tabGbn = nvlPrmSet("${tabGbn}", "rman");
+		}
+		
+		//복원이력 구분(pgbackrest)
+		fn_pgbackrestAut();
+		
 		//검색조건 초기화
 		selectInitTab(tabGbn);
 
 		//작업기간 calender setting
 		dateCalenderSetting();
-
+		
 		//조회
 		if(tabGbn != ""){
 			selectTab(tabGbn);
@@ -57,6 +68,8 @@
 
 			if(tabGbn == "rman"){
 				fn_get_rman_list();
+			}else if (tabGbn == "backrest"){
+				fn_get_backrest_list();		
 			}else{
 				fn_get_dump_list();
 			}
@@ -68,25 +81,37 @@
 	 ******************************************************** */
 	function selectInitTab(intab){
 		tabGbn = intab;
-		if(intab == "rman"){			
+		if(intab == "rman"){		
 			$(".search_rman").show();
 			$(".search_dump").hide();
+			$(".search_backrest").hide();
 			$("#logRmanListDiv").show();
 			$("#logDumpListDiv").hide();
-
+			$("#backrestDataTableDiv").hide();	
+			$("#backRestRestoreActiveLogDiv").hide();
+			seachParamInit(intab);
+		}else if(intab == "backrest"){
+			$(".search_rman").hide();
+			$(".search_dump").hide();
+			$("#logRmanListDiv").hide();
+			$("#logDumpListDiv").hide();
+			$("#backrestDataTableDiv").show();		
+			$("#backRestRestoreActiveLogDiv").show();	
 			seachParamInit(intab);
 		}else{				
 			$(".search_rman").hide();
 			$(".search_dump").show();
 			$("#logRmanListDiv").hide();
 			$("#logDumpListDiv").show();
-
+			$("#backrestDataTableDiv").hide();
+			$("#backRestRestoreActiveLogDiv").hide();
 			seachParamInit(intab);
 		}
 
 		//테이블 setting
 		fn_rman_init();
 		fn_dump_init();
+		fn_backrest_init();
 	}
 
 	/* ********************************************************
@@ -157,6 +182,25 @@
 	    $('#restore_enddtm_div').datepicker('updateDates');
 	}
 	
+	
+	/* ********************************************************
+	 * pgbackrest 사용시,
+	 ******************************************************** */
+	function fn_pgbackrestAut(){
+		if("${pgbackrest_useyn}" == "Y"){
+			selectChkTab = "backrest";
+			check = "backrest";
+
+			$("#server-tab-1").text("<spring:message code="eXperDB_backup.msg33" />");
+		}else{
+			selectChkTab = "rman";
+			check = "rman";
+
+			$("#server-tab-1").text("긴급/시점 복원이력");
+		}
+	}
+	
+	
 	/* ********************************************************
 	 * calender valid 체크
 	 ******************************************************** */
@@ -187,16 +231,27 @@
 			$(".search_dump").hide();
 			$("#logRmanListDiv").show();
 			$("#logDumpListDiv").hide();
-	
+			$("#backrestDataTableDiv").hide();
+			$("#backRestRestoreActiveLogDiv").hide();
 			seachParamInit(intab);
-	
 			fn_get_rman_list();
+		}else if(intab == "backrest"){
+			$(".search_rman").hide();
+			$(".search_dump").hide();
+			$("#logRmanListDiv").hide();
+			$("#logDumpListDiv").hide();
+			$("#backrestDataTableDiv").show();
+			$("#backRestRestoreActiveLogDiv").show();
+			seachParamInit(intab);		
+			fn_get_backrest_list();
+			$('#backRestRestoreAcitveLog').text('');
 		}else{
 			$(".search_rman").hide();
 			$(".search_dump").show();
 			$("#logRmanListDiv").hide();
 			$("#logDumpListDiv").show();
-	
+			$("#backrestDataTableDiv").hide();
+			$("#backRestRestoreActiveLogDiv").hide();
 			seachParamInit(intab);
 			fn_get_dump_list();
 		}
@@ -321,6 +376,123 @@
 	    $(window).trigger('resize'); 
 	}
 
+	
+	/* ********************************************************
+	 * Backrest Data Table initialization
+	 ******************************************************** */
+	 function fn_backrest_init(){
+		tableBackrest = $('#backrestDataTable').DataTable({
+			scrollY: "300px",
+			scrollX: true,	
+			bDestroy: true,
+			paging : true,
+			processing : true,
+			searching : false,	
+			deferRender : true,
+			bSort: false,
+			columns : [
+						{data : "idx", className : "dt-center", defaultContent : ""},
+						{data : "restore_cndt",
+							render : function(data, type, full, meta) {
+								var html = '';
+								if (full.restore_cndt == '0') {
+									html += "<div class='badge badge-light' style='background-color: transparent !important;font-size: 0.875rem;'>";
+									html += "	<i class='fa fa-check-circle text-primary' >";
+									html += '&nbsp;<spring:message code="common.success" /></i>';
+									html += "</div>";
+								} else if (full.restore_cndt == '1'){
+									html += "<div class='badge badge-light' style='background-color: transparent !important;font-size: 0.875rem;'>";
+									html += "	<i class='fa fa-play text-warning' >";
+									html += '&nbsp;<spring:message code="etc.etc37" />';
+									html += "</div>";
+									
+								} else if (full.restore_cndt == '2'){
+									html += "<div class='badge badge-pill badge-info' style='color: #fff;'>";
+									html += "	<i class='fa fa-spin fa-spinner mr-2' ></i>";
+									html += '&nbsp;<spring:message code="restore.progress" />';
+									html += "</div>";
+								} else {
+									html += "<div class='badge badge-light' style='background-color: transparent !important;font-size: 0.875rem;'>";
+									html += "	<i class='fa fa-times text-danger' >";
+									html += '&nbsp;<spring:message code="common.failed" /></i>';
+									html += "</div>";
+								}								
+								return html;
+							},
+							className : "dt-center",
+							defaultContent : ""
+						},	
+						{ data: "restore_nm", className: "dt-center", defaultContent: ""},
+						{ data: "restore_exp", className: "dt-left", defaultContent: ""},		
+						{ data: "db_svr_nm", className: "dt-center", defaultContent: ""},	
+						{
+							data : "restore_flag",
+							render : function(data, type, full, meta) {
+								var html = '';
+								if (full.restore_flag == '0') {
+									html += "<spring:message code="restore.type.full" />";
+								} else if (full.restore_flag == '1'){
+									html += "<spring:message code="eXperDB_backup.msg100" />";
+								} 				
+								return html;
+							},
+							className : "dt-center",
+							defaultContent : ""
+						},	
+						{ data: "restore_size", className: "dt-center", defaultContent: "",
+							render : function(data, type, full, meta){
+							var html = ''; 
+							
+							if(full.restore_size != 0){
+								html += "<div class='badge badge-light' style='background-color: transparent !important;font-size: 0.875rem;'>";
+								html += "	<i class='ti-files text-primary' >";
+								html += '&nbsp;' + full.restore_size + '</i>';
+								html += "</div>";
+							}
+							return html;							
+						},},
+						{ data: "elapsed_time", className: "dt-center", defaultContent: "",
+							render : function(data, type, full, meta) {
+								var html = '';
+								if(full.elapsed_time != undefined ){
+									var seconds = parseInt((full.elapsed_time/1000)%60)
+        							, minutes = parseInt((full.elapsed_time/(1000*60))%60)
+						            , hours = parseInt((full.elapsed_time/(1000*60*60))%24);
+
+							        hours = (hours < 10) ? "0" + hours : hours;
+							        minutes = (minutes < 10) ? "0" + minutes : minutes;
+							        seconds = (seconds < 10) ? "0" + seconds : seconds;
+								
+									html = "<div class='badge badge-pill badge-primary'>";
+									html += "	<i class='mdi mdi-timer mr-2'></i>";
+									html += hours + ":" + minutes + ":" + seconds;
+									html += "</div>";	
+								
+									return html;	
+								}else{
+									return;
+								}
+							}
+						}		
+			],'select': {'style': 'single'}
+		});
+
+		tableBackrest.tables().header().to$().find('th:eq(0)').css('min-width', '10px');
+		tableBackrest.tables().header().to$().find('th:eq(1)').css('min-width', '150px');
+		tableBackrest.tables().header().to$().find('th:eq(2)').css('min-width', '150px');
+		tableBackrest.tables().header().to$().find('th:eq(3)').css('min-width', '200px');
+		tableBackrest.tables().header().to$().find('th:eq(4)').css('min-width', '100px');
+		tableBackrest.tables().header().to$().find('th:eq(5)').css('min-width', '115px');
+		tableBackrest.tables().header().to$().find('th:eq(6)').css('min-width', '115px');
+		tableBackrest.tables().header().to$().find('th:eq(7)').css('min-width', '115px');
+		$(window).trigger('resize'); 
+	}	
+	
+	
+	
+	
+	
+	
 	/* ********************************************************
 	 * Dump Data Table initialization
 	 ******************************************************** */
@@ -472,6 +644,51 @@
 		});
 	}
 
+	
+	
+	/* ********************************************************
+	 * Get Backrest Log List
+	 ******************************************************** */
+	function fn_get_backrest_list(){
+		if(!calenderValid()) {
+			return;
+		}
+		
+ 		$.ajax({
+			url : "/backrestRestoreHistory.do",
+		  	data : {
+		  		restore_strtdtm : $("#restore_strtdtm").val(),
+		  		restore_enddtm : $("#restore_enddtm").val(),
+		  		restore_cndt : $("#restore_cndt").val(),
+		  		restore_nm : nvlPrmSet($('#restore_nm').val(), ""),
+		  	},
+			dataType : "json",
+			type : "post",
+			beforeSend: function(xhr) {
+				xhr.setRequestHeader("AJAX", true);
+			},
+			error : function(xhr, status, error) {
+				if(xhr.status == 401) {
+					showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
+				} else if(xhr.status == 403) {
+					showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
+				} else {
+					showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
+				}
+			},
+			success : function(result) {
+				tableBackrest.rows({selected: true}).deselect();
+				tableBackrest.clear().draw();
+
+				if (nvlPrmSet(result, "") != '') {
+					tableBackrest.rows.add(result).draw();
+				}
+			}
+		});
+	}
+	
+	
+	
 	/* ********************************************************
 	 * Get Dump Log List
 	 ******************************************************** */
@@ -570,6 +787,130 @@
 			}
 		});	
 	}
+
+
+	/* ********************************************************
+	 * Get backrest Log
+	 ******************************************************** */
+	 $(function() {
+		$('#backrestDataTable tbody').on('click', 'tr', function() {
+			if($(this).hasClass('selected')){
+			}else {
+				tableBackrest.$('tr.selected').removeClass('selected');
+				$(this).addClass('selected');
+				realTimeLog();
+			}
+			$('#backRestRestoreAcitveLog').text("");
+		})
+	});
+
+	function realTimeLog(){
+		$(function() {
+			var state = "";
+			if(tableBackrest.row('.selected').data() != null || tableBackrest.row('.selected').data() != undefined){
+				state = tableBackrest.row('.selected').data().restore_cndt;
+			}
+
+			if(state == "2"){
+				var resultCode = -1;
+				document.getElementById("log_starter").style.display = '';
+			
+				interval = setInterval(function() {					
+					if(resultCode == -1){
+						$.ajax({
+							url : "/selectBackrestRestoreLog.do",
+							data : {
+								exelog : tableBackrest.row('.selected').data().exelog,
+								ipadr : tableBackrest.row('.selected').data().db_svr_nm,
+							},
+							dataType : "json",
+							type : "post",
+							beforeSend: function(xhr) {
+								xhr.setRequestHeader("AJAX", true);
+							},
+							error : function(xhr, status, error) {
+								if(xhr.status == 401) {
+									showSwalIcon('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error');
+									top.location.href = "/";
+								} else if(xhr.status == 403) {
+									showSwalIcon('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error');									top.location.href = "/";
+								} else {
+									showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
+								}
+							},
+							success : function(result) {
+								if($('#log_starter').text() == 'Log Stop'){
+									resultCode = result.RESULT_DATA.indexOf('successfully');
+									
+									$('#backRestRestoreAcitveLog').text(result.RESULT_DATA);
+									$('#backRestRestoreAcitveLog').scrollTop($('#backRestRestoreAcitveLog')[0].scrollHeight);	
+								}		
+							}
+						});
+						$('#loading').hide();
+					}else {
+						clearInterval(interval);
+						fn_get_backrest_list();
+						document.getElementById("log_starter").style.display = 'none';
+						$('#loading').hide();
+					}
+				}, 5000);
+			}else{
+				clearInterval(interval);
+				document.getElementById("log_starter").style.display = 'none';
+				$.ajax({
+					url : "/selectBackrestRestoreLog.do",
+					data : {
+						exelog : tableBackrest.row('.selected').data().exelog,
+						ipadr : tableBackrest.row('.selected').data().db_svr_nm,
+					},
+					dataType : "json",
+					type : "post",
+					beforeSend: function(xhr) {
+						xhr.setRequestHeader("AJAX", true);
+					},
+					error : function(xhr, status, error) {
+						if(xhr.status == 401) {
+							showSwalIcon('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error');
+							top.location.href = "/";
+						} else if(xhr.status == 403) {
+							showSwalIcon('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error');
+							top.location.href = "/";
+						} else {
+							showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
+						}
+					},
+					success : function(result) {
+						$('#backRestRestoreAcitveLog').text(result.RESULT_DATA);
+						$('#backRestRestoreAcitveLog').scrollTop($('#backRestRestoreAcitveLog')[0].scrollHeight);
+					}
+				})
+			}
+		});
+	}
+
+	function stopInterval(){
+		var selectedRow = tableBackrest.row('.selected').data();
+		var logText = $('#log_starter').text();
+
+		if(selectedRow != undefined || selectedRow != null){
+	
+			if(logText == 'Log Stop'){
+				clearInterval(interval);
+				showSwalIcon('실시간 로그 중지', '<spring:message code="common.close" />', '', 'success');
+				$('#log_starter').text('Log Restart');
+				$('#log_starter').removeClass('btn-danger');
+				$('#log_starter').addClass('btn-success');	
+			}else{
+				showSwalIcon('실시간 로그 재시작', '<spring:message code="common.close" />', '', 'success');
+				$('#log_starter').text('Log Stop');
+				$('#log_starter').removeClass('btn-success');
+				$('#log_starter').addClass('btn-danger');
+				realTimeLog();
+			}
+		}
+	}
+
 </script>
 
 <%@include file="../popup/restoreLogView.jsp"%>
@@ -633,7 +974,7 @@
 				<div class="card-body">
 					<ul class="nav nav-pills nav-pills-setting nav-justified" id="server-tab" role="tablist" style="border:none;">
 						<li class="nav-item">
-							<a class="nav-link active" id="server-tab-1" data-toggle="pill" href="#subTab-1" role="tab" aria-controls="subTab-1" aria-selected="true" onclick="selectTab('rman');" >
+							<a class="nav-link active" id="server-tab-1" data-toggle="pill" href="#subTab-1" role="tab" aria-controls="subTab-1" aria-selected="true" onclick="selectTab(selectChkTab);" >
 								<spring:message code="restore.Emergency_Point-in-Time" /> <spring:message code="restore.Recovery_history" />
 							</a>
 						</li>
@@ -749,6 +1090,39 @@
 									</table>
 							 	</div>
 
+
+
+								<div class="col-12" id="backrestDataTableDiv" style="diplay:none;">
+									<div class="table-responsive">
+									   <div id="order-listing_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
+										   <div class="row">
+											   <div class="col-sm-12 col-md-6">
+												   <div class="dataTables_length" id="order-listing_length">
+												   </div>
+											   </div>
+										   </div>
+									   </div>
+								   </div>
+
+								   <table id="backrestDataTable" class="table table-hover table-striped system-tlb-scroll" style="width:100%;">
+										<thead>
+											<tr class="bg-info text-white">
+												<th width="30"><spring:message code="common.no" /></th>
+												<th width="100" class="dt-center"><spring:message code="migration.status" /></th>
+												<th width="100"><spring:message code="restore.Recovery_name" /></th>
+												<th width="150"><spring:message code="restore.Recovery_Description" /></th>
+												<th width="100" class="dt-center"><spring:message code="restore.msg227" /></th>
+												<th width="100" class="dt-center"><spring:message code="restore.type" /></th>
+												<th width="100" class="dt-center"><spring:message code="restore.msg228" /></th>
+												<th width="100" class="dt-center"><spring:message code="restore.msg229" /></th>
+											</tr>
+										</thead>
+									</table>
+								</div>
+
+
+
+
 								<div class="col-12" id="logDumpListDiv">
  									<div class="table-responsive">
 										<div id="order-listing_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
@@ -782,6 +1156,26 @@
 							 	</div>
 						 	</div>
 						</div>
+					</div>
+					
+					<br>
+					<div id="backRestRestoreActiveLogDiv" >	
+						<h4>※ Restore Active Log</h4>
+						<div class="card my-sm-2" >	
+							<div class="col-12">
+								<div class="card-body">
+									<div class="row">
+										<table id="backrestLog" class="table table-hover table-striped system-tlb-scroll" style="width:100%;">
+											<tr class="bg-info text-white" style="height: 70px;">
+												<th>Log Message</th> 
+												<th class="float-right"><button id="log_starter" type="button" class="btn btn-danger" onclick="stopInterval()" style="display: none;">Log Stop</button></th>
+											</tr>
+										</table>
+										<textarea id="backRestRestoreAcitveLog" rows=20 style="width:100%" disabled onfocus="this.value = this.value;"></textarea>
+									</div> 
+								</div>
+							</div>
+						</div> 
 					</div>
 				</div>
 				<!-- content-wrapper ends -->

@@ -60,6 +60,15 @@ public class TranCodeType {
 	public static final String DxT043 = "DxT043";
 	public static final String DxT044 = "DxT044";
 	public static final String DxT045 = "DxT045";
+	public static final String DxT046 = "DxT046";
+	public static final String DxT047 = "DxT047";
+	public static final String DxT048 = "DxT048";
+	public static final String DxT049 = "DxT049";
+	public static final String DxT050 = "DxT050";
+	public static final String DxT051 = "DxT051";
+	public static final String DxT052 = "DxT052";
+	public static final String DxT053 = "DxT053";
+	public static final String DxT054 = "DxT054";
 	
 	//proxy 추가
 	public static final String PsP001 = "PsP001"; // proxy 에이전트 setting
@@ -91,6 +100,7 @@ public class TranCodeType {
 	 */
 	public static final String WEB_DB_CONN_TEST = "WEB_DB_CONN_TEST";			  //DB커넥션 테스트
 	
+
 
 	
 

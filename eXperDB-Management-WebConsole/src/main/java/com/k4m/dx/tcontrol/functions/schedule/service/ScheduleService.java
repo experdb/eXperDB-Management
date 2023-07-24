@@ -248,4 +248,7 @@ public interface ScheduleService {
 
 
 	void deleteSchedule(String scd_id) throws Exception;
+	
+	
+	String selectIpadr(String db_svr_ipadr_id) throws Exception;
 }

@@ -1,9 +1,12 @@
 package com.experdb.management.backup.cmmn;
 
+import java.io.BufferedWriter;
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -28,9 +31,11 @@ import org.w3c.dom.Document;
 import com.experdb.management.backup.node.service.TargetMachineVO;
 import com.jcraft.jsch.Channel;
 import com.jcraft.jsch.ChannelExec;
+import com.jcraft.jsch.ChannelSftp;
 import com.jcraft.jsch.JSch;
 import com.jcraft.jsch.JSchException;
 import com.jcraft.jsch.Session;
+import com.jcraft.jsch.SftpException;
 
 
 public class CmmnUtil {
@@ -40,6 +45,7 @@ public class CmmnUtil {
 	private Session session = null;
 	private Channel channel = null;
 	private ChannelExec channelExec = null;
+	private ChannelSftp channelSftp = null;
 	private static DecimalFormat format = new DecimalFormat("#.00");
 	
 	
@@ -92,6 +98,150 @@ public class CmmnUtil {
 			e.printStackTrace();
 		}
 		return channel;
+	}
+	
+	public Channel getChannelBackrest(String ip, String usr, String pw, int port, String type) throws FileNotFoundException, IOException {
+
+		JSch jsch = new JSch();
+
+		try {
+
+			session = jsch.getSession(usr, ip, port);
+			session.setPassword(pw);
+
+			java.util.Properties config = new java.util.Properties();
+			config.put("StrictHostKeyChecking", "no");
+
+			session.setConfig(config);
+			session.connect();
+			
+			channel = session.openChannel("exec");	
+			channelExec = (ChannelExec) channel;
+
+
+		} catch (JSchException e) {
+			e.printStackTrace();
+		}
+		return channel;
+	}
+	
+	@SuppressWarnings("unchecked")
+	public JSONObject executeBackrest(Map<String,Object> serverInfo, String command, String type, String file) throws FileNotFoundException, IOException {
+
+		JSONObject result = new JSONObject();
+		String output = "";
+		String validateOutput = "";
+		try {
+			String ip = serverInfo.get("ip").toString();
+			int port = Integer.parseInt(serverInfo.get("port").toString());
+			String usr = serverInfo.get("usr").toString();
+			String pw = serverInfo.get("pw").toString();
+			
+			getChannelBackrest(ip, usr, pw, port, type);
+			channel = session.openChannel("exec");
+			
+			channelExec = (ChannelExec) channel;
+
+			// 실행할 명령어를 설정한다.
+			channelExec.setCommand(command);
+			OutputStream out = channelExec.getOutputStream();
+			InputStream in = channelExec.getInputStream();
+			InputStream err = channelExec.getErrStream();
+			// 명령어를 실행한다.
+			if(command != null) {
+				channelExec.connect(1500000);	
+			}
+			byte[] buf = new byte[1024];
+			int length;
+				
+			while ((length = in.read(buf)) != -1) {
+				output += new String(buf, 0, length);
+				validateOutput = new String(buf, 0, length);
+			}
+			
+			if(type.equals("backrest")) {
+				result = ResultCode.jobResultCode(output);
+			}else if(type.equals("backrestConf")) {
+				result = ResultCode.jobResultCode(output);
+			}else if (type.equals("file")) {
+				result = ResultCode.jobResultCode(output);
+			}else{
+				result.put("RESULT_CODE", 0);
+				result.put("RESULT_DATA", output.trim());
+			}
+			
+		} catch (JSchException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		} finally {
+			channelExec.disconnect(); 
+		}
+		return result;
+	}
+	
+	public String createBackrestConf(Map<String,Object> serverInfo, String file) {
+		String result = "";
+		JSch jsch = new JSch();
+		
+		String ip = serverInfo.get("ip").toString();
+		int port = Integer.parseInt(serverInfo.get("port").toString());
+		String usr = serverInfo.get("usr").toString();
+		String pw = serverInfo.get("pw").toString();
+		String pth = serverInfo.get("pth").toString();
+		
+		
+		try {
+			session = jsch.getSession(usr, ip, port);
+			session.setPassword(pw);
+			session.setConfig("StrictHostKeyChecking", "no");
+            session.connect();
+            
+            channelSftp = (ChannelSftp) session.openChannel("sftp");
+            channelSftp.connect();
+            
+            channelSftp.put(new ByteArrayInputStream(file.getBytes()), pth);
+            result = "S";
+		} catch (JSchException e) {
+			result = "N";
+			e.printStackTrace();
+		} catch (SftpException e) {
+			result = "N";
+			e.printStackTrace();
+		}finally {
+			channelSftp.disconnect();
+		}
+		return result;
+	}
+	
+	public String createBackrestCmd(JSONObject cmdInfo) {
+		String cmd = "";
+		
+		if(cmdInfo.get("type").equals("backup")) {
+			String bck_filenm = cmdInfo.get("bck_filenm").toString();
+			String bck_opt_cd_nm = cmdInfo.get("bck_opt_cd_nm").toString().toLowerCase();
+			if(bck_opt_cd_nm.equals("incremental")) {
+				bck_opt_cd_nm = "incr";
+			}
+			String log_file_pth = cmdInfo.get("log_file_pth").toString();
+			String wrk_nm = cmdInfo.get("wrk_nm").toString();
+			String now = cmdInfo.get("now").toString();
+			
+			cmd = "pgbackrest --stanza=experdb --config=/home/" + cmdInfo.get("usr") + "/pgbackrest/config/" + bck_filenm + " --type=" + bck_opt_cd_nm + " backup > " + log_file_pth + "/" + wrk_nm + "_" + now + ".log";	
+		}else if(cmdInfo.get("type").equals("info")){
+			String bck_filenm = cmdInfo.get("bck_filenm").toString();
+			cmd = "pgbackrest --stanza=experdb --config=/home/" + cmdInfo.get("usr") +"/pgbackrest/config/" + bck_filenm + " info --output=json";
+		}else if (cmdInfo.get("type").equals("conf")) {
+			String bck_filenm = cmdInfo.get("bck_filenm").toString();
+			cmd = "cat /home/" + cmdInfo.get("usr") + "/pgbackrest/config/" + bck_filenm;
+		}else if(cmdInfo.get("type").equals("chk")) {
+			cmd = "if test -e /home/" + cmdInfo.get("usr") + "/pgbackrest/config/" + cmdInfo.get("bck_filenm")  + ".conf; then echo \"S\"; else echo \"F\"; fi";
+		}
+		else if (cmdInfo.get("type").equals("remove")) {
+			cmd = "rm /home/" + cmdInfo.get("usr") + "/pgbackrest/config/" + cmdInfo.get("bck_filenm") + ".conf";
+		}
+		
+		return cmd;
 	}
 
 	
@@ -660,6 +810,8 @@ public class CmmnUtil {
 			
 			
 			public static void main(String[] args) {
+				
+				
 				TargetMachineVO targetMachine = new TargetMachineVO();
 				targetMachine.setName("192.168.20.127");
 				JobScriptApply("/opt/Arcserve/d2dserver/bin/jobs/",targetMachine);

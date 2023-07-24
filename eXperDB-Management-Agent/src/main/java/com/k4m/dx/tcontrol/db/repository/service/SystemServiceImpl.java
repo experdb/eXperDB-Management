@@ -168,15 +168,16 @@ public class SystemServiceImpl implements SystemService{
 		filesetting();
 		
 		//매니지먼트 기능
-		AgentInfoVO vo = new AgentInfoVO();
+		if("N".equals(prop.getProperty("agent.proxy_yn")) || "N".equals(prop.getProperty("proxy.global.serveryn"))) {
+			AgentInfoVO vo = new AgentInfoVO();
+			vo.setIPADR(strSocketIp);
+			vo.setSOCKET_PORT(Integer.parseInt(strSocketPort));
+			vo.setAGT_CNDT_CD(vo.TC001102); //종료
+			vo.setISTCNF_YN("Y");
+			vo.setLST_MDFR_ID("system");
+			this.updateAgentStopInfo(vo);			
+		}
 		
-		vo.setIPADR(strSocketIp);
-		vo.setSOCKET_PORT(Integer.parseInt(strSocketPort));
-		vo.setAGT_CNDT_CD(vo.TC001102); //종료
-		vo.setISTCNF_YN("Y");
-		vo.setLST_MDFR_ID("system");
-		
-		this.updateAgentStopInfo(vo);
 		
 		if("Y".equals(prop.getProperty("agent.proxy_yn"))) {
 			//프록시 기능
@@ -332,4 +333,31 @@ public class SystemServiceImpl implements SystemService{
 	    	System.exit(0);
 	    }
 	}
+	
+	@Override
+	public int selectDbSvrIpAdrId(String ipadr) throws Exception {
+		return systemDAO.selectDbSvrIpAdrId(ipadr);
+	}
+
+	@Override
+	public void insertPgbackrestBackup(WrkExeVO vo) throws Exception {
+		systemDAO.insertPgbackrestBackup(vo);
+	}
+
+	@Override
+	public void updateBackrestWrk(WrkExeVO vo) throws Exception {
+		systemDAO.updateBackrestWrk(vo);
+	}
+	
+	@Override
+	public void updateBackrestRestore(RmanRestoreVO vo) throws Exception {
+		systemDAO.updateBackrestRestore(vo);
+	}
+	
+	@Override
+	public void updateBackrestErr(WrkExeVO vo) throws Exception {
+		systemDAO.updateBackrestErr(vo);
+	}
+	
+
 }
