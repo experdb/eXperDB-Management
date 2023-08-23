@@ -501,7 +501,7 @@
 	******************************************************** */
 	function fn_proxySvrSsSearch(pry_svr_id, rowChkCnt) {
 		fn_proxy_loadbar("start");		
-		
+		console.log('pry_svr_id', pry_svr_id);
 		//db서버 정보
 		$.ajax({
 			url : '/proxyMonitoring/selectInfoByPrySvrId.do',
@@ -1071,36 +1071,35 @@
 
 		//제목 및 agent 상태
 		// 여기가 db 부분 테이블 만드는곳
-		for(var l = 0; l < result.proxyServerByMasId.length; l++){
+		for(var l = 0; l < result.dbServerConProxyList.length/2; l++){
 			$("#db_con_table > tbody:last").append('<tr id="db_con'+l+'"></tr>')
 		}
 		
   		for(var j = 0; j < result.proxyServerByMasId.length; j++){
-
  			if (result.dbServerConProxyList != null && result.dbServerConProxyList.length > 0) {
 				var standbyCnt = 0;
-				
 				//조건 좀 바꿔야함
 				for(var k = 0; k < result.dbServerConProxyList.length/2; k++){
 					html_db = "";
-					if(standbyCnt == 1){
+					/* if(standbyCnt == 1){
 						standbyCnt = 0;
 						continue;
-					}
+					} */
 					if (result.proxyServerByMasId[j].pry_svr_id == result.dbServerConProxyList[k].pry_svr_id) {
+						
 
 						if(result.dbServerConProxyList[k].master_gbn == 'M'){
 							html_db += '<td><div class="badge badge-pill badge-success" title="">'+result.dbServerConProxyList[k].master_gbn+'</div></td>';
 						} else {
-							html_db += '<td><div class="badge badge-pill badge-success" title="">'+result.dbServerConProxyList[k].master_gbn+'</div></td>';
-							standbyCnt ++;
+								html_db += '<td><div class="badge badge-pill badge-success" title="">'+result.dbServerConProxyList[k].master_gbn+'</div></td>';
+							//standbyCnt ++;
 						}
-
+	
 						
-						if(result.dbServerConProxyList[k].db_cndt == 'Y'){
-						} else {
-							html_db += '<td><div class="badge badge-pill badge-danger" title="">'+result.dbServerConProxyList[k].master_gbn+'</div></td>';
-						}
+						//if(result.dbServerConProxyList[k].db_cndt == 'Y'){
+						//} else {
+						//	html_db += '<td><div class="badge badge-pill badge-danger" title="">'+result.dbServerConProxyList[k].master_gbn+'</div></td>';
+						//}
 						
  						if(result.dbServerConProxyList[k].master_gbn == 'M'){
 							html_db += '			<td>' + result.dbServerConProxyList[k].ipadr + '/' + result.dbServerConProxyList[k].portno + '</td>';
@@ -1132,7 +1131,7 @@
 						dbNulkCnt ++;
 						
 						if(result.proxyServerLsnList != ""){
-							html_db += '<td>'+result.proxyServerLsnList[k].lsn_nm+'</td>'
+							html_db += '<td>'+result.dbServerConProxyList[k].lsn_nm+'</td>'
 						}else {
 							html_db += '<td>'+none+'</td>'
 						}
