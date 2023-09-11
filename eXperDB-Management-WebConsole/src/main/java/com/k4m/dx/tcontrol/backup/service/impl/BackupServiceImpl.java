@@ -179,6 +179,11 @@ public class BackupServiceImpl extends EgovAbstractServiceImpl implements Backup
 	}
 	
 	@Override
+	public List<DbServerVO> selectBckTargetServer(int bck_target_ipadr_id) throws Exception {
+		return backupDAO.selectBckTargetServer(bck_target_ipadr_id);
+	}
+	
+	@Override
 	public List<DbServerVO> selectMasterServer(DbServerVO dbServerVO) throws Exception {
 		return backupDAO.selectMasterServer(dbServerVO);
 	}
@@ -221,5 +226,10 @@ public class BackupServiceImpl extends EgovAbstractServiceImpl implements Backup
 	@Override
 	public Map<String, Object> selectSchedule(int scdId) {
 		return backupDAO.selectSchedule(scdId);
+	}
+	
+	@Override
+	public int selectSingleCheck(WorkVO workVO) throws Exception {
+		return backupDAO.selectSingleCheck(workVO);
 	}
 }

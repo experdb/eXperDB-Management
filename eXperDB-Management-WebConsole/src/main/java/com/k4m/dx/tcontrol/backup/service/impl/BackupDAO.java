@@ -193,6 +193,12 @@ public class BackupDAO extends EgovAbstractMapper{
 		return sl;
 	}
 	
+	public List<DbServerVO> selectBckTargetServer(int bck_target_ipadr_id) {
+		List<DbServerVO> sl = null;
+		sl = (List<DbServerVO>) list("backupSQL.selectBckTargetServer", bck_target_ipadr_id);
+		return sl;
+	}
+	
 	public List<DbServerVO> selectMasterServer(DbServerVO dbServerVO) {
 		List<DbServerVO> sl = null;
 		sl = (List<DbServerVO>) list("backupSQL.selectMasterServer", dbServerVO);
@@ -233,4 +239,12 @@ public class BackupDAO extends EgovAbstractMapper{
 		result = getSqlSession().selectOne("backupSQL.selectSchedule", scdId);
 		return result;
 	}
+	
+	public int selectSingleCheck(WorkVO workVo) {
+		int resultSet = 0;
+		resultSet = (int) getSqlSession().selectOne("backupSQL.dbmsSingleCheck", workVo);
+		return resultSet;
+	}
+	
+	
 }

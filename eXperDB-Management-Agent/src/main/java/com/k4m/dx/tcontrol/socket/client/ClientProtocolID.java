@@ -277,4 +277,9 @@ public class ClientProtocolID {
 	public static final String MASTER_DBMS_USER = "MASTER_DBMS_USER";
 	public static final String EXELOG = "EXELOG";
 	public static final String WRK_TYPE = "WRK_TYPE";
+	public static final String TARGET_MASTER_GBN = "TARGET_MASTER_GBN";
+	public static final String TARGET_IPADR= "TARGET_IPADR";
+	public static final String TARGET_PGDATA= "TARGET_PGDATA";
+	public static final String TARGET_USER= "TARGET_USER";
+	public static final String TARGET_PORT= "TARGET_PORT";
 }

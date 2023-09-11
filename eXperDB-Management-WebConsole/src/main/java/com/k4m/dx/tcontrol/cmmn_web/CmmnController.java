@@ -718,9 +718,27 @@ public class CmmnController {
 						String cmd = cu.createBackrestCmd(cmdInfo);
 						
 						String confContext = cu.executeBackrest(serverInfo, cmd, "backrest", null).get("RESULT_DATA").toString();
-						String[] lines = confContext.split("\r\n");
-						String compress = lines[21].substring(14, lines[21].length());
-						String paralles = lines[22].substring(12, lines[22].length());
+						String[] lines = confContext.split("\n");
+						
+						Boolean standbyBckChk = false;
+						
+						for(int j=0; j<lines.length; j++) {
+							if(lines[j].contains("pg2")) {
+								standbyBckChk = true;
+								break;
+							}
+						}
+						
+						String compress = "";
+						String paralles = "";
+						
+						if(standbyBckChk) {
+							compress = lines[28].substring(14, lines[28].length());
+							paralles = lines[29].substring(12, lines[29].length());
+						}else {
+							compress = lines[21].substring(14, lines[21].length());
+							paralles = lines[22].substring(12, lines[22].length());
+						}
 						
 						conf.put("conf", confContext);
 						conf.put("paralles", paralles);

@@ -321,6 +321,7 @@ function fn_reg_popup(){
 				$('#pop_layer_reg_rman').modal("show");
 			} else if(selectChkTab == "backrest"){
 				fn_init_backrest_reg_form();
+				fn_init_backrest_reg_form2();
 				//PG Backrest Agent Info Table Setting
 				// fn_select_agent_info();
 				$('#pop_layer_reg_backrest').modal("show");
@@ -476,6 +477,8 @@ function fn_insert_chogihwa(gbn, result) {
  * 수정 팝업 초기화
  ******************************************************** */
 function fn_update_chogihwa(gbn, result) {
+
+
 	if (gbn == "rman") {
 		//상단
 		$("#mod_wrk_nm", "#workModForm").val(nvlPrmSet(result.workInfo[0].wrk_nm, "")); 						//work 명
@@ -563,8 +566,36 @@ function fn_update_chogihwa(gbn, result) {
 			$("#mod_bckr_log_pth", "#workRegReFormBckr").css("width", "410px");
 			$("#mod_log_pth_chk", "#workRegReFormBckr").css("display", "none");
 
+			$('#mod_backrest_svr_Info_div').css('width', "680px");
+			$('#mod_backrest_svr_Info_div2').css('width', "680px");
+
 			$("#mod_remote_opt").hide();
 			$("#mod_cloud_opt").hide();
+
+			if(single_chk){
+				$('#mod_backrest_svr_Info_div2').css('display', "none");
+				$('#mod_bckr_svr_div').css('display', "none");
+
+				$('#mod_backrest_svr_Info_div').css('margin-left', "15px");
+
+				$('#mod_backrest_svr_Info_div').css('width', "98%");
+
+				backrestBckServerTable.tables().header().to$().find('th:eq(5)').css('display', '');
+
+				backrestBckServerTable2.columns(5).visible(true);
+				backrestBckServerTable.columns(5).visible(true);	
+
+			}else{
+				backrestBckServerTable.tables().header().to$().find('th:eq(5)').css('display', 'none');
+				backrestBckServerTable2.tables().header().to$().find('th:eq(5)').css('display', 'none');
+				$('#mod_backrest_svr_Info_div2').css('display', "");
+				$('#mod_bckr_svr_div').css('display', "");
+
+				backrestBckServerTable.columns(5).visible(false);
+				backrestBckServerTable2.columns(5).visible(false);	
+			}
+
+			
 		}else if(nvlPrmSet(result.workInfo[0].backrest_gbn, "") == "remote"){
 			$("input:radio[id='mod_remote_radio']").prop("checked", true);
 			bckSrvLocalMod.style.backgroundColor = "#e7e7e7"
@@ -587,6 +618,16 @@ function fn_update_chogihwa(gbn, result) {
 			
 			$("#mod_remote_opt").show();
 			$("#mod_cloud_opt").hide();
+			$('#mod_backrest_svr_Info_div').css('width', "98%");
+
+			$('#mod_backrest_svr_Info_div2').css('display', "none");
+			$('#mod_bckr_svr_div').css('display', "none");
+			$('#mod_backrest_svr_Info_div').css('margin-left', "15px");
+
+			backrestBckServerTable.columns(5).visible(true);
+			backrestBckServerTable2.columns(5).visible(true);	
+			backrestBckServerTable.tables().header().to$().find('th:eq(5)').css('display', '');
+
 		}else{
 			$("input:radio[id='mod_cloud_radio']").prop("checked", true);
 			bckSrvLocalMod.style.backgroundColor = "#e7e7e7"
@@ -611,6 +652,14 @@ function fn_update_chogihwa(gbn, result) {
 
 			$("#mod_remote_opt").hide();
 			$("#mod_cloud_opt").show();
+			$('#mod_backrest_svr_Info_div').css('width', "98%");
+			$('#mod_backrest_svr_Info_div2').css('display', "none");
+			$('#mod_bckr_svr_div').css('display', "none");
+			$('#mod_backrest_svr_Info_div').css('margin-left', "15px");
+
+			backrestBckServerTable.columns(5).visible(true);
+			backrestBckServerTable2.columns(5).visible(true);	
+			backrestBckServerTable.tables().header().to$().find('th:eq(5)').css('display', '');
 		}
 
 		$("#mod_bckr_opt_cd", "#workRegReFormBckr").val(nvlPrmSet(result.workInfo[0].bck_opt_cd, "")).prop("selected", true); //백업옵션
@@ -679,6 +728,8 @@ function fn_update_chogihwa(gbn, result) {
 		custom_map.clear();
         custom_map_before.clear();
 		custom_save_chk = false;
+
+		$(window).trigger('resize'); 
 
 	} else {
 		//상단

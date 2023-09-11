@@ -1,5 +1,7 @@
 package com.k4m.dx.tcontrol.cmmn.client;
 
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.text.SimpleDateFormat;
 import java.time.Duration;
@@ -13,6 +15,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -25,6 +28,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.util.ResourceUtils;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.experdb.management.backup.cmmn.CmmnUtil;
@@ -2392,9 +2396,22 @@ System.out.println("=====cmd1123123123" + cmd);
 	public JSONObject serverSpace(String IP, int PORT, JSONObject serverObj) {
 		JSONObject resultHp = null;
 		try {
+			String pgbackrest_useyn = "";
+
+			Properties props = new Properties();
+			try {
+				props.load(new FileInputStream(
+						ResourceUtils.getFile("classpath:egovframework/tcontrolProps/globals.properties")));
+				pgbackrest_useyn = props.getProperty("pgbackrest.useyn").toString().toUpperCase();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
 			JSONObject jObj = new JSONObject();
 			jObj.put(ClientProtocolID.DX_EX_CODE, ClientTranCodeType.DxT040);
 			jObj.put(ClientProtocolID.SERVER_INFO, serverObj);
+			jObj.put(ClientProtocolID.PGBACKREST_USEYN, pgbackrest_useyn);
 			JSONObject objList;
 			ClientAdapter CA = new ClientAdapter(IP, PORT);
 			CA.open(); 

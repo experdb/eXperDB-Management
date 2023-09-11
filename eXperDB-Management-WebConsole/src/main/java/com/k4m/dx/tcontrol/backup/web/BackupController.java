@@ -645,8 +645,20 @@ public class BackupController {
 
 			if (result.equals("S") && !remoteGbn.equals("remote")) {
 				try {
-					if(request.getParameter("master_gbn").toString().equals("M")) {
-						createBackrestConfig(workVO, dbServerVO, request, paramMap, null);
+					if(request.getParameter("target_svr_master_gbn").toString().equals("M")) {
+						if(request.getParameter("master_gbn").toString().equals("M")) {
+							createBackrestConfig(workVO, dbServerVO, request, paramMap, null);
+						}else {
+							List<DbServerVO> masterServer = backupService.selectMasterServer(dbServerVO);
+							
+							DbServerVO masterDbServerVO = new DbServerVO();
+							masterDbServerVO.setPgdata_pth(masterServer.get(0).getPgdata_pth());
+							masterDbServerVO.setPortno(masterServer.get(0).getPortno());
+							masterDbServerVO.setIpadr(masterServer.get(0).getIpadr());
+							masterDbServerVO.setSvr_spr_usr_id(masterServer.get(0).getSvr_spr_usr_id());
+							
+							createBackrestConfig(workVO, dbServerVO, request, paramMap, masterDbServerVO);
+						}
 					}else {
 						List<DbServerVO> masterServer = backupService.selectMasterServer(dbServerVO);
 						
@@ -658,6 +670,7 @@ public class BackupController {
 						
 						createBackrestConfig(workVO, dbServerVO, request, paramMap, masterDbServerVO);
 					}
+					
 					
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -963,8 +976,10 @@ public class BackupController {
 			
 		List<WorkVO> selectedWork = backupService.selectWorkList(workVO);
 		List<DbServerVO> dbServerVO = backupService.selectBckServer(selectedWork.get(0));
+		List<DbServerVO> bckTargetServerVO = backupService.selectBckTargetServer(selectedWork.get(0).getBck_target_ipadr_id());
 		mv.addObject("workInfo", selectedWork);
 		mv.addObject("bckSvrInfo", dbServerVO);
+		mv.addObject("bckTargetSvrInfo", bckTargetServerVO);
 		
 		// Get Backrest Backup Information (REMOTE / ELSE)
 		if(backrest_gbn.equals("remote")) {
@@ -1344,10 +1359,23 @@ public class BackupController {
 			deleteBackrestConfig(workVO, dbServerVO);
 			
 			try {
-				if(request.getParameter("master_gbn").toString().equals("M")) {
-					createBackrestConfig(workVO, dbServerVO, request, paramMap, null);
+				if(request.getParameter("target_svr_master_gbn").toString().equals("M")) {
+					if(request.getParameter("master_gbn").toString().equals("M")) {
+						createBackrestConfig(workVO, dbServerVO, request, paramMap, null);
+					}else {
+						List<DbServerVO> masterServer = backupService.selectMasterServer(dbServerVO);
+						
+						DbServerVO masterDbServerVO = new DbServerVO();
+						masterDbServerVO.setPgdata_pth(masterServer.get(0).getPgdata_pth());
+						masterDbServerVO.setPortno(masterServer.get(0).getPortno());
+						masterDbServerVO.setIpadr(masterServer.get(0).getIpadr());
+						masterDbServerVO.setSvr_spr_usr_id(masterServer.get(0).getSvr_spr_usr_id());
+						
+						createBackrestConfig(workVO, dbServerVO, request, paramMap, masterDbServerVO);
+					}
 				}else {
 					List<DbServerVO> masterServer = backupService.selectMasterServer(dbServerVO);
+					
 					DbServerVO masterDbServerVO = new DbServerVO();
 					masterDbServerVO.setPgdata_pth(masterServer.get(0).getPgdata_pth());
 					masterDbServerVO.setPortno(masterServer.get(0).getPortno());
@@ -2531,12 +2559,42 @@ public class BackupController {
 			
 			conf = result.get("RESULT_DATA").toString();
 			
-			conf = conf.replaceAll("#pg1-path=", "pg1-path=" + dbServerVO.getPgdata_pth());
-			conf = conf.replaceAll("#pg1-host=", "pg1-host=" + dbServerVO.getIpadr());
-			conf = conf.replaceAll("#pg1-host-user=", "pg1-host-user=" + hostUser);
-			conf = conf.replaceAll("#pg1-host-port=", "pg1-host-port=" + remoteMap.get("remote_port").toString());
-			conf = conf.replaceAll("#pg1-port=", "pg1-port=" + String.valueOf(dbServerVO.getPortno()));
-			conf = conf.replaceAll("#pg1-user=", "pg1-user=" + String.valueOf(dbServerVO.getSvr_spr_usr_id()));
+			if(dbServerVO.getMaster_gbn().equals("M")) {
+				conf = conf.replaceAll("#pg1-path=", "pg1-path=" + dbServerVO.getPgdata_pth());
+				conf = conf.replaceAll("#pg1-host=", "pg1-host=" + dbServerVO.getIpadr());
+				conf = conf.replaceAll("#pg1-host-user=", "pg1-host-user=" + hostUser);
+				conf = conf.replaceAll("#pg1-port=", "pg1-port=" + String.valueOf(dbServerVO.getPortno()));
+				conf = conf.replaceAll("#pg1-user=", "pg1-user=" + String.valueOf(dbServerVO.getSvr_spr_usr_id()));
+			}else {
+				conf = conf.replaceAll("#pg1-path=", "pg1-path=" + masterServer.getPgdata_pth());
+				conf = conf.replaceAll("#pg1-host=", "pg1-host=" + masterServer.getIpadr());
+				conf = conf.replaceAll("#pg1-host-user=", "pg1-host-user=" + hostUser);
+				conf = conf.replaceAll("#pg1-port=", "pg1-port=" + String.valueOf(masterServer.getPortno()));
+				conf = conf.replaceAll("#pg1-user=", "pg1-user=" + String.valueOf(masterServer.getSvr_spr_usr_id()));
+				
+				StringBuffer sb = new StringBuffer(conf);
+				int idxGloval = conf.indexOf("[global]");
+				String standbyInfo = "";
+				standbyInfo += "pg2-path=" + request.getParameter("target_svr_pgdata");
+				standbyInfo += "\n";
+				standbyInfo += "pg2-host=" + request.getParameter("target_svr_ipadr");
+				standbyInfo += "\n";
+				standbyInfo += "pg2-host-user=" + hostUser;
+				standbyInfo += "\n";
+				standbyInfo += "pg2-port=" + request.getParameter("target_svr_port");
+				standbyInfo += "\n";
+				standbyInfo += "pg2-user=" + request.getParameter("target_svr_user");
+				standbyInfo += "\n";
+				standbyInfo += "backup-standby=y";
+				standbyInfo += "\n";
+				standbyInfo += "\n";
+				sb.insert(idxGloval-1, standbyInfo);
+
+				conf = sb.toString();
+				
+				conf = conf.replaceAll("\r", "");
+			}
+			
 			conf = conf.replaceAll("#repo1-gbn=", "#repo1-gbn=" + workVO.getBackrest_gbn());
 
 			String bck_pth = request.getParameter("bck_pth");
@@ -2586,9 +2644,9 @@ public class BackupController {
 	            }
 				
 				if(customKeyList.size() != 0) {
-					conf += "\r\n";
+					conf += "\n";
 					for(int i=0; i < customKeyList.size(); i++) {
-						conf += customKeyList.get(i) + "=" + customValueList.get(i)+ "\r\n";
+						conf += customKeyList.get(i) + "=" + customValueList.get(i)+ "\n";
 					}
 				}
 			}
@@ -2642,6 +2700,15 @@ public class BackupController {
 				jObj.put(ClientProtocolID.MASTER_IP, masterServer.getIpadr());
 				jObj.put(ClientProtocolID.MASTER_DBMS_PORT, masterServer.getPortno());
 				jObj.put(ClientProtocolID.MASTER_DBMS_USER, masterServer.getSvr_spr_usr_id());
+			}
+			
+			if(request.getParameter("target_svr_master_gbn").equals("S")) {
+				jObj.put(ClientProtocolID.TARGET_MASTER_GBN, request.getParameter("target_svr_master_gbn"));
+				jObj.put(ClientProtocolID.TARGET_IPADR, request.getParameter("target_svr_ipadr"));
+				jObj.put(ClientProtocolID.TARGET_USER, request.getParameter("target_svr_user"));
+				jObj.put(ClientProtocolID.TARGET_PORT, request.getParameter("target_svr_port"));
+				jObj.put(ClientProtocolID.TARGET_PGDATA, request.getParameter("target_svr_pgdata"));
+				jObj.put(ClientProtocolID.DB_SVR_IPADR_ID, dbServerVO.getIpadr());
 			}
 
 			result = cic.createBackrestConf(ip, port, jObj);
@@ -2947,6 +3014,26 @@ public class BackupController {
 		}		
 	}
 	
+	/**
+	 * dbms single 여부 조회
+	 * 
+	 * @param workVO, request
+	 * @return String
+	 * @throws Exception
+	 */
+	@SuppressWarnings("unchecked")
+	@RequestMapping(value = "/backup/selectCheckSingle.do")
+	@ResponseBody
+	public int checkSingle(@ModelAttribute("workVO") WorkVO workVO, HttpServletRequest request) {
+		int countDbmsCnt = 0;
+		
+		try {
+			countDbmsCnt = backupService.selectSingleCheck(workVO);
+		} catch (Exception e2) {
+			e2.printStackTrace();
+		}
 	
+		return countDbmsCnt;
+	}
 	
 }
