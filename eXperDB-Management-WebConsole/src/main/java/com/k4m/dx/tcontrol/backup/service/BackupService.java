@@ -218,6 +218,8 @@ public interface BackupService {
 	
 	public List<DbServerVO> selectBckServer(WorkVO workVO) throws Exception;
 	
+	public List<DbServerVO> selectBckTargetServer(int bck_target_ipadr_id) throws Exception;
+	
 	public List<DbServerVO> selectMasterServer(DbServerVO dbServerVO) throws Exception;
 
 	public int selectQ_WRKEXE_G_01_SEQ() throws Exception;
@@ -235,5 +237,7 @@ public interface BackupService {
 	public void updateBackrestErr(WrkExeVO vo);
 
 	public Map<String, Object> selectSchedule(int scdId);
+	
+	public int selectSingleCheck(WorkVO workVO) throws Exception;
 
 }

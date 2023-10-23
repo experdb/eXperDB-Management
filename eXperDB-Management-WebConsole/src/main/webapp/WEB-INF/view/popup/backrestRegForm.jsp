@@ -17,6 +17,7 @@
 	var svrBckCheck = 'local';
 	var selectedAgentServer = null;
 	var backrestServerTable = null;
+	var backrestServerTable2 = null;
 	var db_info_arr = [];
 	var remoteConn = "Fail";
 	
@@ -55,14 +56,15 @@
 
 	function fn_init_backrest_reg_form() {
 		backrestServerTable = $('#backrest_svr_info').DataTable({
-			scrollY : "125px",
-			scrollX: false,	
+			scrollY : "140px",
+			scrollX: "100%",	
 			bSort: false,
 			searching : false,
 			paging : false,
 			deferRender : true,
 			destroy: true,
 			info: false,
+			bScrollCollapse: true,
 			columns : [
 						{data : "rownum", defaultContent : "", className : "dt-center"}, 
 						{data : "master_gbn", className : "dt-center", defaultContent : "",
@@ -82,45 +84,91 @@
 			],'select': {'style': 'single'}
 		});
 		
-		backrestServerTable.tables().header().to$().find('th:eq(0)').css('min-width', '30px');
-		backrestServerTable.tables().header().to$().find('th:eq(1)').css('min-width', '150px');
-		backrestServerTable.tables().header().to$().find('th:eq(2)').css('min-width', '200px');
-		backrestServerTable.tables().header().to$().find('th:eq(3)').css('min-width', '160px');
-		backrestServerTable.tables().header().to$().find('th:eq(4)').css('min-width', '170px');
-		backrestServerTable.tables().header().to$().find('th:eq(5)').css('min-width', '465px');
+		backrestServerTable.tables().header().to$().find('th:eq(0)').css('min-width', '20px');
+		backrestServerTable.tables().header().to$().find('th:eq(1)').css('min-width', '135px');
+		backrestServerTable.tables().header().to$().find('th:eq(2)').css('min-width', '135px');
+		backrestServerTable.tables().header().to$().find('th:eq(3)').css('min-width', '60px');
+		backrestServerTable.tables().header().to$().find('th:eq(4)').css('min-width', '100px');
+		backrestServerTable.tables().header().to$().find('th:eq(5)').css('min-width', '250px');
 		backrestServerTable.tables().header().to$().find('th:eq(6)').css('min-width', '0px');
 
 		$(window).trigger('resize'); 
 
 	}
 
+	function fn_init_backrest_reg_form2() {
+		backrestServerTable2 = $('#backrest_svr_info2').DataTable({
+			scrollY : "140px",
+			scrollX: "100%",	
+			bSort: false,
+			searching : false,
+			paging : false,
+			deferRender : true,
+			destroy: true,
+			info: false,
+			bScrollCollapse: true,
+			columns : [
+						{data : "rownum", defaultContent : "", className : "dt-center"}, 
+						{data : "master_gbn", className : "dt-center", defaultContent : "",
+						render: function(data, type, full, meta){
+							if(data == "M"){
+								if(single_chk){
+									data = '<div class="badge badge-pill badge-primary " title=""><b>Single</b></div>'
+								}else{
+									data = '<div class="badge badge-pill badge-success" title="" style="margin-right: 30px;"><b>Primary</b></div>'
+								}
+							}else if(data == "S"){
+								data = '<i class="mdi mdi-subdirectory-arrow-right" style="margin-left: 50px;"><div class="badge badge-pill badge-outline-warning" title="" style="margin-right: 30px"><b>Standby</b></div>'
+							}
+							return data;
+						}},
+						{data : "ipadr", defaultContent : "" },
+						{data : "portno", defaultContent: "" },
+						{data : "svr_spr_usr_id", defaultContent : ""},
+						{data : "pgdata_pth", defaultContent : ""},
+						{data : "bck_svr_id", defaultContent : "", visible: false }
+			],'select': {'style': 'single'}
+		});
+		
+		backrestServerTable2.tables().header().to$().find('th:eq(0)').css('min-width', '20px');
+		backrestServerTable2.tables().header().to$().find('th:eq(1)').css('min-width', '135px');
+		backrestServerTable2.tables().header().to$().find('th:eq(2)').css('min-width', '135px');
+		backrestServerTable2.tables().header().to$().find('th:eq(3)').css('min-width', '60px');
+		backrestServerTable2.tables().header().to$().find('th:eq(4)').css('min-width', '100px');
+		backrestServerTable2.tables().header().to$().find('th:eq(5)').css('min-width', '250px');
+		backrestServerTable2.tables().header().to$().find('th:eq(6)').css('min-width', '0px');
+
+		$(window).trigger('resize'); 
+
+	}
+
 	$(function() {
-		$("#backrest_svr_info").on('click', 'tbody tr', function(){
+		$("#backrest_svr_info2").on('click', 'tbody tr', function(){
 			$(this).toggleClass('selected');
 
-			selectedAgentServer = backrestServerTable.rows(this).data()[0];
+			selectedAgentServer = backrestServerTable2.rows(this).data()[0];
 			
 			var words = this.className.split(' ');
 
 			if($("#remote_radio").is(':checked')){
 				$("#ins_bckr_pth", "#workRegFormBckr").val("");
 				$("#ins_bckr_log_pth", "#workRegFormBckr").val("");
-				if(selectedAgentServer.master_gbn == "S"){
-					$("#bckr_standby_alert", "#workRegFormBckr").html("<spring:message code='backup_management.msg04' />");
-					$("#bckr_standby_alert", "#workRegFormBckr").show();
-				}else {
-					$("#bckr_standby_alert", "#workRegFormBckr").html("");
-					$("#bckr_standby_alert", "#workRegFormBckr").hide();
-				}
+				// if(selectedAgentServer.master_gbn == "S"){
+				// 	$("#bckr_standby_alert", "#workRegFormBckr").html("<spring:message code='backup_management.msg04' />");
+				// 	$("#bckr_standby_alert", "#workRegFormBckr").show();
+				// }else {
+				// 	$("#bckr_standby_alert", "#workRegFormBckr").html("");
+				// 	$("#bckr_standby_alert", "#workRegFormBckr").hide();
+				// }
 			}else{
 				if(words.length == 2){
-					if(selectedAgentServer.master_gbn == "S"){
-						$("#bckr_standby_alert", "#workRegFormBckr").html("<spring:message code='backup_management.msg04' />");
-						$("#bckr_standby_alert", "#workRegFormBckr").show();
-					}else{
-						$("#bckr_standby_alert", "#workRegFormBckr").html("");
-						$("#bckr_standby_alert", "#workRegFormBckr").hide();
-					}
+					// if(selectedAgentServer.master_gbn == "S"){
+					// 	$("#bckr_standby_alert", "#workRegFormBckr").html("<spring:message code='backup_management.msg04' />");
+					// 	$("#bckr_standby_alert", "#workRegFormBckr").show();
+					// }else{
+					// 	$("#bckr_standby_alert", "#workRegFormBckr").html("");
+					// 	$("#bckr_standby_alert", "#workRegFormBckr").hide();
+					// }
 
 					$.ajax({
 						url : "/backup/backrestPath.do",
@@ -164,7 +212,8 @@
 
 	function fn_bck_srv_check(svrBckRadioCheck) {
 		fn_select_agent_info();
-		
+		$('#backrest_svr_info_div2').css('width', "98%");
+
 		var bckSrvLocal = document.getElementById("bck_srv_local_check"); 
 		var bckSrvRemote = document.getElementById("bck_srv_remote_check"); 
 		var bckSrvCloud = document.getElementById("bck_srv_cloud_check");
@@ -183,7 +232,7 @@
 			$("#bck_pth_chk", "#workRegFormBckr").css("display", "none");
 			$("#ins_bckr_log_pth", "#workRegFormBckr").css("width", "410px");
 			$("#log_pth_chk", "#workRegFormBckr").css("display", "none");
-			
+		
 			bckSrvLocal.style.backgroundColor = "white"
 			bckSrvRemote.style.backgroundColor = "#e7e7e7"
 			bckSrvCloud.style.backgroundColor = "#e7e7e7"
@@ -198,7 +247,31 @@
 			$("#remote_opt").hide();
 			$("#cloud_opt").hide();
 
-			$('#backrest_svr_info_div').css('height', "");
+			if(single_chk){
+				// $('#backrest_svr_info_div2').css('width', "98%");
+				$('#backrest_svr_info_div').css('display', "none");
+				$('#ins_bckr_svr_div').css('display', "none");
+
+				$('#backrest_svr_info_div2').css('margin-left', "15px");;
+
+				backrestServerTable2.columns.adjust().draw();
+				backrestServerTable.columns(5).visible(true);
+				backrestServerTable2.columns(5).visible(true);	
+				backrestServerTable2.tables().header().to$().find('th:eq(5)').css('display', '');
+			}else{
+				$('#backrest_svr_info_div').css('width', "680px");
+				$('#backrest_svr_info_div2').css('width', "680px");
+				$('#backrest_svr_info_div').css('display', "");
+
+				$('#backrest_svr_info_div2').css('margin-left', "0");
+
+				$('#ins_bckr_svr_div').css('display', "");
+				backrestServerTable.tables().header().to$().find('th:eq(5)').css('display', 'none');
+				backrestServerTable2.tables().header().to$().find('th:eq(5)').css('display', 'none');
+				backrestServerTable.columns(5).visible(false);
+				backrestServerTable2.columns(5).visible(false);	
+			}
+
 		}else if(svrBckRadioCheck == "remote"){
 			$("#ins_bckr_pth", "#workRegFormBckr").val("");
 			$("#ins_bckr_log_pth", "#workRegFormBckr").val("");
@@ -221,7 +294,16 @@
 			$("#remote_opt").show();
 			$("#cloud_opt").hide();
 
-			$('#backrest_svr_info_div').css('height', "90px");
+			// $('#backrest_svr_info_div2').css('width', "98%");
+			$('#backrest_svr_info_div').css('display', "none");
+			$('#ins_bckr_svr_div').css('display', "none");
+			$('#backrest_svr_info_div2').css('margin-left', "15px");
+
+			backrestServerTable.columns(5).visible(true);
+			backrestServerTable2.columns(5).visible(true);	
+			backrestServerTable2.tables().header().to$().find('th:eq(5)').css('display', '');
+			
+
 		}else{
 			$("#ins_bckr_pth", "#workRegFormBckr").css("width", "410px");
 			$("#bck_pth_chk", "#workRegFormBckr").css("display", "none");
@@ -242,12 +324,24 @@
 			$("#remote_opt").hide();
 			$("#cloud_opt").show();
 
-			$('#backrest_svr_info_div').css('height', "90px");
+			// $('#backrest_svr_info_div2').css('width', "98%");
+			$('#backrest_svr_info_div').css('display', "none");
+			$('#ins_bckr_svr_div').css('display', "none");
+
+			$('#backrest_svr_info_div2').css('margin-left', "15px");
+
+			backrestServerTable.columns(5).visible(true);
+			backrestServerTable2.columns(5).visible(true);	
+
+			backrestServerTable2.tables().header().to$().find('th:eq(5)').css('display', '');
+			
 		}
 
 		backrestServerTable.rows({selected: true}).deselect();
 		$("#bckr_standby_alert", "#workRegFormBckr").html("");
 		$("#bckr_standby_alert", "#workRegFormBckr").hide();
+
+		$(window).trigger('resize'); 
 	}
 
 	/* ********************************************************
@@ -312,7 +406,7 @@
 		$("#ins_bckr_opt_cd_alert", "#workRegFormBckr").html("");
 		$("#ins_bckr_opt_cd_alert", "#workRegFormBckr").hide();
 		$("#ins_bckr_pth", "#workRegFormBckr").val("");	//백업경로
-		$("#ins_bckr_cnt", "#workRegFormBckr").val(2); //풀백업보관일
+		$("#ins_bckr_cnt", "#workRegFormBckr").val(1); //풀백업보관일
 		$("#ins_bckr_log_pth", "#workRegFormBckr").val("");	//로그경로
 
 		//압축옵션 초기화
@@ -440,7 +534,15 @@
 	function ins_backrest_valCheck(){
 		var iChkCnt = 0;
 
-		if($('#backrest_svr_info').DataTable().rows('.selected').data()[0] == undefined){
+		if(!single_chk && svrBckCheck == "local"){
+			if($('#backrest_svr_info').DataTable().rows('.selected').data()[0] == undefined){
+				showSwalIcon('<spring:message code="message.msg.1" />', '<spring:message code="common.close" />', '', 'warning');
+
+				iChkCnt = iChkCnt + 1;
+			}
+		}
+
+		if($('#backrest_svr_info2').DataTable().rows('.selected').data()[0] == undefined){
 			showSwalIcon('<spring:message code="message.msg.1" />', '<spring:message code="common.close" />', '', 'warning');
 
 			iChkCnt = iChkCnt + 1;
@@ -635,29 +737,32 @@
 			},
 			success : function(data) {
 				backrestServerTable.rows({selected: true}).deselect();
+				backrestServerTable2.rows({selected: true}).deselect();
 
 				var db_server_data = data['agent_list'];
 				backrestServerTable.clear().draw();
+				backrestServerTable2.clear().draw();
 
-				for(var i=0; i < db_server_data.length; i++){
-					if(db_server_data[i].master_gbn == "M"){
-						db_info_arr.push(db_server_data[i]);
-						for(var j=0; j < db_server_data.length; j++){
-							if(svrBckCheck == "local"){
-								if(db_server_data[j].master_gbn == "S"){
-									if(db_server_data[i].db_svr_id == db_server_data[j].db_svr_id){
-										db_info_arr.push(db_server_data[j]);
-									}
-								}
-							}else{
-								break;
-							}		
-						}
-					}
-				}
+				// for(var i=0; i < db_server_data.length; i++){
+				// 	if(db_server_data[i].master_gbn == "M"){
+				// 		db_info_arr.push(db_server_data[i]);
+				// 		for(var j=0; j < db_server_data.length; j++){
+				// 			if(svrBckCheck == "local"){
+				// 				if(db_server_data[j].master_gbn == "S"){
+				// 					if(db_server_data[i].db_svr_id == db_server_data[j].db_svr_id){
+				// 						db_info_arr.push(db_server_data[j]);
+				// 					}
+				// 				}
+				// 			}else{
+				// 				break;
+				// 			}		
+				// 		}
+				// 	}
+				// }
 
 				if (nvlPrmSet(data, "") != '') {
-					backrestServerTable.rows.add(db_info_arr).draw();
+					backrestServerTable.rows.add(db_server_data).draw();
+					backrestServerTable2.rows.add(db_server_data).draw();
 				}
 			}
 		});
@@ -678,7 +783,15 @@
 		
 		var remote_map = new Map();
 		var remote_data = null;
-		
+
+		var selectedBckAgent = null;
+		var target_svr_ipadr = "";
+		var target_svr_master_gbn = "";
+		var target_svr_pgpath = "";
+		var target_svr_user = "";
+		var target_svr_port = "";
+		var bck_target_ipadr_id = "";
+
 		if(svrBckCheck == "cloud"){
 			cloud_map.set("s3_bucket", nvlPrmSet($('#ins_cloud_bckr_s3_buk', '#workRegFormBckr').val(), "").trim());
 			cloud_map.set("s3_region", nvlPrmSet($('#ins_cloud_bckr_s3_rgn', '#workRegFormBckr').val(), "").trim());
@@ -698,9 +811,29 @@
 			remote_data = JSON.stringify(Object.fromEntries(remote_map));
 		}
 
-		var selectedAgent = $('#backrest_svr_info').DataTable().rows('.selected').data()[0];
+		var selectedAgent = $('#backrest_svr_info2').DataTable().rows('.selected').data()[0];
 		var custom_data = JSON.stringify(Object.fromEntries(custom_map))
 
+		if(single_chk || svrBckCheck != "local"){
+			target_svr_ipadr = selectedAgent.ipadr;
+			target_svr_master_gbn = selectedAgent.master_gbn;
+			target_svr_pgdata = selectedAgent.pgdata_pth;
+			target_svr_user = selectedAgent.svr_spr_usr_id;
+			target_svr_port = selectedAgent.portno
+			bck_target_ipadr_id = selectedAgent.db_svr_ipadr_id;	
+		}else{
+			selectedBckAgent = $('#backrest_svr_info').DataTable().rows('.selected').data()[0];
+
+			if(selectedBckAgent != null){
+				target_svr_ipadr = selectedBckAgent.ipadr;
+				target_svr_master_gbn = selectedBckAgent.master_gbn;
+				target_svr_pgdata = selectedBckAgent.pgdata_pth;
+				target_svr_user = selectedBckAgent.svr_spr_usr_id;
+				target_svr_port = selectedBckAgent.portno
+				bck_target_ipadr_id = selectedBckAgent.db_svr_ipadr_id;
+			}
+		}
+		
 		$.ajax({
 			async : false,
 			url : "/popup/workBackrestWrite.do",
@@ -727,7 +860,13 @@
 				backrest_gbn: svrBckCheck,
 				custom_map: custom_data,
 				cloud_map: cloud_data,
-				remote_map: remote_data
+				remote_map: remote_data,
+				target_svr_ipadr: target_svr_ipadr,
+				target_svr_master_gbn: target_svr_master_gbn,
+				target_svr_pgdata: target_svr_pgdata,
+				target_svr_user: target_svr_user,
+				target_svr_port: target_svr_port,
+				bck_target_ipadr_id: bck_target_ipadr_id
 			},
 			type : "post",
 			beforeSend: function(xhr) {
@@ -769,15 +908,22 @@
 	}
 
 	function fn_backrest_ip_select_check(){
-		var selectedIp = $('#backrest_svr_info').DataTable().rows('.selected').data()[0]
+		var selectedIp = $('#backrest_svr_info2').DataTable().rows('.selected').data()[0]
 
 		if(selectedIp == undefined){
 			showSwalIcon('<spring:message code="message.msg.1" />', '<spring:message code="common.close" />', '', 'warning');
 		}
+
+		if(!single_chk && svrBckCheck == "local"){
+			var selectedIp2 = $('#backrest_svr_info').DataTable().rows('.selected').data()[0]
+
+			if(selectedIp2 == undefined){
+				showSwalIcon('<spring:message code="message.msg.1" />', '<spring:message code="common.close" />', '', 'warning');
+			}
+		}
 	}
 	
 function fn_ssh_connection(){
-		
 		var remote_ip = nvlPrmSet($('#ins_remt_str_ip', '#workRegFormBckr').val(), "").trim();
 		var remote_port = nvlPrmSet($('#ins_remt_str_ssh', '#workRegFormBckr').val(), "").trim();
 		var remote_usr = nvlPrmSet($('#ins_remt_str_usr', '#workRegFormBckr').val(), "").trim();
@@ -899,21 +1045,39 @@ function fn_ssh_connection(){
 							<br/>
 
 							<div class="card-body" style="border: 1px solid #adb5bd;">
-								<div class="form-group row div-form-margin-z">
-									<div class="input-group mb-2 mr-sm-2 col-sm-2">
+								<!-- <div class="form-group row div-form-margin-z"> -->
+									<!-- <div class="input-group mb-2 mr-sm-2 col-sm-2">
 										<input hidden="hidden" />
 										<input type="text" class="form-control" style="margin-right: -0.7rem;" maxlength="25" id="ipadr" name="ipadr" onblur="this.value=this.value.trim()" placeholder='<spring:message code="message.msg62" />' />
 									</div>
 
 									<button type="button" class="btn btn-inverse-primary btn-icon-text mb-2 btn-search-disable" onclick="fn_select_agent_info()">
 										<i class="ti-search btn-icon-prepend "></i><spring:message code="common.search" />
-									</button>
+									</button> -->
 
-									<div class="col-sm-4">
+									<!-- <div class="col-sm-4">
 										<div class="alert alert-info " style="display:none; width: 300px; margin-bottom: 0px;" id="bckr_standby_alert" ></div>
+									</div> -->
+								<!-- </div> -->
+								
+								<div class="form-group row div-form-margin-z">
+									<div id="ins_bckr_tar_svr_div" style="width:50%;">
+										<label for="ins_bckr_tar_svr" class="col-sm-6 col-form-label pop-label-index">
+											<i class="item-icon fa fa-dot-circle-o"></i>
+											백업대상서버
+										</label>
 									</div>
-									
-									<div class="col-12" id="backrest_svr_info_div" >
+
+									<div id="ins_bckr_svr_div" style="width:50%;">
+										<label for="ins_bckr_svr" class="col-sm-2 col-form-label pop-label-index">
+											<i class="item-icon fa fa-dot-circle-o"></i>
+											백업서버
+										</label>
+									</div>
+								</div>
+								
+								<div class="form-group row div-form-margin-z">
+									<div id="backrest_svr_info_div" style="margin-right: 30px; margin-left: 15px;" >
 										<div class="table-responsive">
 									   		<div id="order-listing_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
 										   		<div class="row">
@@ -928,12 +1092,39 @@ function fn_ssh_connection(){
 								   		<table id="backrest_svr_info" class="table table-hover table-striped system-tlb-scroll" style="width:100%;">
 											<thead>
 												<tr class="bg-info text-white">
-													<th width="30" class="dt-center"><spring:message code="common.no" /></th>
-													<th width="150" class="dt-center"><spring:message code="data_transfer.type" /></th>
-													<th width="200">IP</th>
-													<th width="160">PORT</th>
-													<th width="170">USER</th>
-													<th width="465">DATA_PATH</th>
+													<th width="20" class="dt-center"><spring:message code="common.no" /></th>
+													<th width="135" class="dt-center"><spring:message code="data_transfer.type" /></th>
+													<th width="135">IP</th>
+													<th width="60">PORT</th>
+													<th width="100">USER</th>
+													<th width="250">DATA_PATH</th>
+													<th width="0"></th>
+												</tr>
+											</thead>
+										</table>
+									</div>
+
+									<div id="backrest_svr_info_div2" >
+										<div class="table-responsive">
+									   		<div id="order-listing_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
+										   		<div class="row">
+											   		<div class="col-sm-12 col-md-6">
+												   		<div class="dataTables_length" id="order-listing_length">
+												   		</div>
+											   		</div>
+										   		</div>
+									   		</div>
+								   		</div>
+										
+								   		<table id="backrest_svr_info2" class="table table-hover table-striped system-tlb-scroll" style="width:100%;">
+											<thead>
+												<tr class="bg-info text-white">
+													<th width="20" class="dt-center"><spring:message code="common.no" /></th>
+													<th width="135" class="dt-center"><spring:message code="data_transfer.type" /></th>
+													<th width="135">IP</th>
+													<th width="60">PORT</th>
+													<th width="100">USER</th>
+													<th width="250">DATA_PATH</th>
 													<th width="0"></th>
 												</tr>
 											</thead>
@@ -1061,7 +1252,7 @@ function fn_ssh_connection(){
 												</label>
 
 												<div class="col-sm-3">
-													<input type="text" class="form-control form-control-xsm" maxlength="120" id="ins_cloud_bckr_s3_buk" name="ins_cloud_bckr_s3_buk" style="width: 270px;" placeholder="<spring:message code="backup_management.s3.bucket" />" onchange="fn_backrest_chg_alert(this)"/>
+													<input type="text" class="form-control form-control-xsm" maxlength="120" id="ins_cloud_bckr_s3_buk" name="ins_cloud_bckr_s3_buk" style="width: 270px;" placeholder="<spring:message code='backup_management.s3.bucket' />" onchange="fn_backrest_chg_alert(this)"/>
 												</div>
 
 												<label for="ins_cloud_opt_s3_rgn" class="col-sm-1 col-form-label pop-label-index" style="padding-top:7px;">
@@ -1224,7 +1415,7 @@ function fn_ssh_connection(){
 											</label>
 
 											<div class="col-sm-2_2">
-												<input type="number" class="form-control form-control-xsm" maxlength="100" id="ins_bckr_cnt" name="ins_bckr_cnt" value="2" min="2" style="width: 120px;" onchange="fn_backrest_chg_alert(this)" onclick="fn_backrest_ip_select_check()"/>
+												<input type="number" class="form-control form-control-xsm" maxlength="100" id="ins_bckr_cnt" name="ins_bckr_cnt" value="1" min="1" style="width: 120px;" onchange="fn_backrest_chg_alert(this)" onclick="fn_backrest_ip_select_check()"/>
 											</div>
 
 											<div id="ins_log_path_label">

@@ -124,10 +124,61 @@ public class DxT049 extends SocketCtl{
 					fileContent = fileContent.replaceAll("#pg1-host=", "pg1-host=" + String.valueOf(jObj.get(ClientProtocolID.MASTER_IP)));
 					fileContent = fileContent.replaceAll("#pg1-port=", "pg1-port=" + String.valueOf(jObj.get(ClientProtocolID.MASTER_DBMS_PORT)));
 					fileContent = fileContent.replaceAll("#pg1-user=", "pg1-user=" + String.valueOf(jObj.get(ClientProtocolID.MASTER_DBMS_USER)));
+					
+					if(String.valueOf(jObj.get(ClientProtocolID.TARGET_MASTER_GBN)).equals("S")) {
+						socketLogger.info("DxT049.execute : " + String.valueOf(jObj.get(ClientProtocolID.DB_SVR_IPADR_ID)));
+						socketLogger.info("DxT049.execute : " + String.valueOf(jObj.get(ClientProtocolID.TARGET_IPADR)));
+						
+						if(String.valueOf(jObj.get(ClientProtocolID.DB_SVR_IPADR_ID)).equals(String.valueOf(jObj.get(ClientProtocolID.TARGET_IPADR)))) {
+							if(fileContent.contains("pg1-user")) {
+								bw.write(fileContent + "\r\n");
+								fileContent = "pg2-path=" + String.valueOf(jObj.get(ClientProtocolID.TARGET_PGDATA));
+								bw.write(fileContent + "\r\n");
+								fileContent = "pg2-port=" + String.valueOf(jObj.get(ClientProtocolID.TARGET_PORT));
+								bw.write(fileContent + "\r\n");
+								fileContent = "pg2-user=" + String.valueOf(jObj.get(ClientProtocolID.TARGET_USER));
+								bw.write(fileContent + "\r\n");
+								fileContent = "backup-standby=y";
+							}
+						}else {
+							if(fileContent.contains("pg1-user")) {
+								bw.write(fileContent + "\r\n");
+								fileContent = "pg2-path=" + String.valueOf(jObj.get(ClientProtocolID.TARGET_PGDATA));
+								bw.write(fileContent + "\r\n");
+								fileContent = "pg2-host=" + String.valueOf(jObj.get(ClientProtocolID.TARGET_IPADR));
+								bw.write(fileContent + "\r\n");
+								fileContent = "pg2-host-user=" + hostUser;
+								bw.write(fileContent + "\r\n");
+								fileContent = "pg2-port=" + String.valueOf(jObj.get(ClientProtocolID.TARGET_PORT));
+								bw.write(fileContent + "\r\n");
+								fileContent = "pg2-user=" + String.valueOf(jObj.get(ClientProtocolID.TARGET_USER));
+								bw.write(fileContent + "\r\n");
+								fileContent = "backup-standby=y";
+							}
+						}
+						
+					}
 				}else {
 					fileContent = fileContent.replaceAll("#pg1-path=", "pg1-path=" + String.valueOf(jObj.get(ClientProtocolID.PGDATA)));
 					fileContent = fileContent.replaceAll("#pg1-port=", "pg1-port=" + String.valueOf(jObj.get(ClientProtocolID.DBMS_PORT)));
 					fileContent = fileContent.replaceAll("#pg1-user=", "pg1-user=" + String.valueOf(jObj.get(ClientProtocolID.SPR_USR_ID)));
+					
+					if(String.valueOf(jObj.get(ClientProtocolID.TARGET_MASTER_GBN)).equals("S")) {
+						if(fileContent.contains("pg1-user")) {
+							bw.write(fileContent + "\r\n");
+							fileContent = "pg2-path=" + String.valueOf(jObj.get(ClientProtocolID.TARGET_PGDATA));
+							bw.write(fileContent + "\r\n");
+							fileContent = "pg2-host=" + String.valueOf(jObj.get(ClientProtocolID.TARGET_IPADR));
+							bw.write(fileContent + "\r\n");
+							fileContent = "pg2-host-user=" + hostUser;
+							bw.write(fileContent + "\r\n");
+							fileContent = "pg2-port=" + String.valueOf(jObj.get(ClientProtocolID.TARGET_PORT));
+							bw.write(fileContent + "\r\n");
+							fileContent = "pg2-user=" + String.valueOf(jObj.get(ClientProtocolID.TARGET_USER));
+							bw.write(fileContent + "\r\n");
+							fileContent = "backup-standby=y";
+						}
+					}
 				}
 				
 				fileContent = fileContent.replaceAll("#repo1-gbn=", "#repo1-gbn=" + String.valueOf(jObj.get(ClientProtocolID.STORAGE_OPT)));

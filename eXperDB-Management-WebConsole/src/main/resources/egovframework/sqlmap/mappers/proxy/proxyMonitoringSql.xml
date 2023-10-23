@@ -123,7 +123,7 @@
 		* Description : Proxy 연결된 db 서버 조회
 		* Author : 윤정
 		**/
-        SELECT
+        <!-- SELECT
                (ROW_NUMBER() OVER()) AS ROWNUM, 
                (ROW_NUMBER() OVER()) AS IDX,
                A.PRY_SVR_ID , 
@@ -189,7 +189,52 @@
             ) B 
             GROUP BY B.MASTER_GBN 
           ) B
-          ON A.MASTER_GBN = B.MASTER_GBN
+          ON A.MASTER_GBN = B.MASTER_GBN -->
+          select  
+	(ROW_NUMBER() OVER()) AS ROWNUM, 
+	(ROW_NUMBER() OVER()) AS IDX,
+	tplsi.pry_svr_id,
+	(select master_gbn
+		from t_dbsvripadr_i tdi 
+		where tdi.ipadr 
+		in (select substring(db_con_addr FROM '([^:]+):([^:]+)'))),
+	(select db_svr_id 
+		from t_dbsvripadr_i tdi 
+		where tdi.ipadr 
+		in (select substring(db_con_addr FROM '([^:]+):([^:]+)'))),
+	(select substring(db_con_addr FROM '([^:]+):([^:]+)') as ipadr),
+	(select portno 
+		from t_dbsvripadr_i tdi 
+		where tdi.ipadr 
+		in (select substring(db_con_addr FROM '([^:]+):([^:]+)'))),
+	(select svr_host_nm  
+		from t_dbsvripadr_i tdi 
+		where tdi.ipadr 
+		in (select substring(db_con_addr FROM '([^:]+):([^:]+)'))),
+	(select agt_cndt_cd
+		from t_agtcndt_i tai 
+		where tai.ipadr 
+		in (select substring(db_con_addr FROM '([^:]+):([^:]+)'))),
+	(select db_cndt  
+		from t_dbsvripadr_i tdi 
+		where tdi.ipadr 
+		in (select substring(db_con_addr FROM '([^:]+):([^:]+)'))),
+	(select intl_ipadr
+		from t_agtcndt_i tai
+		where tai.ipadr 
+		in (select substring(db_con_addr FROM '([^:]+):([^:]+)'))),
+	(select 
+		case 
+			when master_gbn = 'M' then 'pgReadWrite'
+			when master_gbn = 'S' then 'pgReadOnly'
+		end as lsn_nm
+		from t_dbsvripadr_i tdi
+			where tdi.ipadr IN (
+    SELECT substring(db_con_addr FROM '([^:]+):([^:]+)')
+    FROM t_pry_lsn_i tpli2 
+))
+from t_pry_lsn_svr_i tplsi
+	where tplsi.pry_svr_id = #{pry_svr_id}
 	</select>
 	
 	<select id="selectProxyListnerMainList" resultType="hashMap" parameterType="int">

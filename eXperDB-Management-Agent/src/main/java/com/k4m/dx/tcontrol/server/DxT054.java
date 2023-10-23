@@ -58,7 +58,7 @@ public class DxT054 extends SocketCtl{
 			send(TotalLengthBit, outputObj.toString().getBytes());
 			
 		} catch (Exception e) {
-			errLogger.error("DxT048 {} ", e.toString());
+			errLogger.error("DxT054 {} ", e.toString());
 			
 			outputObj.put(ProtocolID.DX_EX_CODE, TranCodeType.DxT054);
 			outputObj.put(ProtocolID.RESULT_CODE, "1");

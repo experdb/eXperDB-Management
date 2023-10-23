@@ -19,6 +19,9 @@
 	var mod_remoteConn = "Fail";
 	var mod_log_pth_chk = false;
 	var mod_remote_pw = "";
+	var backrestBckServerTable = null;
+	var backrestBckServerTable2 = null;
+	
 
 	$(window.document).ready(function() {
 		$("#workRegReFormBckr").validate({
@@ -55,6 +58,47 @@
 			paging : false,
 			deferRender : true,
 			destroy: true,
+			info: false,
+			columns : [
+						{data : "rownum", defaultContent : "", className : "dt-center"}, 
+						{data : "master_gbn", className : "dt-center", defaultContent : "",
+						render: function(data, type, full, meta){
+							if(data == "M"){
+								data = '<div class="badge badge-pill badge-success" title="" ><b>Primary</b></div>'
+							}else if(data == "S"){
+								data = '<div class="badge badge-pill badge-outline-warning" title="" ><b>Standby</b></div>'
+							}
+							return data;
+						}},
+						{data : "ipadr", defaultContent : "" },
+						{data : "portno", defaultContent: "" },
+						{data : "svr_spr_usr_id", defaultContent : ""},
+						{data : "pgdata_pth", defaultContent : ""},
+						{data : "bck_svr_id", defaultContent : "", visible: false }
+			],
+		});
+		
+		backrestBckServerTable.tables().header().to$().find('th:eq(0)').css('min-width', '30px');
+		backrestBckServerTable.tables().header().to$().find('th:eq(1)').css('min-width', '135px');
+		backrestBckServerTable.tables().header().to$().find('th:eq(2)').css('min-width', '135px');
+		backrestBckServerTable.tables().header().to$().find('th:eq(3)').css('min-width', '60px');
+		backrestBckServerTable.tables().header().to$().find('th:eq(4)').css('min-width', '120px');
+		backrestBckServerTable.tables().header().to$().find('th:eq(5)').css('min-width', '200px');
+		backrestBckServerTable.tables().header().to$().find('th:eq(6)').css('min-width', '0px');
+
+		$(window).trigger('resize'); 
+	}
+
+	function fn_init_backrest_mod_form2() {
+		backrestBckServerTable2 = $('#mod_backrest_svr_Info2').DataTable({
+			scrollY : "60px",
+			bSort: false,
+			scrollX: false,	
+			searching : false,
+			paging : false,
+			deferRender : true,
+			destroy: true,
+			info: false,
 			columns : [
 						{data : "rownum", defaultContent : "", className : "dt-center"}, 
 						{data : "master_gbn", className : "dt-center", defaultContent : "",
@@ -74,13 +118,13 @@
 			],
 		});
 		
-		backrestBckServerTable.tables().header().to$().find('th:eq(0)').css('min-width', '30px');
-		backrestBckServerTable.tables().header().to$().find('th:eq(1)').css('min-width', '150px');
-		backrestBckServerTable.tables().header().to$().find('th:eq(2)').css('min-width', '200px');
-		backrestBckServerTable.tables().header().to$().find('th:eq(3)').css('min-width', '150px');
-		backrestBckServerTable.tables().header().to$().find('th:eq(4)').css('min-width', '170px');
-		backrestBckServerTable.tables().header().to$().find('th:eq(5)').css('min-width', '480px');
-		backrestBckServerTable.tables().header().to$().find('th:eq(6)').css('min-width', '0px');
+		backrestBckServerTable2.tables().header().to$().find('th:eq(0)').css('min-width', '30px');
+		backrestBckServerTable2.tables().header().to$().find('th:eq(1)').css('min-width', '135px');
+		backrestBckServerTable2.tables().header().to$().find('th:eq(2)').css('min-width', '135px');
+		backrestBckServerTable2.tables().header().to$().find('th:eq(3)').css('min-width', '60px');
+		backrestBckServerTable2.tables().header().to$().find('th:eq(4)').css('min-width', '120px');
+		backrestBckServerTable2.tables().header().to$().find('th:eq(5)').css('min-width', '200px');
+		backrestBckServerTable2.tables().header().to$().find('th:eq(6)').css('min-width', '0px');
 
 		$(window).trigger('resize'); 
 	}
@@ -335,6 +379,13 @@
 		var remote_map = new Map();
 		var remote_data = null;
 
+		var target_svr_ipadr = "";
+		var target_svr_master_gbn = "";
+		var target_svr_pgdata = "";
+		var target_svr_user = "";
+		var target_svr_port = "";
+		var bck_target_ipadr_id = "";
+
 		if(mod_restore_check == "cloud"){
 			cloud_map.set("s3_bucket", nvlPrmSet($('#mod_cloud_bckr_s3_buk', '#workRegReFormBckr').val(), "").trim());
 			cloud_map.set("s3_region", nvlPrmSet($('#mod_cloud_bckr_s3_rgn', '#workRegReFormBckr').val(), "").trim());
@@ -353,8 +404,29 @@
 			
 			remote_data = JSON.stringify(Object.fromEntries(remote_map));
 		}
-		var selectedAgent = $('#mod_backrest_svr_Info').DataTable().rows().data()[0];
+		
+		var selectedAgent = $('#mod_backrest_svr_Info2').DataTable().rows().data()[0];
 		var custom_data = JSON.stringify(Object.fromEntries(custom_map))		
+
+		if(single_chk || svrBckCheck != "local"){
+			target_svr_ipadr = selectedAgent.ipadr;
+			target_svr_master_gbn = selectedAgent.master_gbn;
+			target_svr_pgdata = selectedAgent.pgdata_pth;
+			target_svr_user = selectedAgent.svr_spr_usr_id;
+			target_svr_port = selectedAgent.portno
+			bck_target_ipadr_id = selectedAgent.db_svr_ipadr_id;	
+		}else{
+			selectedBckAgent = $('#mod_backrest_svr_Info').DataTable().rows().data()[0];;
+
+			if(selectedBckAgent != null){
+				target_svr_ipadr = selectedBckAgent.ipadr;
+				target_svr_master_gbn = selectedBckAgent.master_gbn;
+				target_svr_pgdata = selectedBckAgent.pgdata_pth;
+				target_svr_user = selectedBckAgent.svr_spr_usr_id;
+				target_svr_port = selectedBckAgent.portno
+				bck_target_ipadr_id = selectedBckAgent.db_svr_ipadr_id;
+			}
+		}
 
 		$.ajax({
 			async : false,
@@ -384,7 +456,13 @@
 				backrest_gbn: mod_restore_check,
 				custom_map: custom_data,
 				cloud_map: cloud_data,
-				remote_map: remote_data
+				remote_map: remote_data,
+				target_svr_ipadr: target_svr_ipadr,
+				target_svr_master_gbn: target_svr_master_gbn,
+				target_svr_pgdata: target_svr_pgdata,
+				target_svr_user: target_svr_user,
+				target_svr_port: target_svr_port,
+				bck_target_ipadr_id: bck_target_ipadr_id
 			},
 			type : "post",
 			beforeSend: function(xhr) {
@@ -424,7 +502,6 @@
 	}
 	
 function fn_re_ssh_connection(){
-		
 		var remote_ip = nvlPrmSet($('#mod_remt_str_ip', '#workRegReFormBckr').val(), "").trim();
 		var remote_port = nvlPrmSet($('#mod_remt_str_ssh', '#workRegReFormBckr').val(), "").trim();
 		var remote_usr = nvlPrmSet($('#mod_remt_str_usr', '#workRegReFormBckr').val(), "").trim();
@@ -494,7 +571,7 @@ function fn_re_ssh_connection(){
 <%@include file="../popup/backrestRegCustomForm.jsp"%>
 
 <div class="modal fade" id="pop_layer_mod_backrest" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
-	<div class="modal-dialog  modal-xl-top" role="document" style="margin: 20px 110px;">
+	<div class="modal-dialog  modal-xl-top" role="document" style="margin: 10px 110px;">
 		<div class="modal-content" style="width:1500px; ">		 	 
 			<div class="modal-body" style="margin-bottom:-30px;">
 				<h4 class="modal-title mdi mdi-alert-circle text-info" id="ModalLabel" style="padding-left:5px;">
@@ -549,27 +626,73 @@ function fn_re_ssh_connection(){
 
 							<div class="card-body" style="border: 1px solid #adb5bd;">
 								<div class="form-group row div-form-margin-z">
-									<div class="col-12" id="mod_backrest_svr_Info_div" style="diplay:none;">
+									
+									<div id="mod_bckr_tar_svr_div" style="width:50%;">
+										<label for="mod_bckr_tar_svr" class="col-sm-6 col-form-label pop-label-index">
+											<i class="item-icon fa fa-dot-circle-o"></i>
+											백업대상서버
+										</label>
+									</div>
+	
+									<div id="mod_bckr_svr_div" style="width:50%;">
+										<label for="mod_bckr_svr" class="col-sm-2 col-form-label pop-label-index">
+											<i class="item-icon fa fa-dot-circle-o"></i>
+											백업서버
+										</label>
+									</div>
+								</div>
+				
+								<div class="form-group row div-form-margin-z">
+									<div id="mod_backrest_svr_Info_div2" style="margin-right: 30px; margin-left: 15px;">
 										<div class="table-responsive">
-									   		<div id="order-listing_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
-										   		<div class="row">
-											   		<div class="col-sm-12 col-md-6">
-												   		<div class="dataTables_length" id="order-listing_length">
-												   		</div>
-											   		</div>
-										   		</div>
-									   		</div>
-								   		</div>
+											<div id="order-listing_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
+												<div class="row">
+													<div class="col-sm-12 col-md-6">
+														<div class="dataTables_length" id="order-listing_length">
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
 
-								   		<table id="mod_backrest_svr_Info" class="table table-hover table-striped system-tlb-scroll" style="width:100%;">
+										<table id="mod_backrest_svr_Info2" class="table table-hover table-striped system-tlb-scroll" style="width:100%;">
 											<thead>
 												<tr class="bg-info text-white">
 													<th width="30" class="dt-center"><spring:message code="common.no" /></th>
-													<th width="150" class="dt-center">유형</th>
-													<th width="200">IP</th>
-													<th width="150">PORT</th>
-													<th width="170">USER</th>
-													<th width="480">DATA_PATH</th>
+													<th width="135" class="dt-center"><spring:message code="data_transfer.type" /></th>
+													<th width="135">IP</th>
+													<th width="60">PORT</th>
+													<th width="120">USER</th>
+													<th width="200">DATA_PATH</th>
+													<th width="0"></th>
+												</tr>
+											</thead>
+										</table>
+									</div>
+								
+
+								
+									<div id="mod_backrest_svr_Info_div">
+										<div class="table-responsive">
+											<div id="order-listing_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
+												<div class="row">
+													<div class="col-sm-12 col-md-6">
+														<div class="dataTables_length" id="order-listing_length">
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+
+										<table id="mod_backrest_svr_Info" class="table table-hover table-striped system-tlb-scroll" style="width:100%;">
+											<thead>
+												<tr class="bg-info text-white">
+													<th width="30" class="dt-center"><spring:message code="common.no" /></th>
+													<th width="135" class="dt-center"><spring:message code="data_transfer.type" /></th>
+													<th width="135">IP</th>
+													<th width="60">PORT</th>
+													<th width="120">USER</th>
+													<th width="200">DATA_PATH</th>
 													<th width="0"></th>
 												</tr>
 											</thead>
@@ -577,7 +700,6 @@ function fn_re_ssh_connection(){
 									</div>
 								</div>
 							</div>
-
 							</br>
 							
 							<div style="border: 1px solid #adb5bd;">
@@ -848,7 +970,7 @@ function fn_re_ssh_connection(){
 											</label>
 
 											<div class="col-sm-2_2">
-												<input type="number" class="form-control form-control-xsm" maxlength="100" id="mod_bckr_cnt" name="mod_bckr_cnt" value="2" min="2" style="width: 120px;" onchange="fn_backrest_chg_alert(this)"/>
+												<input type="number" class="form-control form-control-xsm" maxlength="100" id="mod_bckr_cnt" name="mod_bckr_cnt" value="1" min="1" style="width: 120px;" onchange="fn_backrest_chg_alert(this)"/>
 											</div>
 
 											<label for="mod_bckr_opt_log_path" class="col-sm-1_8 col-form-label pop-label-index" style="padding-top:7px; margin-left: 30px;">

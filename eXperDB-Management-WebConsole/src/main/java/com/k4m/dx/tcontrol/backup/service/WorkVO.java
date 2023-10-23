@@ -49,6 +49,9 @@ public class WorkVO {
 	private String remote_usr;
 	private String remote_pw;
 	private String remote_use;
+	private int bck_target_ipadr_id;
+	private String bck_target_ipadr;
+	
 	
 	public String getEncd_mth_cd() {
 		return encd_mth_cd;
@@ -433,6 +436,23 @@ public class WorkVO {
 	public void setRemote_use(String remote_use) {
 		this.remote_use = remote_use;
 	}
+
+	public int getBck_target_ipadr_id() {
+		return bck_target_ipadr_id;
+	}
+
+	public void setBck_target_ipadr_id(int bck_target_ipadr_id) {
+		this.bck_target_ipadr_id = bck_target_ipadr_id;
+	}
+
+	public String getBck_target_ipadr() {
+		return bck_target_ipadr;
+	}
+
+	public void setBck_target_ipadr(String bck_target_ipadr) {
+		this.bck_target_ipadr = bck_target_ipadr;
+	}
+	
 	
 	
 	

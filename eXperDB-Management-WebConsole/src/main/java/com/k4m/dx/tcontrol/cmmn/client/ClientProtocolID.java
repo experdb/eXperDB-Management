@@ -288,6 +288,7 @@ public class ClientProtocolID {
 	public static final String DBMS_IP = "DBMS_IP";
 	public static final String DBMS_PORT = "DBMS_PORT";
 	
+	public static final String PGBACKREST_USEYN = "PGBACKREST_USEYN";
 	public static final String STORAGE_OPT = "STORAGE_OPT";
 	public static final String LOG_PATH = "LOG_PATH";
 	public static final String WRK_NM = "WRK_NM";
@@ -305,5 +306,11 @@ public class ClientProtocolID {
 	public static final String MASTER_DBMS_USER = "MASTER_DBMS_USER";
 	public static final String TIME_RESTORE = "TIME_RESTORE";
 	public static final String EXELOG = "EXELOG";
+	public static final String TARGET_MASTER_GBN = "TARGET_MASTER_GBN";
+	public static final String TARGET_IPADR= "TARGET_IPADR";
+	public static final String TARGET_PGDATA= "TARGET_PGDATA";
+	public static final String TARGET_USER= "TARGET_USER";
+	public static final String TARGET_PORT= "TARGET_PORT";
+	
 	
 }

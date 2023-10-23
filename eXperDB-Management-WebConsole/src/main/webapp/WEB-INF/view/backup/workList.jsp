@@ -48,6 +48,7 @@
 	remote_pw = null;
 	var bck_pth_chk = false;
 	var log_pth_chk = false;
+	var single_chk = false;
 	
 	
 	$(window).ready(function(){
@@ -56,6 +57,7 @@
 		selectInitTab(selectChkTab);
 		//스케줄 테이즐 setting
 		fn_init_schedule();
+		fn_chk_single();
 
 		//조회 (backup_common.js)
 		if(tabGbn != ""){
@@ -645,6 +647,7 @@
 		var datas = null;
 		var bck_wrk_id = "";
 		var wrk_id = "";
+		var bck_target_ipadr_id = 0;
 		
 		if (selectChkTab == "rman") {
 			datas = tableRman.rows('.selected').data();
@@ -684,11 +687,16 @@
 			wrk_id = tableDump.row('.selected').data().wrk_id;
 		}
 
+		if(tableBackrest.row('.selected').data().bck_target_ipadr_id != 0){
+			bck_target_ipadr_id = tableBackrest.row('.selected').data().bck_target_ipadr_id;
+		}
+
 		$.ajax({
 			url : reregUrl,
 			data : {
 				db_svr_id : $("#db_svr_id", "#findList").val(),
 				bck_wrk_id : bck_wrk_id,
+				bck_target_ipadr_id : bck_target_ipadr_id,
 				wrk_id : wrk_id,
 				backrest_gbn: backrest_gbn,
 				remote_ip: remote_ip,
@@ -713,6 +721,9 @@
 			success : function(result) {
 				
 				if (result.workInfo != null) {
+					fn_init_backrest_mod_form();
+					fn_init_backrest_mod_form2();
+
 					fn_update_chogihwa(selectChkTab, result);
 
 					if (selectChkTab == "rman") {
@@ -721,14 +732,19 @@
 						$('#pop_layer_mod_rman').modal("show");
 					} else if(selectChkTab == "backrest"){
 						$('#backrest_call_gbn', '#search_backrestRegForm').val("");
-
-						fn_init_backrest_mod_form();
 						
 						backrestBckServerTable.rows({selected: true}).deselect();
 						backrestBckServerTable.clear().draw();
 
+						backrestBckServerTable2.rows({selected: true}).deselect();
+						backrestBckServerTable2.clear().draw();
+
 						if (nvlPrmSet(result.bckSvrInfo, "") != '') {
 							backrestBckServerTable.rows.add(result.bckSvrInfo).draw();
+						}
+
+						if (nvlPrmSet(result.bckTargetSvrInfo, "") != '') {
+							backrestBckServerTable2.rows.add(result.bckTargetSvrInfo).draw();
 						}
 
 						if(result.custom_map != null || result.custom_map != undefined){
@@ -736,7 +752,6 @@
           			      		custom_map.set(key, result.custom_map[key]);
            					}
 						}
-						
 
 						$('#pop_layer_mod_backrest').modal("show");
 					} else{
@@ -777,9 +792,11 @@
 						{data : "db_svr_ipadr", className : "dt-center", defaultContent: "",
 							render : function(data, type, full, meta) {
 									if(full.backrest_gbn == "remote"){
-										return full.remote_ip;
+										return full.bck_target_ipadr + " ▶ " + full.remote_ip;
+									}else if(full.backrest_gbn == "cloud"){
+										return full.db_svr_ipadr + " ▶ s3 Bucket" ;
 									}else{
-										return full.db_svr_ipadr;
+										return full.bck_target_ipadr + " ▶ " + full.db_svr_ipadr;
 									}
 							}},
 						{data : "backrest_gbn", className : "dt-center", defaultContent : ""},
@@ -1015,6 +1032,40 @@
 				}
 			}
 		}
+
+		function fn_chk_single(){
+			$.ajax({
+				url : "/backup/selectCheckSingle.do",
+				data : {
+					db_svr_id : $("#db_svr_id", "#findList").val()
+				},
+				type : "post",
+				async: true,
+				beforeSend: function(xhr) {
+					xhr.setRequestHeader("AJAX", true);
+				},
+				error : function(xhr, status, error) {
+					if(xhr.status == 401) {
+						showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
+					} else if(xhr.status == 403) {
+						showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
+					} else {
+						if (xhr.responseText != null) {
+							showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
+						} else {
+							showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : ", '<spring:message code="common.close" />', '', 'error');
+						}
+					}
+				},
+				success : function(result) {
+					if(result == 1){
+						single_chk = true;
+					}else{
+						single_chk = false;
+					}
+				}
+			}); 
+		}
 </script>
 
 <%@include file="../cmmn/workRmanInfo.jsp"%>
@@ -1228,8 +1279,8 @@
 												<th width="30"><spring:message code="common.no" /></th>
 												<th width="150"><spring:message code="common.work_name" /></th>
 												<th width="200"><spring:message code="common.work_description" /></th>
-												<th width="100" class="dt-center"><spring:message code="backup_management.backup.storage" /></th>
-												<th width="100" class="dt-center"><spring:message code="backup_management.storage" /></th>
+												<th width="100" class="dt-center">백업 구성</th>
+												<th width="100" class="dt-center">타입</th>
 												<th width="100" class="dt-center"><spring:message code="backup_management.bck_div" /></th>
 												<th width="200"><spring:message code="backup_management.backup_dir" /></th> 
 												<th width="100"><spring:message code="common.register" /></th>
