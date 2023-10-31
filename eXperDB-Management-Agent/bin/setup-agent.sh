@@ -86,6 +86,18 @@ SQL_SET(){
 }
 
 
+PGBACKREST_SET(){
+        sed -i "s,pg1-path=,pg1-path=$PGDATA,g" -i $PGHOME/etc/pgbackrest/pgbackrest.conf > /dev/null 2>&1
+        sed -i "s,repo1-path=,repo1-path=$PGBBAK,g" -i $PGHOME/etc/pgbackrest/pgbackrest.conf > /dev/null 2>&1
+
+        sleep 2
+        pgbackrest --stanza=experdb --log-level-console=info --config=$PGHOME/etc/pgbackrest/pgbackrest.conf stanza-create > /dev/null 2>&1
+
+        sleep 3
+        pgbackrest --stanza=experdb --log-level-console=info --config=$PGHOME/etc//pgbackrest/pgbackrest.conf check > /dev/null 2>&1
+}
+
+
 echo -e " ${GREEN}  "
 echo "   **********************************"
 echo "   *    __  __                      *"
@@ -141,6 +153,11 @@ echo "      "
  
     SQL_SET
   fi
+  
+    echo -n "   Start eXperDB-Backup Setting "
+    PGBACKREST_SET
+    ComplateMsg "" $?
+    
   echo "      "
  
 echo "========================= Installantion compliete! =========================="

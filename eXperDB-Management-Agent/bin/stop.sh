@@ -4,8 +4,8 @@ echo "eXperDB-Management-Agent stop run .. "
 SCRIPTPATH=$(cd "$(dirname "$0")" && pwd)
 PROJECT_HOME=${SCRIPTPATH%/*}
 
-JAVAC=`which javac`
-JAVA_HOME=`readlink -f $JAVAC | sed "s:/bin/javac::"`
+JAVA=`which java`
+JAVA_HOME=`readlink -f $JAVA | sed "s:/bin/java::"`
 
 #JAVA_HOME=$PROJECT_HOME/java/jdk1.8.0_91
 LOG_DIR=$PROJECT_HOME/logs
