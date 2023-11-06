@@ -87,8 +87,12 @@ SQL_SET(){
 
 
 PGBACKREST_SET(){
-        sed -i "s,pg1-path=,pg1-path=$PGDATA,g" -i $PGHOME/etc/pgbackrest/pgbackrest.conf > /dev/null 2>&1
-        sed -i "s,repo1-path=,repo1-path=$PGBBAK,g" -i $PGHOME/etc/pgbackrest/pgbackrest.conf > /dev/null 2>&1
+        sed -i "s,#pg1-path=,pg1-path=$PGDATA,g" -i $PGHOME/etc/pgbackrest/pgbackrest.conf > /dev/null 2>&1
+        sed -i "s,#pg1-port=,pg1-port=$PGPORT,g" -i $PGHOME/etc/pgbackrest/pgbackrest.conf > /dev/null 2>&1
+        sed -i "s,#repo1-path=,repo1-path=$PGBBAK,g" -i $PGHOME/etc/pgbackrest/pgbackrest.conf > /dev/null 2>&1
+        sed -i "s,#repo1-retention-full=,repo1-retention-full=2,g" -i $PGHOME/etc/pgbackrest/pgbackrest.conf > /dev/null 2>&1
+        sed -i "s,#log-level-console=,log-level-console=detail,g" -i $PGHOME/etc/pgbackrest/pgbackrest.conf > /dev/null 2>&1
+        sed -i "s,#log-level-file=,log-level-file=detail,g" -i $PGHOME/etc/pgbackrest/pgbackrest.conf > /dev/null 2>&1
 
         sleep 2
         pgbackrest --stanza=experdb --log-level-console=info --config=$PGHOME/etc/pgbackrest/pgbackrest.conf stanza-create > /dev/null 2>&1
