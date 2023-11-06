@@ -83,6 +83,48 @@
 			}
 		});
 		
+			
+		/* ********************************************************
+		 * Click Excel Button
+		 ******************************************************** */
+	 	$("#btnExcel").click(function() {		 		
+			var dataLength = 0;
+			
+			var form = document.excelForm;
+			
+			var db_id = $("#db_id").val();
+			if(db_id == "") db_id = 0;
+			
+			$("#dbsvrid").val($("#db_svr_id", "#findList").val());			
+			$("#bck_opt").val($("#bck_opt_cd").val());
+			$("#strt_dtm").val($("#wrk_strt_dtm").val());
+			$("#end_dtm").val($("#wrk_end_dtm").val());
+			$("#exe_rslt").val($("#exe_rslt_cd").val());
+			$("#wrkNm").val(nvlPrmSet($('#wrk_nm').val(), ""));
+			$("#fixRsltcd").val($("#fix_rsltcd").val());
+			$("#dbId").val(db_id);
+
+			if(selectChkTab == "rman"){
+				dataLength = tableRman.rows().data().length;
+				if(dataLength >0){
+					$("#histgbn").val("rman_hist");
+					$("#bck_bsn").val("TC000201");
+					form.action = "/backupExeclDownload.do";
+				 	form.submit();				
+				}						
+			}else if (selectChkTab == "pgbackrest" ){
+				dataLength = tableBackrest.rows().data().length;
+			}else{
+				 dataLength = tableDump.rows().data().length;
+					if(dataLength >0){
+						$("#histgbn").val("dump_hist");
+						$("#bck_bsn").val("TC000202");
+						form.action = "/backupExeclDownload.do";
+					 	form.submit();				
+					}	
+			}
+
+	}); 
 		
 		/* ********************************************************
 		 * Click Latest Log
@@ -139,7 +181,7 @@
 			$("#backRestActiveLogDiv").show();
 			$('#fix_rsltcd').parent().hide();
 			$('#wrk_nm').parent().removeClass('col-sm-2');
-			$('#wrk_nm').parent().addClass('col-sm-4');
+			$('#wrk_nm').parent().addClass('col-sm-2_3');
 			
 			seachParamInit(intab);
 			
@@ -238,7 +280,7 @@
 	 ******************************************************** */
 	function fn_rman_init(){
 		tableRman = $('#logRmanList').DataTable({
-			scrollY: "300px",
+			scrollY: "750px",
 			scrollX : true,
 			searching : false,
 			deferRender : true,
@@ -379,7 +421,7 @@
 	 ******************************************************** */
 	function fn_dump_init(){
 		tableDump = $('#logDumpList').DataTable({
-			scrollY: "300px",	
+			scrollY: "750px",	
 			scrollX: true,
 			bDestroy: true,
 			paging : true,
@@ -1096,8 +1138,22 @@
 <%@include file="../cmmn/wrkLog.jsp"%>
 
 <form name="findList" id="findList" method="post">
-	<input type="hidden" name="db_svr_id"  id="db_svr_id"  value="${db_svr_id}">
+	<input type="hidden" name="db_svr_id"  id="db_svr_id"  value="${db_svr_id}">	
 </form>
+
+<form name="excelForm" id="excelForm" method="post">
+	<input type="hidden" name="histgbn" id="histgbn" >
+	<input type="hidden" name="dbsvrid"  id="dbsvrid"  value="${db_svr_id}">	
+	<input type="hidden" name="bck_bsn" id="bck_bsn" >
+	<input type="hidden" name="bck_opt" id="bck_opt" >
+	<input type="hidden" name="strt_dtm" id="strt_dtm" >
+	<input type="hidden" name="end_dtm" id="end_dtm" >
+	<input type="hidden" name="exe_rslt" id="exe_rslt" >
+	<input type="hidden" name="wrkNm" id="wrkNm" >
+	<input type="hidden" name="fixRsltcd" id="fixRsltcd" >
+	<input type="hidden" name="dbId" id="dbId" >
+</form>
+
 
 <div class="content-wrapper main_scroll" style="min-height: calc(100vh);" id="contentsDiv">
 	<div class="row">
@@ -1229,7 +1285,7 @@
 									</select>
 								</div>
 									
-								<div class="input-group mb-2 mr-sm-2 col-sm-3">
+								<div class="input-group mb-2 mr-sm-2 col-sm-2">
 									<input type="text" class="form-control" style="margin-right: -0.7rem;" maxlength="25" id="wrk_nm" name="wrk_nm" onblur="this.value=this.value.trim()" placeholder='<spring:message code="message.msg107" />' />
 								</div>
 
@@ -1245,6 +1301,9 @@
 								<button type="button" class="btn btn-inverse-primary btn-icon-text mb-2 btn-search-disable" id="btnSelect">
 									<i class="ti-search btn-icon-prepend "></i><spring:message code="common.search" />
 								</button>
+								 <button type="button" class="btn btn-inverse-primary btn-icon-text mb-2 btn-search-disable" id="btnExcel" style="margin-left: 5px;">
+									<i class="ti-import btn-icon-prepend "></i>엑셀
+								</button> 
 							</form>
 						</div>
 					</div>

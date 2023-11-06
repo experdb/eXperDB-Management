@@ -154,9 +154,13 @@ echo "      "
     SQL_SET
   fi
   
-    echo -n "   Start eXperDB-Backup Setting "
-    PGBACKREST_SET
-    ComplateMsg "" $?
+  recovery_status=$(psql -c "SELECT pg_is_in_recovery();" -tA)
+  if [ "$recovery_status" = "f" ]; then
+	    echo -n "   Start eXperDB-Backup Setting "
+	    PGBACKREST_SET
+	    ComplateMsg "" $?
+   fi
+    
     
   echo "      "
  

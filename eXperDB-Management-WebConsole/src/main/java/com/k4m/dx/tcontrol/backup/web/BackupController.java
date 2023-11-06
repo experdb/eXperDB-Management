@@ -1,12 +1,8 @@
 package com.k4m.dx.tcontrol.backup.web;
 
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.StringReader;
 import java.text.SimpleDateFormat;
@@ -66,6 +62,18 @@ import com.k4m.dx.tcontrol.common.service.PageVO;
 import com.k4m.dx.tcontrol.functions.schedule.service.ScheduleService;
 import com.k4m.dx.tcontrol.functions.schedule.service.WrkExeVO;
 import com.k4m.dx.tcontrol.login.service.LoginVO;
+
+import jxl.Workbook;
+import jxl.format.Alignment;
+import jxl.format.Border;
+import jxl.format.BorderLineStyle;
+import jxl.format.Colour;
+import jxl.format.VerticalAlignment;
+import jxl.write.Label;
+import jxl.write.NumberFormats;
+import jxl.write.WritableCellFormat;
+import jxl.write.WritableSheet;
+import jxl.write.WritableWorkbook;
 
 @Controller
 public class BackupController {
@@ -3034,6 +3042,225 @@ public class BackupController {
 		}
 	
 		return countDbmsCnt;
+	}
+	
+	
+
+	@RequestMapping(value="/backupExeclDownload.do")
+	public void backupExeclDownload(@ModelAttribute("workLogVo") WorkLogVO workLogVO, HttpServletRequest request, HttpServletResponse response) throws Exception {
+	 	
+
+		String backupGbn = request.getParameter("histgbn");
+		
+		workLogVO.setDb_svr_id(request.getParameter("dbsvrid"));
+		workLogVO.setBck_bsn_dscd(request.getParameter("bck_bsn"));
+		workLogVO.setBck_opt_cd(request.getParameter("bck_opt"));
+		workLogVO.setWrk_strt_dtm(request.getParameter("strt_dtm"));
+		workLogVO.setWrk_end_dtm(request.getParameter("end_dtm"));
+		workLogVO.setExe_rslt_cd(request.getParameter("exe_rslt"));
+		workLogVO.setFix_rsltcd(request.getParameter("fixRsltcd"));
+		workLogVO.setWrk_nm(request.getParameter("wrkNm"));
+
+		WritableWorkbook workbook = null;
+
+		try {
+			// File Name
+			java.text.SimpleDateFormat formatter = new java.text.SimpleDateFormat("yyyyMMddHHmmss");
+			String strDateTime = formatter.format(new java.util.Date());
+			String strExcelName = "백업결과_"+strDateTime+".xls";
+			
+			response.setCharacterEncoding("utf-8");
+			response.setContentType("application/vnd.ms-excel");
+			response.setHeader("Content-Disposition",
+					"attachment;filename=" + new String(strExcelName.getBytes("euc-kr"), "8859_1"));
+			
+			workbook = Workbook.createWorkbook(response.getOutputStream());
+			
+			
+			WritableSheet sheet = workbook.createSheet("백업결과", 0);
+			
+			//setting
+			WritableCellFormat titleFormat = new WritableCellFormat();
+			titleFormat.setAlignment(Alignment.CENTRE);
+			titleFormat.setVerticalAlignment(VerticalAlignment.CENTRE);
+			titleFormat.setBorder(Border.ALL, BorderLineStyle.THICK);
+			titleFormat.setBackground(Colour.GREY_25_PERCENT);
+			
+			WritableCellFormat cellFormatLeft = new WritableCellFormat();
+			cellFormatLeft.setAlignment(Alignment.LEFT);
+			cellFormatLeft.setVerticalAlignment(VerticalAlignment.CENTRE);
+			cellFormatLeft.setBorder(Border.ALL, BorderLineStyle.THIN);
+			
+			WritableCellFormat cellFormatRight = new WritableCellFormat();
+			cellFormatRight.setAlignment(Alignment.RIGHT);
+			cellFormatRight.setVerticalAlignment(VerticalAlignment.CENTRE);
+			cellFormatRight.setBorder(Border.ALL, BorderLineStyle.THIN);
+			
+			WritableCellFormat cellFormatInteger = new WritableCellFormat(NumberFormats.FLOAT);
+			cellFormatInteger.setAlignment(Alignment.LEFT);
+			cellFormatInteger.setVerticalAlignment(VerticalAlignment.CENTRE);
+			cellFormatInteger.setBorder(Border.ALL, BorderLineStyle.THIN);
+			
+			
+			//Header
+			Label label_01 = new Label(0, 0, "순번", titleFormat);
+			sheet.addCell(label_01);
+			sheet.setColumnView(0, 5);
+			
+			Label label_02 = new Label(1, 0, "Work명", titleFormat);
+			sheet.addCell(label_02);
+			sheet.setColumnView(1, 20);
+			
+			Label label_03 = new Label(2, 0, "DBMS아이피", titleFormat);
+			sheet.addCell(label_03);
+			sheet.setColumnView(2, 20);
+			
+			Label label_04 = new Label(3, 0, "Work설명", titleFormat);
+			sheet.addCell(label_04);
+			sheet.setColumnView(3, 20);
+			
+			if(backupGbn.equals("rman_hist")) //사용자
+			{
+				Label label_05 = new Label(4, 0, "백업옵션", titleFormat);
+				sheet.addCell(label_05);
+				sheet.setColumnView(4, 20);
+				
+				Label label_06 = new Label(5, 0, "백업파일경로", titleFormat);
+				sheet.addCell(label_06);
+				sheet.setColumnView(5, 20);
+				
+				Label label_07 = new Label(6, 0, "작업시작시간", titleFormat);
+				sheet.addCell(label_07);
+				sheet.setColumnView(6, 20);
+				
+				Label label_08 = new Label(7, 0, "작업종료시간", titleFormat);
+				sheet.addCell(label_08);
+				sheet.setColumnView(7, 20);
+				
+				Label label_09 = new Label(8, 0, "경과시간", titleFormat);
+				sheet.addCell(label_09);
+				sheet.setColumnView(8, 20);
+				
+				Label label_10 = new Label(9, 0, "상태", titleFormat);
+				sheet.addCell(label_10);
+				sheet.setColumnView(9, 20);
+			}else if(backupGbn.equals("dump_hist")) {
+				Label label_05 = new Label(4, 0, "Database", titleFormat);
+				sheet.addCell(label_05);
+				sheet.setColumnView(4, 20);
+				
+				Label label_06 = new Label(5, 0, "사이즈", titleFormat);
+				sheet.addCell(label_06);
+				sheet.setColumnView(5, 20);
+				
+				Label label_07 = new Label(6, 0, "백업파일경로", titleFormat);
+				sheet.addCell(label_07);
+				sheet.setColumnView(6, 20);
+				
+				Label label_08 = new Label(7, 0, "백업파일명", titleFormat);
+				sheet.addCell(label_08);
+				sheet.setColumnView(7, 20);
+				
+				Label label_09 = new Label(8, 0, "작업시작시간", titleFormat);
+				sheet.addCell(label_09);
+				sheet.setColumnView(8, 20);
+				
+				Label label_10 = new Label(9, 0, "작업종료시간", titleFormat);
+				sheet.addCell(label_10);
+				sheet.setColumnView(9, 20);
+				
+				Label label_11 = new Label(10, 0, "경과시간", titleFormat);
+				sheet.addCell(label_11);
+				sheet.setColumnView(10, 20);
+				
+				Label label_12 = new Label(11, 0, "상태", titleFormat);
+				sheet.addCell(label_12);
+				sheet.setColumnView(11, 20);
+			}
+
+			List<WorkLogVO> resultSet = null;
+			
+			resultSet = backupService.selectWorkLogList(workLogVO);
+			
+			if (resultSet != null && resultSet.size() > 0) {
+				
+				int row = 1;
+				for (WorkLogVO list : resultSet) {
+					
+					int j = 0;
+					long lngIdx = (long) list.getRownum();
+					String strIdx = Long.toString(lngIdx);
+
+					//DateFormat sdFormat = new SimpleDateFormat("yyyy-mm-dd");
+					
+					String wrkNm=list.getWrk_nm();
+					String dbmsIp=list.getIpadr();
+					String wrkExp = list.getWrk_exp();
+					String bckOption = list.getBck_opt_cd_nm();
+					String bakFilePth = list.getBck_file_pth();
+					String wrkStartDtm = list.getWrk_strt_dtm();
+					String wrkEndDtm = list.getWrk_end_dtm();
+					String wrkDtm = list.getWrk_dtm();
+					String result = list.getExe_rslt_cd_nm();
+					String dbNm = list.getDb_nm();
+					Long file_sz = list.getFile_sz();
+					String bck_filenm = list.getBck_filenm();
+					String fileSize = formatDataSize(file_sz);
+
+					//jxl.write.Number idxNumber = new jxl.write.Number(j++, row, intIdx, cellFormatInteger);
+
+					//sheet.addCell(idxNumber);
+					sheet.addCell(new Label(j++, row, strIdx, cellFormatLeft));					
+					sheet.addCell(new Label(j++, row, wrkNm, cellFormatLeft));
+					sheet.addCell(new Label(j++, row, dbmsIp, cellFormatLeft));				
+					sheet.addCell(new Label(j++, row, wrkExp, cellFormatLeft));					
+					
+					if(backupGbn.equals("rman_hist")) //사용자
+					{
+						sheet.addCell(new Label(j++, row, bckOption, cellFormatLeft));					
+						sheet.addCell(new Label(j++, row, bakFilePth, cellFormatLeft));					
+						sheet.addCell(new Label(j++, row, wrkStartDtm, cellFormatLeft));					
+						sheet.addCell(new Label(j++, row, wrkEndDtm, cellFormatLeft));
+						sheet.addCell(new Label(j++, row, wrkDtm, cellFormatLeft));
+						sheet.addCell(new Label(j++, row, result, cellFormatLeft));
+					}
+					else if(backupGbn.equals("dump_hist"))
+					{			
+						sheet.addCell(new Label(j++, row, dbNm, cellFormatLeft));		
+						sheet.addCell(new Label(j++, row, fileSize, cellFormatLeft));		
+						sheet.addCell(new Label(j++, row, bakFilePth, cellFormatLeft));				
+						sheet.addCell(new Label(j++, row, bck_filenm, cellFormatLeft));	
+						sheet.addCell(new Label(j++, row, wrkStartDtm, cellFormatLeft));					
+						sheet.addCell(new Label(j++, row, wrkEndDtm, cellFormatLeft));
+						sheet.addCell(new Label(j++, row, wrkDtm, cellFormatLeft));
+						sheet.addCell(new Label(j++, row, result, cellFormatLeft));
+					}else {			
+						
+					}
+					row++;
+				}				
+				workbook.write();
+			}
+				
+		} catch(Exception e) {
+			e.printStackTrace();
+		} finally {
+			workbook.close();
+		}	
+	}
+	
+	
+	public static String formatDataSize(long size) {
+	    if (size <= 0) {
+	        return "0 bytes";
+	    }
+	    
+	    String[] units = {"bytes", "kB", "MB", "GB", "TB", "PB"};
+	    int unitIndex = (int) (Math.log10(size) / Math.log10(1024));
+	    
+	    double formattedSize = size / Math.pow(1024, unitIndex);
+	    
+	    return String.format("%.2f %s", formattedSize, units[unitIndex]);
 	}
 	
 }
