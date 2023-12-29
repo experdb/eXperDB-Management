@@ -27,8 +27,7 @@ eXperDB-Management is a PostgreSQL management tool(for efficient operation and m
 * Auto Scaling(On AWS)
   - Auto Scale-Out/In function according to threshold setting On public cloud(AWS)
   - Automatic and manual management
-  - 
-
+  
 ## TODO
 * Supports PostgreSQL Version 12
 
@@ -71,7 +70,7 @@ eXperDB-Management is a PostgreSQL management tool(for efficient operation and m
 
 #### 2. Installing eXperDB-Management-WebConsole
 
-2-1. Install agent using eXperDB-Management-WebConsole-10.7.1.0.run file 
+2-1. Install WebConsole using eXperDB-Management-WebConsole-10.7.1.0.run file 
 ```
 2-2-1. Upload to installation target server using FTP program  
 2-2-2. Run eXperDB-Management-WebConsole-10.7.1.0.run file  
@@ -81,7 +80,7 @@ eXperDB-Management is a PostgreSQL management tool(for efficient operation and m
 2-2-6. Enter information (DBMS IP, Port, Default Database, Username, password)       
 ```
 
-2-3. Starting and stopping the agent    
+2-3. Starting and stopping the WebConsole    
 ```
 2-3-1. Start : eXperDB-Management-WebConsole/bin/start.sh   
 2-3-2. Stop : eXperDB-Management-WebConsole/bin/shutdown.sh  
@@ -100,7 +99,7 @@ Also, if you would like to contact us directly, please send an email to experdb@
 
 
 ## Copyright
-Copyright (c) 2016-2020, eXperDB Development Team
+Copyright (c) 2016-2023, eXperDB Development Team
 All rights reserved.
 
 
