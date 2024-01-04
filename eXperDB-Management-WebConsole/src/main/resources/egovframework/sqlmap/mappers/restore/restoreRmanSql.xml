@@ -30,6 +30,7 @@
 	 		, RESTORE_DIR
 	 		, EXELOG
 	 		, REGR_ID
+	 		, DB_SVR_IPADR_ID
 	 		)
 	 		VALUES
 	 		(
@@ -51,6 +52,7 @@
 			, #{restore_dir}
 	 		, #{exelog}
 	 		, #{regr_id}	
+	 		, #{db_svr_ipadr_id}	
 	 		)
 	</insert>
 	

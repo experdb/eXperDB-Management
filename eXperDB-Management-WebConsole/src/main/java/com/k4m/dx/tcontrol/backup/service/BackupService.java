@@ -239,5 +239,9 @@ public interface BackupService {
 	public Map<String, Object> selectSchedule(int scdId);
 	
 	public int selectSingleCheck(WorkVO workVO) throws Exception;
+	
+	public List<DbServerVO> selectAllAgentInfo(DbServerVO dbServerVO) throws Exception;
+	
+	public WrkExeVO selectBackupSvrInfo(WorkVO workVO) throws Exception;
 
 }

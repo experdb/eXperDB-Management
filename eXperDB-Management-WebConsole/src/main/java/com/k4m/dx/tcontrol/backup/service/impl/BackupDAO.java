@@ -246,5 +246,15 @@ public class BackupDAO extends EgovAbstractMapper{
 		return resultSet;
 	}
 	
+	public List<DbServerVO> selectAllAgentInfo(DbServerVO dbServerVO) {
+		List<DbServerVO> sl = null;
+		sl = (List<DbServerVO>) list("backupSQL.selectAllAgentInfo", dbServerVO);
+		return sl;
+	}
+	
+	public WrkExeVO selectBackupSvrInfo(WorkVO workVo) throws Exception{
+		return (WrkExeVO)getSqlSession().selectOne("backupSQL.selectBackupSvrInfo", workVo);
+	}
+	
 	
 }

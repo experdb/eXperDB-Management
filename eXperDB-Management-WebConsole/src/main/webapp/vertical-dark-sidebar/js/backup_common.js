@@ -613,7 +613,7 @@ function fn_update_chogihwa(gbn, result) {
 			$("#mod_remt_str_ip", "#workRegReFormBckr").val(nvlPrmSet(result.remote_map.ip, ""));
 			$("#mod_remt_str_ssh", "#workRegReFormBckr").val(nvlPrmSet(result.remote_map.port, ""));
 			$("#mod_remt_str_usr", "#workRegReFormBckr").val(nvlPrmSet(result.remote_map.usr, ""));
-			$("#mod_remt_str_pw", "#workRegReFormBckr").val(nvlPrmSet(result.remote_map.pw, ""));
+			// $("#mod_remt_str_pw", "#workRegReFormBckr").val(nvlPrmSet(result.remote_map.pw, ""));
 			mod_remote_pw = result.remote_map.pw;
 			
 			$("#mod_remote_opt").show();

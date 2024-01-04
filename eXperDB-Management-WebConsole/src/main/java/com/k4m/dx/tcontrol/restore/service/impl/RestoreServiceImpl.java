@@ -67,5 +67,10 @@ public class RestoreServiceImpl extends EgovAbstractServiceImpl implements Resto
 	public List<RestoreBackrestVO> backrestRestoreHistory(RestoreBackrestVO restoreBackrestVO) throws Exception {
 		return restoreDAO.backrestRestoreHistory(restoreBackrestVO);
 	}
+	
+	@Override
+	public int backrestNameCheck(String backrestWrkName) throws Exception {
+		return restoreDAO.backrestNameCheck(backrestWrkName);
+	}
 
 }

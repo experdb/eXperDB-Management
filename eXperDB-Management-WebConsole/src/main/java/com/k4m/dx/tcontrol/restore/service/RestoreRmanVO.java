@@ -24,6 +24,7 @@ public class RestoreRmanVO {
 	private String exelog;
 	private String regr_id;
 	private String reg_dtm;
+	private int db_svr_ipadr_id;
 
 	public int getRownum() {
 		return rownum;
@@ -207,6 +208,14 @@ public class RestoreRmanVO {
 
 	public void setReg_dtm(String reg_dtm) {
 		this.reg_dtm = reg_dtm;
+	}
+
+	public int getDb_svr_ipadr_id() {
+		return db_svr_ipadr_id;
+	}
+
+	public void setDb_svr_ipadr_id(int db_svr_ipadr_id) {
+		this.db_svr_ipadr_id = db_svr_ipadr_id;
 	}
 
 }

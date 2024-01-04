@@ -51,7 +51,9 @@
 			A.REMOTE_IP,
 			A.REMOTE_PORT,
 			A.REMOTE_USR,
-			A.REMOTE_PW
+			A.REMOTE_PW,
+			A.BCK_TARGET_IPADR_ID,
+			A.BCK_TARGET_IPADR
 	  FROM(	
       SELECT 
       		BCK_WRK_ID,
@@ -93,7 +95,9 @@
 			REMOTE_IP,
 			REMOTE_PORT,
 			REMOTE_USR,
-			REMOTE_PW
+			REMOTE_PW,
+			BCK_TARGET_IPADR_ID,
+			(SELECT IPADR FROM T_DBSVRIPADR_I WHERE A.BCK_TARGET_IPADR_ID = DB_SVR_IPADR_ID ) AS BCK_TARGET_IPADR
       FROM T_BCK_WRKCNG_I A, T_WRKCNG_I B
       WHERE 1=1	
       	AND A.WRK_ID=B.WRK_ID
@@ -245,7 +249,8 @@
 			log_file_pth,
 			bck_filenm,
 			db_svr_ipadr_id,
-			backrest_gbn
+			backrest_gbn,
+			bck_target_ipadr_id
 		<if test="remote_use != null and remote_use != ''">
 			,remote_ip,
 			remote_port,
@@ -271,7 +276,8 @@
 			#{log_file_pth},
 			#{bck_filenm},
 			#{db_svr_ipadr_id},
-			#{backrest_gbn}
+			#{backrest_gbn},
+			#{bck_target_ipadr_id}
 		<if test="remote_use != null and remote_use != ''">
 			,#{remote_ip},
 			#{remote_port},
@@ -1005,6 +1011,10 @@
 					, B.BSN_DSCD
 					, (SELECT DB_SVR_IPADR_ID FROM T_DBSVRIPADR_I WHERE A.DB_SVR_ID = DB_SVR_ID AND master_gbn = 'M') AS DB_SVR_IPADR_ID
 					, (SELECT IPADR FROM T_DBSVRIPADR_I WHERE A.DB_SVR_IPADR_ID = DB_SVR_IPADR_ID) AS DB_SVR_IPADR
+					, A.REMOTE_IP
+					, A.REMOTE_PORT
+					, A.REMOTE_USR
+					, A.BACKREST_GBN
 		FROM T_BCK_WRKCNG_I A, T_WRKCNG_I B
 		WHERE A.WRK_ID = B.WRK_ID
 	 	AND A.WRK_ID = #{wrk_id}
@@ -1034,6 +1044,21 @@
            AND B.IPADR = #{db_svr_ipadr}	
     </select>
     
+    <select id="selectBckTargetServer" parameterType="int" resultType="dbServerVO">
+          SELECT
+          	   (ROW_NUMBER() OVER()) AS ROWNUM,
+               A.pgdata_pth ,
+               B.ipadr,
+               B.portno,
+               B.master_gbn,
+               A.svr_spr_usr_id,
+               B.db_svr_ipadr_id
+          FROM T_DBSVR_I A, T_DBSVRIPADR_I B
+         WHERE
+           A.DB_SVR_ID = B.DB_SVR_ID
+           AND B.DB_SVR_IPADR_ID = #{bck_target_ipadr_id}	
+    </select>
+    
     <select id="selectMasterServer" parameterType="dbServerVO" resultType="dbServerVO">
           SELECT
           	   (ROW_NUMBER() OVER()) AS ROWNUM,
@@ -1047,6 +1072,7 @@
          WHERE
            A.DB_SVR_ID = B.DB_SVR_ID
            AND B.MASTER_GBN = 'M'
+           AND A.DB_SVR_ID = #{db_svr_id}
     </select>
     
 <insert id="insertPgbackrestBackup" parameterType="WrkExeVO">
@@ -1197,5 +1223,62 @@
    		WHERE
    			SCD_ID = #{num}
    			AND A.WRK_ID = B.WRK_ID
+    </select>
+    
+    <select id="dbmsSingleCheck" parameterType="workVO" resultType="int">
+		/**
+		* Query ID : dbmsSingleCheck
+		* Description : dbms Single 체크여부
+		* Author : 박유라
+		**/
+		SELECT COUNT(*)
+		FROM t_dbsvripadr_i 
+		WHERE DB_SVR_ID = #{db_svr_id}
+	</select>
+	
+	
+	<select id="selectAllAgentInfo" parameterType="dbServerVO" resultType="dbServerVO">
+    
+    	  SELECT	
+	        (ROW_NUMBER() OVER()) AS ROWNUM,
+			(ROW_NUMBER() OVER()) AS IDX,
+			AA.*
+          FROM (SELECT
+              	 A.pgdata_pth,
+              	 A.pghome_pth,
+            	 B.ipadr,
+           	   	 B.portno,
+              	 B.master_gbn,
+              	 A.svr_spr_usr_id,
+             	 B.db_svr_ipadr_id,
+               	 B.svr_host_nm,
+               	 B.db_svr_id
+          	FROM T_DBSVR_I A, T_DBSVRIPADR_I B
+         	WHERE
+           		B.DB_SVR_ID = A.DB_SVR_ID
+           		<if test="ipadr != null and ipadr != '' ">
+      		   		AND B.ipadr LIKE CONCAT('%',#{ipadr},'%')
+      	   		</if>
+      	   		order by 3,5)AA;
+			
+    </select>
+    
+    <select id="selectBackupSvrInfo" parameterType="workVO" resultType="WrkExeVO">
+    	  /**
+			* Query ID : selectBackupSvrInfo
+			* Description : 백업 서버 정보
+			* Author : 박유라
+		  **/
+    	  SELECT	
+	        B.db_svr_ipadr_id,
+            B.bck_file_pth,
+            B.wrk_id,
+            A.backrest_gbn
+          FROM T_BCK_WRKCNG_I A, T_WRKEXE_G B
+          WHERE
+          		A.DB_SVR_ID = #{db_svr_id}
+          		AND B.WRK_ID = A.WRK_ID
+           		AND B.exe_rslt_cd = 'TC001701'
+				order by wrk_end_dtm desc limit 1;
     </select>
 </mapper>

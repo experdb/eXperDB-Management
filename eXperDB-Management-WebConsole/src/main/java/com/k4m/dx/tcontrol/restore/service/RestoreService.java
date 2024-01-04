@@ -75,4 +75,7 @@ public interface RestoreService {
 
 
 	List<RestoreBackrestVO> backrestRestoreHistory(RestoreBackrestVO restoreBackrestVO) throws Exception;
+	
+	
+	public int backrestNameCheck(String backrestWrkName) throws Exception;
 }

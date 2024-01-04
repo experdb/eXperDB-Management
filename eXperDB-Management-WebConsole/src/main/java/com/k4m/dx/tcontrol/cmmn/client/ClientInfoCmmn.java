@@ -340,13 +340,14 @@ public class ClientInfoCmmn implements Runnable{
 								endVO.setBACKREST_SCD_ID(Integer.parseInt(resultWork.get(i).get("scd_id").toString()));
 								
 								backupService.updateBackrestWrk(endVO);
+
 							}else {
 																
 								WrkExeVO endVO = new WrkExeVO();
 								
 								endVO.setExe_sn(exe_sn);
 								endVO.setExe_rslt_cd("TC001702");
-								endVO.setRslt_msg("Fail");
+								endVO.setRslt_msg(result.get("RESULT_DATA").toString());
 								endVO.setBACKREST_SCD_ID(Integer.parseInt(resultWork.get(i).get("scd_id").toString()));
 								backupService.updateBackrestErr(endVO);
 							}
@@ -2916,4 +2917,53 @@ public JSONObject pgbackrestImmediateStart(String ip, int port, JSONObject jObj)
 		return result;
 	}
 	
+	public JSONObject createBackrestRestoreConf(String ip, int port, JSONObject jObj) {
+		JSONObject objList;
+		
+		ClientAdapter CA = new ClientAdapter(ip, port);
+		
+		jObj.put(ClientProtocolID.DX_EX_CODE, ClientTranCodeType.DxT055);
+
+		try {
+			CA.open();
+			objList = CA.dxT055(jObj);
+			CA.close();
+		} catch (Exception e) {			
+			e.printStackTrace();
+		}
+		
+		return null;
+	}
+	
+	public JSONObject selectHostuser(String ip, int port, JSONObject jObj) {
+		JSONObject objList;
+		JSONObject result = new JSONObject();
+		
+		ClientAdapter CA = new ClientAdapter(ip, port);
+		
+		jObj.put(ClientProtocolID.DX_EX_CODE, ClientTranCodeType.DxT056);
+		
+		try {
+			CA.open();
+			objList = CA.dxT056(jObj);
+			CA.close();
+			
+			String strErrMsg = String.valueOf(objList.get(ClientProtocolID.ERR_MSG));
+			String strErrCode = String.valueOf(objList.get(ClientProtocolID.ERR_CODE));
+			String strDxExCode = String.valueOf(objList.get(ClientProtocolID.DX_EX_CODE));
+			String strResultCode = String.valueOf(objList.get(ClientProtocolID.RESULT_CODE));
+			String strResultData = String.valueOf(objList.get(ClientProtocolID.RESULT_DATA));
+			
+			result.put(ClientProtocolID.ERR_MSG, strErrMsg);
+			result.put(ClientProtocolID.ERR_CODE, strErrCode);
+			result.put(ClientProtocolID.DX_EX_CODE, strDxExCode);
+			result.put(ClientProtocolID.RESULT_CODE, strResultCode);
+			result.put(ClientProtocolID.RESULT_DATA, strResultData);
+			
+		} catch (Exception e) {			
+			e.printStackTrace();
+		}
+		
+		return result;
+	}
 }

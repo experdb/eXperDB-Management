@@ -61,4 +61,10 @@ public class RestoreDAO extends EgovAbstractMapper {
 		return (List<RestoreBackrestVO>) list("restoreBackrestSql.backrestRestoreHistory",restoreBackrestVO);
 	}
 
+	public int backrestNameCheck(String backrestWrkName) {
+		int resultSet = 0;
+		resultSet = (int) getSqlSession().selectOne("restoreBackrestSql.backrestNameCheck", backrestWrkName);
+		return resultSet;
+	}
+
 }

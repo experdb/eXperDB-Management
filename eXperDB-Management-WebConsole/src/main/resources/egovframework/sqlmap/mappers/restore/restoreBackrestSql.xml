@@ -34,7 +34,8 @@
 				AA.REGR_ID,
 				AA.REG_DTM,
 				AA.RESTORE_SIZE,
-				AA.ELAPSED_TIME
+				AA.ELAPSED_TIME,
+				AA.RESTORE_SVR_NM
 		  FROM(	
 	      SELECT 
 	      		RESTORE_SN,
@@ -59,7 +60,8 @@
 				REGR_ID,
 				REG_DTM,
 				RESTORE_SIZE,
-				ELAPSED_TIME
+				ELAPSED_TIME,
+				(SELECT IPADR FROM t_dbsvripadr_i WHERE A.DB_SVR_IPADR_ID = DB_SVR_IPADR_ID ) AS RESTORE_SVR_NM
 	      FROM T_RMAN_RESTORE A
 	      WHERE 1=1		  
 	       <if test="restore_strtdtm != null and restore_strtdtm != '' ">
@@ -79,5 +81,26 @@
 	      </if>  
 	      ORDER BY RESTORE_SN DESC
 	      )AA	
+	</select>
+	
+	<select id="backrestNameCheck" resultType="int">
+        /**
+         * Query ID : backrestRestoreNameCheck
+        * Description : 복구명 중복 체크
+        * Author : 박유라
+        **/
+        SELECT 
+               COUNT(A.RESTORE_NM)
+         FROM (
+               SELECT RESTORE_NM
+                 FROM T_RMAN_RESTORE
+                UNION ALL
+               SELECT RESTORE_NM
+                 FROM T_DUMP_RESTORE
+                UNION ALL
+               SELECT wrk_nm
+                 FROM t_wrkcng_i
+         )A
+        WHERE RESTORE_NM = #{backrestWrkName};
 	</select>
 </mapper>

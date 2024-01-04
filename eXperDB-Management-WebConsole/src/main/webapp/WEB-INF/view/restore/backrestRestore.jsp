@@ -13,8 +13,13 @@
 	var db_info_arr = [];
 	var exelog = "";
 	var time_restore = "";
+	var single_chk = new Map();
+	var selected_type = "";
+	var backrest_gbn = "";
+	var backupInfoCode = "";
 
 	$(window.document).ready(function() {
+
 		fn_init();
 
 		//validate
@@ -51,7 +56,7 @@
 
     function fn_init_db_svr_info() {
 		dbServerTable = $('#db_svr_info').DataTable({
-			scrollY : "60px",
+			scrollY : "275px",
 			bSort: false,
 			scrollX: false,	
 			searching : false,
@@ -62,14 +67,17 @@
 						{data : "master_gbn", className : "dt-center", defaultContent : "",
 						render: function(data, type, full, meta){
 							if(data == "M"){
-								data = '<div class="badge badge-pill badge-success" title=""><b>Primary</b></div>'
+								data = '<div class="badge badge-pill badge-success" title="" style="margin-right: 30px;"><b>Primary</b></div>'
+							}else if(data == "S"){
+								data = '<i class="mdi mdi-subdirectory-arrow-right" style="margin-left: 50px;"><div class="badge badge-pill badge-outline-warning" title="" style="margin-right: 30px"><b>Standby</b></div>'
 							}
+							
 							return data;
 						}},
 						{data : "svr_host_nm", className : "dt-center", defaultContent : "" },
 						{data : "ipadr", className : "dt-center", defaultContent: "" },
 						{data : "bck_svr_id", defaultContent : "", visible: false }
-			]
+			],'select': {'style': 'single'}
 		});
 		
 		dbServerTable.tables().header().to$().find('th:eq(0)').css('min-width', '170px');
@@ -78,8 +86,6 @@
 		dbServerTable.tables().header().to$().find('th:eq(3)').css('min-width', '0px');
 
 		$(window).trigger('resize'); 
-
-		fn_select_agent_info();
 	}
 
 	function fn_init(){
@@ -87,7 +93,9 @@
 		fn_makeMin();
 		fn_makeSec();
 
-		fn_init_db_svr_info();
+		fn_select_agent_info();
+
+		// fn_init_db_svr_info();
 
 		$("#pitr_div").hide();
 	}
@@ -167,9 +175,9 @@
 		}
 	}
 
-	function fn_select_agent_info(){
+	async function fn_select_agent_info(){
 		$.ajax({
-			url : "/backup/backrestAgentList.do",
+			url : "/restore/backrestAllAgentList.do",
 			data : {
 				db_svr_id : $("#db_svr_id", "#findList").val()
 			},
@@ -188,23 +196,43 @@
 				}
 			},
 			success : function(data) {
-				dbServerTable.rows({selected: true}).deselect();
-				dbServerTable.clear().draw();
-
 				var db_server_data = data['agent_list'];
 
 				for(var i=0; i < db_server_data.length; i++){
-					if(db_server_data[i].master_gbn == "M"){
-						db_info_arr.push(db_server_data[i]);
-					}
+					db_info_arr.push(db_server_data[i]);
 				}
+
+				fn_init_db_svr_info();
+
+				dbServerTable.rows({selected: true}).deselect();
+				dbServerTable.clear().draw();
 
 				if (nvlPrmSet(data, "") != '') {
 					dbServerTable.rows.add(db_info_arr).draw();
 				}
+				
+				backupInfoCode = data.result_code;
+
+				if(data.result_code == "E"){
+					showSwalIconRst("백업된 정보가 없습니다.", closeBtn, '', 'error', '');
+				}else{
+					backrest_gbn = data.backrest_gbn;
+
+					if(backrest_gbn == "cloud"){
+						$("#cloud_s3_restore_info", "#restoreBackrestRegForm").css("display", "");
+						$("#ssh_port_info", "#restoreBackrestRegForm").css("display", "none");
+					}else if(backrest_gbn == "remote"){
+						$("#cloud_s3_restore_info", "#restoreBackrestRegForm").css("display", "none");
+						$("#ssh_port_info", "#restoreBackrestRegForm").css("display", "none");
+					}else{
+						$("#cloud_s3_restore_info", "#restoreBackrestRegForm").css("display", "none");
+						$("#ssh_port_info", "#restoreBackrestRegForm").css("display", "");
+					}
+				}
 			}
 		});
 	}
+
 
 	/* ********************************************************
 	 * 복구명 중복체크
@@ -220,10 +248,10 @@
 		$("#restorenm_check_alert", "#restoreBackrestRegForm").hide();
 
 		$.ajax({
-			url : '/restore_nmCheck.do',
+			url : '/backrest_nmCheck.do',
 			type : 'post',
 			data : {
-				restore_nm : $("#restore_nm", "#restoreBackrestRegForm").val()
+				backrest_nm : $("#restore_nm", "#restoreBackrestRegForm").val()
 			},
 			beforeSend: function(xhr) {
 				xhr.setRequestHeader("AJAX", true);
@@ -273,6 +301,13 @@
 			iChkCnt = iChkCnt + 1;
 		}
 
+		//1
+		if($('#db_svr_info').DataTable().rows('.selected').data()[0] == undefined){
+			showSwalIcon("복원 대상 서버를 선택해주세요", '<spring:message code="common.close" />', '', 'warning');
+
+			iChkCnt = iChkCnt + 1;
+		}
+
 		if(nvlPrmSet($("#ins_rst_opt_cd", "#restoreBackrestRegForm").val(), "") == "") {
 			$("#ins_rst_opt_cd_alert", "#restoreBackrestRegForm").html('복구유형를 입력해주세요.');
 			$("#ins_rst_opt_cd_alert", "#restoreBackrestRegForm").show();
@@ -285,6 +320,58 @@
 				$("#rst_pitr_dtm_alert", "#restoreBackrestRegForm").html('특정 시점의 날짜를 선택해주세요.');
 				$("#rst_pitr_dtm_alert", "#restoreBackrestRegForm").show();
 			
+				iChkCnt = iChkCnt + 1;
+			}
+		}
+
+		//2
+		if(backrest_gbn == "cloud"){
+			if(nvlPrmSet($("#ins_s3_bucket", "#restoreBackrestRegForm").val(), "") == "") {
+				$("#ins_s3_bucket_alert", "#restoreBackrestRegForm").html('<spring:message code="backup_management.s3.bucket" />');
+				$("#ins_s3_bucket_alert", "#restoreBackrestRegForm").show();
+				
+				iChkCnt = iChkCnt + 1;
+			}
+			
+			if(nvlPrmSet($("#ins_s3_region", "#restoreBackrestRegForm").val(), "") == "") {
+				$("#ins_s3_region_alert", "#restoreBackrestRegForm").html('<spring:message code="backup_management.s3.region" />');
+				$("#ins_s3_region_alert", "#restoreBackrestRegForm").show();
+				
+				iChkCnt = iChkCnt + 1;
+			}
+			
+			if(nvlPrmSet($("#ins_s3_key", "#restoreBackrestRegForm").val(), "") == "") {
+				$("#ins_s3_key_alert", "#restoreBackrestRegForm").html('<spring:message code="backup_management.s3.key" />');
+				$("#ins_s3_key_alert", "#restoreBackrestRegForm").show();
+				
+				iChkCnt = iChkCnt + 1;
+			}
+			
+			if(nvlPrmSet($("#ins_s3_endpoint", "#restoreBackrestRegForm").val(), "") == "") {
+				$("#ins_s3_endpoint_alert", "#restoreBackrestRegForm").html('<spring:message code="backup_management.s3.endpoint" />');
+				$("#ins_s3_endpoint_alert", "#restoreBackrestRegForm").show();
+				
+				iChkCnt = iChkCnt + 1;
+			}
+
+			if(nvlPrmSet($("#ins_s3_path", "#restoreBackrestRegForm").val(), "") == "") {
+				$("#ins_s3_path_alert", "#restoreBackrestRegForm").html('<spring:message code="backup_management.s3.path" />');
+				$("#ins_s3_path_alert", "#restoreBackrestRegForm").show();
+				
+				iChkCnt = iChkCnt + 1;
+			}
+
+			if(nvlPrmSet($("#ins_s3_secret", "#restoreBackrestRegForm").val(), "") == "") {
+				$("#ins_s3_secret_alert", "#restoreBackrestRegForm").html('<spring:message code="backup_management.s3.secretkey" />');
+				$("#ins_s3_secret_alert", "#restoreBackrestRegForm").show();
+
+				iChkCnt = iChkCnt + 1;
+			}
+		}else if(backrest_gbn == "local"){
+			if(nvlPrmSet($("#ins_ssh_port", "#restoreBackrestRegForm").val(), "") == "") {
+				$("#ins_ssh_port_alert", "#restoreBackrestRegForm").html('ssh 포트를 입력해주세요');
+				$("#ins_ssh_port_alert", "#restoreBackrestRegForm").show();
+
 				iChkCnt = iChkCnt + 1;
 			}
 		}
@@ -311,8 +398,15 @@
 	 * 실행버튼 클릭 시
 	 ******************************************************** */
 	function fn_restore_start() {
-		$("#restoreBackrestRegForm").submit();
+		if(backupInfoCode == "E"){	
+			showSwalIconRst("백업된 정보가 없습니다.", closeBtn, '', 'error', '');
+		}else{
+			$("#restoreBackrestRegForm").submit();
+		}
+
+		
 	}
+
 
 	/* ********************************************************
 	 * 복구 내용 저장 
@@ -324,7 +418,7 @@
 		var timeline_s = $("#timeline_s", "#restoreBackrestRegForm").val();
 		var selected_type = $("#ins_rst_opt_cd option:selected").val();
 		var restore_type = 0;
-		var selectedAgent = $('#db_svr_info').DataTable().rows().data()[0];
+		var selectedAgent = $('#db_svr_info').DataTable().rows('.selected').data()[0];
 
 		if(selected_type == "pitr"){
 			restore_type = 1;
@@ -341,6 +435,7 @@
 			url : "/insertBackrestRestore.do",
 			data : {
 				db_svr_id : selectedAgent.db_svr_id,
+				db_svr_ipadr_id : selectedAgent.db_svr_ipadr_id,
 				restore_nm : $("#restore_nm", "#restoreBackrestRegForm").val(),
 				restore_exp : $("#restore_exp", "#restoreBackrestRegForm").val(),
 				restore_flag :  restore_type,
@@ -374,7 +469,6 @@
 						}else{
 							showSwalIconRst('<spring:message code="restore.msg226" />', '<spring:message code="common.close" />', '', 'warning', 'backrest_restore');
 						}
-						
 						fn_restore_execute();
 					} else {
 						showSwalIcon('<spring:message code="message.msg32" />', '<spring:message code="common.close" />', '', 'error');
@@ -388,32 +482,48 @@
 		});
 	}
 
-	/* ********************************************************
-	 * restore history 이동
-	 ******************************************************** */
-	 function fn_bckr_restore_History_move() {
-		var id = "restoreHistory" + $("#db_svr_id", "#findList").val();
-		location.href='/restoreHistory.do?db_svr_id='+$("#db_svr_id", "#findList").val()
-		parent.fn_GoLink(id);
-	}
 
 
 	/* ********************************************************
 	 * 복구 실행 
 	 ******************************************************** */
-	function fn_restore_execute(){
+	 function fn_restore_execute(){
 		var restore_type = $("#ins_rst_opt_cd option:selected").val();
-		var agentInfo = $('#db_svr_info').DataTable().rows().data()[0];
+		var agentInfo = $('#db_svr_info').DataTable().rows('.selected').data()[0];
+
+		var cloud_map = new Map();
+		var cloud_data = null;
+
+		if(backrest_gbn == "cloud"){
+			cloud_map.set("s3_bucket", nvlPrmSet($('#ins_s3_bucket', '#restoreBackrestRegForm').val(), "").trim());
+			cloud_map.set("s3_region", nvlPrmSet($('#ins_s3_region', '#restoreBackrestRegForm').val(), "").trim());
+			cloud_map.set("s3_key", nvlPrmSet($('#ins_s3_key', '#restoreBackrestRegForm').val(), "").trim());
+			cloud_map.set("s3_endpoint", nvlPrmSet($('#ins_s3_endpoint', '#restoreBackrestRegForm').val(), "").trim());
+			cloud_map.set("s3_path", nvlPrmSet($('#ins_s3_path', '#restoreBackrestRegForm').val(), "").trim());
+			cloud_map.set("s3_key-secret", nvlPrmSet($('#ins_s3_secret', '#restoreBackrestRegForm').val(), "").trim());
+			cloud_map.set("cloud_type", "s3");
+
+			cloud_data = JSON.stringify(Object.fromEntries(cloud_map))
+		}
 
 		$.ajax({
 			url : "/executeBackrestRestore.do",
 			data : {
 				exelog : exelog,
+				restore_nm : $("#restore_nm", "#restoreBackrestRegForm").val(),
 				restore_type : restore_type,
 				ipadr : agentInfo.ipadr,
-				time_restore : time_restore
+				time_restore : time_restore,
+				pgdata_pth : agentInfo.pgdata_pth,
+				portno : agentInfo.portno,
+				svr_spr_usr_id : agentInfo.svr_spr_usr_id,
+				db_svr_ipadr_id : agentInfo.db_svr_ipadr_id,
+				db_svr_id : $("#db_svr_id", "#findList").val(),
+				restore_db_svr_id : agentInfo.db_svr_id,
+				cloud_map : cloud_data,
+				backup_location : backrest_gbn,
+				ssh_port : nvlPrmSet($('#ins_ssh_port', '#restoreBackrestRegForm').val(), "").trim()
 			},
-			dataType : "json",
 			type : "post",
 			beforeSend: function(xhr) {
 				xhr.setRequestHeader("AJAX", true);
@@ -428,10 +538,51 @@
 				}
 			},
 			success : function(data) {
-				
+				cloud_map.clear();
+				cloud_data = null;
 			}
 		});
 	}
+
+
+	/* ********************************************************
+	 * restore history 이동
+	 ******************************************************** */
+	 function fn_bckr_restore_History_move() {
+		var agentInfo = $('#db_svr_info').DataTable().rows('.selected').data()[0];
+
+		var id = "restoreHistory" + agentInfo.db_svr_id;
+		location.href='/restoreHistory.do?db_svr_id='+agentInfo.db_svr_id;
+		parent.fn_GoLink(id);
+	}
+
+
+	// $(function() {
+	// 	$("#db_svr_info").on('click', 'tbody tr', function(){
+			
+	// 		console.log($('#db_svr_info').DataTable().row(this).data());
+
+	// 		$(this).toggleClass('selected');
+	// 		var agentInfo = $('#db_svr_info').DataTable().rows('.selected').data()[0];
+	// 		var svrId = $("#db_svr_id", "#findList").val();
+			
+	// 		var words = this.className.split(' ');
+			
+	// 		if(backrest_gbn == "local"){
+
+	// 		}
+
+	// 		if(words.length == 2){
+	// 			if(svrId != agentInfo.db_svr_id){
+	// 				$("#ssh_port_info", "#restoreBackrestRegForm").css("display", "");
+	// 			}else{
+	// 				$("#ssh_port_info", "#restoreBackrestRegForm").css("display", "none");
+	// 			}
+	// 		}else{
+	// 			$("#ssh_port_info", "#restoreBackrestRegForm").css("display", "none");
+	// 		}
+	// 	});
+	// })
 </script>
 
 <%@include file="../cmmn/passwordConfirm.jsp"%>
@@ -490,7 +641,7 @@
 
         <div class="col-12 stretch-card div-form-margin-table">
 			<div class="card">
-				<div class="card-body" style="min-height:598px; max-height:870px;">
+				<div class="card-body" style="min-height:700px; max-height:900px;">
 					<div class="row" style="margin-top:-20px;">
 						<div class="col-12">
 							<div class="template-demo">																				
@@ -510,7 +661,7 @@
 												
 						<fieldset>
 							<div class="row" style="margin-top:10px;">
-								<div class="col-md-12 system-tlb-scroll" style="min-height: 170px; max-height: 220px; overflow-x: hidden;  overflow-y: auto; ">
+								<div class="col-md-12 system-tlb-scroll" style="min-height: 200px; max-height: 500px; overflow-x: hidden;  overflow-y: auto; ">
 									<div class="card-body" style="border: 1px solid #adb5bd;">
 										<div class="form-group row div-form-margin-z" style="margin-top:-10px;">
 											<label for="restore_nm" class="col-sm-2 col-form-label pop-label-index" style="padding-top:7px;">
@@ -554,16 +705,24 @@
 							</div>
 
 							<div class="row" style="margin-top:10px;">
-								<div class="col-md-6 system-tlb-scroll" style="border:0px; max-height: 300px; overflow-x: hidden; ">
+								<div class="col-md-6 system-tlb-scroll" style="min-height: 200px; max-height: 500px; overflow-x: hidden ">
 									<div class="card-body" style="border: 1px solid #adb5bd;">
-                                        <div style="margin-left: -15px;">
-                                            <label for="restore_nm" class="col-sm-5 col-form-label pop-label-index" style="padding-top:7px;">
+                                        <div style="margin-left: -15px; display: flex;">
+                                            <label for="restore_nm" class="col-sm-7 col-form-label pop-label-index" style="padding-top:7px;">
                                                 <i class="ti-desktop menu-icon"></i>
                                                 <span><spring:message code="restore.target.list" /></span>
                                             </label>
+
+											<div class="col-sm-5">
+												<div class="alert alert-danger form-control-sm" style="margin-top:-7px; visibility: hidden " id="server_selected_check_alert">복구 대상 서버를 선택해주세요</div>
+											</div>
                                         </div>
 
-                                        <div class="col-12" id="backrest_svr_info_div" style="diplay:none;">
+										<!-- <div class="col-sm-5">
+											<div class="alert alert-danger form-control-sm" style="margin-top:5px;" id="server_selected_check_alert">복구 대상 서버를 선택해주세요</div>
+										</div> -->
+
+                                        <div class="col-12" id="backrest_svr_info_div" style="">
                                             <div class="table-responsive">
                                                 <div id="order-listing_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
                                                     <div class="row">
@@ -588,9 +747,150 @@
                                         </div>
 									</div>
 								</div>
+
+								<div class="col-md-6 system-tlb-scroll" style="border:0px; min-height: 550px; max-height: 600px; overflow-x: hidden; ">
+									<div class="card-body" style="border: 1px solid #adb5bd; padding: 10px;">
+                                        <div>
+											<div class="form-group row div-form-margin-z" style="padding: 10px; display: none;" id="cloud_s3_restore_info">
+                                                <label for="" class="col-sm-3 col-form-label pop-label-index" style="margin-top: -10px;">
+                                                    <i class="item-icon fa fa-dot-circle-o"></i>
+                                                    s3-bucket
+                                                </label>
+												<div class="col-sm-4" style="margin-left: 10px;">
+													<input type="text" class="form-control form-control-xsm" maxlength="50" id="ins_s3_bucket" name="ins_s3_bucket" style="width: 100%" placeholder="" />
+												</div>
+
+												<div class="col-sm-4">
+													<div class="alert alert-danger" style="display:none; width: 105%; margin-top: -7px;" id="ins_s3_bucket_alert"></div>
+												</div>
+
+												<label for="" class="col-sm-3 col-form-label pop-label-index" style="margin-top: -10px;">
+                                                    <i class="item-icon fa fa-dot-circle-o"></i>
+                                                   s3-region
+                                                </label>
+												<div class="col-sm-4" style="margin-left: 10px;">
+													<input type="text" class="form-control form-control-xsm" maxlength="50" id="ins_s3_region" name="ins_s3_region" style="width: 100%" placeholder="" />
+												</div>
+
+												<div class="col-sm-4">
+													<div class="alert alert-danger" style="display:none; width: 105%; margin-top: -7px;" id="ins_s3_region_alert"></div>
+												</div>
+
+												<label for="" class="col-sm-3 col-form-label pop-label-index" style="margin-top: -10px;">
+                                                    <i class="item-icon fa fa-dot-circle-o"></i>
+                                                    s3-key
+                                                </label>
+												<div class="col-sm-4" style="margin-left: 10px;">
+													<input type="password" class="form-control form-control-xsm" maxlength="50" id="ins_s3_key" name="ins_s3_key" style="width: 100%" placeholder=""/>
+												</div>
+
+												<div class="col-sm-4">
+													<div class="alert alert-danger" style="display:none; width: 105%; margin-top: -7px; " id="ins_s3_key_alert"></div>
+												</div>
+
+												<label for="backup_file_type" class="col-sm-3 col-form-label pop-label-index" style="margin-top: -10px;">
+                                                    <i class="item-icon fa fa-dot-circle-o"></i>
+                                                    s3-endpoint
+                                                </label>
+												<div class="col-sm-4" style="margin-left: 10px;">
+													<input type="text" class="form-control form-control-xsm" maxlength="50" id="ins_s3_endpoint" name="ins_s3_endpoint" style="width: 100%" placeholder=""/>
+												</div>
+
+												<div class="col-sm-4">
+													<div class="alert alert-danger" style="display:none; width: 105%; margin-top: -7px;" id="ins_s3_endpoint_alert"></div>
+												</div>
+
+												<label for="backup_file_type" class="col-sm-3 col-form-label pop-label-index" style="margin-top: -10px;">
+                                                    <i class="item-icon fa fa-dot-circle-o"></i>
+                                                    s3-path
+                                                </label>
+												<div class="col-sm-4" style="margin-left: 10px;">
+													<input type="text" class="form-control form-control-xsm" maxlength="50" id="ins_s3_path" name="ins_s3_path" style="width: 100%" placeholder="" />
+												</div>
+
+												<div class="col-sm-4">
+													<div class="alert alert-danger" style="display:none; width: 105%; margin-top: -7px;" id="ins_s3_path_alert"></div>
+												</div>
+
+												<label for="backup_file_type" class="col-sm-3 col-form-label pop-label-index" style="margin-top: -10px;">
+                                                    <i class="item-icon fa fa-dot-circle-o"></i>
+                                                    s3-key-secret
+                                                </label>
+												<div class="col-sm-4" style="margin-left: 10px;">
+													<input type="password" class="form-control form-control-xsm" maxlength="50" id="ins_s3_secret" name="ins_s3_secret" style="width: 100%" placeholder=""/>
+												</div>
+
+												<div class="col-sm-4">
+													<div class="alert alert-danger" style="display:none; width: 105%; margin-top: -7px;" id="ins_s3_secret_alert"></div>
+												</div>
+							
+												<!-- <div class="col-sm-3">
+													<div class="alert alert-danger" style="display:none; width: 220px; margin-left: -15px;" id="ins_rst_opt_cd_alert"></div>
+												</div> -->
+                                            </div>
+
+											<div class="form-group row div-form-margin-z" style="margin-top:10px; padding: 10px;" id="ssh_port_info">
+                                                <label for="" class="col-sm-3 col-form-label pop-label-index" style="margin-top: -10px;">
+                                                    <i class="item-icon fa fa-dot-circle-o"></i>
+                                                    ssh-port
+                                                </label>
+												<div class="col-sm-4" style="margin-left: 10px;">
+													<input type="text" class="form-control form-control-xsm" maxlength="50" id="ins_ssh_port" name="ins_ssh_port" style="width: 100%" placeholder="" />
+												</div>
+												<div class="col-sm-4">
+													<div class="alert alert-danger" style="display:none; width: 105%; margin-top: -7px;" id="ins_ssh_port_alert"></div>
+												</div>
+											</div>
+
+
+                                            <div class="form-group row div-form-margin-z" style="margin-top:10px; padding: 10px;">
+                                                <label for="restore_type" class="col-sm-3 col-form-label pop-label-index" >
+                                                    <i class="item-icon fa fa-dot-circle-o"></i>
+                                                    <spring:message code="restore.type" />
+                                                </label>
+
+                                                <div class="col-sm-4">
+                                                    <select class="form-control form-control-sm" style=" color: black; margin-top: 5px; margin-left: 10px;" name="ins_rst_opt_cd" id="ins_rst_opt_cd" tabindex=2 onchange="fn_restore_type_chk(this)">
+													    <option value=""><spring:message code="common.choice" /></option>
+	    												<option value="full"><spring:message code="restore.type.full" /></option>
+		    											<option value="pitr"><spring:message code="restore.type.time" /></option>
+				    								</select>
+                                                </div>
+
+												<div class="col-sm-4">
+													<div class="alert alert-danger" style="display:none; width: 105%; margin-left: 10px;" id="ins_rst_opt_cd_alert"></div>
+												</div>
+                                            </div>
+
+											<div class="form-group row div-form-margin-z">
+												<div class="alert alert-info " style="display:none; width: 100%; margin:20px" id="bckr_restore_type_alert" ></div>
+											</div>
+											
+
+                                            <div class="form-group row div-form-margin-z" style="padding: 10px; margin-left: 1px;" id="pitr_div">
+												<div id="rst_pitr_div" class="input-group align-items-center date datepicker totDatepicker col-sm-4">
+                                                    <input type="text" class="form-control totDatepicker" id="rst_pitr_dtm" name="rst_pitr_dtm" onchange="fn_backrest_chg_alert(this)">
+                                                    <span class="input-group-addon input-group-append border-left">
+                                                        <span class="ti-calendar input-group-text" style="cursor:pointer"></span>
+                                                    </span>
+                                                </div>
+
+												<div class="col-sm-8">
+													<span id="hour" style="margin-right: 1rem;"></span>
+													<span id="min" style="margin-right: 1rem;"></span>
+													<span id="sec"></span>
+												</div>
+                                            </div>
+
+											<div class="col-sm-4">
+												<div class="alert alert-danger" style="display:none; width: 265px; margin-left: -2px;" id="rst_pitr_dtm_alert"></div>
+											</div>
+                                        </div>
+									</div>
+								</div>
 							</div>
 
-                            <div class="row" style="margin-top:10px; margin-bottom: 10px;">
+                            <!-- <div class="row" style="margin-top:10px; margin-bottom: 10px;">
 								<div class="col-md-6 system-tlb-scroll" style="border:0px;max-height: 300px; overflow-x: hidden; ">
 									<div class="card-body" style="border: 1px solid #adb5bd; padding: 10px;">
                                         <div style="border: 1px solid #adb5bd;">
@@ -641,7 +941,7 @@
                                         </div>
 									</div>
 								</div>
-							</div>
+							</div> -->
 						</fieldset>
 					</form>
 				</div>

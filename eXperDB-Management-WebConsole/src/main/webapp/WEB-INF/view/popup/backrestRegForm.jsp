@@ -153,23 +153,8 @@
 			if($("#remote_radio").is(':checked')){
 				$("#ins_bckr_pth", "#workRegFormBckr").val("");
 				$("#ins_bckr_log_pth", "#workRegFormBckr").val("");
-				// if(selectedAgentServer.master_gbn == "S"){
-				// 	$("#bckr_standby_alert", "#workRegFormBckr").html("<spring:message code='backup_management.msg04' />");
-				// 	$("#bckr_standby_alert", "#workRegFormBckr").show();
-				// }else {
-				// 	$("#bckr_standby_alert", "#workRegFormBckr").html("");
-				// 	$("#bckr_standby_alert", "#workRegFormBckr").hide();
-				// }
 			}else{
 				if(words.length == 2){
-					// if(selectedAgentServer.master_gbn == "S"){
-					// 	$("#bckr_standby_alert", "#workRegFormBckr").html("<spring:message code='backup_management.msg04' />");
-					// 	$("#bckr_standby_alert", "#workRegFormBckr").show();
-					// }else{
-					// 	$("#bckr_standby_alert", "#workRegFormBckr").html("");
-					// 	$("#bckr_standby_alert", "#workRegFormBckr").hide();
-					// }
-
 					$.ajax({
 						url : "/backup/backrestPath.do",
 						data : {
@@ -358,10 +343,10 @@
 		$("#ins_wrk_nm_bckr_alert", "#workRegFormBckr").hide();
 		
 		$.ajax({
-			url : '/wrk_nmCheck.do',
+			url : '/backrest_nmCheck.do',
 			type : 'post',
 			data : {
-				wrk_nm : $('#ins_wrk_nm_bckr', '#workRegFormBckr').val()
+				backrest_nm : $('#ins_wrk_nm_bckr', '#workRegFormBckr').val()
 			},
 			beforeSend: function(xhr) {
 				xhr.setRequestHeader("AJAX", true);
@@ -569,24 +554,18 @@
 			
 			iChkCnt = iChkCnt + 1;
 		}
-		
-		if(nvlPrmSet($("#ins_bckr_pth", "#workRegFormBckr").val(), "") == ""){
-			$("#ins_bckr_pth_alert", "#workRegFormBckr").html('<spring:message code="properties.backup_path.chk" />');
-			$("#ins_bckr_pth_alert", "#workRegFormBckr").show();
-			iChkCnt = iChkCnt + 1;
-		}
-
-		if(nvlPrmSet($("#ins_bckr_log_pth", "#workRegFormBckr").val(), "") == "") {
-			$("#ins_bckr_log_pth_alert", "#workRegFormBckr").html('<spring:message code="properties.log_path_chk" />');
-			$("#ins_bckr_log_pth_alert", "#workRegFormBckr").show();
-			
-			iChkCnt = iChkCnt + 1;
-		}
 
 		if(nvlPrmSet($("#ins_cps_opt_prcs", "#workRegFormBckr").val(), "") == "") {
 			$("#ins_cps_opt_prcs_alert", "#workRegFormBckr").html('<spring:message code="backup_management.paralles_chk" />');
 			$("#ins_cps_opt_prcs_alert", "#workRegFormBckr").show();
 			
+			iChkCnt = iChkCnt + 1;
+		}
+
+		if(nvlPrmSet($("#ins_bckr_log_pth", "#workRegFormBckr").val(), "") == "") {
+			$("#ins_bckr_log_pth_alert", "#workRegFormBckr").html('로그경로를 확인해주세요');
+			$("#ins_bckr_log_pth_alert", "#workRegFormBckr").show();
+		
 			iChkCnt = iChkCnt + 1;
 		}
 
@@ -638,6 +617,12 @@
 				iChkCnt = iChkCnt + 1;
 			}
 			
+		}else if(svrBckCheck == "local"){
+			if(nvlPrmSet($("#ins_bckr_pth", "#workRegFormBckr").val(), "") == ""){
+				$("#ins_bckr_pth_alert", "#workRegFormBckr").html('백업경로를 확인해주세요');
+				$("#ins_bckr_pth_alert", "#workRegFormBckr").show();
+				iChkCnt = iChkCnt + 1;
+			}
 		}
 
 		//Cloud 옵션 alert
@@ -705,6 +690,8 @@
 	function fn_backrest_chg_alert(obj){
 		$("#"+obj.id+"_alert", "#workRegFormBckr").html("");
 		$("#"+obj.id+"_alert", "#workRegFormBckr").hide();
+
+		console.log(obj)
 		
 		if($("#remote_radio").is(':checked')){
 			if(obj.id == 'ins_bckr_pth') bck_pth_chk = false;
@@ -1149,21 +1136,21 @@ function fn_ssh_connection(){
 										<div class="col-12" style="background-color: #e7e7e7; height: 50px;">
 											<div id="bck_srv_local_check" style="background-color:white; width: 120px; padding-left: 5px; height: 40px; margin-top: 10px; border-radius: 0.4em; float: left;" onclick="fn_bck_srv_check('local')">
 												<input type="radio" class="form-control" style="width: 20px; margin-left: 10px;" id="local_radio" name="bck_srv" checked/>
-												<label style="margin: -35px 0 0 35px; font-size: 1.2em;">
+												<label style="margin: -48px 0 0 35px;" class="col-form-label pop-label-index">
 													LOCAL
 												</label>
 											</div>
 
 											<div id="bck_srv_remote_check" style="background-color: #e7e7e7; width: 130px; padding-left: 5px; height: 40px; margin: 10px 0 0 25px; border-radius: 0.4em; float: left;" onclick="fn_bck_srv_check('remote')">
 												<input type="radio" class="form-control" style="width: 20px; margin-left: 10px;" id="remote_radio" name="bck_srv"/>
-												<label style="margin: -35px 0 0 35px; font-size: 1.2em;">
+												<label style="margin: -48px 0 0 35px;" class="col-form-label pop-label-index">
 													REMOTE
 												</label>
 											</div>
 
 											<div id="bck_srv_cloud_check" style="background-color: #e7e7e7; width: 120px; padding-left: 5px; height: 40px; margin: 10px 0 0 30px; border-radius: 0.4em; float: left;" onclick="fn_bck_srv_check('cloud')">
 												<input type="radio" class="form-control" style="width: 20px; margin-left: 10px;" id="cloud_radio" name="bck_srv"/>
-												<label style="margin: -35px 0 0 35px; font-size: 1.2em;">
+												<label style="margin: -48px 0 0 35px;" class="col-form-label pop-label-index">
 													CLOUD
 												</label>
 											</div>
@@ -1176,7 +1163,7 @@ function fn_ssh_connection(){
 								</div>
 
 								<div>
-									<div id="remote_opt" style="display: none;">
+									<div id="remote_opt" style="display: none;" >
 										<div style="border: 1px solid #adb5bd; margin: -10px 10px 10px 10px;">
 											<div style="padding-top:7px;">
 												<label for="ins_remt_opt_cd" class="col-sm-2_2 col-form-label pop-label-index" >
@@ -1184,33 +1171,33 @@ function fn_ssh_connection(){
 													<spring:message code="backup_management.storage.option" />
 												</label>
 
-												<div class="d-flex" style="margin-bottom: 10px;">
+												<div class="d-flex" style="margin-bottom: 20px;">
 													<div class="col-sm-2_3">
-														<input type="text" class="form-control form-control-xsm" maxlength="50" id="ins_remt_str_ip" name="ins_remt_str_ip" style="width: 250px;" placeholder="<spring:message code="message.msg62" />" onchange="remote_chg_chk(this)" onclick="fn_backrest_ip_select_check()"/>
+														<input type="text" class="form-control form-control-xsm" maxlength="50" id="ins_remt_str_ip" name="ins_remt_str_ip" style="width: 250px;" placeholder="<spring:message code='message.msg62' />" onchange="remote_chg_chk(this)" onclick="fn_backrest_ip_select_check()"/>
 													</div>
 
 													<div class="col-sm-2" style="margin-left: 6px;">
-														<input type="text" class="form-control form-control-xsm" maxlength="3" id="ins_remt_str_ssh" name="ins_remt_str_ssh" style="width: 180px;" placeholder="<spring:message code="backup_management.remote.port" />" onchange="remote_chg_chk(this)" onclick="fn_backrest_ip_select_check()"/>
+														<input type="text" class="form-control form-control-xsm" maxlength="3" id="ins_remt_str_ssh" name="ins_remt_str_ssh" style="width: 180px;" placeholder="<spring:message code='backup_management.remote.port' />" onchange="remote_chg_chk(this)" onclick="fn_backrest_ip_select_check()"/>
 													</div>
 
 													<div class="col-sm-2_3" style="margin-left: -30px;">
-														<input type="text" class="form-control form-control-xsm" maxlength="50" id="ins_remt_str_usr" name="ins_remt_str_usr" style="width: 250px;" placeholder="<spring:message code="encrypt_policy_management.OS_User" />" onchange="remote_chg_chk(this)" onclick="fn_backrest_ip_select_check()"/>
+														<input type="text" class="form-control form-control-xsm" maxlength="50" id="ins_remt_str_usr" name="ins_remt_str_usr" style="width: 250px;" placeholder="<spring:message code='encrypt_policy_management.OS_User' />" onchange="remote_chg_chk(this)" onclick="fn_backrest_ip_select_check()"/>
 													</div>
 													
 													<div class="col-sm-2_3" style="margin-left: 6px;">
-														<input type="password" class="form-control form-control-xsm" maxlength="50" id="ins_remt_str_pw" name="ins_remt_str_pw" style="width: 250px;" placeholder="<spring:message code="migration.msg20" />" onchange="remote_chg_chk(this)" onclick="fn_backrest_ip_select_check()"/>
+														<input type="password" class="form-control form-control-xsm" maxlength="50" id="ins_remt_str_pw" name="ins_remt_str_pw" style="width: 250px;" placeholder="<spring:message code='migration.msg20' />" onchange="remote_chg_chk(this)" onclick="fn_backrest_ip_select_check()"/>
 													</div>
 
 													<div class="col-sm-1" style="height: 20px; margin-top: 3px;">
 														<button id="ssh_conn" type="button" class="btn btn-outline-primary" style="width: 60px;padding: 5px;" onclick="fn_ssh_connection()">연결</button>
 													</div>
-													<div class="col-sm-2_3">
+													<div class="col-sm-2_3" style="margin-top: -5px;">
 														<div class="alert alert-danger" style="display:none; width: 250px; margin-left: -25px;" id="ssh_con_alert"></div>
 													</div>
 												</div>
 
 												<!-- Remote 옵션 alert창 -->
-												<div class="form-group d-flex div-form-margin-z" style="width: 900px;">
+												<div class="d-flex div-form-margin-z" style="width: 900px; margin-top: -15px;">
 													<div class="col-sm-4">
 														<div class="alert alert-danger" style="display:none; width: 250px;" id="ins_remt_str_ip_alert"></div>
 													</div>
@@ -1261,7 +1248,7 @@ function fn_ssh_connection(){
 												</label>
 
 												<div class="col-sm-2_8">
-													<input type="text" class="form-control form-control-xsm" maxlength="100" id="ins_cloud_bckr_s3_rgn" name="ins_cloud_bckr_s3_rgn" style="width: 240px;" placeholder="<spring:message code="backup_management.s3.region" />" onchange="fn_backrest_chg_alert(this)"/>
+													<input type="text" class="form-control form-control-xsm" maxlength="100" id="ins_cloud_bckr_s3_rgn" name="ins_cloud_bckr_s3_rgn" style="width: 240px;" placeholder="<spring:message code='backup_management.s3.region' />" onchange="fn_backrest_chg_alert(this)"/>
 												</div>
 
 												<label for="ins_cloud_opt_s3_key" class="col-sm-1_5 col-form-label pop-label-index" style="padding-top:7px; ">
@@ -1270,7 +1257,7 @@ function fn_ssh_connection(){
 												</label>
 
 												<div class="col-sm-2">
-													<input type="password" class="form-control form-control-xsm" maxlength="50" id="ins_cloud_bckr_s3_key" name="ins_cloud_bckr_s3_key" style="width: 220px;" placeholder="<spring:message code="backup_management.s3.key" />" onchange="fn_backrest_chg_alert(this)"/>
+													<input type="password" class="form-control form-control-xsm" maxlength="50" id="ins_cloud_bckr_s3_key" name="ins_cloud_bckr_s3_key" style="width: 220px;" placeholder="<spring:message code='backup_management.s3.key'/>" onchange="fn_backrest_chg_alert(this)"/>
 												</div>
 											</div>
 
@@ -1296,7 +1283,7 @@ function fn_ssh_connection(){
 												</label>
 
 												<div class="col-sm-3">
-													<input type="text" class="form-control form-control-xsm" maxlength="120" id="ins_cloud_bckr_s3_npt" name="ins_cloud_bckr_s3_npt" style="width: 270px;" placeholder="<spring:message code="backup_management.s3.endpoint" />" onchange="fn_backrest_chg_alert(this)"/>
+													<input type="text" class="form-control form-control-xsm" maxlength="120" id="ins_cloud_bckr_s3_npt" name="ins_cloud_bckr_s3_npt" style="width: 270px;" placeholder="<spring:message code='backup_management.s3.endpoint' />" onchange="fn_backrest_chg_alert(this)"/>
 												</div>
 
 												<label for="ins_cloud_opt_s3_pth" class="col-sm-1 col-form-label pop-label-index" style="padding-top:7px;">
@@ -1305,7 +1292,7 @@ function fn_ssh_connection(){
 												</label>
 
 												<div class="col-sm-2_8">
-													<input type="text" class="form-control form-control-xsm" maxlength="100" id="ins_cloud_bckr_s3_pth" name="ins_cloud_bckr_s3_pth" style="width: 240px;" placeholder="<spring:message code="backup_management.s3.path" />" onchange="fn_backrest_chg_alert(this)"/>
+													<input type="text" class="form-control form-control-xsm" maxlength="100" id="ins_cloud_bckr_s3_pth" name="ins_cloud_bckr_s3_pth" style="width: 240px;" placeholder="<spring:message code='backup_management.s3.path' />" onchange="fn_backrest_chg_alert(this)"/>
 												</div>
 
 												<label for="ins_cloud_opt_s3_scrk" class="col-sm-1_5 col-form-label pop-label-index" style="padding-top:7px;">
@@ -1314,7 +1301,7 @@ function fn_ssh_connection(){
 												</label>
 
 												<div class="col-sm-2">
-													<input type="password" class="form-control form-control-xsm" maxlength="100" id="ins_cloud_bckr_s3_scrk" name="ins_cloud_bckr_s3_scrk" style="width: 220px;" placeholder="<spring:message code="backup_management.s3.secretkey" /> onchange="fn_backrest_chg_alert(this)"/>
+													<input type="password" class="form-control form-control-xsm" maxlength="100" id="ins_cloud_bckr_s3_scrk" name="ins_cloud_bckr_s3_scrk" style="width: 220px;" placeholder="<spring:message code='backup_management.s3.secretkey' /> onchange="fn_backrest_chg_alert(this)"/>
 												</div>
 											</div>
 
@@ -1477,7 +1464,7 @@ function fn_ssh_connection(){
 							</div>
 
 							<div class="card-body">
-								<div class="top-modal-footer" style="text-align: center !important; margin: -20px 0 -30px; -20px;" >
+								<div class="top-modal-footer" style="text-align: center !important; margin: -20px 0 -30px -20px" >
 									<input class="btn btn-primary" width="200px;" style="vertical-align:middle;" type="submit" value='<spring:message code="common.registory" />' />
 									<button type="button" class="btn btn-light" data-dismiss="modal"><spring:message code="common.cancel"/></button>
 								</div>

@@ -198,10 +198,10 @@ $(function() {
 	    			}
 	    		},
 	    		success : function(result) {
-      				for(var i = 0; i<result.length; i++){  
-      					if(result[i].mnu_cd != "MN0001" && result[i].mnu_cd != "MN0002" && result[i].mnu_cd != "MN0003" && result[i].mnu_cd != "MN0005" && result[i].mnu_cd != "MN0006" && result[i].mnu_cd != "MN0007" && result[i].mnu_cd != "MN0009" && result[i].mnu_cd != "MN00010" && result[i].mnu_cd != "MN00011" && result[i].mnu_cd != "MN00012" && result[i].mnu_cd != "MN00013" && result[i].mnu_cd != "MN00014" && result[i].mnu_cd != "MN00018" && result[i].mnu_cd != "MN0001804" && result[i].mnu_cd != "MN00019" && result[i].mnu_cd != "MN0001901" && result[i].mnu_cd != "MN0001902" && result[i].mnu_cd != "MN0001903" && result[i].mnu_cd != "MN00020" && result[i].mnu_cd != "MN0002001" && result[i].mnu_cd != "MN0002002" && result[i].mnu_cd != "MN00021" && result[i].mnu_cd != "MN0002101" && result[i].mnu_cd != "MN0002102" &&  result[i].mnu_cd != "MN00022" && result[i].mnu_cd != "MN0002201" && result[i].mnu_cd != "MN0002202"){
-							//읽기권한      					
-	  						if(result[i].read_aut_yn == "Y"){	
+      				for(var i = 0; i<result.length; i++){
+      					if(result[i].mnu_cd != "MN0001" && result[i].mnu_cd != "MN0002" && result[i].mnu_cd != "MN0003" && result[i].mnu_cd != "MN0005" && result[i].mnu_cd != "MN0006" && result[i].mnu_cd != "MN0007" && result[i].mnu_cd != "MN0009" && result[i].mnu_cd != "MN00010" && result[i].mnu_cd != "MN00011" && result[i].mnu_cd != "MN00012" && result[i].mnu_cd != "MN00013" && result[i].mnu_cd != "MN00014" && result[i].mnu_cd != "MN00018" && result[i].mnu_cd != "MN0001804" && result[i].mnu_cd != "MN00019" && result[i].mnu_cd != "MN0001901" && result[i].mnu_cd != "MN0001902" && result[i].mnu_cd != "MN0001903" && result[i].mnu_cd != "MN00020" && result[i].mnu_cd != "MN0002001" && result[i].mnu_cd != "MN0002002" && result[i].mnu_cd != "MN00021" && result[i].mnu_cd != "MN0002101" && result[i].mnu_cd != "MN0002102"  &&  result[i].mnu_cd != "MN00022"){
+							//읽기권한
+	  						if(result[i].read_aut_yn == "Y"){
 	  							document.getElementById("r_"+result[i].mnu_cd).checked = true;
 	  						}else{
 	  							document.getElementById("r_"+result[i].mnu_cd).checked = false;
