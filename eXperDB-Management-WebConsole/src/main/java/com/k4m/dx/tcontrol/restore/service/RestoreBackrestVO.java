@@ -27,7 +27,8 @@ public class RestoreBackrestVO {
 	private String db_svr_nm;
 	private String restore_size;
 	private String elapsed_time;
-
+	private String restore_svr_nm;
+	
 	public String getDb_svr_nm() {
 		return db_svr_nm;
 	}
@@ -235,5 +236,15 @@ public class RestoreBackrestVO {
 	public void setElapsed_time(String elapsed_time) {
 		this.elapsed_time = elapsed_time;
 	}
+
+	public String getRestore_svr_nm() {
+		return restore_svr_nm;
+	}
+
+	public void setRestore_svr_nm(String restore_svr_nm) {
+		this.restore_svr_nm = restore_svr_nm;
+	}
+	
+	
 
 }

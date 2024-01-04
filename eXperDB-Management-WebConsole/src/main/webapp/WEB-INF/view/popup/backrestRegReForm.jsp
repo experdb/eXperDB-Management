@@ -106,7 +106,7 @@
 							if(data == "M"){
 								data = '<div class="badge badge-pill badge-success" title="" style="margin-right: 30px;"><b>Primary</b></div>'
 							}else if(data == "S"){
-								data = '<div class="badge badge-pill badge-outline-warning" title="" style="margin-right: 30px"><b>Standby</b></div>'
+								data = '<div class="badge badge-pill badge-outline-warning" title=""><b>Standby</b></div>'
 							}
 							return data;
 						}},
@@ -708,21 +708,21 @@ function fn_re_ssh_connection(){
 										<div class="col-12" style="background-color: #e7e7e7; height: 50px;">
 											<div id="mod_bck_srv_local_check" style="background-color:white; width: 120px; padding-left: 5px; height: 40px; margin-top: 10px; border-radius: 0.4em; float: left;">
 												<input type="radio" class="form-control" style="width: 20px; margin-left: 10px;" id="mod_local_radio" name="mod_bck_srv" checked onclick="return(false)"/>
-												<label style="margin: -35px 0 0 35px; font-size: 1.2em;">
+												<label style="margin: -48px 0 0 35px;" class="col-form-label pop-label-index">
 													LOCAL
 												</label>
 											</div>
 
 											<div id="mod_bck_srv_remote_check" style="background-color: #e7e7e7; width: 130px; padding-left: 5px; height: 40px; margin: 10px 0 0 25px; border-radius: 0.4em; float: left;">
 												<input type="radio" class="form-control" style="width: 20px; margin-left: 10px;" id="mod_remote_radio" name="mod_bck_srv" onclick="return(false)"/>
-												<label style="margin: -35px 0 0 35px; font-size: 1.2em;">
+												<label style="margin: -48px 0 0 35px;" class="col-form-label pop-label-index">
 													REMOTE
 												</label>
 											</div>
 
 											<div id="mod_bck_srv_cloud_check" style="background-color: #e7e7e7; width: 120px; padding-left: 5px; height: 40px; margin: 10px 0 0 30px; border-radius: 0.4em; float: left;">
 												<input type="radio" class="form-control" style="width: 20px; margin-left: 10px;" id="mod_cloud_radio" name="mod_bck_srv" onclick="return(false)"/>
-												<label style="margin: -35px 0 0 35px; font-size: 1.2em;">
+												<label style="margin: -48px 0 0 35px;" class="col-form-label pop-label-index">
 													CLOUD
 												</label>
 											</div>
@@ -743,7 +743,7 @@ function fn_re_ssh_connection(){
 													스토리지 정보
 												</label>
 
-												<div class="d-flex" style="margin-bottom: 10px;">
+												<div class="d-flex" style="margin-bottom: 20px;">
 													<div class="col-sm-2_3">
 														<input type="text" class="form-control form-control-xsm" maxlength="50" id="mod_remt_str_ip" name="mod_remt_str_ip" style="width: 250px; height:30px;" placeholder="IP를 입력해주세요" readOnly />
 													</div>
@@ -763,13 +763,13 @@ function fn_re_ssh_connection(){
 													<div class="col-sm-1" style="height: 20px; margin-top: 3px;">
 														<button id="mod_ssh_conn" type="button" class="btn btn-outline-primary" style="width: 60px;padding: 5px;" onclick="fn_re_ssh_connection()">연결</button>
 													</div>
-													<div class="col-sm-2_3">
+													<div class="col-sm-2_3" style="margin-top: -5px;">
 														<div class="alert alert-danger" style="display:none; width: 250px; margin-left: -25px;" id="mod_ssh_con_alert"></div>
 													</div>
 												</div>
 
 												<!-- Remote 옵션 alert창 -->
-												<div class="form-group d-flex div-form-margin-z" style="width: 900px;">
+												<div class="d-flex div-form-margin-z" style="width: 900px; margin-top: -15px;">
 													<div class="col-sm-4">
 														<div class="alert alert-danger" style="display:none; width: 250px;" id="mod_remt_str_ip_alert"></div>
 													</div>
@@ -962,7 +962,7 @@ function fn_re_ssh_connection(){
 
 
 									<div class="d-flex">
-										<div class="d-flex" style="width: 900px; margin: 0px 10px 10px 10px;">
+										<div class="d-flex" style="width: 900px; margin: 0px 10px 0px 10px;">
 											<!-- 왼쪽 메뉴 -->
 											<label for="mod_bckr_opt_cnt" class="col-sm-2_3 col-form-label pop-label-index" style="padding-top:7px;">
 												<i class="item-icon fa fa-dot-circle-o"></i>
@@ -1014,7 +1014,7 @@ function fn_re_ssh_connection(){
 								</div>
 
 								<!-- 기본옵션 alert창 -->
-								<div class="d-flex" style="width: 900px; margin: 0px 10px 0px 10px;">
+								<div class="d-flex" style="width: 900px; margin: 0px 10px 5px 10px;">
 									<div class="col-sm-4">
 										<div class="alert alert-danger" style="display:none;" id="mod_bckr_cnt_alert"></div>
 									</div>

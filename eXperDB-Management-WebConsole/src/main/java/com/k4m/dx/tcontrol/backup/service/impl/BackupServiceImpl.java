@@ -232,4 +232,14 @@ public class BackupServiceImpl extends EgovAbstractServiceImpl implements Backup
 	public int selectSingleCheck(WorkVO workVO) throws Exception {
 		return backupDAO.selectSingleCheck(workVO);
 	}
+	
+	@Override
+	public List<DbServerVO> selectAllAgentInfo(DbServerVO dbServerVO) throws Exception {
+		return backupDAO.selectAllAgentInfo(dbServerVO);	
+	}
+	
+	@Override
+	public WrkExeVO selectBackupSvrInfo(WorkVO workVO) throws Exception {
+		return backupDAO.selectBackupSvrInfo(workVO);
+	}
 }

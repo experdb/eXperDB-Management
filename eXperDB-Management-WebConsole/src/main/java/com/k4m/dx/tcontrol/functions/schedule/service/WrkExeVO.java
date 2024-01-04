@@ -26,6 +26,7 @@ public class WrkExeVO {
 	private int db_svr_ipadr_id;
 	private long DB_SZ;
 	private int BACKREST_SCD_ID;
+	private String backrest_gbn;
 
 	public int getExe_sn() {
 		return exe_sn;
@@ -226,5 +227,15 @@ public class WrkExeVO {
 	public void setFile_sz(long file_sz) {
 		this.file_sz = file_sz;
 	}
+
+	public String getBackrest_gbn() {
+		return backrest_gbn;
+	}
+
+	public void setBackrest_gbn(String backrest_gbn) {
+		this.backrest_gbn = backrest_gbn;
+	}
+	
+	
 
 }

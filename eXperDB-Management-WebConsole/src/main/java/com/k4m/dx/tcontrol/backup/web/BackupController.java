@@ -3013,7 +3013,7 @@ public class BackupController {
 				
 				errVo.setExe_sn(exe_sn);
 				errVo.setExe_rslt_cd(TC001702);
-				errVo.setRslt_msg("Fail");
+				errVo.setRslt_msg(result.get("RESULT_DATA").toString());
 				
 				backupService.updateBackrestErr(errVo);
 			}

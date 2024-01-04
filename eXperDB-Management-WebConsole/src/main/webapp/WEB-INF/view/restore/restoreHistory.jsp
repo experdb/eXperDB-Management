@@ -191,12 +191,12 @@
 			selectChkTab = "backrest";
 			check = "backrest";
 
-			$("#server-tab-1").text("<spring:message code="eXperDB_backup.msg33" />");
+			$("#server-tab-1").text("<spring:message code='eXperDB_backup.msg33' />");
 		}else{
 			selectChkTab = "rman";
 			check = "rman";
 
-			$("#server-tab-1").text("긴급/시점 복원이력");
+			$("#server-tab-1").text("<spring:message code='restore.Emergency_Point-in-Time' />" + " " + "<spring:message code='restore.Recovery_history' />");
 		}
 	}
 	
@@ -424,15 +424,15 @@
 						},	
 						{ data: "restore_nm", className: "dt-center", defaultContent: ""},
 						{ data: "restore_exp", className: "dt-left", defaultContent: ""},		
-						{ data: "db_svr_nm", className: "dt-center", defaultContent: ""},	
+						{ data: "restore_svr_nm", className: "dt-center", defaultContent: ""},	
 						{
 							data : "restore_flag",
 							render : function(data, type, full, meta) {
 								var html = '';
 								if (full.restore_flag == '0') {
-									html += "<spring:message code="restore.type.full" />";
+									html += "<spring:message code='restore.type.full' />";
 								} else if (full.restore_flag == '1'){
-									html += "<spring:message code="eXperDB_backup.msg100" />";
+									html += "<spring:message code='eXperDB_backup.msg100' />";
 								} 				
 								return html;
 							},
@@ -821,7 +821,7 @@
 							url : "/selectBackrestRestoreLog.do",
 							data : {
 								exelog : tableBackrest.row('.selected').data().exelog,
-								ipadr : tableBackrest.row('.selected').data().db_svr_nm,
+								ipadr : tableBackrest.row('.selected').data().restore_svr_nm,
 							},
 							dataType : "json",
 							type : "post",
@@ -862,7 +862,7 @@
 					url : "/selectBackrestRestoreLog.do",
 					data : {
 						exelog : tableBackrest.row('.selected').data().exelog,
-						ipadr : tableBackrest.row('.selected').data().db_svr_nm,
+						ipadr : tableBackrest.row('.selected').data().restore_svr_nm,
 					},
 					dataType : "json",
 					type : "post",

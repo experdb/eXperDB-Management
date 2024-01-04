@@ -106,7 +106,7 @@
 			selectChkTab = "rman";
 			check = "rman";
 
-			$("#server-tab-1").text("Online 백업");
+			$("#server-tab-1").text("<spring:message code='backup_management.rman_backup' />");
 		}
 	}
 	
@@ -682,14 +682,16 @@
 			remote_port = tableBackrest.row('.selected').data().remote_port,
 			remote_usr = tableBackrest.row('.selected').data().remote_usr,
 			remote_pw = tableBackrest.row('.selected').data().remote_pw
+
+			if(tableBackrest.row('.selected').data().bck_target_ipadr_id != 0){
+				bck_target_ipadr_id = tableBackrest.row('.selected').data().bck_target_ipadr_id;
+			}
 		} else {
 			bck_wrk_id = tableDump.row('.selected').data().bck_wrk_id;
 			wrk_id = tableDump.row('.selected').data().wrk_id;
 		}
 
-		if(tableBackrest.row('.selected').data().bck_target_ipadr_id != 0){
-			bck_target_ipadr_id = tableBackrest.row('.selected').data().bck_target_ipadr_id;
-		}
+		
 
 		$.ajax({
 			url : reregUrl,

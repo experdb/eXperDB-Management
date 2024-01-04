@@ -311,6 +311,10 @@ public class ClientProtocolID {
 	public static final String TARGET_PGDATA= "TARGET_PGDATA";
 	public static final String TARGET_USER= "TARGET_USER";
 	public static final String TARGET_PORT= "TARGET_PORT";
-	
+	public static final String REMOTE_IP= "REMOTE_IP";
+	public static final String REMOTE_PORT= "REMOTE_PORT";
+	public static final String REMOTE_USR= "REMOTE_USR";
+	public static final String HOSTUSER= "HOSTUSER";
+	public static final String SSH_PORT= "SSH_PORT";
 	
 }

@@ -130,6 +130,7 @@ public class CmmnUtil {
 
 		JSONObject result = new JSONObject();
 		String output = "";
+		String errOutput = "";
 		String validateOutput = "";
 		try {
 			String ip = serverInfo.get("ip").toString();
@@ -147,16 +148,35 @@ public class CmmnUtil {
 			OutputStream out = channelExec.getOutputStream();
 			InputStream in = channelExec.getInputStream();
 			InputStream err = channelExec.getErrStream();
+			
 			// 명령어를 실행한다.
 			if(command != null) {
 				channelExec.connect(1500000);	
 			}
+			
 			byte[] buf = new byte[1024];
 			int length;
-				
+			
 			while ((length = in.read(buf)) != -1) {
 				output += new String(buf, 0, length);
-				validateOutput = new String(buf, 0, length);
+			}
+			
+			while ((length = err.read(buf)) != -1) {
+				errOutput += new String(buf, 0, length);
+			}
+			
+			int exitStatus = channelExec.getExitStatus();
+			
+			if (exitStatus == 0) {
+			    // Success: The command executed without errors
+				result.put("RESULT_CODE", 0);
+			} else {
+			    // Failure: The command exited with an error
+				result.put("RESULT_CODE", -1);
+				result.put("RESULT_DATA", errOutput);
+				channelExec.disconnect();
+				
+				return result;
 			}
 			
 			if(type.equals("backrest")) {
@@ -169,6 +189,7 @@ public class CmmnUtil {
 				result.put("RESULT_CODE", 0);
 				result.put("RESULT_DATA", output.trim());
 			}
+			
 			
 		} catch (JSchException e) {
 			e.printStackTrace();
