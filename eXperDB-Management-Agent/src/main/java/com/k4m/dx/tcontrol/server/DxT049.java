@@ -57,26 +57,26 @@ public class DxT049 extends SocketCtl{
 			String hostUserCmd = "echo $HOSTUSER";
 			String hostUser =  util.getPidExec(hostUserCmd);
 
-			String backrestConfigPath = pghomePath + "/etc/pgbackrest/pgbackrest.conf";
-			
-			BufferedReader br2 = new BufferedReader(new FileReader(backrestConfigPath));
-			StringBuilder content = new StringBuilder();
-			
-			String backerestConfigContent;
-			while((backerestConfigContent = br2.readLine()) != null) {
-				if(backerestConfigContent.contains("log-path")) {
-					String logPath[] = backerestConfigContent.split("=");
-					backerestConfigContent = backerestConfigContent.replaceAll("log-path="+logPath[1], "log-path=" + String.valueOf(jObj.get(ClientProtocolID.LOG_PATH)));
-				}
-				content.append(backerestConfigContent).append(System.lineSeparator());
-			}
-			
-			br2.close();
-			
-			BufferedWriter bw2 = new BufferedWriter(new FileWriter(new File (backrestConfigPath)));
-			
-			bw2.write(content.toString());
-			bw2.close();
+//			String backrestConfigPath = pghomePath + "/etc/pgbackrest/pgbackrest.conf";
+//			
+//			BufferedReader br2 = new BufferedReader(new FileReader(backrestConfigPath));
+//			StringBuilder content = new StringBuilder();
+//			
+//			String backerestConfigContent;
+//			while((backerestConfigContent = br2.readLine()) != null) {
+//				if(backerestConfigContent.contains("log-path")) {
+//					String logPath[] = backerestConfigContent.split("=");
+//					backerestConfigContent = backerestConfigContent.replaceAll("log-path="+logPath[1], "log-path=" + String.valueOf(jObj.get(ClientProtocolID.LOG_PATH)));
+//				}
+//				content.append(backerestConfigContent).append(System.lineSeparator());
+//			}
+//			
+//			br2.close();
+//			
+//			BufferedWriter bw2 = new BufferedWriter(new FileWriter(new File (backrestConfigPath)));
+//			
+//			bw2.write(content.toString());
+//			bw2.close();
 			
 			String configPath = pghomePath + "/etc/pgbackrest/default.conf";
 			filePath = pghomePath + "/etc/pgbackrest/config/" + String.valueOf(jObj.get(ProtocolID.BCK_FILENM));

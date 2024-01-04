@@ -69,6 +69,8 @@ public class TranCodeType {
 	public static final String DxT052 = "DxT052";
 	public static final String DxT053 = "DxT053";
 	public static final String DxT054 = "DxT054";
+	public static final String DxT055 = "DxT055";
+	public static final String DxT056 = "DxT056";
 	
 	//proxy 추가
 	public static final String PsP001 = "PsP001"; // proxy 에이전트 setting

@@ -52,18 +52,20 @@ public class DxT053 extends SocketCtl {
 			String pgBlogPathCmd = "echo $PGBLOG";
 			String pgBlogPath = util.getPidExec(pgBlogPathCmd);
 
-			String restore_type = String.valueOf(jObj.get(ProtocolID.RESTORE_FLAG));
+			String restoreType = String.valueOf(jObj.get(ProtocolID.RESTORE_FLAG));
 			String exelog = String.valueOf(jObj.get(ProtocolID.EXELOG));
+			
+			String restoreWrkName = String.valueOf(jObj.get(ProtocolID.WRK_NM));
 			
 			vo.setEXELOG(exelog);
 
 			// 복구 타입에 따른 명령어
-			if (restore_type.equals("full")) {
-				restoreCmd = "pgbackrest --stanza=experdb --config-path=$PGHOME/etc/pgbackrest --delta restore > "
+			if (restoreType.equals("full")) {
+				restoreCmd = "pgbackrest --stanza=experdb --config=$PGHOME/etc/pgbackrest/config/" + restoreWrkName + ".conf --delta restore > "
 						+ pgBlogPath + "/" + exelog + ".log";
 			} else {
 				String time_restore = String.valueOf(jObj.get(ProtocolID.TIME_RESTORE));
-				restoreCmd = "pgbackrest --stanza=experdb --config-path=$PGHOME/etc/pgbackrest --type=time \"--target="
+				restoreCmd = "pgbackrest --stanza=experdb --config=$PGHOME/etc/pgbackrest/config/" + restoreWrkName + ".conf --type=time \"--target="
 						+ time_restore + "\" --target-action=promote --delta restore > " + pgBlogPath + "/" + exelog + ".log";
 			}
 
