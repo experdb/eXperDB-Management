@@ -69,7 +69,12 @@ public class BackrestRestoreController {
 			if(!wrkExeVO.equals(null)) {
 				resultCode = "S";
 				
+				mv.addObject("db_svr_nm", backupService.selectDbSvrNm(workVO).getDb_svr_nm());
 				mv.addObject("backrest_gbn", wrkExeVO.getBackrest_gbn());
+				
+				if(wrkExeVO.getBackrest_gbn().equals("remote")) {
+					mv.addObject("remote_ip", wrkExeVO.getRemote_ip());
+				}
 			}
 			
 		} catch (Exception e) {
@@ -220,6 +225,9 @@ public class BackrestRestoreController {
 			jObj.put(ClientProtocolID.RESTORE_FLAG, request.getParameter("restore_type"));
 			jObj.put(ClientProtocolID.TIME_RESTORE, request.getParameter("time_restore"));
 			
+			jObj.put(ClientProtocolID.DBLIST_MAP, paramMap.get("dbList_map"));
+			jObj.put(ClientProtocolID.LIST_TYPE, request.getParameter("list_type"));
+			
 			ClientInfoCmmn cic = new ClientInfoCmmn();
 			JSONObject result = new JSONObject(); 
 			
@@ -351,7 +359,6 @@ public class BackrestRestoreController {
 					}
 				}
 			}else {
-				System.out.println(paramMap.get("cloud_map"));
 				jObj.put(ClientProtocolID.CLOUD_MAP, paramMap.get("cloud_map"));
 			}
 			

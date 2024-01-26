@@ -27,6 +27,7 @@ public class WrkExeVO {
 	private long DB_SZ;
 	private int BACKREST_SCD_ID;
 	private String backrest_gbn;
+	private String remote_ip;
 
 	public int getExe_sn() {
 		return exe_sn;
@@ -234,6 +235,14 @@ public class WrkExeVO {
 
 	public void setBackrest_gbn(String backrest_gbn) {
 		this.backrest_gbn = backrest_gbn;
+	}
+
+	public String getRemote_ip() {
+		return remote_ip;
+	}
+
+	public void setRemote_ip(String remote_ip) {
+		this.remote_ip = remote_ip;
 	}
 	
 	

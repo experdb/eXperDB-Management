@@ -1273,12 +1273,14 @@
 	        B.db_svr_ipadr_id,
             B.bck_file_pth,
             B.wrk_id,
-            A.backrest_gbn
+            A.backrest_gbn,
+            A.remote_ip
           FROM T_BCK_WRKCNG_I A, T_WRKEXE_G B
           WHERE
           		A.DB_SVR_ID = #{db_svr_id}
           		AND B.WRK_ID = A.WRK_ID
            		AND B.exe_rslt_cd = 'TC001701'
+           		AND A.bck_bsn_dscd = 'TC000205'
 				order by wrk_end_dtm desc limit 1;
     </select>
 </mapper>
