@@ -287,5 +287,6 @@ public class ClientProtocolID {
 	public static final String REMOTE_USR= "REMOTE_USR";
 	public static final String HOSTUSER= "HOSTUSER";
 	public static final String SSH_PORT= "SSH_PORT";
-	
+	public static final String DBLIST_MAP= "DBLIST_MAP";
+	public static final String LIST_TYPE= "LIST_TYPE";
 }
