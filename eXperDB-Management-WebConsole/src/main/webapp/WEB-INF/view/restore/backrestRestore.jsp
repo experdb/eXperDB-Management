@@ -701,14 +701,12 @@
     		},	
 			columns : [
 				{data : "rownum", defaultContent : "", targets : 0, orderable : false, checkboxes : {'selectRow' : true}}, 
-				{data : "dft_db_nm", defaultContent : ""}, 
-				{data : "db_exp", defaultContent : ""}
-			]
+				{data : "dft_db_nm", defaultContent : ""}
+			],'select': {'style': 'multi'}
 		});
 
-		table_db.tables().header().to$().find('th:eq(0)').css('min-width', '10px');
-   		table_db.tables().header().to$().find('th:eq(1)').css('min-width', '110px');
-    	table_db.tables().header().to$().find('th:eq(2)').css('min-width', '360px');
+		table_db.tables().header().to$().find('th:eq(0)').css('min-width', '50px');
+   		table_db.tables().header().to$().find('th:eq(1)').css('min-width', '470px');
 	}
 	
 </script>
@@ -1049,9 +1047,8 @@
 														<table id="dbList" class="table table-hover table-striped system-tlb-scroll" style="width:100%;">
 															<thead>
 																<tr class="bg-info text-white">
-																	<th width="10"><input name="select" value="1" type="checkbox"></th>
-																	<th width="110"><spring:message code="common.database" /></th>
-																	<th width="360"><spring:message code="common.desc" /></th>
+																	<th width="50" style="text-align: center;"><input name="select" value="1" type="checkbox"></th>
+																	<th width="470"><spring:message code="common.database" /></th>
 																</tr>
 															</thead>
 														</table> 
