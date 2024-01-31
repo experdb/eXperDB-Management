@@ -219,14 +219,14 @@
 			success : function(data) {
 				var db_server_data = data['agent_list'];
 
-				for(var i=0; i < db_server_data.length; i++){
-					db_info_arr.push(db_server_data[i]);
-				}
-
 				if(data.result_code == "E"){
 					showSwalIconRst("백업된 정보가 없습니다.", closeBtn, '', 'error', '');
 				}else{
 					backrest_gbn = data.backrest_gbn;
+
+					for(var i=0; i < db_server_data.length; i++){
+						db_info_arr.push(db_server_data[i]);
+					}
 
 					if(backrest_gbn == "cloud"){
 						$("#cloud_s3_restore_info", "#restoreBackrestRegForm").css("display", "");
@@ -240,11 +240,12 @@
 						$("#cloud_s3_restore_info", "#restoreBackrestRegForm").css("display", "none");
 						$("#ssh_port_info", "#restoreBackrestRegForm").css("display", "none");
 					}
+					
+					db_svr_nm = data.db_svr_nm;
+					fn_select_database_list();
 				}
 
-				db_svr_nm = data.db_svr_nm;
 				fn_init_db_svr_info();
-				fn_select_database_list();
 
 				dbServerTable.rows({selected: true}).deselect();
 				dbServerTable.clear().draw();
