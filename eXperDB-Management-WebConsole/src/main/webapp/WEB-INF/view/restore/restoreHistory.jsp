@@ -433,7 +433,9 @@
 									html += "<spring:message code='restore.type.full' />";
 								} else if (full.restore_flag == '1'){
 									html += "<spring:message code='eXperDB_backup.msg100' />";
-								} 				
+								} else if (full.restore_flag == '2'){
+									html += "특정 데이터베이스 복구";
+								}	
 								return html;
 							},
 							className : "dt-center",

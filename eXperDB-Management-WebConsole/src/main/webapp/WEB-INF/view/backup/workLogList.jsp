@@ -657,7 +657,9 @@
 								var html = '';
 								
 								if(full.exe_rslt_cd == 'TC001701'){
-									var compress = full.db_sz / full.file_sz;
+									console.log((full.file_sz / full.db_sz ));
+
+									var compress = (1 - (full.file_sz / full.db_sz ))*100
 									html += compress.toFixed(1) + "%";
 								}
 								return html;

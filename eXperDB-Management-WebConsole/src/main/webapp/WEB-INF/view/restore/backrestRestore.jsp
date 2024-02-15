@@ -10,13 +10,15 @@
 
 <script type="text/javascript">
 	var dbServerTable = null;
+	var table_db = null;
 	var db_info_arr = [];
 	var exelog = "";
 	var time_restore = "";
-	var single_chk = new Map();
 	var selected_type = "";
 	var backrest_gbn = "";
 	var backupInfoCode = "";
+	var db_svr_nm = "";
+	var remote_ip = "";
 
 	$(window.document).ready(function() {
 
@@ -56,7 +58,7 @@
 
     function fn_init_db_svr_info() {
 		dbServerTable = $('#db_svr_info').DataTable({
-			scrollY : "275px",
+			scrollY : "538px",
 			bSort: false,
 			scrollX: false,	
 			searching : false,
@@ -89,6 +91,7 @@
 	}
 
 	function fn_init(){
+		fu_database_list_init();
 		fn_makeHour();
 		fn_makeMin();
 		fn_makeSec();
@@ -160,17 +163,35 @@
 		var selected_type = $("#ins_rst_opt_cd option:selected").val();
 
 		if(selected_type == "pitr"){
+			$("#rst_pitr_dtm", "#restoreBackrestRegForm").val("");
+			$('#timeline_h option:eq(0)').prop("selected", true);
+			$('#timeline_m option:eq(0)').prop("selected", true);
+			$('#timeline_s option:eq(0)').prop("selected", true);
 			document.getElementById("bckr_restore_type_alert").style.width = "340px"
 			$("#bckr_restore_type_alert", "#restoreBackrestRegForm").html('<spring:message code="restore.type.time.exp" />');
 			$("#bckr_restore_type_alert", "#restoreBackrestRegForm").show();
+			$("#dbList_div").hide();
 			$("#pitr_div").show();
 		}else if(selected_type == "full"){
 			document.getElementById("bckr_restore_type_alert").style.width = "665px"
 			$("#bckr_restore_type_alert", "#restoreBackrestRegForm").html('<spring:message code="restore.type.full.exp" />');
 			$("#bckr_restore_type_alert", "#restoreBackrestRegForm").show();
+			$("#dbList_div").hide();
+			$("#pitr_div").hide();
+		}else if(selected_type == "ropd"){
+			//특정 데이터베이스 복구
+			fn_select_database_list();
+			table_db.rows({selected: true}).deselect();
+			$('#src_database option:eq(0)').prop("selected", true);
+			document.getElementById("bckr_restore_type_alert").style.width = "720px"
+			$("#bckr_restore_type_alert", "#restoreBackrestRegForm").show();
+			$("#bckr_restore_type_alert", "#restoreBackrestRegForm").html('특정 데이터베이스를 복구대상 서버에 복구합니다. (postgres, template0, template1는 자동으로 복구됩니다.)');
+			$("#dbList_div").show();
 			$("#pitr_div").hide();
 		}else{
 			$("#bckr_restore_type_alert", "#restoreBackrestRegForm").hide();
+			$("#bckr_restore_type_alert", "#restoreBackrestRegForm").html('');
+			$("#dbList_div").hide();
 			$("#pitr_div").hide();
 		}
 	}
@@ -198,8 +219,30 @@
 			success : function(data) {
 				var db_server_data = data['agent_list'];
 
-				for(var i=0; i < db_server_data.length; i++){
-					db_info_arr.push(db_server_data[i]);
+				if(data.result_code == "E"){
+					showSwalIconRst("백업된 정보가 없습니다.", closeBtn, '', 'error', '');
+				}else{
+					backrest_gbn = data.backrest_gbn;
+
+					for(var i=0; i < db_server_data.length; i++){
+						db_info_arr.push(db_server_data[i]);
+					}
+
+					if(backrest_gbn == "cloud"){
+						$("#cloud_s3_restore_info", "#restoreBackrestRegForm").css("display", "");
+						$("#ssh_port_info", "#restoreBackrestRegForm").css("display", "none");
+					}else if(backrest_gbn == "remote"){
+						$("#cloud_s3_restore_info", "#restoreBackrestRegForm").css("display", "none");
+						$("#ssh_port_info", "#restoreBackrestRegForm").css("display", "none");
+
+						remote_ip = data.remote_ip;
+					}else{
+						$("#cloud_s3_restore_info", "#restoreBackrestRegForm").css("display", "none");
+						$("#ssh_port_info", "#restoreBackrestRegForm").css("display", "none");
+					}
+					
+					db_svr_nm = data.db_svr_nm;
+					fn_select_database_list();
 				}
 
 				fn_init_db_svr_info();
@@ -213,22 +256,7 @@
 				
 				backupInfoCode = data.result_code;
 
-				if(data.result_code == "E"){
-					showSwalIconRst("백업된 정보가 없습니다.", closeBtn, '', 'error', '');
-				}else{
-					backrest_gbn = data.backrest_gbn;
-
-					if(backrest_gbn == "cloud"){
-						$("#cloud_s3_restore_info", "#restoreBackrestRegForm").css("display", "");
-						$("#ssh_port_info", "#restoreBackrestRegForm").css("display", "none");
-					}else if(backrest_gbn == "remote"){
-						$("#cloud_s3_restore_info", "#restoreBackrestRegForm").css("display", "none");
-						$("#ssh_port_info", "#restoreBackrestRegForm").css("display", "none");
-					}else{
-						$("#cloud_s3_restore_info", "#restoreBackrestRegForm").css("display", "none");
-						$("#ssh_port_info", "#restoreBackrestRegForm").css("display", "");
-					}
-				}
+				
 			}
 		});
 	}
@@ -319,6 +347,14 @@
 			if(nvlPrmSet($("#rst_pitr_dtm", "#restoreBackrestRegForm").val(), "") == "") {
 				$("#rst_pitr_dtm_alert", "#restoreBackrestRegForm").html('특정 시점의 날짜를 선택해주세요.');
 				$("#rst_pitr_dtm_alert", "#restoreBackrestRegForm").show();
+			
+				iChkCnt = iChkCnt + 1;
+			}
+		}
+
+		if(selected_type == "ropd"){
+			if($('#dbList').DataTable().rows('.selected').data()[0] == undefined) {
+				showSwalIcon("복구할 특정 테이터베이스를 선택해주세요.", '<spring:message code="common.close" />', '', 'warning');
 			
 				iChkCnt = iChkCnt + 1;
 			}
@@ -424,7 +460,9 @@
 			restore_type = 1;
 			time_restore = timeline_dt + " " + timeline_h + ":" + timeline_m + ":" + timeline_s;
 		}else if(selected_type == "full"){
-			restore_type = 0
+			restore_type = 0;
+		}else if(selected_type == "ropd"){
+			restore_type = 2;
 		}
 		
 		if (timeline_dt != null && timeline_dt != "") {
@@ -466,8 +504,10 @@
 						exelog = data.exelog;
 						if(restore_type == 0){
 							showSwalIconRst('<spring:message code="restore.msg225" />', '<spring:message code="common.close" />', '', 'warning', 'backrest_restore');
-						}else{
+						}else if(restore_type == 1){
 							showSwalIconRst('<spring:message code="restore.msg226" />', '<spring:message code="common.close" />', '', 'warning', 'backrest_restore');
+						}else if(restore_type == 2){
+							showSwalIconRst('특정 데이터베이스 복구를 시작합니다.', '<spring:message code="common.close" />', '', 'warning', 'backrest_restore');
 						}
 						fn_restore_execute();
 					} else {
@@ -493,6 +533,9 @@
 
 		var cloud_map = new Map();
 		var cloud_data = null;
+		var dbList_map = new Map();
+		var dbList_data = null;
+		var list_type = null;
 
 		if(backrest_gbn == "cloud"){
 			cloud_map.set("s3_bucket", nvlPrmSet($('#ins_s3_bucket', '#restoreBackrestRegForm').val(), "").trim());
@@ -504,6 +547,19 @@
 			cloud_map.set("cloud_type", "s3");
 
 			cloud_data = JSON.stringify(Object.fromEntries(cloud_map))
+		}
+
+		if(restore_type == "ropd"){
+			var dbList_data = $('#dbList').DataTable().rows('.selected').data();
+			list_type = $("#src_database option:selected").val();
+			
+			for(var i=0; i < dbList_data.length; i++){
+				dbList_map.set(i, dbList_data[i].dft_db_nm)
+			}
+
+			dbList_data = JSON.stringify(Object.fromEntries(dbList_map))
+
+			console.log(dbList_data);
 		}
 
 		$.ajax({
@@ -522,7 +578,9 @@
 				restore_db_svr_id : agentInfo.db_svr_id,
 				cloud_map : cloud_data,
 				backup_location : backrest_gbn,
-				ssh_port : nvlPrmSet($('#ins_ssh_port', '#restoreBackrestRegForm').val(), "").trim()
+				ssh_port : nvlPrmSet($('#ins_ssh_port', '#restoreBackrestRegForm').val(), "").trim(),
+				dbList_map : dbList_data,
+				list_type : list_type
 			},
 			type : "post",
 			beforeSend: function(xhr) {
@@ -548,7 +606,7 @@
 	/* ********************************************************
 	 * restore history 이동
 	 ******************************************************** */
-	 function fn_bckr_restore_History_move() {
+	function fn_bckr_restore_History_move() {
 		var agentInfo = $('#db_svr_info').DataTable().rows('.selected').data()[0];
 
 		var id = "restoreHistory" + agentInfo.db_svr_id;
@@ -557,32 +615,101 @@
 	}
 
 
-	// $(function() {
-	// 	$("#db_svr_info").on('click', 'tbody tr', function(){
-			
-	// 		console.log($('#db_svr_info').DataTable().row(this).data());
+	$(function() {
+		$("#db_svr_info").on('click', 'tbody tr', function(){
+			var agentInfo = $('#db_svr_info').DataTable().rows(this).data()[0];
+			var state = $('#ins_rst_opt_cd option:selected').val();
 
-	// 		$(this).toggleClass('selected');
-	// 		var agentInfo = $('#db_svr_info').DataTable().rows('.selected').data()[0];
-	// 		var svrId = $("#db_svr_id", "#findList").val();
-			
-	// 		var words = this.className.split(' ');
-			
-	// 		if(backrest_gbn == "local"){
+			$('#ins_rst_opt_cd option:eq(0)').prop("selected", true);
 
-	// 		}
+			if(state == "pitr"){
+				$("#rst_pitr_dtm", "#restoreBackrestRegForm").val("");
+				$('#timeline_h option:eq(0)').prop("selected", true);
+				$('#timeline_m option:eq(0)').prop("selected", true);
+				$('#timeline_s option:eq(0)').prop("selected", true);
 
-	// 		if(words.length == 2){
-	// 			if(svrId != agentInfo.db_svr_id){
-	// 				$("#ssh_port_info", "#restoreBackrestRegForm").css("display", "");
-	// 			}else{
-	// 				$("#ssh_port_info", "#restoreBackrestRegForm").css("display", "none");
-	// 			}
-	// 		}else{
-	// 			$("#ssh_port_info", "#restoreBackrestRegForm").css("display", "none");
-	// 		}
-	// 	});
-	// })
+				$("#pitr_div").hide();
+			}else if(state = "ropd"){
+				$("#dbList_div", "#restoreBackrestRegForm").css("display", "none");
+			}
+
+			if($("#db_svr_id", "#findList").val() == agentInfo.db_svr_id){
+				$("#restore_opt_db", "#restoreBackrestRegForm").css("display", "none");
+			}else{
+				$("#restore_opt_db", "#restoreBackrestRegForm").css("display", "");
+			}
+
+
+			if(backrest_gbn == "local"){
+				if($("#db_svr_id", "#findList").val() == agentInfo.db_svr_id){
+					$("#ssh_port_info", "#restoreBackrestRegForm").css("display", "none");
+				}else{
+					$("#ssh_port_info", "#restoreBackrestRegForm").css("display", "");
+				}
+			}
+
+			$("#bckr_restore_type_alert", "#restoreBackrestRegForm").hide();
+
+		});
+	})
+
+	function fn_select_database_list() {
+		$.ajax({
+			url : "/selectTreeServerDBList.do",
+			data : {
+				db_svr_nm: db_svr_nm
+			},
+			type : "post",
+			beforeSend: function(xhr) {
+				xhr.setRequestHeader("AJAX", true);
+			},
+			error : function(xhr, status, error) {
+				if(xhr.status == 401) {
+					showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
+				} else if(xhr.status == 403) {
+					showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
+				} else {
+					showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');						}
+			},
+			success : function(result) { 
+				var db_list_data = [];
+
+				for(var i=0; i < result.data.length; i++){
+					if(result.data[i].dft_db_nm != "postgres"){
+						db_list_data.push(result.data[i]);
+					}
+				}
+
+				table_db.clear().draw();
+	    		table_db.rows.add(db_list_data).draw();
+				// table_db.rows({selected: true}).deselect();
+			}
+		});
+	}
+
+	function fu_database_list_init(){
+		table_db = $('#dbList').DataTable({
+			scrollY : "240px",
+			scrollX: true,	
+			searching : true,
+			paging : true,		
+			deferRender : true,
+			destroy : true,
+			lengthChange : false,
+			language: {
+        		"search": "",
+				"searchPlaceholder" : "DB명을 입력해주세요"
+    		},	
+			columns : [
+				{data : "rownum", defaultContent : "", targets : 0, orderable : false, checkboxes : {'selectRow' : true}}, 
+				{data : "dft_db_nm", defaultContent : ""}
+			],'select': {'style': 'multi'}
+		});
+
+		table_db.tables().header().to$().find('th:eq(0)').css('min-width', '50px');
+   		table_db.tables().header().to$().find('th:eq(1)').css('min-width', '470px');
+	}
+	
 </script>
 
 <%@include file="../cmmn/passwordConfirm.jsp"%>
@@ -641,7 +768,7 @@
 
         <div class="col-12 stretch-card div-form-margin-table">
 			<div class="card">
-				<div class="card-body" style="min-height:700px; max-height:900px;">
+				<div class="card-body" style="min-height:1000px; max-height:1400px;">
 					<div class="row" style="margin-top:-20px;">
 						<div class="col-12">
 							<div class="template-demo">																				
@@ -705,12 +832,12 @@
 							</div>
 
 							<div class="row" style="margin-top:10px;">
-								<div class="col-md-6 system-tlb-scroll" style="min-height: 200px; max-height: 500px; overflow-x: hidden ">
+								<div class="col-md-6 system-tlb-scroll" style="min-height: 600px; max-height: 800px; overflow-x: hidden ">
 									<div class="card-body" style="border: 1px solid #adb5bd;">
                                         <div style="margin-left: -15px; display: flex;">
                                             <label for="restore_nm" class="col-sm-7 col-form-label pop-label-index" style="padding-top:7px;">
                                                 <i class="ti-desktop menu-icon"></i>
-                                                <span><spring:message code="restore.target.list" /></span>
+                                                <span>복구<spring:message code="restore.target.list" /></span>
                                             </label>
 
 											<div class="col-sm-5">
@@ -748,7 +875,7 @@
 									</div>
 								</div>
 
-								<div class="col-md-6 system-tlb-scroll" style="border:0px; min-height: 550px; max-height: 600px; overflow-x: hidden; ">
+								<div class="col-md-6 system-tlb-scroll" style="border:0px; min-height: 600px; max-height: 700px; overflow-x: hidden; ">
 									<div class="card-body" style="border: 1px solid #adb5bd; padding: 10px;">
                                         <div>
 											<div class="form-group row div-form-margin-z" style="padding: 10px; display: none;" id="cloud_s3_restore_info">
@@ -848,12 +975,13 @@
                                                     <i class="item-icon fa fa-dot-circle-o"></i>
                                                     <spring:message code="restore.type" />
                                                 </label>
-
+ 
                                                 <div class="col-sm-4">
                                                     <select class="form-control form-control-sm" style=" color: black; margin-top: 5px; margin-left: 10px;" name="ins_rst_opt_cd" id="ins_rst_opt_cd" tabindex=2 onchange="fn_restore_type_chk(this)">
 													    <option value=""><spring:message code="common.choice" /></option>
 	    												<option value="full"><spring:message code="restore.type.full" /></option>
 		    											<option value="pitr"><spring:message code="restore.type.time" /></option>
+														<option value="ropd" id="restore_opt_db" style="display: none;">특정 데이터베이스 복구</option>
 				    								</select>
                                                 </div>
 
@@ -885,63 +1013,54 @@
 											<div class="col-sm-4">
 												<div class="alert alert-danger" style="display:none; width: 265px; margin-left: -2px;" id="rst_pitr_dtm_alert"></div>
 											</div>
+
+
+											<div id="dbList_div" style="display: none;">
+												<div class="form-group row div-form-margin-z" style="margin-top:10px; padding: 10px;">
+													<label for="restore_type" class="col-sm-3 col-form-label pop-label-index" >
+														<i class="item-icon fa fa-dot-circle-o"></i>
+														<spring:message code="dbms_information.databaseList"/>
+													</label>
+												</div>
+
+												<div style="margin-top: -7%;">
+													<div style="width: 100%; position: relative;  z-index: 2;">
+														<!-- <div class="col-sm-9" style="display: flex;">
+															<div>
+																<input type="text" class="form-control" style="margin-right: -0.7rem;" maxlength="25" id="wrk_nm" name="wrk_nm" onblur="this.value=this.value.trim()" placeholder='DB명을 입력해주세요' />
+															</div>
+
+															<button type="button" class="btn btn-inverse-primary btn-icon-text mb-2 btn-search-disable" id="btnSelect" style="margin-left: 1rem;">
+																<i class="ti-search btn-icon-prepend "></i><spring:message code="common.search" />
+															</button>
+														</div> -->
+
+														<div class="col-sm-4" style="top: 40px;">
+															<select name="src_database" id="src_database"  class="form-control form-control-sm" style="width: 80%; color: black;">
+																<option value="include">대상 데이터베이스</option>
+																<option value="exclude">제외 데이터베이스</option>
+															</select>
+														</div>
+													</div>
+
+
+													<div style="margin-left: 15px; position: relative; margin-right: 15px; margin-bottom: 20px; z-index: 1;">
+														<table id="dbList" class="table table-hover table-striped system-tlb-scroll" style="width:100%;">
+															<thead>
+																<tr class="bg-info text-white">
+																	<th width="50" style="text-align: center;"><input name="select" value="1" type="checkbox"></th>
+																	<th width="470"><spring:message code="common.database" /></th>
+																</tr>
+															</thead>
+														</table> 
+													</div>
+												</div>
+											</div>
                                         </div>
 									</div>
 								</div>
 							</div>
 
-                            <!-- <div class="row" style="margin-top:10px; margin-bottom: 10px;">
-								<div class="col-md-6 system-tlb-scroll" style="border:0px;max-height: 300px; overflow-x: hidden; ">
-									<div class="card-body" style="border: 1px solid #adb5bd; padding: 10px;">
-                                        <div style="border: 1px solid #adb5bd;">
-                                            <div class="form-group row div-form-margin-z" style="margin-top:10px; padding: 10px;">
-                                                <label for="restore_type" class="col-sm-4 col-form-label pop-label-index" >
-                                                    <i class="item-icon fa fa-dot-circle-o"></i>
-                                                    <spring:message code="restore.type" />
-                                                </label>
-
-                                                <div class="col-sm-4">
-                                                    <select class="form-control form-control-sm" style="width:200px; color: black; margin-top: 5px; margin-left: 10px;" name="ins_rst_opt_cd" id="ins_rst_opt_cd" tabindex=2 onchange="fn_restore_type_chk(this)">
-													    <option value=""><spring:message code="common.choice" /></option>
-	    												<option value="full"><spring:message code="restore.type.full" /></option>
-		    											<option value="pitr"><spring:message code="restore.type.time" /></option>
-				    								</select>
-                                                </div>
-
-												<div class="col-sm-3">
-													<div class="alert alert-danger" style="display:none; width: 220px; margin-left: -15px;" id="ins_rst_opt_cd_alert"></div>
-												</div>
-                                            </div>
-
-											<div class="form-group row div-form-margin-z">
-												
-												<div class="alert alert-info " style="display:none; width: 100%; margin:20px" id="bckr_restore_type_alert" ></div>
-												
-											</div>
-											
-
-                                            <div class="form-group row div-form-margin-z" style="padding: 10px; margin-left: 1px;" id="pitr_div">
-												<div id="rst_pitr_div" class="input-group align-items-center date datepicker totDatepicker col-sm-4">
-                                                    <input type="text" class="form-control totDatepicker" id="rst_pitr_dtm" name="rst_pitr_dtm" onchange="fn_backrest_chg_alert(this)">
-                                                    <span class="input-group-addon input-group-append border-left">
-                                                        <span class="ti-calendar input-group-text" style="cursor:pointer"></span>
-                                                    </span>
-                                                </div>
-
-												<div class="col-sm-8">
-													<span id="hour" style="margin-right: 1rem;"></span>
-													<span id="min" style="margin-right: 1rem;"></span>
-													<span id="sec"></span>
-												</div>
-                                            </div>
-
-											<div class="col-sm-4">
-												<div class="alert alert-danger" style="display:none; width: 265px; margin-left: -2px;" id="rst_pitr_dtm_alert"></div>
-											</div>
-                                        </div>
-									</div>
-								</div>
-							</div> -->
 						</fieldset>
 					</form>
 				</div>

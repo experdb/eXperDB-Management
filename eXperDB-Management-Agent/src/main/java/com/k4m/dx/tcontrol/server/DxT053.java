@@ -5,8 +5,10 @@ import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.net.Socket;
+import java.util.Iterator;
 
 import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
@@ -17,6 +19,7 @@ import com.k4m.dx.tcontrol.db.repository.vo.RmanRestoreVO;
 import com.k4m.dx.tcontrol.socket.ProtocolID;
 import com.k4m.dx.tcontrol.socket.SocketCtl;
 import com.k4m.dx.tcontrol.socket.TranCodeType;
+import com.k4m.dx.tcontrol.socket.client.ClientProtocolID;
 import com.k4m.dx.tcontrol.util.CommonUtil;
 import com.k4m.dx.tcontrol.util.RunCommandExec;
 
@@ -54,7 +57,6 @@ public class DxT053 extends SocketCtl {
 
 			String restoreType = String.valueOf(jObj.get(ProtocolID.RESTORE_FLAG));
 			String exelog = String.valueOf(jObj.get(ProtocolID.EXELOG));
-			
 			String restoreWrkName = String.valueOf(jObj.get(ProtocolID.WRK_NM));
 			
 			vo.setEXELOG(exelog);
@@ -63,10 +65,30 @@ public class DxT053 extends SocketCtl {
 			if (restoreType.equals("full")) {
 				restoreCmd = "pgbackrest --stanza=experdb --config=$PGHOME/etc/pgbackrest/config/" + restoreWrkName + ".conf --delta restore > "
 						+ pgBlogPath + "/" + exelog + ".log";
-			} else {
+			} else if(restoreType.equals("pitr")){
 				String time_restore = String.valueOf(jObj.get(ProtocolID.TIME_RESTORE));
 				restoreCmd = "pgbackrest --stanza=experdb --config=$PGHOME/etc/pgbackrest/config/" + restoreWrkName + ".conf --type=time \"--target="
 						+ time_restore + "\" --target-action=promote --delta restore > " + pgBlogPath + "/" + exelog + ".log";
+			} else if(restoreType.equals("ropd")) {			
+				JSONParser parser = new JSONParser();
+				JSONObject jsonObject = (JSONObject) parser.parse(String.valueOf(jObj.get(ClientProtocolID.DBLIST_MAP)));
+				Iterator<String> dbListKeys = jsonObject.keySet().iterator();
+				
+				String dbListCmd = "";
+				
+				while(dbListKeys.hasNext()) {
+					String key = dbListKeys.next().toString();
+					
+					if(String.valueOf(jObj.get(ClientProtocolID.LIST_TYPE)).equals("include")) {
+						socketLogger.info("DxT053.value : " + String.valueOf(jsonObject.get(key)));
+						dbListCmd += " --db-include=" + String.valueOf(jsonObject.get(key));
+					}else if(String.valueOf(jObj.get(ClientProtocolID.LIST_TYPE)).equals("exclude")) {
+						dbListCmd += " --db-exclude=" + String.valueOf(jsonObject.get(key));
+					}
+				}
+				
+				restoreCmd = "pgbackrest --stanza=experdb --config=$PGHOME/etc/pgbackrest/config/" + restoreWrkName + ".conf" + dbListCmd + " --delta restore > "
+						+ pgBlogPath + "/" + exelog + ".log";
 			}
 
 			RunCommandExec r = new RunCommandExec(restoreCmd);
