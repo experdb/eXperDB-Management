@@ -710,7 +710,7 @@ function fn_scriptLayer(wrk_id){
 			if(result.length==0){
 				alert("Work가 삭제되어 Work 정보를 확인할 수 없습니다.");
 			}else{
-				$("#exe_cmd").html(result[0].exe_cmd);
+				$("#exe_cmd").text(result[0].exe_cmd);
 				toggleLayer($('#pop_layer_script'), 'on');	
 			}
 	
