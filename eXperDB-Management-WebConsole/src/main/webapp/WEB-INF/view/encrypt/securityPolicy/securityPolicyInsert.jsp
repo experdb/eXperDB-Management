@@ -28,6 +28,8 @@
 <script>
 	var table = null;
 	var table2 = null;
+	var policyCnt = 0;
+	var accessControlCnt = 0;
 
 	function fn_init() {
 		table = $('#encryptPolicyTable').DataTable({
@@ -35,9 +37,12 @@
 			searching : false,
 			deferRender : true,
 			scrollX: true,
+			bSort: false,
 			columns : [
 			{ data : "", defaultContent : "", targets : 0, orderable : false, checkboxes : {'selectRow' : true}}, 
-			{ data : "", className : "dt-center", defaultContent : ""}, 
+			{ data : "", className : "dt-center", defaultContent : "", render: function (data, type, full){
+				return ++policyCnt;
+			},}, 
 			{ data : "offset", className : "dt-right", defaultContent : ""}, 
 			{ data : "length", className : "dt-right", defaultContent : ""}, 
 			{ data : "cipherAlgorithmCode", defaultContent : ""}, 
@@ -64,9 +69,12 @@
 			searching : false,
 			deferRender : true,
 			scrollX: true,
+			bSort: false,
 			columns : [
 			{ data : "", defaultContent : "", targets : 0, orderable : false, checkboxes : {'selectRow' : true}}, 
-			{ data : "", className : "dt-center", defaultContent : ""}, 
+			{ data : "", className : "dt-center", defaultContent : "", render: function (data, type, full){
+				return ++accessControlCnt;
+			},},
 			{ data : "specName", defaultContent : ""}, 
 			{ data : "serverInstanceId", defaultContent : ""}, 
 			{ data : "serverLoginId", defaultContent : ""}, 
@@ -347,6 +355,7 @@
 			showSwalIcon('<spring:message code='message.msg04' />', '<spring:message code="common.close" />', '', 'error');
 			return false;
 		} else {
+			policyCnt--;
 			var rows = table.rows( '.selected' ).remove().draw();
 			table.rows({selected: true}).deselect();
 		}
@@ -618,6 +627,7 @@
 			showSwalIcon('<spring:message code='message.msg04' />', '<spring:message code="common.close" />', '', 'error');
 			return false;
 		} else {
+			accessControlCnt--;
 			var rows = table2.rows( '.selected' ).remove().draw();
 			table2.rows({selected: true}).deselect();
 		}

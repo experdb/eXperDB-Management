@@ -73,7 +73,12 @@ public class UserManagerServiceImpl extends EgovAbstractServiceImpl implements U
 	public void updateEncUserPw(Map<String, Object> param) throws Exception{
 		userManagerDAO.updateEncUserPw(param);
 	}
-
+	
+	@Override
+	public void updateUserUseyn(String usr_id) throws Exception {
+		userManagerDAO.updateUserUseyn(usr_id);
+		
+	}
 
 
 }

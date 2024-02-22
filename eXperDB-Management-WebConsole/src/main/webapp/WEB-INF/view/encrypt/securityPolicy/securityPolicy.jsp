@@ -32,6 +32,7 @@ var table = null;
 			searching : false,
 			deferRender : true,
 			scrollX: true,
+			bSort: false,
 			columns : [
 				{ data : "rnum", defaultContent : "", targets : 0, orderable : false, checkboxes : {'selectRow' : true}}, 
 				{ data : "rnum", className : "dt-center", defaultContent : ""},

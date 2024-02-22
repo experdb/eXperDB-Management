@@ -35,9 +35,10 @@
 			searching : false,
 			deferRender : true,
 			scrollX: true,
+			bSort: false,
 			columns : [
 			{ data : "", defaultContent : "", targets : 0, orderable : false, checkboxes : {'selectRow' : true}}, 
-			{ data : "", className : "dt-center", defaultContent : ""}, 
+			{ data : "rownum", className : "dt-center", defaultContent : ""}, 
 			{ data : "offset", className : "dt-right", defaultContent : ""}, 
 			{ data : "length", className : "dt-right", defaultContent : ""}, 
 			{ data : "cipherAlgorithmCode", defaultContent : ""}, 
@@ -64,9 +65,10 @@
 			searching : false,
 			deferRender : true,
 			scrollX: true,
+			bSort: false,
 			columns : [
 			{ data : "", defaultContent : "", targets : 0, orderable : false, checkboxes : {'selectRow' : true}}, 
-			{ data : "", defaultContent : ""}, 
+			{ data : "no", defaultContent : ""}, 
 			{ data : "specName", defaultContent : ""}, 
 			{ data : "serverInstanceId", defaultContent : ""}, 
 			{ data : "serverLoginId", defaultContent : ""}, 
@@ -302,6 +304,7 @@
 	function fn_SecurityAdd(result){
 		var stop = 0;
 		var data = table.rows().data();
+		var table_cnt = table.rows().data().length;
 		for(var i=0; i<data.length; i++){
 			var length = data[i].length;
 			if(length=='<spring:message code="encrypt_policy_management.End"/>'){
@@ -314,6 +317,7 @@
 		}
 		
 		table.row.add({
+			"rownum":table_cnt+1,
 			"offset":result.offset,
 			"length":result.length,
 			"cipherAlgorithmCode":result.cipherAlgorithmCode,
@@ -424,7 +428,10 @@
 	
 	/*접근제어 정책 등록*/
 	function fn_AccessAdd(result){
+		var table2_cnt = table2.rows().data().length;
+
 		table2.row.add({
+			"no":table2_cnt+1,
 			"specName":result.specName,
 			"serverInstanceId":result.serverInstanceId,
 			"serverLoginId":result.serverLoginId,
@@ -967,7 +974,7 @@
 										<c:forEach var="ProfileCipherSpecData" items="${result.ProfileCipherSpecData}">
 											<tr>
 												<td></td>
-												<td></td>
+												<td>${ProfileCipherSpecData.rownum}</td>
 												<td>${ProfileCipherSpecData.offset}</td>
 												<td>
 													<c:if test="${ProfileCipherSpecData.length eq null}"><spring:message code="encrypt_policy_management.End"/></c:if>
@@ -1162,7 +1169,7 @@
 									<c:forEach var="arrProfileAclSpec" items="${result.arrProfileAclSpec}">
 										<tr>
 											<td></td>
-											<td></td>
+											<td>${arrProfileAclSpec.no}</td>
 											<td>${arrProfileAclSpec.specName}</td>
 											<td>${arrProfileAclSpec.serverInstanceId}</td>
 											<td>${arrProfileAclSpec.serverLoginId}</td>

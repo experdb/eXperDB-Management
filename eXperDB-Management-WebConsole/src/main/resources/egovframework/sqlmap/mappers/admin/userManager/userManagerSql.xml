@@ -320,5 +320,17 @@
              PASSWORD = #{password}
 		WHERE ENTITY_UID = #{ectityUid}	
 	</update>
+	
+	<update id="updateUserUseyn" parameterType="string" >
+		/**
+		* Query ID : updateUserUseyn
+		* Description :  사용자 사용유무 변경
+		* Author : 박유라
+		**/
+        UPDATE T_USR_I
+           SET 
+              USE_YN='N'
+		 WHERE USR_ID = #{usr_id}
+	</update>
 
 </mapper>

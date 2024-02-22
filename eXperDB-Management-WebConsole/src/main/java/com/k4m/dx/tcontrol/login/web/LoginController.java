@@ -75,6 +75,8 @@ public class LoginController {
 	private AccessHistoryService accessHistoryService;
 
 	private static final Logger logger = LoggerFactory.getLogger(EgovBatchListnerUtl.class);
+	int loginTryCnt;
+	String loginId;
 
 	
 	/* PlayTrial 아이디 인증 연동 */
@@ -492,13 +494,36 @@ public class LoginController {
 			}
 
 			List<UserVO> userList = loginService.selectUserList(userVo);
+			
 			int intLoginCnt = userList.size();
 			if (intLoginCnt == 0) {
 				mv.addObject("error", "msg156");
 				mv.setViewName("login");
 				return mv;
 			} else if (!id.equals(userList.get(0).getUsr_id()) || !pw.equals(userList.get(0).getPwd())) {
-				mv.addObject("error", "msg157");
+				
+				++loginTryCnt;
+				
+				if(loginTryCnt == 1) {
+					loginId = userList.get(0).getUsr_id();
+				}else {
+					if(!loginId.equals(userList.get(0).getUsr_id())) {
+						loginTryCnt = 1;
+						loginId = userList.get(0).getUsr_id();
+					}
+				}
+
+				if(loginTryCnt == 5) {
+					if(!loginId.equals("admin")){
+						userManagerService.updateUserUseyn(loginId);
+						mv.addObject("error", "msg230");
+					}else {
+						mv.addObject("error", "msg157");
+					}
+				}else {
+					mv.addObject("error", "msg157");
+				}
+				
 				mv.setViewName("login");
 				return mv;
 			} else if (userList.get(0).getUse_yn().equals("N")) {

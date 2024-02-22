@@ -97,4 +97,11 @@ public interface UserManagerService {
 
 	public void updateEncUserPw(Map<String, Object> param) throws Exception;
 	
+	/**
+	 * 사용자 유저 사용유무 n
+	 * @param string
+	 * @throws Exception
+	 */
+	public void updateUserUseyn(String usr_id)throws Exception;
+	
 }

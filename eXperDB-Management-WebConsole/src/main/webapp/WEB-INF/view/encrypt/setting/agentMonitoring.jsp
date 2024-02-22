@@ -62,6 +62,7 @@ var table = null;
 			searching : false,
 			deferRender : true,
 			scrollX: true,
+			bSort: false,
 			columns : [
 				{ data : "no", defaultContent : "", targets : 0, orderable : false, checkboxes : {'selectRow' : true}}, 
 				{ data : "no", className : "dt-center", defaultContent : ""}, 

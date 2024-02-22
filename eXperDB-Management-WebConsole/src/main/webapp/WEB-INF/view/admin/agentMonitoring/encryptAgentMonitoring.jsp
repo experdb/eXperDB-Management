@@ -24,16 +24,23 @@
 %>
 <script>
 var table = null;
+var cnt = 0;
 
-function fn_init(){
+function fn_init(data_list_cnt){
 	table = $('#monitoring').DataTable({
 		scrollY : "420px",
 		searching : false,
 		deferRender : true,
 		scrollX: true,
+		bSort: false,
 		columns : [
 			{ data : "", defaultContent : "", targets : 0, orderable : false, checkboxes : {'selectRow' : true}}, 
-			{data : "idx", columnDefs: [ { searchable: false, orderable: false, targets: 0} ], order: [[ 1, 'asc' ]],  className : "dt-center", defaultContent : ""},
+			{ data : "idx", className : "dt-center", defaultContent : "", render: function (data, type, full){
+				for(var i=0; i < data_list_cnt; i++){
+					return ++cnt;
+				}
+				return data;
+			},},
 			{ data : "monitoredName", defaultContent : ""}, 
 			{ data : "status", defaultContent : "", className : "dt-center", render: function (data, type, full){
 				if(full.status == "start"){
@@ -64,7 +71,7 @@ function fn_init(){
 
 $(window.document).ready(function() {
 	fn_buttonAut();
-	fn_init();
+	// fn_init();
 	fn_refresh();
 });
 
@@ -98,10 +105,14 @@ function fn_refresh(){
 			}
 		},
 		success : function(data) {
-			table.rows({selected: true}).deselect();
-			table.clear().draw();
+			// fn_init(data.list.length);
+			// table.rows({selected: true}).deselect();
+			// table.clear().draw();
 				if(data.resultCode == "0000000000"){
 					if(data.list != null){
+						fn_init(data.list.length);
+						table.rows({selected: true}).deselect();
+						table.clear().draw();
 						table.rows.add(data.list).draw();
 					}
 				}else if(data.resultCode == "8000000002"){

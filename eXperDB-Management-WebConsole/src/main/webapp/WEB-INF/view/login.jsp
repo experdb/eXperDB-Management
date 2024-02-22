@@ -77,6 +77,8 @@
 				errorMsg = '<spring:message code="message.msg159" />';
 			} else if (errorCode == "msg176") {
 				errorMsg = '<spring:message code="message.msg176" />';
+			} else if (errorCode == "msg230"){
+				errorMsg = '<spring:message code="message.msg230" />';
 			}
 			
 			titleMsg = '<spring:message code="common.login" />' + ' ' +'<spring:message code="common.failed" />';

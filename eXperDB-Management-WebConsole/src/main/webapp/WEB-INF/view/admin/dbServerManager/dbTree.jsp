@@ -42,9 +42,8 @@ function fn_init() {
 		deferRender : true,
 		columns : [
 		{data : "rownum", defaultContent : "", 
-			targets: 0,
 	        searchable: false,
-	        orderable: false,
+			columnDefs: [ { orderable: false, targets: 0} ],
 	        className : "dt-center",
 	        render: function(data, type, full, meta){
 	           if(type === 'display'){
@@ -100,6 +99,7 @@ function fn_init() {
 		searching : false,
 		paging : false,		
 		deferRender : true,
+		bSort: false,
 		columns : [
 		{data : "dft_db_nm", defaultContent : "", targets : 0, orderable : false, checkboxes : {'selectRow' : true}}	,
 		{data : "dft_db_nm", defaultContent : ""}, 
