@@ -5,7 +5,7 @@
    <groupId>com.k4m</groupId> 
    <artifactId>eXperDB-Management-WebConsole</artifactId>
    <packaging>war</packaging>
-   <version>v15.0.4</version>
+   <version>v15.0.5</version>
    <name>eXperDB-Management-WebConsole</name>
    <url>http://www.egovframe.go.kr</url>
 
