@@ -9,25 +9,52 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>eXperDB</title>
+
+<style>
+        /* Style the div container */
+        .image-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 200px;
+        }
+        /* Style the image */
+        .image-container img {
+            max-width: 100%;
+            max-height: 100%;
+        }
+    </style>
+    
 </head>
 
 <body>
-	<div class="container-scroller">
+
+    <div class="image-container"> 
+        <img src="images/500.png" >
+    </div>
+  	<div class="row mt-5">
+		<div class="col-12 text-center mt-xl-2">
+			<a " href="javascript:void(0);" onclick="history.go(-1)"><spring:message code="common.back"/></a>
+		</div>
+	</div> 
+
+
+	<%-- <div class="container-scroller">
 		<div class="container-fluid page-body-wrapper full-page-wrapper">
-			<div class="content-wrapper d-flex align-items-center text-center error-page bg-primary">
+			<div class="content-wrapper d-flex align-items-center text-center error-page bg-info">
 				<div class="row flex-grow">
 					<div class="col-lg-7 mx-auto text-white">
 						<div class="row align-items-center d-flex flex-row">
-							<div class="col-lg-5 text-lg-right pr-lg-4">
-								<h1 class="display-1 mb-0">400</h1>
+							<div class="col-lg-4 text-lg-right pr-lg-4">
+								<h1 class="display-1 mb-0">500</h1>
 							</div>
-							<div class="col-lg-7 error-page-divider text-lg-left pl-lg-4">
-								<h2>요청실패</h2>
+							<div class="col-lg-8 error-page-divider text-lg-left pl-lg-4">
+								<h2><spring:message code="message.msg222" /></h2>
 								<br/>
 								<h4 class="font-weight-light">
-									요청문에 오류가 있거나 서버가 요청을 이해하지 못합니다.
+									<spring:message code="message.msg182" />
 									<br/><br/>
-									Your request resulted in an error.
+									<spring:message code="message.msg183" />
 								</h4>
 							</div>
 						</div>
@@ -40,6 +67,6 @@
 				</div>
 			</div>
 		</div>
-	</div>
+	</div> --%>
 </body>
 </html>

@@ -9,10 +9,37 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>eXperDB</title>
+
+<style>
+        /* Style the div container */
+        .image-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 200px;
+        }
+        /* Style the image */
+        .image-container img {
+            max-width: 100%;
+            max-height: 100%;
+        }
+    </style>
+    
 </head>
 
 <body>
-	<div class="container-scroller">
+
+    <div class="image-container"> 
+        <img src="images/500.png" >
+    </div>
+  	<div class="row mt-5">
+		<div class="col-12 text-center mt-xl-2">
+			<a " href="javascript:void(0);" onclick="history.go(-1)"><spring:message code="common.back"/></a>
+		</div>
+	</div> 
+
+
+	<%-- <div class="container-scroller">
 		<div class="container-fluid page-body-wrapper full-page-wrapper">
 			<div class="content-wrapper d-flex align-items-center text-center error-page bg-info">
 				<div class="row flex-grow">
@@ -40,6 +67,6 @@
 				</div>
 			</div>
 		</div>
-	</div>
+	</div> --%>
 </body>
 </html>
