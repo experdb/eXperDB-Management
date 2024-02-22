@@ -58,6 +58,7 @@ public class DxT040 extends SocketCtl{
 								, "du -s $PGLOG" //PG_LOG 용량	
 								, "ls $PGALOG | wc -l"
 								, "ls $PGLOG | wc -l"
+								, " psql -t -c \"select setting from pg_settings where name = 'max_wal_size'\"" 
 							   };
 	
 	public DxT040(Socket socket, BufferedInputStream is, BufferedOutputStream	os) {
@@ -93,6 +94,7 @@ public class DxT040 extends SocketCtl{
 		String pgalog_cnt;
 		String log_cnt="";
 		
+		String max_wal_size="";
 
 		byte[] sendBuff = null;
 		
@@ -115,8 +117,13 @@ public class DxT040 extends SocketCtl{
 			resultHP.put(ProtocolID.PGWAL_CNT, pgwal_cnt);	
 				
 			wal_keep_segments = util.getPidExec(arrCmd[4]);
-			resultHP.put(ProtocolID.WAL_KEEP_SEGMENTS, wal_keep_segments);
-			
+			if(wal_keep_segments.trim().equals("0")) {
+				max_wal_size = util.getPidExec(arrCmd[14]);
+				resultHP.put(ProtocolID.WAL_KEEP_SEGMENTS, 0);
+				resultHP.put(ProtocolID.MAX_WAL_SIZE, max_wal_size);
+			}else {
+				resultHP.put(ProtocolID.WAL_KEEP_SEGMENTS, wal_keep_segments);
+			}
 			
 			pgalog_path = util.getPidExec(arrCmd[5]);
 			resultHP.put(ProtocolID.PGALOG_PATH, pgalog_path);
@@ -148,6 +155,8 @@ public class DxT040 extends SocketCtl{
 			
 			log_cnt = util.getPidExec(arrCmd[13]);
 			resultHP.put(ProtocolID.LOG_CNT, log_cnt);	
+			
+						
 			
 			setShowData(serverInfoObj, resultHP);
 			
