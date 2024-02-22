@@ -55,7 +55,7 @@
 		var secHtml ="";
 
 		secHtml += '<select class="form-control form-control-xsm" style="margin-right: 1rem;" name="MONITOR_POLLING_SERVER" id="MONITOR_POLLING_SERVER">';	
-		for(var i=10; i<=599; i++){
+		for(var i=10; i<=600; i++){
 			if(i >= 0 && i<10){
 				sec = i;
 			}else{
@@ -75,7 +75,7 @@
 		var secHtml ="";
 		
 		secHtml += '<select class="form-control form-control-xsm" style="margin-right: 1rem;" name="MONITOR_POLLING_AGENT" id="MONITOR_POLLING_AGENT">';	
-		for(var i=5; i<=399; i++){
+		for(var i=5; i<=400; i++){
 			if(i >= 0 && i<10){
 				sec = i;
 			}else{
@@ -95,7 +95,7 @@
 		var secHtml ="";
 
 		secHtml += '<select class="form-control form-control-xsm" style="margin-right: 1rem;" name="MONITOR_EXPIRE_CRYPTO_KEY" id="MONITOR_EXPIRE_CRYPTO_KEY">';	
-		for(var i=10; i<=599; i++){
+		for(var i=10; i<=600; i++){
 			if(i >= 0 && i<10){
 				sec = i;
 			}else{
@@ -322,7 +322,7 @@
 														<div class="col-sm-1" style=" margin-left: 70px;">
 															<div id = "period02"></div>
 														</div>											
-														 <div style="margin-top:15px;"><spring:message code="schedule.second" />(5 ~ 86400<spring:message code="schedule.second" />)</div>												
+														 <div style="margin-top:15px;"><spring:message code="schedule.second" />(5 ~ 400<spring:message code="schedule.second" />)</div>												
 												</div>	
 												
 												<div class="form-group row" style="margin-bottom:10px;">
