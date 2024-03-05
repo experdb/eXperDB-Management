@@ -275,6 +275,7 @@ public class ProtocolID {
 	public static final String PGDBAK_PATH = "PGDBAK_PATH";
 	public static final String PGWAL_PATH = "PGWAL_PATH";
 	public static final String WAL_KEEP_SEGMENTS = "WAL_KEEP_SEGMENTS";
+	public static final String MAX_WAL_SIZE = "MAX_WAL_SIZE";
 	public static final String BACKUP_PATH = "BACKUP_PATH";
 	public static final String BACKUP_MOUNT = "BACKUP_MOUNT";
 	public static final String BACKUP_V = "BACKUP_V";

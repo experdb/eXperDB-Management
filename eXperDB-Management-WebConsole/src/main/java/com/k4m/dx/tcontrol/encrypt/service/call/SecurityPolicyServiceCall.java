@@ -323,6 +323,7 @@ public class SecurityPolicyServiceCall {
 					System.out.println(" offset : " + profileCipherSpec.getOffset());
 					System.out.println(" length : " + profileCipherSpec.getLength());
 					System.out.println(" binUid : " + profileCipherSpec.getBinUid());
+					jsonObj.put("rownum", i+1);
 					jsonObj.put("specIndex", profileCipherSpec.getSpecIndex());
 					jsonObj.put("profileUid", profileCipherSpec.getProfileUid());
 					jsonObj.put("CipherAlgorithmCode", profileCipherSpec.getCipherAlgorithmCode());
@@ -476,6 +477,7 @@ public class SecurityPolicyServiceCall {
 						}
 					}
 					
+					jsonObj.put("no", i+1);
 					jsonObj.put("specName", new String(profileAclSpec.getSpecName().getBytes("iso-8859-1"),"UTF-8"));  
 					if(profileAclSpec.getServerInstanceId() != null){
 						jsonObj.put("serverInstanceId", new String(profileAclSpec.getServerInstanceId().getBytes("iso-8859-1"),"UTF-8"));

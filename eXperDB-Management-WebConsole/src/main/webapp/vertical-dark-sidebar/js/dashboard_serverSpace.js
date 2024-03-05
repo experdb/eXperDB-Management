@@ -86,6 +86,7 @@ function fn_gBackup(fullSize, backupSize) {
  * pg_wal 로그 용량
  ******************************************************** */
 function fn_gWal(walCnt, segmentCnt) {
+	
 	var cnt = walCnt/segmentCnt*100;
 	if (isNaN(cnt) ) {
 		cnt = 0;
@@ -138,7 +139,60 @@ function fn_gWal(walCnt, segmentCnt) {
 
 }
 
+function fn_gMaxWal(walCnt, segmentCnt) {
+	
+	var cnt = ((walCnt*16)/segmentCnt)*100;
+	
+	if (isNaN(cnt) ) {
+		cnt = 0;
+	}
 
+	var wal = {
+			
+		    id: 'pg_wal',
+		    value: cnt,
+		    min: 0,
+		    max: 200,
+		    symbol: '%',
+		    pointer: true,
+		    gaugeWidthScale: 1.0,
+		    customSectors: [{
+		      color: '#ff0000',
+		      lo: 150,
+		      hi: 500
+		    }, {
+		      color: '#00ff00',
+		      lo: 0,
+		      hi: 200
+		    }],
+		    counter: true
+
+		   /* id: 'pg_wal',
+		    value: v*979,
+		    min: 0,
+		    max: 1000000000000,
+		    humanFriendly: true,
+		    reverse: true,
+		    gaugeWidthScale: 1.0,
+		    customSectors: [{
+		      color: "#00ff00",
+		      lo: 0,
+		      hi: 50000000
+		    },{
+			      color: "#ff6b00",
+			      lo: 5000000,
+			      hi: 8000000000
+			    },{
+				      color: "#ff0000",
+				      lo: 8000000000,
+				      hi: 1000000000000
+				    }],
+		    counter: true*/
+			  };
+	
+	var pg_wal = new JustGage(wal);
+
+}
 
 
 

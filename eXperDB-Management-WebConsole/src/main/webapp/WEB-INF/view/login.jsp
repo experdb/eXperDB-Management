@@ -77,6 +77,8 @@
 				errorMsg = '<spring:message code="message.msg159" />';
 			} else if (errorCode == "msg176") {
 				errorMsg = '<spring:message code="message.msg176" />';
+			} else if (errorCode == "msg230"){
+				errorMsg = '<spring:message code="message.msg230" />';
 			}
 			
 			titleMsg = '<spring:message code="common.login" />' + ' ' +'<spring:message code="common.failed" />';
@@ -167,7 +169,7 @@
 </div>
 
 <!-- js -->
-<script src="../login/vendor/jquery/jquery-3.3.1.min.js"></script>
+<script src="../login/vendor/jquery/jquery-3.7.1.min.js"></script>
 <script src="../login/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 <script src="../login/js/common.js"></script>
 

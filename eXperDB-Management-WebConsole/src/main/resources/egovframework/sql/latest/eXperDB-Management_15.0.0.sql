@@ -45,9 +45,9 @@ INSERT INTO T_BACKREST_OPT_I (OPT_ID, OPT_GBN, OPT_NM, OPT_EXP) VALUES(7, 0, 'ar
 INSERT INTO T_BACKREST_OPT_I (OPT_ID, OPT_GBN, OPT_NM, OPT_EXP) VALUES(8, 1, 'archve-check', '백업이 완료되기 전에 아카이브 WAL 세그먼트를 체크');
 INSERT INTO T_BACKREST_OPT_I (OPT_ID, OPT_GBN, OPT_NM, OPT_EXP) VALUES(9, 1, 'archive-copy', '백업 일관성을 유지하기 위한 WAL 세그먼트 복사');
 INSERT INTO T_BACKREST_OPT_I (OPT_ID, OPT_GBN, OPT_NM, OPT_EXP) VALUES(10, 1, 'start-fast', '신속하게 백업을 실행하기 위해 체크포인트를 강제 실행');
-INSERT INTO T_BACKREST_OPT_I (OPT_ID, OPT_GBN, OPT_NM, OPT_EXP) VALUES(11, 0, 'repo-retention-archive', '유지할 연속 WAL의 백업 수');
-INSERT INTO T_BACKREST_OPT_I (OPT_ID, OPT_GBN, OPT_NM, OPT_EXP) VALUES(12, 0, 'repo-retention-archive-type', 'WAL 보존을 위한 백업 유형');
-INSERT INTO T_BACKREST_OPT_I (OPT_ID, OPT_GBN, OPT_NM, OPT_EXP) VALUES(13, 0, 'repo-retention-diff', '보존할 차등백업 수');
+INSERT INTO T_BACKREST_OPT_I (OPT_ID, OPT_GBN, OPT_NM, OPT_EXP) VALUES(11, 0, 'repo1-retention-archive', '유지할 연속 WAL의 백업 수');
+INSERT INTO T_BACKREST_OPT_I (OPT_ID, OPT_GBN, OPT_NM, OPT_EXP) VALUES(12, 0, 'repo1-retention-archive-type', 'WAL 보존을 위한 백업 유형');
+INSERT INTO T_BACKREST_OPT_I (OPT_ID, OPT_GBN, OPT_NM, OPT_EXP) VALUES(13, 0, 'repo1-retention-diff', '보존할 차등백업 수');
 INSERT INTO T_BACKREST_OPT_I (OPT_ID, OPT_GBN, OPT_NM, OPT_EXP) VALUES(14, 2, 'db-include', '특정 데이터베이스 복원');
 INSERT INTO T_BACKREST_OPT_I (OPT_ID, OPT_GBN, OPT_NM, OPT_EXP) VALUES(15, 2, 'db-exclude', '특정 데이터베이스를 제외한 나머지 복원');
 

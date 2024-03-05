@@ -23,7 +23,8 @@
 						<tbody>
 							<tr>
 								<th class="t1">Version</th>
- 								<td id="version" style="border : 0 none;">123</td>
+								<td style="border : 0 none;">eXperDB v15</td>
+ 								<!-- <td id="version" style="border : 0 none;">123</td> -->
 							</tr>
  							<tr>
 								<th class="t1">Copyright</th>

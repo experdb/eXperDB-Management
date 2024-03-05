@@ -25,6 +25,7 @@
     var templates = {		
         treeview: '<div class="bstreeview"></div>',
     	treeviewNew : '<li class="nav-item"></li>',
+    	treeviewItemLst1: '<class="nav-link" href="#itemid" >',
     	treeviewItemLst: '<a class="nav-link" href="#itemid" ></a>',
     	treeviewItem: '<a class="nav-link mainMenu" data-toggle="collapse" class="list-group-item" href="#itemid" aria-expanded="false" aria-controls="ui-basic"></a>',
     	treeviewItemServer: '<a class="nav-link mainMenu" data-toggle="collapse" class="list-group-item" href="#itemid" aria-expanded="false" aria-controls="ui-basic"></a>',
@@ -202,8 +203,8 @@
         			} else {
         				node_tot_url = "";
             			if (node.nodes) {
-            				treeItem = $(templates.treeviewItemLst)
-            					.attr('style', 'padding-left:' + leftPadding)
+            				treeItem = $(templates.treeviewItemLst1)
+            					.attr('style', 'padding-left:' + leftPadding + '; color: #dfe9e9')
             					.attr('id', node.id + "c")
             					.attr('href', "#" + _this.itemIdPrefix + node.nodeId);
             			} else {

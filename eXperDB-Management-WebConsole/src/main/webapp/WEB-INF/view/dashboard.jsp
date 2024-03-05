@@ -10,6 +10,8 @@
 <%@include file="./cmmn/commonLocaleDashboard.jsp" %>  
 
 <script src="/vertical-dark-sidebar/js/dashboard_common.js"></script>
+<script src="/vertical-dark-sidebar/js/dashboard_serverSpace.js"></script>
+
 
 <!-- <STYLE TYPE="text/css">
 

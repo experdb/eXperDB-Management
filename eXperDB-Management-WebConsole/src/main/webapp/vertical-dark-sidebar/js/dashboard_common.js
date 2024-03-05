@@ -203,19 +203,24 @@ function fn_tablescpace_setting(result) {
 			$("#pgwalPathTd").html('<i class="fa fa-hdd-o text-primary"></i>');
 		}
 
-		if (result.tablespaceObj.WAL_KEEP_SEGMENTS != null && result.tablespaceObj.WAL_KEEP_SEGMENTS != undefined) {
+		if (result.tablespaceObj.WAL_KEEP_SEGMENTS != null && result.tablespaceObj.WAL_KEEP_SEGMENTS != undefined && result.tablespaceObj.WAL_KEEP_SEGMENTS != 0) {
 			$("#walKeepSegmentsTd").html('<i class="ti-files"> WAL_KEEP_SEGMENTS : </i>'+ nvlPrmSet(result.tablespaceObj.WAL_KEEP_SEGMENTS, "") + dashboard_count);
 		} else {
-			$("#walKeepSegmentsTd").html('<i class="ti-files"> WAL_KEEP_SEGMENTS : </i>0' + dashboard_count);
+			$("#walKeepSegmentsTd").html('<i class="ti-files"> MAX_WAL_SIZE : </i>'+ nvlPrmSet(result.tablespaceObj.MAX_WAL_SIZE, "") + dashboard_count);
+			//$("#walKeepSegmentsTd").html('<i class="ti-files"> WAL_KEEP_SEGMENTS : </i>0' + dashboard_count);
 		}
 
 		if (result.tablespaceObj.PGWAL_CNT != null && result.tablespaceObj.PGWAL_CNT != undefined) {
-			$("#pgwalCntTd").html('<i class="ti-files"> WAL_FILE : </i>'+ nvlPrmSet(result.tablespaceObj.PGWAL_CNT, "") + dashboard_count);
-			
+			$("#pgwalCntTd").html('<i class="ti-files"> WAL_FILE : </i>'+ nvlPrmSet(result.tablespaceObj.PGWAL_CNT, "") + dashboard_count);			
+
+		if (result.tablespaceObj.WAL_KEEP_SEGMENTS != null && result.tablespaceObj.WAL_KEEP_SEGMENTS != undefined && result.tablespaceObj.WAL_KEEP_SEGMENTS != 0) {
 			fn_gWal(result.tablespaceObj.PGWAL_CNT, result.tablespaceObj.WAL_KEEP_SEGMENTS);
 		} else {
-			$("#pgwalCntTd").html('<i class="ti-files"> WAL_FILE : </i>0' + dashboard_count);
-			
+			fn_gMaxWal(result.tablespaceObj.PGWAL_CNT, result.tablespaceObj.MAX_WAL_SIZE);
+		}
+			 
+		} else {
+			$("#pgwalCntTd").html('<i class="ti-files"> WAL_FILE : </i>0' + dashboard_count);			
 			fn_gWal("0", "0");
 		}
 

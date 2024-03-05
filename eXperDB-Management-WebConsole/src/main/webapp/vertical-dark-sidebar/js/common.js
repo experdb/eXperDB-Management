@@ -381,7 +381,7 @@ function fn_scriptLayer(wrk_id){
 			if(result.length==0){
 				showSwalIcon(wrk_chk_del_msg, closeBtn, '', 'error');
 			}else{
-				$("#info_exe_cmd").html(nvlPrmSet(result[0].exe_cmd, ""));
+				$("#info_exe_cmd").text(nvlPrmSet(result[0].exe_cmd, ""));
 
 				$("#pop_layer_script").modal("show");
 			}

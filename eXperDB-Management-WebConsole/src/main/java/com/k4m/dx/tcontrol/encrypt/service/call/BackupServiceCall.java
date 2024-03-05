@@ -176,7 +176,7 @@ public class BackupServiceCall {
 			return result;
 		}
 		
-		if(!header.ContainsPolicy() && (boolean) param.get("chkKey")){
+		if(!header.ContainsPolicy() && (boolean) param.get("chkPolicy")){
 			System.out.println("not contains policy in file");
 			result.put("RESULT_CODE", SystemCode.ResultCode.ITEM_NOT_FOUND_ERROR);
 			result.put("RESULT_MESSAGE", "The backup file does not contain the policy data");
@@ -190,7 +190,7 @@ public class BackupServiceCall {
 			return result;
 		}
 		
-		if(!header.ContainsBackupLog() && (boolean) param.get("chkConfig")){
+		if(!header.ContainsConfig() && (boolean) param.get("chkConfig")){
 			System.out.println("not contains config info in file");
 			result.put("RESULT_CODE", SystemCode.ResultCode.ITEM_NOT_FOUND_ERROR);
 			result.put("RESULT_MESSAGE", "The backup file does not contain the config data");

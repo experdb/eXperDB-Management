@@ -152,6 +152,17 @@ public class UserManagerDAO extends EgovAbstractMapper{
 		update("userManagerSql.updateEncUserPw", param);
 		
 	}
+	
+	
+	/**
+	 * 사용자 사용유무 변경
+	 * 
+	 * @param string
+	 * @throws SQLException
+	 */
+	public void updateUserUseyn(String string) throws SQLException {
+		update("userManagerSql.updateUserUseyn", string);
+	}
 
 
 }

@@ -120,16 +120,6 @@
 																 '"id": "scale'+item.db_svr_id+'",' +
 																 '"nodes": [';
 
-												if(aut.length != 0 && aut[index].scale_cng_aut_yn == "Y"){
-													menuJson +=	'{' +
-																//	'"icon": "fa fa-spin fa-cog",' +
-																	'"icon": "fa fa-cog",' +
-																	'"text": "<spring:message code="menu.eXperDB_scale_settings"/>",' +
-																	'"url": "/scale/scaleManagement.do?db_svr_id='+item.db_svr_id+'",' +
-																	'"id": "scaleManagement'+item.db_svr_id+'"' +
-																'},';
-												}
-
 												if(aut.length != 0 && aut[index].scale_aut_yn == "Y"){
 													menuJson +=	'{' +
 																	'"icon": "fa fa-expand",' +
