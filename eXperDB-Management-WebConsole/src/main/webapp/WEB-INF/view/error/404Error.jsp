@@ -9,53 +9,37 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>eXperDB</title>
-
-   <style>
-        /* Style the div container */
-        .image-container {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            margin-top: 200px;
-        }
-        /* Style the image */
-        .image-container img {
-            max-width: 100%;
-            max-height: 100%;
-        }
-    </style>
-   
 </head>
 
 <body>
-    <div class="image-container"> 
-        <img src="images/404.png" >
-    </div>
-  	<div class="row mt-5">
-		<div class="col-12 text-center mt-xl-2">
-			<a " href="javascript:void(0);" onclick="history.go(-1)"><spring:message code="common.back"/></a>
-		</div>
-	</div> 
-
-	 <%-- <div class="container-scroller">
+	<div class="container-scroller">
 		<div class="container-fluid page-body-wrapper full-page-wrapper">
-			<div class="content-wrapper d-flex align-items-center text-center error-page">
+			<div class="content-wrapper d-flex align-items-center text-center error-page bg-primary">
 				<div class="row flex-grow">
 					<div class="col-lg-7 mx-auto text-white">
 						<div class="row align-items-center d-flex flex-row">
+							<div class="col-lg-5 text-lg-right pr-lg-4">
+								<h1 class="display-1 mb-0">404</h1>
+							</div>
 							<div class="col-lg-7 error-page-divider text-lg-left pl-lg-4">
-									<img src="images/404.png" >
+								<h2><spring:message code="message.msg221" /></h2>
+								<br/>
+								<h4 class="font-weight-light">
+									<spring:message code="message.msg180" />
+									<br/><br/>
+									The page you are looking for is missing
+								</h4>
 							</div>
 						</div>
 						<div class="row mt-5">
 							<div class="col-12 text-center mt-xl-2">
-								<a class="font-weight-medium" href="javascript:void(0);" onclick="history.go(-1)"><spring:message code="common.back"/></a>
+								<a class="text-white font-weight-medium" href="javascript:void(0);" onclick="history.go(-1)"><spring:message code="common.back"/></a>
 							</div>
 						</div>
 					</div>
 				</div>
 			</div>
 		</div>
-	</div> --%>
+	</div>
 </body>
 </html>

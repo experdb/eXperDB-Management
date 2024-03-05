@@ -169,7 +169,7 @@
 </div>
 
 <!-- js -->
-<script src="../login/vendor/jquery/jquery-3.3.1.min.js"></script>
+<script src="../login/vendor/jquery/jquery-3.7.1.min.js"></script>
 <script src="../login/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 <script src="../login/js/common.js"></script>
 
