@@ -7,7 +7,7 @@ if [ ${1:-} == "A" ]; then
 fi
 
 echo "****************************************************"
-echo "eXperDB-Management-15.0.5 Repository DB Install"
+echo "eXperDB-Management-15.1.0 Repository DB Install"
 echo "****************************************************"
 
 echo "**CREATE USER experdb**"
@@ -111,6 +111,6 @@ echo "**15.0.3**"
 psql -U experdb -d experdb -f eXperDB-Management_15.0.3.sql
 echo "**15.0.3 END**"
 
-echo "**15.0.5**"
-psql -U experdb -d experdb -f eXperDB-Management_15.0.5.sql
-echo "**15.0.5 END**"
+echo "**15.1.0**"
+psql -U experdb -d experdb -f eXperDB-Management_15.1.0.sql
+echo "**15.1.0 END**"
