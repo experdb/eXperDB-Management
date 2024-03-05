@@ -110,3 +110,7 @@ echo "**15.0.0 END**"
 echo "**15.0.3**"
 psql -U experdb -d experdb -f eXperDB-Management_15.0.3.sql
 echo "**15.0.3 END**"
+
+echo "**15.0.5**"
+psql -U experdb -d experdb -f eXperDB-Management_15.0.5.sql
+echo "**15.0.5 END**"
