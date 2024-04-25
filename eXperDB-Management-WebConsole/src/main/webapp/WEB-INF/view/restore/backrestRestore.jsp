@@ -242,7 +242,7 @@
 					}
 					
 					db_svr_nm = data.db_svr_nm;
-					fn_select_database_list();
+					// fn_select_database_list();
 				}
 
 				fn_init_db_svr_info();
@@ -321,6 +321,7 @@
 	function fn_restore_validate() {
 		var iChkCnt = 0;
 		var selected_type = $("#ins_rst_opt_cd option:selected").val();
+		var agentInfo = $('#db_svr_info').DataTable().rows('.selected').data()[0];
 
 		if(nvlPrmSet($("#restore_nmChk", "#restoreBackrestRegForm").val(), "") == "" || nvlPrmSet($("#restore_nmChk", "#restoreBackrestRegForm").val(), "") == "fail") {
 			$("#restorenm_check_alert", "#restoreBackrestRegForm").html('<spring:message code="restore.msg02"/>');
@@ -404,12 +405,21 @@
 				iChkCnt = iChkCnt + 1;
 			}
 		}else if(backrest_gbn == "local"){
-			if(nvlPrmSet($("#ins_ssh_port", "#restoreBackrestRegForm").val(), "") == "") {
-				$("#ins_ssh_port_alert", "#restoreBackrestRegForm").html('ssh 포트를 입력해주세요');
-				$("#ins_ssh_port_alert", "#restoreBackrestRegForm").show();
+			if($("#db_svr_id", "#findList").val() != agentInfo.db_svr_id){
+				if(nvlPrmSet($("#ins_ssh_port", "#restoreBackrestRegForm").val(), "") == "") {
+					$("#ins_ssh_port_alert", "#restoreBackrestRegForm").html('ssh 포트를 입력해주세요');
+					$("#ins_ssh_port_alert", "#restoreBackrestRegForm").show();
 
-				iChkCnt = iChkCnt + 1;
+					iChkCnt = iChkCnt + 1;
+				}
 			}
+
+			// if(nvlPrmSet($("#ins_ssh_port", "#restoreBackrestRegForm").val(), "") == "") {
+			// 	$("#ins_ssh_port_alert", "#restoreBackrestRegForm").html('ssh 포트를 입력해주세요');
+			// 	$("#ins_ssh_port_alert", "#restoreBackrestRegForm").show();
+
+			// 	iChkCnt = iChkCnt + 1;
+			// }
 		}
 
 		if (iChkCnt > 0) {
