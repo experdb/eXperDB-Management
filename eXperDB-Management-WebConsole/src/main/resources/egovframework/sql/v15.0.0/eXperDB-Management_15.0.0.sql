@@ -48,7 +48,7 @@ INSERT INTO T_BACKREST_OPT_I (OPT_ID, OPT_GBN, OPT_NM, OPT_EXP) VALUES(9, 1, 'ar
 INSERT INTO T_BACKREST_OPT_I (OPT_ID, OPT_GBN, OPT_NM, OPT_EXP) VALUES(10, 1, 'start-fast', '신속하게 백업을 실행하기 위해 체크포인트를 강제 실행');
 INSERT INTO T_BACKREST_OPT_I (OPT_ID, OPT_GBN, OPT_NM, OPT_EXP) VALUES(11, 0, 'repo1-retention-archive', '유지할 연속 WAL의 백업 수');
 INSERT INTO T_BACKREST_OPT_I (OPT_ID, OPT_GBN, OPT_NM, OPT_EXP) VALUES(12, 0, 'repo1-retention-archive-type', 'WAL 보존을 위한 백업 유형');
-INSERT INTO T_BACKREST_OPT_I (OPT_ID, OPT_GBN, OPT_NM, OPT_EXP) VALUES(13, 0, 'repo1-retention-di                                                                                                     ff', '보존할 차등백업 수');
+INSERT INTO T_BACKREST_OPT_I (OPT_ID, OPT_GBN, OPT_NM, OPT_EXP) VALUES(13, 0, 'repo1-retention-diff', '보존할 차등백업 수');                                                                                                    ff', '보존할 차등백업 수');
 INSERT INTO T_BACKREST_OPT_I (OPT_ID, OPT_GBN, OPT_NM, OPT_EXP) VALUES(14, 2, 'db-include', '특정 데이터베이스 복원');
 INSERT INTO T_BACKREST_OPT_I (OPT_ID, OPT_GBN, OPT_NM, OPT_EXP) VALUES(15, 2, 'db-exclude', '특정 데이터베이스를 제외한 나머지 복원');
 
@@ -61,3 +61,4 @@ ALTER TABLE t_rman_restore ADD COLUMN restore_size varchar(10) ;
 ALTER TABLE t_rman_restore ADD COLUMN elapsed_time varchar(100) ;
 COMMENT ON COLUMN t_rman_restore.restore_size IS '복원_파일_크기';
 COMMENT ON COLUMN t_rman_restore.elapsed_time IS '복원_소요시간';
+
