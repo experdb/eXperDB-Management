@@ -523,22 +523,24 @@ public class ScheduleQuartzJob implements Job{
 		try {
 			String IP = "";
 			int PORT =0;
-
-				if(!CMD.get(0).equals("DB2PG")) {
-					 IP = (String) resultDbconn.get(0).get("ipadr");
+			
+			// 스케줄 수정 시 마이그레이션 후 배치 실행 후에 배치 실행안되는 버그로 수정(240516)
+//				if(!CMD.get(0).equals("DB2PG")) {
+					IP = (String) resultDbconn.get(0).get("ipadr");
 					
 					AgentInfoVO vo = new AgentInfoVO();
 					vo.setIPADR(IP);		
 					
 					AgentInfoVO agentInfo =  (AgentInfoVO) cmmnServerInfoService.selectAgentInfo(vo);	
-					 PORT = agentInfo.getSOCKET_PORT();
-				}else {
+					PORT = agentInfo.getSOCKET_PORT();
+//				}else {
+//				}
+				
+			for (int i = 0; i < BCKNM.size(); i++) {
+				if(BCKNM.get(i).equals("backrest")){
+					IP = scheduleService.selectIpadr(backrest_scd_id);
 				}
-				for (int i = 0; i < BCKNM.size(); i++) {
-					if(BCKNM.get(i).equals("backrest")){
-						IP = scheduleService.selectIpadr(backrest_scd_id);
-						}
-					}
+			}
 				
 				/*
 				 * String IP = (String) resultDbconn.get(0).get("ipadr");
