@@ -896,7 +896,7 @@ function fn_db2pgAdd(){
 									<spring:message code="schedule.schedule_name" />
 								</label>
 								<div class="col-sm-4">
-									<input type="text" class="form-control" maxlength="20" id="scd_nm" name="scd_nm" onkeyup="fn_checkWord(this,20)" onblur="this.value=this.value.trim()" placeholder="20<spring:message code='message.msg188'/>" onchange="fn_checkSchNm_change()"/>
+									<input type="text" class="form-control" maxlength="50" id="scd_nm" name="scd_nm" onkeyup="fn_checkWord(this,50)" onblur="this.value=this.value.trim()" placeholder="50<spring:message code='message.msg188'/>" onchange="fn_checkSchNm_change()"/>
 								</div>
 								<div class="col-sm-1_5">
 									<input class="btn btn-inverse-danger btn-icon-text mdi mdi-lan-connect" style="margin-left:-20px;" type="button" onclick="fn_check();" value='<spring:message code="common.overlap_check" />' />
