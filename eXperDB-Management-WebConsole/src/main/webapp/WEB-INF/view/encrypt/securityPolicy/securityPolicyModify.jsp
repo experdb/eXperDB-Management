@@ -407,16 +407,16 @@
 		fn_makeToHour();
 		fn_makeToMin();
 	
-		$("#SUNDAY").prop('checked', false);
-		$("#MONDAY").prop('checked', false);
-		$("#TUESDAY").prop('checked', false);
-		$("#WEDNESDAY").prop('checked', false);
-		$("#THURSDAY").prop('checked', false);
-		$("#FRIDAY").prop('checked', false);
-		$("#SATURDAY").prop('checked', false);	
+		$("#SUNDAY").prop('checked', true);
+		$("#MONDAY").prop('checked', true);
+		$("#TUESDAY").prop('checked', true);
+		$("#WEDNESDAY").prop('checked', true);
+		$("#THURSDAY").prop('checked', true);
+		$("#FRIDAY").prop('checked', true);
+		$("#SATURDAY").prop('checked', true);	
 		
-		$("#to_exe_h").val(23);
-		$("#to_exe_m").val(59);
+		$("#to_exe_h").val(24);
+		$("#to_exe_m").val("00");
 		$('#endDateTime').val('9997-12-31');
 		
 
@@ -429,6 +429,8 @@
 	/*접근제어 정책 등록*/
 	function fn_AccessAdd(result){
 		var table2_cnt = table2.rows().data().length;
+		
+		alert(result);
 
 		table2.row.add({
 			"no":table2_cnt+1,
@@ -522,6 +524,7 @@
 						}
 					},
 				success : function(result) {			
+					alert(JSON.stringify(result));
 					fn_accessPolicyRegReFormInit(result);	
 					$('#pop_layer_accessPolicyRegReForm').modal("show");
 				}

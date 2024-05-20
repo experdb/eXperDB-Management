@@ -414,17 +414,17 @@
 		fn_makeToHour();
 		fn_makeToMin();
 	
-		$("#SUNDAY").prop('checked', false);
-		$("#MONDAY").prop('checked', false);
-		$("#TUESDAY").prop('checked', false);
-		$("#WEDNESDAY").prop('checked', false);
-		$("#THURSDAY").prop('checked', false);
-		$("#FRIDAY").prop('checked', false);
-		$("#SATURDAY").prop('checked', false);	
-		
-		$("#to_exe_h").val(23);
-		$("#to_exe_m").val(59);
-		$('#endDateTime').val("");
+		$("#SUNDAY").prop('checked', true);
+		$("#MONDAY").prop('checked', true);
+		$("#TUESDAY").prop('checked', true);
+		$("#WEDNESDAY").prop('checked', true);
+		$("#THURSDAY").prop('checked', true);
+		$("#FRIDAY").prop('checked', true);
+		$("#SATURDAY").prop('checked', true);	
+	
+		$("#to_exe_h").val(24);
+		$("#to_exe_m").val("00");
+		$('#endDateTime').val("9997-12-31");
 		
 
 		$("#whitelistYes").prop('checked', true);		

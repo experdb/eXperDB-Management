@@ -370,19 +370,28 @@ public class SecurityPolicyServiceCall {
 					System.out.println("hostName : " + profileAclSpec.getHostName());
 					System.out.println("whitelistYesNo : " + profileAclSpec.getWhitelistYesNo());
 					
-					SimpleDateFormat dateformat = new SimpleDateFormat("yyyyMMddhhmmss"); 
-					SimpleDateFormat formatDate = new SimpleDateFormat("yyyy-MM-dd");
-					Date date = dateformat.parse(profileAclSpec.getStartDateTime());
-					String startDateTime = formatDate.format(date);
-					date = dateformat.parse(profileAclSpec.getEndDateTime());
-					String endDateTime = formatDate.format(date);
+					/*
+					 * SimpleDateFormat dateformat = new SimpleDateFormat("yyyyMMddhhmmss");
+					 * SimpleDateFormat formatDate = new SimpleDateFormat("yyyy-MM-dd"); Date date =
+					 * dateformat.parse(profileAclSpec.getStartDateTime()); String startDateTime =
+					 * formatDate.format(date); date =
+					 * dateformat.parse(profileAclSpec.getEndDateTime()); String endDateTime =
+					 * formatDate.format(date);
+					 * 
+					 * SimpleDateFormat timeFormat = new SimpleDateFormat("HHmmss");
+					 * SimpleDateFormat formatTime = new SimpleDateFormat("HH:mm"); Date time =
+					 * timeFormat.parse(profileAclSpec.getStartTime()); String startTime =
+					 * formatTime.format(time); time =
+					 * timeFormat.parse(profileAclSpec.getEndTime()); String endTime =
+					 * formatTime.format(time);
+					 */
 					
-					SimpleDateFormat timeFormat = new SimpleDateFormat("HHmmss"); 
-					SimpleDateFormat formatTime = new SimpleDateFormat("HH:mm");
-					Date time = timeFormat.parse(profileAclSpec.getStartTime());
-					String startTime = formatTime.format(time);
-					time = timeFormat.parse(profileAclSpec.getEndTime());
-					String endTime = formatTime.format(time);
+					String startDateTime  = convertToDateTime(profileAclSpec.getStartDateTime());
+					String endDateTime   = convertToDateTime(profileAclSpec.getEndDateTime());
+					String startTime  = convertToTime(profileAclSpec.getStartTime());
+					String endTime  = convertToTime(profileAclSpec.getEndTime());
+					
+					
 					
 					String workDay = "";
 					boolean monday = ContainsWeekDay(profileAclSpec.getWorkDay(), SystemCode.Weekday.MONDAY);
@@ -503,6 +512,14 @@ public class SecurityPolicyServiceCall {
 					if(profileAclSpec.getAccessMacAddress() != null){
 						jsonObj.put("accessMacAddress", new String(profileAclSpec.getAccessMacAddress().getBytes("iso-8859-1"),"UTF-8"));
 					}
+					
+					System.out.println("@@@@@@@@@@@@@@@@@@@@@@@@");
+					System.out.println("startDateTime :"+startDateTime);
+					System.out.println("endDateTime :"+endDateTime);
+					System.out.println("startTime :"+startTime);
+					System.out.println("endTime :"+endTime);
+					System.out.println("@@@@@@@@@@@@@@@@@@@@@@@@");
+					
 					jsonObj.put("startDateTime", startDateTime);
 					jsonObj.put("endDateTime", endDateTime);
 					jsonObj.put("startTime", startTime);
@@ -961,4 +978,20 @@ public class SecurityPolicyServiceCall {
 		}
 		return jsonArray;
 	}
+	
+	  // 날짜 변환 메서드
+    public static String convertToDateTime(String inputDateTime) {
+        String year = inputDateTime.substring(0, 4);
+        String month = inputDateTime.substring(4, 6);
+        String day = inputDateTime.substring(6, 8);
+        return year + "-" + month + "-" + day;
+    }
+
+    // 시간 변환 메서드
+    public static String convertToTime(String inputTime) {
+        String hour = inputTime.substring(0, 2);
+        String minute = inputTime.substring(2, 4);
+        return hour + ":" + minute;
+    }
+	
 }

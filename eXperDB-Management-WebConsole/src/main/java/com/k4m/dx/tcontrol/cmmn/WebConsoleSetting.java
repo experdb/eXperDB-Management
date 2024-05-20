@@ -15,7 +15,7 @@ public class WebConsoleSetting {
 
 	public static void main(String[] args) throws Exception {
 		String strLanguage ="";
-		String strVersion ="eXperDB-Management-WebConsole-15.1.0";
+		String strVersion ="eXperDB-Management-WebConsole-15.1.1";
 
 		String strDatabaseIp = "";
 		String strDatabasePort = "";

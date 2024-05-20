@@ -264,6 +264,8 @@ public class SecurityPolicyController {
 			
 			mv.addObject("profileUid",request.getParameter("profileUid"));
 			mv.addObject("result",result);
+			
+			System.out.println("#################="+result);
 			mv.setViewName("encrypt/securityPolicy/securityPolicyModify");
 
 		} catch (Exception e) {
@@ -612,7 +614,7 @@ public class SecurityPolicyController {
 				
 				String startDateTime = jsrow.get("startDateTime").toString()+"000000";
 				startDateTime =  startDateTime.replace("-","");
-				String endDateTime = jsrow.get("endDateTime").toString()+"235959";
+				String endDateTime = jsrow.get("endDateTime").toString()+"240000";
 				endDateTime =  endDateTime.replace("-","");
 				// 기간
 				r.setStartDateTime(startDateTime);
@@ -620,18 +622,30 @@ public class SecurityPolicyController {
 				
 				String startTime = jsrow.get("startTime").toString()+"00";
 				startTime =  startTime.replace(":","");
-				String endTime = jsrow.get("endTime").toString()+"59";
+				String endTime = jsrow.get("endTime").toString()+"00";
 				endTime =  endTime.replace(":","");
+				
+				System.out.println("@@@@@@@@@@@@startTime=" +startTime);
+				System.out.println("@@@@@@@@@@@@endTime=" +endTime);
 				//시간
 				r.setStartTime(startTime);
 				r.setEndTime(endTime);
 				
 				//OS 사용자
 				r.setOsLoginId(jsrow.get("osLoginId").toString());
-				//초
-				r.setMassiveTimeInterval(Integer.parseInt(jsrow.get("massiveTimeInterval").toString()));
-				//대량작업임계건수
-				r.setMassiveThreshold(Integer.parseInt(jsrow.get("massiveThreshold").toString()));
+				
+				if(jsrow.get("massiveTimeInterval").equals("")) {
+					r.setMassiveTimeInterval(-1);
+				}else {
+					//초
+					r.setMassiveTimeInterval(Integer.parseInt(jsrow.get("massiveTimeInterval").toString()));
+				}			
+				if(jsrow.get("massiveTimeInterval").equals("")) {
+					r.setMassiveThreshold(-1);
+				}else {
+					//대량작업임계건수
+					r.setMassiveThreshold(Integer.parseInt(jsrow.get("massiveThreshold").toString()));
+				}							
 				//규칙만족할때 접근허용-Y 접근거부-N
 				r.setWhitelistYesNo(jsrow.get("whitelistYesNo").toString());
 				
@@ -639,15 +653,16 @@ public class SecurityPolicyController {
 				String workday = jsrow.get("workDay").toString();
 				String data[] = workday.split(",");
 		        for(int j=0 ; j<data.length ; j++)
-		        {
-		            workDay += data[j].equals("월")||data[j].equals("MON")?SystemCode.Weekday.MONDAY : 0;
-		            workDay += data[j].equals("화")||data[j].equals("TUE")?SystemCode.Weekday.TUESDAY : 0;
-		            workDay += data[j].equals("수")||data[j].equals("WED")?SystemCode.Weekday.WEDNESDAY : 0;
-		            workDay += data[j].equals("목")||data[j].equals("THU")?SystemCode.Weekday.THURSDAY : 0;
-		            workDay += data[j].equals("금")||data[j].equals("FRI")?SystemCode.Weekday.FRIDAY : 0;
-		            workDay += data[j].equals("토")||data[j].equals("SAT")?SystemCode.Weekday.SATURDAY : 0;
-		            workDay += data[j].equals("일")||data[j].equals("SUN")?SystemCode.Weekday.SUNDAY : 0;
+		        {   	
+		        	workDay |= data[j].equals("월") || data[j].equals("MON") ? SystemCode.Weekday.MONDAY : 0;
+		            workDay |= data[j].equals("화") || data[j].equals("TUE") ? SystemCode.Weekday.TUESDAY : 0;
+		            workDay |= data[j].equals("수") || data[j].equals("WED") ? SystemCode.Weekday.WEDNESDAY : 0;
+		            workDay |= data[j].equals("목") || data[j].equals("THU") ? SystemCode.Weekday.THURSDAY : 0;
+		            workDay |= data[j].equals("금") || data[j].equals("FRI") ? SystemCode.Weekday.FRIDAY : 0;
+		            workDay |= data[j].equals("토") || data[j].equals("SAT") ? SystemCode.Weekday.SATURDAY : 0;
+		            workDay |= data[j].equals("일") || data[j].equals("SUN") ? SystemCode.Weekday.SUNDAY : 0;
 		        }
+		        
 				r.setWorkDay(workDay);
 				param3.add(r.toJSONString());
 			}
@@ -859,10 +874,20 @@ public class SecurityPolicyController {
 				r.setEndTime(endTime);
 				//OS 사용자
 				r.setOsLoginId(jsrow.get("osLoginId").toString());
-				//초
-				r.setMassiveTimeInterval(Integer.parseInt(jsrow.get("massiveTimeInterval").toString()));
-				//대량작업임계건수
-				r.setMassiveThreshold(Integer.parseInt(jsrow.get("massiveThreshold").toString()));
+				
+				if(jsrow.get("massiveTimeInterval").equals("")) {
+					r.setMassiveTimeInterval(-1);
+				}else {
+					//초
+					r.setMassiveTimeInterval(Integer.parseInt(jsrow.get("massiveTimeInterval").toString()));
+				}			
+				if(jsrow.get("massiveTimeInterval").equals("")) {
+					r.setMassiveThreshold(-1);
+				}else {
+					//대량작업임계건수
+					r.setMassiveThreshold(Integer.parseInt(jsrow.get("massiveThreshold").toString()));
+				}		
+				
 				//규칙만족할때 접근허용-Y 접근거부-N
 				r.setWhitelistYesNo(jsrow.get("whitelistYesNo").toString());
 				
@@ -871,13 +896,13 @@ public class SecurityPolicyController {
 				String data[] = workday.split(",");
 		        for(int j=0 ; j<data.length ; j++)
 		        {
-		            workDay += data[j].equals("월")||data[j].equals("MON")?SystemCode.Weekday.MONDAY : 0;
-		            workDay += data[j].equals("화")||data[j].equals("TUE")?SystemCode.Weekday.TUESDAY : 0;
-		            workDay += data[j].equals("수")||data[j].equals("WED")?SystemCode.Weekday.WEDNESDAY : 0;
-		            workDay += data[j].equals("목")||data[j].equals("THU")?SystemCode.Weekday.THURSDAY : 0;
-		            workDay += data[j].equals("금")||data[j].equals("FRI")?SystemCode.Weekday.FRIDAY : 0;
-		            workDay += data[j].equals("토")||data[j].equals("SAT")?SystemCode.Weekday.SATURDAY : 0;
-		            workDay += data[j].equals("일")||data[j].equals("SUN")?SystemCode.Weekday.SUNDAY : 0;
+		        	workDay |= data[j].equals("월") || data[j].equals("MON") ? SystemCode.Weekday.MONDAY : 0;
+		            workDay |= data[j].equals("화") || data[j].equals("TUE") ? SystemCode.Weekday.TUESDAY : 0;
+		            workDay |= data[j].equals("수") || data[j].equals("WED") ? SystemCode.Weekday.WEDNESDAY : 0;
+		            workDay |= data[j].equals("목") || data[j].equals("THU") ? SystemCode.Weekday.THURSDAY : 0;
+		            workDay |= data[j].equals("금") || data[j].equals("FRI") ? SystemCode.Weekday.FRIDAY : 0;
+		            workDay |= data[j].equals("토") || data[j].equals("SAT") ? SystemCode.Weekday.SATURDAY : 0;
+		            workDay |= data[j].equals("일") || data[j].equals("SUN") ? SystemCode.Weekday.SUNDAY : 0;
 		        }
 				r.setWorkDay(workDay);
 				param3.add(r.toJSONString());

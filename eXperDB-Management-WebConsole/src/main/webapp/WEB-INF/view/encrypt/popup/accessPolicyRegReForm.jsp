@@ -52,7 +52,7 @@ function fn_mod_makeFromHour(){
 	var hourHtml ="";
 	
 	hourHtml += '<select class="form-control form-control-xsm" style="margin-right: 1rem;" name="mod_from_exe_h" id="mod_from_exe_h">';	
-	for(var i=0; i<=23; i++){
+	for(var i=0; i<=24; i++){
 		if(i >= 0 && i<10){
 			hour = "0" + i;
 		}else{
@@ -96,7 +96,7 @@ function fn_mod_makeToHour(){
 	var hourHtml ="";
 	
 	hourHtml += '<select class="form-control form-control-xsm" style="margin-right: 1rem;" name="mod_to_exe_h" id="mod_to_exe_h">';	
-	for(var i=0; i<=23; i++){
+	for(var i=0; i<=24; i++){
 		if(i >= 0 && i<10){
 			hour = "0" + i;
 		}else{
@@ -450,13 +450,13 @@ function fn_acc_update(){
 								<div class="form-group row" style="margin-bottom:10px;">
 									<label for="ins_connect_nm" class="col-sm-2 col-form-label-sm pop-label-index" style="padding-top:calc(0.5rem-1px);">
 										<i class="item-icon fa fa-dot-circle-o"></i>
-										<spring:message code="encrypt_policy_management.MAC_Address"/>
+										<spring:message code="encrypt_policy_management.Threshold"/>
 									</label>			
 									<div class="col-sm-1_5">
 										<input type="number" class="form-control form-control-xsm" id="mod_massiveThreshold" name="mod_massiveThreshold"   min="0" onKeyPress="NumObj(this);" />														
 									</div>
-									<div class="col-sm-2_5" style="margin-top:3px; margin-left:-20px;">
-										<spring:message code="encrypt_policy_management.Threshold"/>
+									<div style="margin-top:3px; ">
+										<spring:message code="encrypt_policy_management.count"/> /
 									</div>		
 									<div class="col-sm-1_5">
 										<input type="number" class="form-control form-control-xsm" id="mod_massiveTimeInterval" name="mod_massiveTimeInterval" min="0" onKeyPress="NumObj(this);"/>												
@@ -487,7 +487,7 @@ function fn_acc_update(){
 								<div class="form-group row" style="margin-bottom:10px;">
 									<label for="ins_connect_nm" class="col-sm-2 col-form-label-sm pop-label-index" style="padding-top:calc(0.5rem-1px);">
 										<i class="item-icon fa fa-dot-circle-o"></i>
-										<spring:message code="encrypt_policy_management.MAC_Address"/>
+										<spring:message code="encrypt_policy_management.Rules"/>
 									</label>
 									<div class="col-sm-2">
 										<div class="form-check">
