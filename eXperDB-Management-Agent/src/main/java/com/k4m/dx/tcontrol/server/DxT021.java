@@ -117,8 +117,8 @@ public class DxT021 extends SocketCtl{
 			
 			
 			//network정보
-			ArrayList<HashMap<String, String>> ipList = NetworkUtil.getNetworkInfo();
-			resultHP.put(ProtocolID.CMD_NETWORK, ipList);
+			//ArrayList<HashMap<String, String>> ipList = NetworkUtil.getNetworkInfo();
+			resultHP.put(ProtocolID.CMD_NETWORK, null);
 
 			//PostgreSQL 버젼, DATA 경로, LOG 경로, ARCHIVE 경로
 			List<ServerInfoVO> serverInfoList = selectPostgreSqlServerInfo(serverInfoObj);
