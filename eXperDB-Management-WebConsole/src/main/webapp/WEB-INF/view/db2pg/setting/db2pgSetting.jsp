@@ -1238,7 +1238,7 @@ function fn_buttonAut(){
 										<spring:message code="common.work_name" />
 									</label>
 									<div class="col-sm-8">
-										<input type="text" class="form-control form-control-sm" maxlength="20" id="wrk_nm" name="wrk_nm" onkeyup="fn_checkWord(this,20)" placeholder='20<spring:message code='message.msg188'/>' onblur="this.value=this.value.trim()"/>
+										<input type="text" class="form-control form-control-sm" maxlength="50" id="wrk_nm" name="wrk_nm" onkeyup="fn_checkWord(this,50)" placeholder='50<spring:message code='message.msg188'/>' onblur="this.value=this.value.trim()"/>
 									</div>
 									<div class="col-sm-2">
 										<button type="button" class="btn btn-inverse-danger btn-fw" style="width: 115px;" onclick="fn_check()"><spring:message code="common.overlap_check" /></button>
@@ -1256,7 +1256,7 @@ function fn_buttonAut(){
 							</div>
 							
 							<div class="card-body">
-								<div class="top-modal-footer" style="text-align: center !important; margin: -20px 0 -30px; -20px;" >
+								<div class="top-modal-footer" style="text-align: center !important; margin: -20px 0 -30px -20px;" >
 									<input class="btn btn-primary" width="200px;" style="vertical-align:middle;" type="button"  onclick="fn_copy_save()" value='<spring:message code="common.registory" />' />
 									<button type="button" class="btn btn-light" data-dismiss="modal"><spring:message code="common.cancel"/></button>
 								</div>
