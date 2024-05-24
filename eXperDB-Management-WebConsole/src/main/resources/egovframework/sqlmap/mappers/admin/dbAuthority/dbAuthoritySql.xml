@@ -412,7 +412,6 @@
                   , #{point_restore_aut_yn}
                   , #{dump_restore_aut_yn}
                   , #{restore_his_aut_yn}
-                  , #{restore_his_aut_yn}
                   
          <if test='scale_yn_chk != null and (scale_yn_chk eq "Y".toString())'>
                 , #{scale_cng_aut_yn}
