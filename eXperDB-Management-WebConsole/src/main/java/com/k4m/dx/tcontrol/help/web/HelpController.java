@@ -95,10 +95,10 @@ public class HelpController {
 				String entityId = loginVo.getEctityUid();
 				
 				AgentMonitoringServiceCall amsc = new AgentMonitoringServiceCall();	
-				list = amsc.selectSystemStatus(restIp, restPort, strTocken, loginId, entityId);
+				list = amsc.selectLicense(restIp, restPort, strTocken, loginId, entityId);
 				listResult = (List<Map<String, Object>>) list;
-				
-				for(int i=0; i<listResult.size(); i++){
+
+				for(int i=0; i<listResult.size(); i++){			
 					if(listResult.get(i).get("status").equals("licenseCheck")){
 						license = listResult.get(i).get("logMessage").toString();
 						System.out.println(license);

@@ -358,7 +358,7 @@ public class KeyManageController {
 				JSONObject jsrow = (JSONObject) rows01.get(i);
 				key.setBinUid(jsrow.get("binuid").toString());
 				key.setBinStatusCode(jsrow.get("binstatuscode").toString());
-				key.setValidEndDateTime(jsrow.get("validEndDateTime").toString());				
+				key.setValidEndDateTime(jsrow.get("validEndDateTime").toString()+".999");				
 				param2.add(key.toJSONString());
 			}	
 			try{

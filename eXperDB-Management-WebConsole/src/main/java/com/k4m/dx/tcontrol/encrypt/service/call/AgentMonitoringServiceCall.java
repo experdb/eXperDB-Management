@@ -58,6 +58,8 @@ public class AgentMonitoringServiceCall {
 			ArrayList list = (ArrayList) resultJson.get("list");
 			if(list != null) {
 				for (int j = 0; j < list.size(); j++) {
+					
+					
 					JSONObject jsonObj = (JSONObject) list.get(j);
 
 					Gson gson = new Gson();
@@ -102,10 +104,85 @@ public class AgentMonitoringServiceCall {
 						jsonArray.add(jObj);
 					}
 					
-					if(targetType.equals("LICENSE") && targetName.equals("LICENSE")){
-						JSONObject jObj = new JSONObject();
-						jObj.put("monitoredName", monitoredName);
-						jObj.put("logMessage", logMessage);
+//					 if(targetType.equals("LICENSE") && targetName.equals("LICENSE")){
+//					 	JSONObject jObj = new JSONObject();
+//					 	jObj.put("monitoredName", monitoredName);
+//					  	jObj.put("logMessage", logMessage);
+//						jObj.put("status", "licenseCheck");
+//						jsonArray.add(jObj);
+//					}
+					
+				}
+			}
+		}else{
+			JSONObject jObj = new JSONObject();
+			jObj.put("resultCode", resultCode);
+			jObj.put("resultMessage", resultMessage);
+			jsonArray.add(jObj);
+		}
+		
+		
+		return jsonArray;
+	}
+	
+	
+	
+	public JSONArray selectLicense(String restIp, int restPort, String strTocken, String loginId, String entityId) throws Exception {
+
+		JSONObject result = new JSONObject();
+		JSONArray jsonArray = new JSONArray();
+		
+		EncryptCommonService api = new EncryptCommonService(restIp, restPort);
+
+		String strService = SystemCode.ServiceName.MONITOR_SERVICE;
+		String strCommand = SystemCode.ServiceCommand.SELECTSYSTEMSTATUS;
+
+		SystemStatus param = new SystemStatus();
+
+		param.setMonitoredUid(""); //전체
+
+
+		//JSONObject parameters = new JSONObject();
+		//parameters.put("profile", vo);
+		
+		HashMap body = new HashMap();
+		body.put(TypeUtility.getJustClassName(param.getClass()), param.toJSONString());
+
+		String parameters = TypeUtility.makeRequestBody(body);
+
+		HashMap header = new HashMap();
+		//header.put(SystemCode.FieldName.LOGIN_ID, loginId);
+		//header.put(SystemCode.FieldName.ENTITY_UID, entityId);
+		header.put(SystemCode.FieldName.LOGIN_ID, loginId);
+		header.put(SystemCode.FieldName.ENTITY_UID, entityId);
+		header.put(SystemCode.FieldName.TOKEN_VALUE, strTocken);
+
+		JSONObject resultJson = api.callService(strService, strCommand, header, parameters);
+		
+
+		String resultCode = (String) resultJson.get("resultCode");
+		String resultMessage = (String) resultJson.get("resultMessage");
+		resultMessage = new String(resultMessage.getBytes("iso-8859-1"),"UTF-8"); 
+		
+		System.out.println("resultCode : " + resultCode + " resultMessage : " + resultMessage);
+		
+		if(resultCode.equals(SystemCode.ResultCode.SUCCESS)) {
+			
+			ArrayList list = (ArrayList) resultJson.get("list");
+			if(list != null) {
+				for (int j = 0; j < list.size(); j++) {
+					
+					
+					JSONObject jsonObj = (JSONObject) list.get(j);
+
+					Gson gson = new Gson();
+					SystemStatus systemStatus = new SystemStatus();
+					systemStatus = gson.fromJson(jsonObj.toJSONString(), systemStatus.getClass());
+					
+					 if(systemStatus.getTargetType().equals("LICENSE") && systemStatus.getTargetName().equals("LICENSE")){
+					 	JSONObject jObj = new JSONObject();
+					 	jObj.put("monitoredName", systemStatus.getMonitoredName());
+					  	jObj.put("logMessage", systemStatus.getLogMessage());
 						jObj.put("status", "licenseCheck");
 						jsonArray.add(jObj);
 					}
@@ -122,4 +199,5 @@ public class AgentMonitoringServiceCall {
 		
 		return jsonArray;
 	}
+	
 }
