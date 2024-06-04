@@ -279,7 +279,7 @@ function fn_tableAddCallback(rowList, tableGbn, totalCnt){
 						<th scope="row" class="ico_t1"><spring:message code="common.work_description" /></th>
 						<td>
 							<div class="textarea_grp">
-								<textarea name="db2pg_trsf_wrk_exp" id="db2pg_trsf_wrk_exp" maxlength="25" onkeyup="fn_checkWord(this,25)" placeholder="25<spring:message code='message.msg188'/>"><c:out value="${db2pg_trsf_wrk_exp}"/></textarea>
+								<textarea name="db2pg_trsf_wrk_exp" id="db2pg_trsf_wrk_exp" maxlength="100" onkeyup="fn_checkWord(this,100)" placeholder="100<spring:message code='message.msg188'/>"><c:out value="${db2pg_trsf_wrk_exp}"/></textarea>
 							</div>
 						</td>
 					</tr>

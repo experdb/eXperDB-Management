@@ -93,9 +93,14 @@
 				}, */
 				{ data : "wrk_exp",
 					render : function(data, type, full, meta) {	 	
-						var html = '';					
-						html += '<span title="'+full.wrk_exp+'">' + full.wrk_exp + '</span>';
-						return html;
+						// var html = '';					
+						// html += '<span title="'+full.wrk_exp+'">' + full.wrk_exp + '</span>';
+						// return html;
+						if(full.wrk_exp.length < 31){
+							return full.wrk_exp;
+						}else{ 
+							return full.wrk_exp.substr(0, 31) + " ···";
+						}
 					},
 					defaultContent : ""
 				},

@@ -33,9 +33,14 @@ function fn_init(){
 		},
 		{data : "scd_exp",
 				render : function(data, type, full, meta) {	 	
-					var html = '';					
-					html += '<span title="'+full.scd_exp+'">' + full.scd_exp + '</span>';
-					return html;
+					// var html = '';					
+					// html += '<span title="'+full.scd_exp+'">' + full.scd_exp + '</span>';
+					// return html;
+					if(full.scd_exp.length < 31){
+						return full.scd_exp;
+					}else{ 
+						return full.scd_exp.substr(0, 31) + " ···";
+					}
 				},
 				defaultContent : ""
 			},

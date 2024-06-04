@@ -129,7 +129,7 @@
 	      		AND TWG.EXE_RSLT_CD=#{exe_rslt_cd}
 	      	</if>  
 	      	<if test="wrk_nm != null and wrk_nm != '' ">
-	      		AND C.WRK_NM=#{wrk_nm}
+	      		AND C.WRK_NM LIKE CONCAT('%',#{wrk_nm},'%')
 	      	</if>
       		ORDER BY LST_MDF_DTM DESC   		
       	)AA    
