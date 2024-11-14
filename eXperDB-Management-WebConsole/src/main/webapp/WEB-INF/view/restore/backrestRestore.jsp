@@ -720,6 +720,14 @@
    		table_db.tables().header().to$().find('th:eq(1)').css('min-width', '470px');
 	}
 	
+	function removeKoreanCharacters(input) {
+		if (/[\u3131-\u318E\uAC00-\uD7A3]+/.test(input.value)) {
+			showSwalIcon('<spring:message code="encrypt_msg.msg22" />', '<spring:message code="common.close" />', '', 'error');	
+	    }
+		
+        input.value = input.value.replace(/[\u3131-\u318E\uAC00-\uD7A3]+/g, '');
+    }
+	
 </script>
 
 <%@include file="../cmmn/passwordConfirm.jsp"%>
@@ -807,7 +815,7 @@
 											</label>
 		
 											<div class="col-sm-8">
-												<input type="text" class="form-control form-control-sm" maxlength="20" id="restore_nm" name="restore_nm" onkeyup="fn_checkWord(this,20)" placeholder="20<spring:message code='message.msg188'/>"" onchange="fn_restoreNm_Chg();" onblur="this.value=this.value.trim()" tabindex=1 required />
+												<input type="text" class="form-control form-control-sm" maxlength="20" id="restore_nm" name="restore_nm" onkeyup="fn_checkWord(this,20)" placeholder="20<spring:message code='message.msg188'/>"" onchange="fn_restoreNm_Chg();" onblur="this.value=this.value.trim()" oninput="removeKoreanCharacters(this)" tabindex=1 required />
 											</div>
 		
 											<div class="col-sm-2">
