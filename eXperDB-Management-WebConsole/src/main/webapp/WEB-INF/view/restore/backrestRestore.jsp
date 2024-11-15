@@ -174,7 +174,7 @@
 			$("#pitr_div").show();
 		}else if(selected_type == "full"){
 			document.getElementById("bckr_restore_type_alert").style.width = "665px"
-			$("#bckr_restore_type_alert", "#restoreBackrestRegForm").html('<spring:message code="restore.type.full.exp" />');
+			$("#bckr_restore_type_alert", "#restoreBackrestRegForm").html('<spring:message code="restore.type.full.exp" /> <br> <div style="color:red">pg_wal 디렉토리가 심볼릭 link 되어 있을경우만 완전복구가 가능합니다</div>');
 			$("#bckr_restore_type_alert", "#restoreBackrestRegForm").show();
 			$("#dbList_div").hide();
 			$("#pitr_div").hide();

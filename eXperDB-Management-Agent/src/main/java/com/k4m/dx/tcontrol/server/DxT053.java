@@ -68,7 +68,7 @@ public class DxT053 extends SocketCtl {
 			} else if(restoreType.equals("pitr")){
 				String time_restore = String.valueOf(jObj.get(ProtocolID.TIME_RESTORE));
 				restoreCmd = "pgbackrest --stanza=experdb --config=$PGHOME/etc/pgbackrest/config/" + restoreWrkName + ".conf --type=time \"--target="
-						+ time_restore + "\" --target-action=promote --delta restore > " + pgBlogPath + "/" + exelog + ".log";
+						+ time_restore + "\" --target-action=promote --delta --link-all restore > " + pgBlogPath + "/" + exelog + ".log";
 			} else if(restoreType.equals("ropd")) {			
 				JSONParser parser = new JSONParser();
 				JSONObject jsonObject = (JSONObject) parser.parse(String.valueOf(jObj.get(ClientProtocolID.DBLIST_MAP)));
@@ -132,6 +132,17 @@ public class DxT053 extends SocketCtl {
 				br.close();
 				
 				vo.setRESTORE_CNDT("0");
+				
+				if (restoreType.equals("full")) {
+					String restoreAfterCmd = "rm -rf $PGDATA/pg_wal && ln -s $PGWAL $PGDATA";
+					String afterCmdRst = util.getPidExec(restoreAfterCmd);
+					
+					if(afterCmdRst == "" || afterCmdRst == null) {
+						errLogger.error("[ERROR] DxT053 Restore after cmd error{} " + afterCmdRst);
+					}
+						
+				}
+				
 				
 //				if(restore_type.equals("pitr")) {
 //					String pgRecoveryCmd = "rm -rf $PGDATA/recovery.signal";
