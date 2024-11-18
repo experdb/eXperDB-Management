@@ -133,16 +133,24 @@ public class DxT053 extends SocketCtl {
 				
 				vo.setRESTORE_CNDT("0");
 				
-				if (restoreType.equals("full")) {
-					String restoreAfterCmd = "rm -rf $PGDATA/pg_wal && ln -s $PGWAL $PGDATA";
-					String afterCmdRst = util.getPidExec(restoreAfterCmd);
-					
-					if(afterCmdRst == "" || afterCmdRst == null) {
-						errLogger.error("[ERROR] DxT053 Restore after cmd error{} " + afterCmdRst);
-					}
-						
-				}
+				//추가 (2024-11-18)
+				//PGWAL 환경변수가 있을 때 pg_wal 분리 -> $PGDATA/pg_wal 삭제 후 다시 심볼릭링크
+				String pgwalPathCmd = "echo $PGWAL";
+				String pgwalPathRst = util.getPidExec(pgwalPathCmd);
 				
+				if(pgwalPathRst.toString().trim().equals("")) {
+					
+				}else {
+					if (restoreType.equals("full")) {
+						String restoreAfterCmd = "rm -rf $PGDATA/pg_wal && ln -s $PGWAL $PGDATA";
+						String afterCmdRst = util.getPidExec(restoreAfterCmd);
+						
+						if(afterCmdRst == "" || afterCmdRst == null) {
+							errLogger.error("[ERROR] DxT053 Restore after cmd error{} " + afterCmdRst);
+						}
+							
+					}
+				}
 				
 //				if(restore_type.equals("pitr")) {
 //					String pgRecoveryCmd = "rm -rf $PGDATA/recovery.signal";
