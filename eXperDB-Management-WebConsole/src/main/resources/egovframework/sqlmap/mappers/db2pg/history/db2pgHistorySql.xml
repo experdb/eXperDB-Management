@@ -310,7 +310,7 @@
 			FROM T_DB2PG_MIG_HISTORY		
 			WHERE 1=1
 			<if test="wrk_nm != null and wrk_nm != '' ">
-	      		AND WRK_NM = #{wrk_nm}
+	      		AND WRK_NM LIKE CONCAT('%',#{wrk_nm},'%')
 	      	</if>  	
 	      	<if test="migStartDate != null and migStartDate != '' ">
       			<if test="migEndDate != null and migEndDate != '' ">

@@ -70,7 +70,15 @@ function fn_init(){
 				  return '<span onClick=javascript:fn_db2pgConfigLayer("'+full.db2pg_ddl_wrk_nm+'"); class="bold">' + full.db2pg_ddl_wrk_nm + '</span>';
 			}
 		},
-		{data : "db2pg_ddl_wrk_exp", className : "dt-left", defaultContent : ""}, 
+		{data : "db2pg_ddl_wrk_exp", className : "dt-left", defaultContent : ""
+		,"render": function (data, type, full) {				
+				if(full.db2pg_ddl_wrk_exp.length < 31){
+					return full.db2pg_ddl_wrk_exp;
+				}else{ 
+					return full.db2pg_ddl_wrk_exp.substr(0, 31) + " ···";
+				}
+			}
+		}, 
 		{data : "dbms_dscd", className : "dt-center", defaultContent : ""}, 
 		{data : "ipadr", className : "dt-center", defaultContent : ""},
 		{data : "dtb_nm", className : "dt-center", defaultContent : ""},
@@ -102,7 +110,15 @@ function fn_init(){
 				  return '<span onClick=javascript:fn_db2pgConfigLayer("'+full.db2pg_trsf_wrk_nm+'"); class="bold">' + full.db2pg_trsf_wrk_nm + '</span>';
 			}
 		},
-		{data : "db2pg_trsf_wrk_exp", className : "dt-left", defaultContent : ""}, 
+		{data : "db2pg_trsf_wrk_exp", className : "dt-left", defaultContent : ""
+		,"render": function (data, type, full) {				
+				if(full.db2pg_trsf_wrk_exp.length < 31){
+					return full.db2pg_trsf_wrk_exp;
+				}else{ 
+					return full.db2pg_trsf_wrk_exp.substr(0, 31) + " ···";
+				}
+			}
+		}, 
 		{data : "source_dbms_dscd", className : "dt-center", defaultContent : ""}, 
 		{data : "source_ipadr", className : "dt-center", defaultContent : ""}, 
 		{data : "source_dtb_nm", className : "dt-center", defaultContent : ""}, 
@@ -1250,7 +1266,7 @@ function fn_buttonAut(){
 										<spring:message code="common.work_description" />
 									</label>
 									<div class="col-sm-10">
-										<textarea class="form-control" id="wrk_exp" name="wrk_exp" rows="2" maxlength="25" onkeyup="fn_checkWord(this,25)" placeholder="25<spring:message code='message.msg188'/>" required tabindex=2></textarea>
+										<textarea class="form-control" id="wrk_exp" name="wrk_exp" rows="2" maxlength="100" onkeyup="fn_checkWord(this,100)" placeholder="100<spring:message code='message.msg188'/>" required tabindex=2></textarea>
 									</div>
 								</div>
 							</div>

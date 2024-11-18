@@ -117,7 +117,7 @@
 									</label>
 
 									<div class="col-sm-10">
-										<input type="text" class="form-control" maxlength="20" id="mod_wrk_nm" name="mod_wrk_nm" onkeyup="fn_checkWord(this,20)" placeholder='20<spring:message code='message.msg188'/>' onblur="this.value=this.value.trim()" tabindex=1 required readonly/>
+										<input type="text" class="form-control" maxlength="50" id="mod_wrk_nm" name="mod_wrk_nm" onkeyup="fn_checkWord(this,50)" placeholder='50<spring:message code='message.msg188'/>' onblur="this.value=this.value.trim()" tabindex=1 required readonly/>
 									</div>
 								</div>
 

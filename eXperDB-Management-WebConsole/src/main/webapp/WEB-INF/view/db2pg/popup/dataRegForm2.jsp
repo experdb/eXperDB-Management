@@ -990,7 +990,7 @@ function fn_search_tableInfo_mig(){
 												<spring:message code="common.work_description" />
 											</label>
 											<div class="col-sm-10">
-												<textarea class="form-control" id="db2pg_trsf_wrk_exp" name="db2pg_trsf_wrk_exp" rows="2" maxlength="25" onkeyup="fn_checkWord(this,25)" placeholder="25<spring:message code='message.msg188'/>"></textarea>
+												<textarea class="form-control" id="db2pg_trsf_wrk_exp" name="db2pg_trsf_wrk_exp" rows="2" maxlength="100" onkeyup="fn_checkWord(this,100)" placeholder="100<spring:message code='message.msg188'/>"></textarea>
 											</div>
 										</div>
 									</div>
