@@ -18,6 +18,7 @@ import com.k4m.dx.tcontrol.db.repository.vo.WrkExeVO;
 import com.k4m.dx.tcontrol.socket.ProtocolID;
 import com.k4m.dx.tcontrol.socket.SocketCtl;
 import com.k4m.dx.tcontrol.socket.TranCodeType;
+import com.k4m.dx.tcontrol.util.BackupRunCommandExec;
 import com.k4m.dx.tcontrol.util.CommonUtil;
 import com.k4m.dx.tcontrol.util.RunCommandExec;
 
@@ -119,7 +120,7 @@ public class DxT034 extends SocketCtl {
 
 				socketLogger.info("[COMMAND] " + strCommand);
 
-				RunCommandExec r = new RunCommandExec(strCommand);
+				BackupRunCommandExec r = new BackupRunCommandExec(strCommand);
 				
 				//명령어 실행
 				r.start();
