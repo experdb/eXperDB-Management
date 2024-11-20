@@ -142,7 +142,7 @@ public class DxT053 extends SocketCtl {
 					
 				}else {
 					if (restoreType.equals("full")) {
-						String restoreAfterCmd = "rm -rf $PGDATA/pg_wal && ln -s $PGWAL $PGDATA";
+						String restoreAfterCmd = "rm -rf $PGDATA/pg_wal && ln -s $PGWAL $PGDATA/pg_wal";
 						String afterCmdRst = util.getPidExec(restoreAfterCmd);
 						
 						if(afterCmdRst == "" || afterCmdRst == null) {
