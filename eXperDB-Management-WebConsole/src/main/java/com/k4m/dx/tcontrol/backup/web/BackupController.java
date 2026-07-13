@@ -1904,7 +1904,8 @@ public class BackupController {
 			HashMap<String, Object> paramvalue = new HashMap<String, Object>();
 			paramvalue.put("datest", (String) request.getParameter("stdate"));
 			paramvalue.put("dateed", (String) request.getParameter("eddate"));
-			paramvalue.put("db_svr_id", (String) request.getParameter("db_svr_id"));
+			// 보안: db_svr_id는 정수만 허용하여 SQL 인젝션을 차단한다(매퍼도 #{} 바인딩 사용).
+			paramvalue.put("db_svr_id", Integer.parseInt(request.getParameter("db_svr_id")));
 
 			result = backupService.selectMonthBckScheduleSearch(paramvalue);
 		} catch (Exception e) {

@@ -1231,7 +1231,7 @@
 	    	LEFT OUTER JOIN T_BCK_WRKCNG_I B ON A.WRK_ID = B.WRK_ID 
 	    	LEFT OUTER JOIN T_DBSVRIPADR_I D ON D.DB_SVR_ID = B.DB_SVR_ID
    		WHERE 1=1
-	    	AND A.SCD_ID = '${value}'::numeric AND B.DB_SVR_IPADR_ID = D.DB_SVR_IPADR_ID 
+	    	AND A.SCD_ID = #{value}::numeric AND B.DB_SVR_IPADR_ID = D.DB_SVR_IPADR_ID 
 	    ORDER BY A.EXE_ORD
 	</select>
 </mapper>

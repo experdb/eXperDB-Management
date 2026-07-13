@@ -141,6 +141,10 @@ public class AccessHistoryController {
 			String search = request.getParameter("search");
 			String order_type = request.getParameter("order_type");
 			String order = request.getParameter("order");
+			// 보안: 정렬컬럼/방향/검색컬럼을 화이트리스트로 강제(SQL 인젝션 방지)
+			order_type = CmmnUtils.whiteList(order_type, "exedtm", "exedtm", "usr_id");
+			order = CmmnUtils.whiteList(order, "desc", "asc", "desc");
+			type = CmmnUtils.whiteList(type, "usr_nm", "usr_nm", "usr_id");
 			String sys_cd = request.getParameter("sys_cd");		
 			String locale_type = LocaleContextHolder.getLocale().getLanguage();
 			
@@ -222,6 +226,10 @@ public class AccessHistoryController {
 			String search = request.getParameter("search");
 			String order_type = request.getParameter("order_type");
 			String order = request.getParameter("order");
+			// 보안: 정렬컬럼/방향/검색컬럼을 화이트리스트로 강제(SQL 인젝션 방지)
+			order_type = CmmnUtils.whiteList(order_type, "exedtm", "exedtm", "usr_id");
+			order = CmmnUtils.whiteList(order, "desc", "asc", "desc");
+			type = CmmnUtils.whiteList(type, "usr_nm", "usr_nm", "usr_id");
 			String sys_cd = request.getParameter("sys_cd");		
 			String locale_type = LocaleContextHolder.getLocale().getLanguage();
 			
@@ -286,6 +294,10 @@ public class AccessHistoryController {
 			String search = request.getParameter("search");
 			String order_type = request.getParameter("order_type");
 			String order = request.getParameter("order");
+			// 보안: 정렬컬럼/방향/검색컬럼을 화이트리스트로 강제(SQL 인젝션 방지)
+			order_type = CmmnUtils.whiteList(order_type, "exedtm", "exedtm", "usr_id");
+			order = CmmnUtils.whiteList(order, "desc", "asc", "desc");
+			type = CmmnUtils.whiteList(type, "usr_nm", "usr_nm", "usr_id");
 			String sys_cd = request.getParameter("sys_cd");		
 			String locale_type = LocaleContextHolder.getLocale().getLanguage();
 			
@@ -376,6 +388,10 @@ public class AccessHistoryController {
 			String order_type = request.getParameter("excel_order_type");
 			String order = request.getParameter("excel_order");
 			String sys_cd = request.getParameter("excel_sys_cd");
+			// 보안: 정렬컬럼/방향/검색컬럼을 화이트리스트로 강제(SQL 인젝션 방지)
+			order_type = CmmnUtils.whiteList(order_type, "exedtm", "exedtm", "usr_id");
+			order = CmmnUtils.whiteList(order, "desc", "asc", "desc");
+			type = CmmnUtils.whiteList(type, "usr_nm", "usr_nm", "usr_id");
 			String locale_type = LocaleContextHolder.getLocale().getLanguage();
 
 			param.put("lgi_dtm_start", lgi_dtm_start);
