@@ -803,7 +803,7 @@
 		                SELECT 
 		                	wrk_id 
 		                FROM T_BCK_WRKCNG_I
-		                WHERE db_svr_id = ${db_svr_id}
+		                WHERE db_svr_id = #{db_svr_id}
 		                GROUP BY wrk_id
                     )
               )
