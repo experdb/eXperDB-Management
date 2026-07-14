@@ -13,7 +13,7 @@
 			SYS_CD,
 			SYS_CD_NM
 		FROM T_SYSDTL_C
-		WHERE GRP_CD = '${dbms_dscd}'
+		WHERE GRP_CD = #{dbms_dscd}
     </select>
 
 

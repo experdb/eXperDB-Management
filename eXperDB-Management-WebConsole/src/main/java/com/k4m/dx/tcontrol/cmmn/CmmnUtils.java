@@ -40,6 +40,27 @@ public class CmmnUtils {
 		
 	
 	//private ConfigurableApplicationContext context;
+
+	/**
+	 * SQL 인젝션 방지용 화이트리스트.
+	 * MyBatis ${} 자리(정렬컬럼/검색컬럼/정렬방향 등 바인딩이 불가한 식별자)에 들어가는 값을
+	 * 허용 목록과 대조하여, 일치하는 정규화된 값만 반환하고 그 외에는 기본값을 반환한다.
+	 *
+	 * @param value        요청으로 들어온 원본 값
+	 * @param defaultValue 허용 목록에 없을 때 사용할 안전한 기본값
+	 * @param allowed      허용되는 값 목록
+	 * @return 허용 목록 내의 정규화된 값 또는 기본값
+	 */
+	public static String whiteList(String value, String defaultValue, String... allowed) {
+		if (value != null) {
+			for (String a : allowed) {
+				if (a.equalsIgnoreCase(value)) {
+					return a;
+				}
+			}
+		}
+		return defaultValue;
+	}
 	
 	public static boolean saveHistory(HttpServletRequest request,@ModelAttribute("historyVO") HistoryVO historyVO) {
 		HttpSession session = request.getSession();
