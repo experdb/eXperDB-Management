@@ -158,6 +158,9 @@ public class ScheduleHistoryController {
 				String exe_result = request.getParameter("exe_result");
 				String order_type = request.getParameter("order_type");
 				String order = request.getParameter("order");
+				// 보안: 정렬컬럼/방향을 화이트리스트로 강제(SQL 인젝션 방지)
+				order_type = CmmnUtils.whiteList(order_type, "wrk_strt_dtm", "wrk_strt_dtm", "wrk_end_dtm");
+				order = CmmnUtils.whiteList(order, "desc", "asc", "desc");
 						
 				param.put("lgi_dtm_start", lgi_dtm_start);
 				param.put("lgi_dtm_end", lgi_dtm_end);
@@ -219,6 +222,9 @@ public class ScheduleHistoryController {
 				String exe_result = request.getParameter("exe_result");
 				String order_type = request.getParameter("order_type");
 				String order = request.getParameter("order");
+				// 보안: 정렬컬럼/방향을 화이트리스트로 강제(SQL 인젝션 방지)
+				order_type = CmmnUtils.whiteList(order_type, "wrk_strt_dtm", "wrk_strt_dtm", "wrk_end_dtm");
+				order = CmmnUtils.whiteList(order, "desc", "asc", "desc");
 						
 				param.put("lgi_dtm_start", lgi_dtm_start);
 				param.put("lgi_dtm_end", lgi_dtm_end);
