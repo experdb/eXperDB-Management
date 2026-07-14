@@ -1,11 +1,14 @@
 package com.k4m.dx.tcontrol.db2pg.history.web;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -16,10 +19,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.util.ResourceUtils;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.k4m.dx.tcontrol.admin.accesshistory.service.AccessHistoryService;
+import com.k4m.dx.tcontrol.admin.menuauthority.service.MenuAuthorityService;
 import com.k4m.dx.tcontrol.cmmn.CmmnUtils;
 import com.k4m.dx.tcontrol.common.service.HistoryVO;
 import com.k4m.dx.tcontrol.db2pg.cmmn.DB2PG_LOG;
@@ -37,7 +42,10 @@ public class Db2pgHistoryController {
 	
 	@Autowired
 	private AccessHistoryService accessHistoryService;
-	
+
+	@Autowired
+	private MenuAuthorityService menuAuthorityService;
+
 	/**
 	 * DB2PG 수행이력 화면을 보여준다.
 	 * 
@@ -228,7 +236,10 @@ public class Db2pgHistoryController {
 
 		try {
 			String trans_save_pth = request.getParameter("trans_save_pth");
-			db2pgResult  = DB2PG_LOG.db2pgFile(trans_save_pth);
+			// 보안: db2pg 루트 하위 경로만 허용(경로 조작 방지)
+			if (resolveUnderDb2pgRoot(trans_save_pth) != null) {
+				db2pgResult  = DB2PG_LOG.db2pgFile(trans_save_pth);
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -261,11 +272,15 @@ public class Db2pgHistoryController {
 		String[] result = null;
 		try {
 			String trans_save_pth = request.getParameter("trans_save_pth");			
-			lines = DB2PG_LOG.readLastLine(new File(trans_save_pth+"/result/progress.txt"), 1);
+			// 보안: db2pg 루트 하위 경로만 허용(경로 조작 방지)
+			File progressDir = resolveUnderDb2pgRoot(trans_save_pth);
+			if (progressDir != null) {
+				lines = DB2PG_LOG.readLastLine(new File(progressDir, "result/progress.txt"), 1);
+			}
 		} catch (Exception e) {
 			System.out.println("* cannot found progress.txt");
 		}
-		if(lines.size() > 0 && lines.get(0).contains(",")){
+		if(lines != null && lines.size() > 0 && lines.get(0).contains(",")){
 			result = lines.get(0).split(",");
 			mv.addObject("totalcnt",result[0]);
 			mv.addObject("nowcnt",result[1]);
@@ -332,8 +347,9 @@ public class Db2pgHistoryController {
 			String pattern = "yyyy-MM-dd HH:mm:ss"; 
 			SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
 			
-			File dirFile = new File(ddl_save_pth);
-			File [] fileList = dirFile.listFiles();
+			// 보안: db2pg 루트 하위 디렉토리만 허용(경로 조작 방지)
+			File dirFile = resolveUnderDb2pgRoot(ddl_save_pth);
+			File [] fileList = (dirFile != null) ? dirFile.listFiles() : null;
 			
 			if(fileList!=null){
 				 for(int i=0; i < fileList.length; i++){
@@ -353,6 +369,32 @@ public class Db2pgHistoryController {
 	}
 	
 	/**
+	 * 보안: 사용자 입력 경로가 db2pg 루트(db2pg_path) 하위인지 검증한다.
+	 * 유효하면 정규화된 File을, 루트 이탈·오류·빈값이면 null을 반환한다(경로 조작 방지).
+	 */
+	private File resolveUnderDb2pgRoot(String userPath) {
+		if (userPath == null || userPath.trim().isEmpty()) {
+			return null;
+		}
+		try {
+			Properties props = new Properties();
+			try (FileInputStream in = new FileInputStream(
+					ResourceUtils.getFile("classpath:egovframework/tcontrolProps/globals.properties"))) {
+				props.load(in);
+			}
+			File root = new File(props.getProperty("db2pg_path")).getCanonicalFile();
+			File target = new File(userPath).getCanonicalFile();
+			if (target.getPath().equals(root.getPath())
+					|| target.getPath().startsWith(root.getPath() + File.separator)) {
+				return target;
+			}
+		} catch (Exception e) {
+			// 검증 실패는 거부(null)로 처리
+		}
+		return null;
+	}
+
+	/**
 	 * DDL 수행이력 결과를 파일로 다운받는다.
 	 * 
 	 * @param request
@@ -361,21 +403,54 @@ public class Db2pgHistoryController {
 	@RequestMapping(value = "/db2pg/popup/db2pgFileDownload.do")
 	public  void fileDownload(HttpServletRequest request, HttpServletResponse response){
 		try {
-			//파일경로입력
-			
-			System.out.println("파일경로=" +request.getParameter("path")); 
-			System.out.println("파일명=" +request.getParameter("name")); 		
-			
-			String filePath = request.getParameter("path");
-			String fileName = request.getParameter("name");
-			String viewFileNm = request.getParameter("name");
+			// 인가: DB2PG 수행이력(MN00017) 읽기 권한 확인
+			CmmnUtils cu = new CmmnUtils();
+			List<Map<String, Object>> menuAut = cu.selectMenuAut(menuAuthorityService, "MN00017");
+			if (menuAut == null || menuAut.isEmpty() || "N".equals(menuAut.get(0).get("read_aut_yn"))) {
+				response.sendError(HttpServletResponse.SC_FORBIDDEN);
+				return;
+			}
+
+			String reqPath = request.getParameter("path");
+			String reqName = request.getParameter("name");
+			if (reqPath == null || reqPath.trim().isEmpty() || reqName == null || reqName.trim().isEmpty()) {
+				response.sendError(HttpServletResponse.SC_BAD_REQUEST);
+				return;
+			}
+
+			// 보안: 파일명은 basename만 사용하여 경로 구분자·상위경로(../)를 제거한다.
+			String safeName = new File(reqName).getName();
+
+			// 보안: 다운로드 루트(db2pg_path) 하위로만 허용한다(canonical 경로 prefix 검증).
+			Properties props = new Properties();
+			try (FileInputStream in = new FileInputStream(
+					ResourceUtils.getFile("classpath:egovframework/tcontrolProps/globals.properties"))) {
+				props.load(in);
+			}
+			File root = new File(props.getProperty("db2pg_path")).getCanonicalFile();
+			File target = new File(reqPath, safeName).getCanonicalFile();
+			if (!target.getPath().equals(root.getPath())
+					&& !target.getPath().startsWith(root.getPath() + File.separator)) {
+				response.sendError(HttpServletResponse.SC_FORBIDDEN);
+				return;
+			}
+			if (!target.exists() || !target.isFile()) {
+				response.sendError(HttpServletResponse.SC_NOT_FOUND);
+				return;
+			}
+
+			// 검증된 경로/파일명으로만 다운로드한다.
 			DownloadView fileDown = new DownloadView(); //파일다운로드 객체생성
-			fileDown.filDown(request, response, filePath, fileName, viewFileNm); //파일다운로드 
+			fileDown.filDown(request, response, target.getParent() + File.separator, target.getName(), safeName); //파일다운로드
 
 		} catch (Exception e) {
 			e.printStackTrace();
+			try {
+				response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+			} catch (IOException ignore) {
+			}
 		}
-	}	
+	}
 	
 	@RequestMapping(value = "/db2pg/cancel.do")
 	public @ResponseBody JSONObject db2pgCancel(HttpServletRequest request){
