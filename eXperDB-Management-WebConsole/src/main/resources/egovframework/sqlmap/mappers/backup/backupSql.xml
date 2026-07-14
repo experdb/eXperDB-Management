@@ -948,7 +948,7 @@
             	T_SCD_M A, T_BCK_WRKCNG_I B, T_SCD_D C
            	WHERE A.SCD_ID = C.SCD_ID
           		AND B.WRK_ID = C.WRK_ID
-          		AND B.DB_SVR_ID = ${db_svr_id}
+          		AND B.DB_SVR_ID = #{db_svr_id}
 		]]>
     </select>
   
