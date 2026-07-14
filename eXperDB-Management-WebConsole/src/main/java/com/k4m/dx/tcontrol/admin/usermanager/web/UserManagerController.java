@@ -125,6 +125,8 @@ public class UserManagerController {
 			accessHistoryService.insertHistory(historyVO);
 
 			String type = request.getParameter("type");
+			// 보안: 검색컬럼을 화이트리스트로 강제 (SQL 인젝션 방지)
+			type = CmmnUtils.whiteList(type, "usr_nm", "usr_nm", "usr_id");
 			String search = request.getParameter("search");
 			String use_yn = request.getParameter("use_yn");
 			String encp_use_yn = request.getParameter("encp_use_yn");
