@@ -1,6 +1,7 @@
 package com.k4m.dx.tcontrol.socket.listener;
 
 import java.io.InterruptedIOException;
+import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.Vector;
@@ -9,6 +10,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.k4m.dx.tcontrol.util.CommonUtil;
+import com.k4m.dx.tcontrol.util.FileUtil;
 
 /**
 * @author 박태혁
@@ -88,17 +90,26 @@ public class SocketListener implements Runnable {
 	
 	public void run() {
 		isRunning = true;
+		String allowedIp = loadAllowedIp();
 		try {
 		//ServerSocket	serverSocket = new ServerSocket(listenPort);
 		//serverSocket.setSoTimeout(1000);
-		
+
 		while ( !toBeShutdown) {
 			try {
 				Socket client = serverSocket.accept();
 
 				if ( toBeShutdown ) break;
-				
-				if (client != null && !client.isClosed()){	
+
+				if (client != null && !client.isClosed()){
+					if (!isAllowedClient(client, allowedIp)) {
+						InetAddress remoteAddr = client.getInetAddress();
+						socketLogger.warn("Blocked connection from disallowed source IP ["
+								+ (remoteAddr != null ? remoteAddr.getHostAddress() : "unknown")
+								+ "] (allowed: repoDB_ip=" + allowedIp + ", loopback)");
+						try { client.close(); } catch (Exception ce) { /* ignore */ }
+						continue;
+					}
 					Thread thread = new Thread(new DXTcontrolSocketExecute(client));
 					thread.start();
 					//socketLogger.info("Thread가 종료될때까지 기다립니다.");
@@ -134,8 +145,41 @@ public class SocketListener implements Runnable {
 		} catch (Exception e) {
 			errLogger.error("Fail to Closing Socket [" + e.toString() + "]");
 		} finally {
-			
+
 		}
+	}
+
+	/**
+	 * Loads the allowed source IP (repository DB host) from context.properties once.
+	 * Returns an empty string when the value is missing (validation is then skipped).
+	 */
+	private String loadAllowedIp() {
+		try {
+			String ip = FileUtil.getPropertyValue("context.properties", "repoDB_ip");
+			return ip == null ? "" : ip.trim();
+		} catch (Exception e) {
+			errLogger.error("Failed to load repoDB_ip for source IP validation [" + e.toString() + "]");
+			return "";
+		}
+	}
+
+	/**
+	 * Allows a client only when it originates from loopback or the configured repoDB_ip.
+	 * When repoDB_ip is not configured, validation is skipped (fail-open) with a warning.
+	 */
+	private boolean isAllowedClient(Socket client, String allowedIp) {
+		InetAddress addr = client.getInetAddress();
+		if (addr == null) {
+			return false;
+		}
+		if (addr.isLoopbackAddress()) {
+			return true;
+		}
+		if (allowedIp == null || allowedIp.isEmpty()) {
+			socketLogger.warn("repoDB_ip is not configured; skipping source IP validation [" + addr.getHostAddress() + "]");
+			return true;
+		}
+		return allowedIp.equals(addr.getHostAddress());
 	}
 
 }
