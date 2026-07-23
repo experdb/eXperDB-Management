@@ -1964,6 +1964,9 @@ public List<HashMap<String, String>> dumpShow(String IP, int PORT,String cmd) {
 				
 				JSONObject jObj = new JSONObject();
 				
+				// KVE-2026-1573: CDC connection test disabled; remote command injection sink removed (CDC no longer used).
+				// Do NOT re-enable the agent command execution below without input validation / removing the shell sink.
+				/*
 				jObj.put(ClientProtocolID.DX_EX_CODE, ClientTranCodeType.DxT037);
 				jObj.put(ClientProtocolID.REQ_CMD, cmd);
 				
@@ -1975,6 +1978,10 @@ public List<HashMap<String, String>> dumpShow(String IP, int PORT,String cmd) {
 				objList = CA.dxT037(jObj);
 			
 				CA.close();
+				*/
+				JSONObject objList = new JSONObject();
+				objList.put(ClientProtocolID.RESULT_CODE, "1");
+				objList.put(ClientProtocolID.ERR_MSG, "CDC connection test is disabled.");
 				
 				String strErrMsg = (String)objList.get(ClientProtocolID.ERR_MSG);
 				String strErrCode = (String)objList.get(ClientProtocolID.ERR_CODE);
@@ -2265,12 +2272,15 @@ System.out.println("=====cmd1123123123" + cmd);
 		JSONObject result = new JSONObject();
 
 		try {
-			JSONObject objList;
-
+			// KVE-2026-1573: CDC topic list disabled; remote command injection sink removed (CDC no longer used).
+			// Do NOT re-enable the agent command execution below without input validation / removing the shell sink.
+			/*
 			ClientAdapter CA = new ClientAdapter(IP, PORT);
 			CA.open();
 
 			objList = CA.dxT041(ClientTranCodeType.DxT041, serverObj);
+			*/
+			JSONObject objList = new JSONObject();
 
 			String strErrMsg = (String) objList.get(ClientProtocolID.ERR_MSG);
 			String strDxExCode = (String) objList.get(ClientProtocolID.DX_EX_CODE);
