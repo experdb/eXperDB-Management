@@ -1085,7 +1085,9 @@ public class TransController {
 	 * @return result
 	 * @throws Exception
 	 */
-	@RequestMapping(value="/selectTargetTopicMappList.do")
+	// KVE-2026-1573: endpoint disabled to remove remote command injection (CDC no longer used).
+	// Command execution sink is also disabled in ClientInfoCmmn#trans_topic_List.
+	// @RequestMapping(value="/selectTargetTopicMappList.do")
 	public @ResponseBody JSONObject selectTargetTopicMappList(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request) {
 		
 		JSONObject result = new JSONObject();
