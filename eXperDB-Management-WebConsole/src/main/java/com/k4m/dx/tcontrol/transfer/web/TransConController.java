@@ -86,7 +86,9 @@ public class TransConController {
 	 * @return result
 	 * @throws Exception
 	 */
-	@RequestMapping(value = "/kafkaConnectionTest.do")
+	// KVE-2026-1573: endpoint disabled to remove remote command injection (CDC no longer used).
+	// Command execution sink is also disabled in ClientInfoCmmn#kafkaConnectionTest.
+	// @RequestMapping(value = "/kafkaConnectionTest.do")
 	@ResponseBody
 	public Map<String, Object> kafkaConnectionTest(HttpServletResponse response, HttpServletRequest request) {
 		Map<String, Object> result = new HashMap<String, Object>();
