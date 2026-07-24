@@ -106,7 +106,7 @@ public class SocketListener implements Runnable {
 						InetAddress remoteAddr = client.getInetAddress();
 						socketLogger.warn("Blocked connection from disallowed source IP ["
 								+ (remoteAddr != null ? remoteAddr.getHostAddress() : "unknown")
-								+ "] (allowed: repoDB_ip=" + allowedIp + ", loopback)");
+								+ "] (allowed: repoDB_ip=" + allowedIp + ")");
 						try { client.close(); } catch (Exception ce) { /* ignore */ }
 						continue;
 					}
@@ -150,8 +150,9 @@ public class SocketListener implements Runnable {
 	}
 
 	/**
-	 * Loads the allowed source IP (repository DB host) from context.properties once.
-	 * Returns an empty string when the value is missing (validation is then skipped).
+	 * Loads the allowed source IP from context.properties once. The WebConsole runs on
+	 * the repository DB host, so repoDB_ip is the WebConsole address.
+	 * Returns an empty string when the value is missing.
 	 */
 	private String loadAllowedIp() {
 		try {
@@ -164,20 +165,18 @@ public class SocketListener implements Runnable {
 	}
 
 	/**
-	 * Allows a client only when it originates from loopback or the configured repoDB_ip.
-	 * When repoDB_ip is not configured, validation is skipped (fail-open) with a warning.
+	 * Allows a client only when its source IP matches the configured repoDB_ip
+	 * (the WebConsole host). Loopback is not exempt from this check.
+	 * When repoDB_ip is not configured the connection is denied (fail-closed).
 	 */
 	private boolean isAllowedClient(Socket client, String allowedIp) {
 		InetAddress addr = client.getInetAddress();
 		if (addr == null) {
 			return false;
 		}
-		if (addr.isLoopbackAddress()) {
-			return true;
-		}
 		if (allowedIp == null || allowedIp.isEmpty()) {
-			socketLogger.warn("repoDB_ip is not configured; skipping source IP validation [" + addr.getHostAddress() + "]");
-			return true;
+			errLogger.error("repoDB_ip is not configured; denying connection from [" + addr.getHostAddress() + "]");
+			return false;
 		}
 		return allowedIp.equals(addr.getHostAddress());
 	}
