@@ -614,7 +614,8 @@ public class TransConController {
 	 * @throws Exception
 	 */
 	// 
-	@RequestMapping(value = "/kafkaConnectionTestUpdate.do")
+	// KVE-2026-1573: endpoint disabled to remove remote command injection (CDC no longer used).
+	// @RequestMapping(value = "/kafkaConnectionTestUpdate.do")
 	@ResponseBody
 	public Map<String, Object> kafkaConnectionTestUpdate(@ModelAttribute("transDbmsVO") TransDbmsVO transDbmsVO, HttpServletResponse response, HttpServletRequest request) {
 
@@ -645,7 +646,8 @@ public class TransConController {
 	 * @throws Exception
 	 */
 	// 
-	@RequestMapping(value = "/schemaRegistryTestUpdate.do")
+	// KVE-2026-1573: endpoint disabled to remove remote command injection (CDC no longer used).
+	// @RequestMapping(value = "/schemaRegistryTestUpdate.do")
 	@ResponseBody
 	public Map<String, Object> schemaRegistryTestUpdate(@ModelAttribute("transRegiVO") TransRegiVO transRegiVO, HttpServletResponse response, HttpServletRequest request) {
 
