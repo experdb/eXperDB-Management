@@ -864,7 +864,13 @@ public class ClientInfoCmmn implements Runnable{
 			ClientAdapter CA = new ClientAdapter(IP, PORT);
 			CA.open();
 
-			objList = CA.dxT013(ClientTranCodeType.DxT013, jObj);
+			// KVE-2026-1573: CDC disabled; agent command execution sink removed.
+			// Do NOT re-enable without input validation / removing the shell sink.
+			// objList = CA.dxT013(ClientTranCodeType.DxT013, jObj);
+			objList = new JSONObject();
+			objList.put(ClientProtocolID.RESULT_CODE, "1");
+			objList.put(ClientProtocolID.ERR_MSG, "CDC is disabled.");
+			objList.put(ClientProtocolID.RESULT_DATA, "fail");
 
 			String strErrMsg = (String) objList.get(ClientProtocolID.ERR_MSG);
 			String strErrCode = (String) objList.get(ClientProtocolID.ERR_CODE);
@@ -892,7 +898,13 @@ public class ClientInfoCmmn implements Runnable{
 			ClientAdapter CA = new ClientAdapter(IP, PORT);
 			CA.open();
 
-			objList = CA.dxT013(ClientTranCodeType.DxT013, jObj);
+			// KVE-2026-1573: CDC disabled; agent command execution sink removed.
+			// Do NOT re-enable without input validation / removing the shell sink.
+			// objList = CA.dxT013(ClientTranCodeType.DxT013, jObj);
+			objList = new JSONObject();
+			objList.put(ClientProtocolID.RESULT_CODE, "1");
+			objList.put(ClientProtocolID.ERR_MSG, "CDC is disabled.");
+			objList.put(ClientProtocolID.RESULT_DATA, "fail");
 
 			String strErrMsg = (String) objList.get(ClientProtocolID.ERR_MSG);
 			String strErrCode = (String) objList.get(ClientProtocolID.ERR_CODE);
@@ -2149,6 +2161,7 @@ public List<HashMap<String, String>> dumpShow(String IP, int PORT,String cmd) {
 				JSONObject objList = new JSONObject();
 				objList.put(ClientProtocolID.RESULT_CODE, "1");
 				objList.put(ClientProtocolID.ERR_MSG, "CDC connection test is disabled.");
+				objList.put(ClientProtocolID.RESULT_DATA, "fail");
 				
 				String strErrMsg = (String)objList.get(ClientProtocolID.ERR_MSG);
 				String strErrCode = (String)objList.get(ClientProtocolID.ERR_CODE);
@@ -2229,7 +2242,13 @@ public List<HashMap<String, String>> dumpShow(String IP, int PORT,String cmd) {
 			ClientAdapter CA = new ClientAdapter(IP, PORT);
 	
 			CA.open(); 
-			objList = CA.dxT038(jObj);
+			// KVE-2026-1573: CDC disabled; agent command execution sink removed.
+			// Do NOT re-enable without input validation / removing the shell sink.
+			// objList = CA.dxT038(jObj);
+			objList = new JSONObject();
+			objList.put(ClientProtocolID.RESULT_CODE, "1");
+			objList.put(ClientProtocolID.ERR_MSG, "CDC is disabled.");
+			objList.put(ClientProtocolID.RESULT_DATA, "fail");
 			CA.close();
 
 			String strErrMsg = (String)objList.get(ClientProtocolID.ERR_MSG);
@@ -2323,7 +2342,13 @@ System.out.println("=====cmd1123123123" + cmd);
 			ClientAdapter CA = new ClientAdapter(IP, PORT);
 	
 			CA.open(); 
-			objList = CA.dxT038(jObj);
+			// KVE-2026-1573: CDC disabled; agent command execution sink removed.
+			// Do NOT re-enable without input validation / removing the shell sink.
+			// objList = CA.dxT038(jObj);
+			objList = new JSONObject();
+			objList.put(ClientProtocolID.RESULT_CODE, "1");
+			objList.put(ClientProtocolID.ERR_MSG, "CDC is disabled.");
+			objList.put(ClientProtocolID.RESULT_DATA, "fail");
 			CA.close();
 
 			String strErrMsg = (String)objList.get(ClientProtocolID.ERR_MSG);
@@ -2368,7 +2393,13 @@ System.out.println("=====cmd1123123123" + cmd);
 			ClientAdapter CA = new ClientAdapter(IP, PORT);
 			CA.open(); 
 
-			objList = CA.dxT039(jObj);
+			// KVE-2026-1573: CDC disabled; agent command execution sink removed.
+			// Do NOT re-enable without input validation / removing the shell sink.
+			// objList = CA.dxT039(jObj);
+			objList = new JSONObject();
+			objList.put(ClientProtocolID.RESULT_CODE, "1");
+			objList.put(ClientProtocolID.ERR_MSG, "CDC is disabled.");
+			objList.put(ClientProtocolID.RESULT_DATA, "fail");
 		
 			CA.close();
 			
