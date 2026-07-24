@@ -306,7 +306,8 @@ public class TransController {
 	 * @return result
 	 * @throws
 	 */
-	@RequestMapping(value = "/transStart.do")
+	// KVE-2026-1573: endpoint disabled to remove remote command injection (CDC no longer used).
+	// @RequestMapping(value = "/transStart.do")
 	@ResponseBody
 	public String transStart(HttpServletResponse response, HttpServletRequest request) {
 		HttpSession session = request.getSession();
@@ -340,7 +341,8 @@ public class TransController {
 	 * @return result
 	 * @throws
 	 */
-	@RequestMapping(value = "/transTargetStart.do")
+	// KVE-2026-1573: endpoint disabled to remove remote command injection (CDC no longer used).
+	// @RequestMapping(value = "/transTargetStart.do")
 	@ResponseBody
 	public String transTargetStart(HttpServletResponse response, HttpServletRequest request) {
 		HttpSession session = request.getSession();
@@ -374,7 +376,8 @@ public class TransController {
 	 * @return result
 	 * @throws
 	 */
-	@RequestMapping(value = "/transStop.do")
+	// KVE-2026-1573: endpoint disabled to remove remote command injection (CDC no longer used).
+	// @RequestMapping(value = "/transStop.do")
 	@ResponseBody
 	public String transStop(HttpServletResponse response, HttpServletRequest request) {
 		HttpSession session = request.getSession();
@@ -1407,7 +1410,8 @@ public class TransController {
 	 * @return result
 	 * @throws
 	 */
-	@RequestMapping(value = "/transAutoStart.do")
+	// KVE-2026-1573: endpoint disabled to remove remote command injection (CDC no longer used).
+	// @RequestMapping(value = "/transAutoStart.do")
 	@ResponseBody
 	public String transAutoStart(HttpServletResponse response, HttpServletRequest request) {
 		HttpSession session = request.getSession();
