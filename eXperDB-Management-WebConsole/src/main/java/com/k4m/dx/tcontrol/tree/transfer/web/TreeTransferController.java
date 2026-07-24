@@ -925,7 +925,8 @@ public class TreeTransferController {
 	 * @return
 	 * @throws Exception
 	 */
-	@RequestMapping(value = "/bottlewaterControl.do")
+	// KVE-2026-1573: endpoint disabled to remove remote command injection (CDC no longer used).
+	// @RequestMapping(value = "/bottlewaterControl.do")
 	public @ResponseBody String bottlewaterControl(@ModelAttribute("historyVO") HistoryVO historyVO,
 			@ModelAttribute("transferDetailVO") TransferDetailVO transferDetailVO, HttpServletRequest request) {
 		ClientInfoCmmn cic = new ClientInfoCmmn();
